@@ -1,0 +1,16 @@
+# Next.js
+.next/
+out/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Bun
+bun.lockb
+
