@@ -17,7 +17,8 @@ export default function Page() {
           I’m <strong>@Dhruv2mars</strong> on{' '}
           <a href="https://x.com/Dhruv2mars" target="_blank" rel="noopener noreferrer">X</a>,{' '}
           <a href="https://github.com/Dhruv2mars" target="_blank" rel="noopener noreferrer">GitHub</a>, and{' '}
-          <a href="http://linkedin.com/in/dhruv2mars" target="_blank" rel="noopener noreferrer">LinkedIn</a>. You can also{' '}
+          <a href="http://linkedin.com/in/dhruv2mars" target="_blank" rel="noopener noreferrer">LinkedIn</a>. You can also checkout my{' '}
+          <a href="/DhruvSharmaResume.pdf" target="_blank" rel="noopener noreferrer">resume</a> or{' '}
           <a href="mailto:Dhruv2mars@gmail.com" target="_blank" rel="noopener noreferrer">email me</a>.
         </p>
       </section>
