@@ -11,13 +11,13 @@ export const projects: readonly Project[] = [
     url: "https://github.com/Dhruv2mars/GridFall",
   },
   {
-    name: "project-r",
+    name: "Project-r",
     description:
       "AI tutor in your IDE — local, offline, voice-first (Gemma 3n).",
     url: "https://github.com/Dhruv2mars/project-r",
   },
   {
-    name: "cinemasketch",
+    name: "Cinemasketch",
     description:
       "AI storyboard generator from a text prompt (NVIDIA).",
     url: "https://github.com/Dhruv2mars/cinemasketch",
@@ -47,7 +47,7 @@ export const projects: readonly Project[] = [
     url: "https://github.com/Dhruv2mars/gunmetal",
   },
   {
-    name: "mdv",
+    name: "MDV",
     description:
       "Terminal Markdown app with a live editor, formatted preview, and in-app guide.",
     url: "https://github.com/Dhruv2mars/mdv",
