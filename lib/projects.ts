@@ -23,22 +23,33 @@ export const projects: readonly Project[] = [
     url: "https://github.com/Dhruv2mars/cinemasketch",
   },
   {
-    name: "LocalChat",
+    name: "SuperChant",
     description:
-      "Local, offline-first AI chat using Tauri, SQLite, and Ollama.",
-    url: "https://github.com/Dhruv2mars/LocalChat",
+      "Distraction-free Android mala for counting mantras with volume buttons.",
+    url: "https://github.com/Dhruv2mars/superchant",
   },
   {
-    name: "noteit",
+    name: "Detox",
     description:
-      "Offline-first note-taking app for mobile, web, and desktop.",
-    url: "https://github.com/Dhruv2mars/noteit",
+      "Privacy-first Android app blocker with local allowlists and blocking overlays.",
+    url: "https://github.com/Dhruv2mars/detox",
   },
   {
-    name: "Code-Editor",
+    name: "Offdex",
     description:
-      "Code editor to write and run programs on macOS desktop (Tauri) and web (React).",
-    url: "https://github.com/Dhruv2mars/Code-Editor",
+      "Local-first Codex experience across phone, web, and a native bridge.",
+    url: "https://github.com/Dhruv2mars/offdex",
+  },
+  {
+    name: "Gunmetal",
+    description:
+      "Local OpenAI-compatible API for routing your existing AI provider access.",
+    url: "https://github.com/Dhruv2mars/gunmetal",
+  },
+  {
+    name: "mdv",
+    description:
+      "Terminal Markdown app with a live editor, formatted preview, and in-app guide.",
+    url: "https://github.com/Dhruv2mars/mdv",
   },
 ];
-

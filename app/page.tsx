@@ -25,23 +25,18 @@ export default function Page() {
       <section className="mt-10">
         <h2 className="mb-4">Projects</h2>
         <ul className="list-disc marker:text-gray-500 pl-5 space-y-2">
-          {projects.map((p) => {
-            const displayName = p.name
-              ? p.name.charAt(0).toUpperCase() + p.name.slice(1).toLowerCase()
-              : "";
-            return (
-              <li key={p.name}>
-                <a
-                  href={p.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {displayName}
-                </a>{' '}
-                — {p.description}
-              </li>
-            );
-          })}
+          {projects.map((p) => (
+            <li key={p.name}>
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {p.name}
+              </a>{' '}
+              — {p.description}
+            </li>
+          ))}
         </ul>
       </section>
     </main>
