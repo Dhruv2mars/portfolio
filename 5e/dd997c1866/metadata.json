@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "5edd997c1866",
+  "strategy": "manual-commit",
+  "branch": "chore/update-portfolio-domain",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "README.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/5e/dd997c1866/0/metadata.json",
+      "transcript": "/5e/dd997c1866/0/full.jsonl",
+      "compact_transcript": "/5e/dd997c1866/0/transcript.jsonl",
+      "content_hash": "/5e/dd997c1866/0/content_hash.txt",
+      "prompt": "/5e/dd997c1866/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 7366,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 150784,
+    "output_tokens": 999,
+    "api_call_count": 7
+  }
+}
