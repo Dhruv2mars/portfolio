@@ -1,30 +1,27 @@
 import Link from "next/link";
+import { HOME_SECTION_COPY } from "@/lib/home";
 import { formatPostDate, getLatestPublishedPosts } from "@/lib/writings";
 
 export function HomeWritings() {
   const posts = getLatestPublishedPosts(3);
 
-  if (posts.length === 0) {
-    return null;
-  }
-
   return (
     <section
       aria-labelledby="home-writings-heading"
-      className="border-t border-border pt-10 pb-8 sm:pt-12 sm:pb-10"
+      className="section-home"
     >
       <h2
         id="home-writings-heading"
         className="text-[1.125rem] font-semibold tracking-tight text-foreground"
       >
-        Latest Writings
+        {HOME_SECTION_COPY.writings}
       </h2>
       <ul className="mt-6 space-y-5" aria-labelledby="home-writings-heading">
         {posts.map((post) => (
           <li key={post.slug}>
             <Link
               href={`/writings/${post.slug}`}
-              className="inline-flex min-h-9 items-center text-[15px] font-medium text-foreground no-underline transition-opacity duration-200 ease-[var(--ease-editorial)] hover:underline"
+              className="link-editorial text-[15px] font-medium"
             >
               {post.title}
             </Link>

@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { PRIMARY_NAV } from "./nav";
 import { site } from "./site";
 import {
+  HOME_SECTION_COPY,
   HOME_SHELL_ORDER,
   composeHomeContentSections,
   type HomeCompositionInput,
@@ -51,17 +52,21 @@ describe("Home composition", () => {
   });
 
   test("Visitor path language avoids Blog and dashboard copy", () => {
+    const sectionTitles = Object.values(HOME_SECTION_COPY).filter(
+      (title): title is string => title !== null,
+    );
     const labels = [
       ...PRIMARY_NAV.map((item) => item.label),
       site.positioning,
-      "Selected Projects",
-      "Latest Writings",
-      "AI Activity",
+      ...sectionTitles,
     ].join(" ");
 
     expect(labels).not.toMatch(/\bBlog\b/i);
     expect(labels).not.toMatch(/\bdashboard\b/i);
     expect(labels).not.toMatch(/\bArticles\b/i);
     expect(PRIMARY_NAV.some((item) => item.label === "Writings")).toBe(true);
+    expect(HOME_SECTION_COPY.writings).toBe("Latest Writings");
+    expect(HOME_SECTION_COPY["selected-projects"]).toBe("Selected Projects");
+    expect(HOME_SECTION_COPY["ai-activity"]).toBe("AI Activity");
   });
 });

@@ -20,14 +20,14 @@ export function SiteFooter() {
               {...(social.href.startsWith("mailto:")
                 ? {}
                 : { target: "_blank", rel: "noopener noreferrer" })}
-              className="inline-flex min-h-9 items-center text-muted no-underline transition-colors duration-200 ease-[var(--ease-editorial)] hover:text-foreground hover:underline"
+              className="link-editorial-muted"
             >
               {social.label}
             </a>
           ))}
           <Link
             href={site.rssPath}
-            className="inline-flex min-h-9 items-center text-muted no-underline transition-colors duration-200 ease-[var(--ease-editorial)] hover:text-foreground hover:underline"
+            className="link-editorial-muted"
           >
             RSS
           </Link>

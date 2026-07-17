@@ -9,8 +9,8 @@ export const FOCUSABLE_CHROME = {
   mainContentId: "main-content",
 } as const;
 
+/** A control is keyboard-reachable when it can receive focus and has a name. */
 export function isKeyboardReachableControl(options: {
-  roleOrTag: "a" | "button" | "link";
   hasAccessibleName: boolean;
   tabbable: boolean;
 }): boolean {

@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import type { ActivityDay, AiActivity } from "@/lib/ai-activity";
 import { formatTokenCount } from "@/lib/ai-activity";
+import { HOME_SECTION_COPY } from "@/lib/home";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 
@@ -47,16 +48,13 @@ export function AiActivityHeatmap({ activity }: AiActivityHeatmapProps) {
   const weeks = chunkWeeks(padToWeeks(activity.days));
 
   return (
-    <section
-      aria-labelledby={labelId}
-      className="border-t border-border pt-10 pb-8 sm:pt-12 sm:pb-10"
-    >
+    <section aria-labelledby={labelId} className="section-home">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
         <h2
           id={labelId}
           className="text-[1.125rem] font-semibold tracking-tight text-foreground"
         >
-          AI Activity
+          {HOME_SECTION_COPY["ai-activity"]}
         </h2>
         <p className="text-sm text-muted tabular-nums">
           {formatTokenCount(activity.lifetimeTokens)} lifetime tokens

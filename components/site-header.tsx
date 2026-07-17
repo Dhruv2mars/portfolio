@@ -36,7 +36,7 @@ export function SiteHeader() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={[
-                  "rounded-md px-2 py-2 text-sm no-underline transition-[color,background-color] duration-200 ease-[var(--ease-editorial)] sm:px-2.5",
+                  "inline-flex min-h-9 items-center rounded-md px-2 text-sm no-underline transition-[color,background-color] duration-200 ease-[var(--ease-editorial)] sm:px-2.5",
                   active
                     ? "font-medium text-foreground"
                     : "text-muted hover:text-foreground",

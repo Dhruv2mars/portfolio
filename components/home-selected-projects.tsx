@@ -1,23 +1,20 @@
 import { ProjectList } from "@/components/project-list";
+import { HOME_SECTION_COPY } from "@/lib/home";
 import { getSelectedProjects } from "@/lib/projects";
 
 export function HomeSelectedProjects() {
   const projects = getSelectedProjects();
 
-  if (projects.length === 0) {
-    return null;
-  }
-
   return (
     <section
       aria-labelledby="home-projects-heading"
-      className="border-t border-border pt-10 pb-8 sm:pt-12 sm:pb-10"
+      className="section-home"
     >
       <h2
         id="home-projects-heading"
         className="text-[1.125rem] font-semibold tracking-tight text-foreground"
       >
-        Selected Projects
+        {HOME_SECTION_COPY["selected-projects"]}
       </h2>
       <ProjectList
         projects={projects}

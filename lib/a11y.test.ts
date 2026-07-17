@@ -4,6 +4,8 @@ import {
   isKeyboardReachableControl,
 } from "./a11y";
 import { PRIMARY_NAV } from "./nav";
+import { getSelectedProjects } from "./projects";
+import { getLatestPublishedPosts } from "./writings";
 
 describe("Editorial keyboard chrome", () => {
   test("exposes skip-to-content and main landmark ids", () => {
@@ -18,7 +20,6 @@ describe("Editorial keyboard chrome", () => {
       expect(item.href.startsWith("/")).toBe(true);
       expect(
         isKeyboardReachableControl({
-          roleOrTag: "a",
           hasAccessibleName: item.label.length > 0,
           tabbable: true,
         }),
@@ -29,17 +30,39 @@ describe("Editorial keyboard chrome", () => {
   test("theme control requires an accessible name when tabbable", () => {
     expect(
       isKeyboardReachableControl({
-        roleOrTag: "button",
         hasAccessibleName: true,
         tabbable: true,
       }),
     ).toBe(true);
     expect(
       isKeyboardReachableControl({
-        roleOrTag: "button",
         hasAccessibleName: false,
         tabbable: true,
       }),
     ).toBe(false);
+  });
+
+  test("selected Project links expose name and outbound url", () => {
+    for (const project of getSelectedProjects()) {
+      expect(
+        isKeyboardReachableControl({
+          hasAccessibleName: project.name.length > 0,
+          tabbable: true,
+        }),
+      ).toBe(true);
+      expect(project.url).toMatch(/^https:\/\//);
+    }
+  });
+
+  test("published Post links expose title and writings href shape", () => {
+    for (const post of getLatestPublishedPosts(3)) {
+      expect(
+        isKeyboardReachableControl({
+          hasAccessibleName: post.title.length > 0,
+          tabbable: true,
+        }),
+      ).toBe(true);
+      expect(post.slug.length).toBeGreaterThan(0);
+    }
   });
 });

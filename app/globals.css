@@ -105,6 +105,19 @@
   @apply mx-auto w-full max-w-[42rem] px-5 sm:px-6;
 }
 
+/* Shared editorial interactive + Home strip rhythm */
+.link-editorial {
+  @apply inline-flex min-h-9 items-center text-foreground no-underline transition-opacity duration-200 ease-[var(--ease-editorial)] hover:underline;
+}
+
+.link-editorial-muted {
+  @apply inline-flex min-h-9 items-center text-muted no-underline transition-colors duration-200 ease-[var(--ease-editorial)] hover:text-foreground hover:underline;
+}
+
+.section-home {
+  @apply border-t border-border pt-10 pb-8 sm:pt-12 sm:pb-10;
+}
+
 /* MDX / Post body — quiet editorial prose */
 .prose-editorial {
   @apply text-[15px] leading-7 text-foreground;

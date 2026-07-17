@@ -36,7 +36,7 @@ export default function WritingsPage() {
             <li key={post.slug}>
               <Link
                 href={`/writings/${post.slug}`}
-                className="inline-flex min-h-9 items-center text-[1.0625rem] font-medium text-foreground no-underline transition-opacity duration-200 ease-[var(--ease-editorial)] hover:underline"
+                className="link-editorial text-[1.0625rem] font-medium"
               >
                 {post.title}
               </Link>

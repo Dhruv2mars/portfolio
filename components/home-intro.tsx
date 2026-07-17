@@ -23,7 +23,7 @@ export function HomeIntro() {
               {...(social.href.startsWith("mailto:")
                 ? {}
                 : { target: "_blank", rel: "noopener noreferrer" })}
-              className="inline-flex min-h-9 items-center text-foreground no-underline transition-opacity duration-200 ease-[var(--ease-editorial)] hover:underline"
+              className="link-editorial"
             >
               {social.label}
             </a>
