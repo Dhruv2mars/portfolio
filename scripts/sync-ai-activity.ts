@@ -6,7 +6,7 @@
  * (so LaunchAgent need not embed secrets in the plist).
  *
  * Env (required for publish):
- *   AI_ACTIVITY_INGEST_URL   e.g. https://dhruv2mars.com/api/ai-activity/ingest
+ *   AI_ACTIVITY_INGEST_URL   e.g. https://www.dhruv2mars.com/api/ai-activity/ingest
  *   AI_ACTIVITY_INGEST_SECRET
  *
  * Optional:

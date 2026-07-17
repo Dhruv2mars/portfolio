@@ -30,7 +30,7 @@ Set `AI_ACTIVITY_BLOB_URL` after the first successful ingest (response includes 
 ```bash
 mkdir -p ~/.config/portfolio-ai-activity
 cat > ~/.config/portfolio-ai-activity/env <<'EOF'
-AI_ACTIVITY_INGEST_URL=https://dhruv2mars.com/api/ai-activity/ingest
+AI_ACTIVITY_INGEST_URL=https://www.dhruv2mars.com/api/ai-activity/ingest
 AI_ACTIVITY_INGEST_SECRET=same-as-vercel
 EOF
 chmod 600 ~/.config/portfolio-ai-activity/env
