@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx";
 import { ogImagePath } from "@/lib/discovery";
+import { serializeJsonLd } from "@/lib/json-ld";
 import { site } from "@/lib/site";
 import {
   formatPostDate,
@@ -74,7 +75,7 @@ export default async function WritingPostPage({ params }: PageProps) {
     <article className="mx-auto max-w-[42rem] pt-14 pb-20 sm:pt-16">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <Link
         href="/writings"

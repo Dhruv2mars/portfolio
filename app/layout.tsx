@@ -8,6 +8,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { ogImagePath } from "@/lib/discovery";
+import { serializeJsonLd } from "@/lib/json-ld";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -75,7 +76,7 @@ export default function RootLayout({
         <div className="site-atmosphere" aria-hidden="true" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
         <ThemeProvider>
           <a href={FOCUSABLE_CHROME.skipToContentHref} className="skip-link">
