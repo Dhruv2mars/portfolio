@@ -1,0 +1,53 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { PRIMARY_NAV } from "@/lib/nav";
+import { site } from "@/lib/site";
+import { ThemeToggle } from "@/components/theme-toggle";
+
+export function SiteHeader() {
+  const pathname = usePathname();
+
+  return (
+    <header className="sticky top-0 z-10 border-b border-border/80 bg-background/85 backdrop-blur-md">
+      <div className="container-editorial flex h-14 items-center justify-between gap-4">
+        <Link
+          href="/"
+          className="shrink-0 text-sm font-medium tracking-tight text-foreground no-underline hover:opacity-70"
+        >
+          {site.name}
+        </Link>
+
+        <nav
+          aria-label="Primary"
+          className="flex items-center gap-1 sm:gap-2"
+        >
+          {PRIMARY_NAV.map((item) => {
+            const active =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={[
+                  "rounded-md px-2.5 py-1.5 text-sm no-underline transition-colors duration-200",
+                  active
+                    ? "text-foreground"
+                    : "text-muted hover:text-foreground",
+                ].join(" ")}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+          <ThemeToggle />
+        </nav>
+      </div>
+    </header>
+  );
+}

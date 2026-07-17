@@ -1,30 +1,73 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --bg: #0f0f10;
-  --fg: #e5e7eb;
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-background: #fafafa;
+  --color-foreground: #171717;
+  --color-muted: #737373;
+  --color-border: #e5e5e5;
+  --color-surface: #ffffff;
+  --color-link: #171717;
+
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html, body { height: 100%; }
-
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-feature-settings: "liga" 1, "calt" 1;
+.dark {
+  --color-background: #0a0a0a;
+  --color-foreground: #ededed;
+  --color-muted: #a3a3a3;
+  --color-border: #262626;
+  --color-surface: #111111;
+  --color-link: #ededed;
 }
 
-/* Base typography to better match reference */
 @layer base {
-  :root {
-    --container-narrow: 720px;
+  html {
+    color-scheme: light;
   }
-  h1 { @apply text-3xl font-bold tracking-tight; }
-  h2 { @apply text-xl font-bold; }
-  p { @apply text-[15px] leading-7 text-gray-300; }
-  ul { @apply text-gray-300; }
-  a { @apply underline text-white; }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "liga" 1, "calt" 1;
+  }
+
+  a {
+    @apply text-link underline-offset-4 transition-colors duration-200;
+  }
+
+  a:hover {
+    @apply underline;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-foreground;
+  }
 }
 
-.container-narrow { max-width: var(--container-narrow); }
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    transition: color 180ms var(--ease-editorial),
+      background-color 180ms var(--ease-editorial);
+  }
+
+  body,
+  header,
+  footer,
+  main {
+    transition: color 180ms var(--ease-editorial),
+      background-color 180ms var(--ease-editorial),
+      border-color 180ms var(--ease-editorial);
+  }
+}
+
+.container-editorial {
+  @apply mx-auto w-full max-w-[42rem] px-5 sm:px-6;
+}
