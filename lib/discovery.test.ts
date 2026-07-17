@@ -57,6 +57,14 @@ describe("discovery contracts", () => {
     expect(urls).toContain("https://dhruv2mars.com/writings");
     expect(urls).toContain("https://dhruv2mars.com/projects");
     expect(urls).toContain("https://dhruv2mars.com/writings/judgment");
+
+    const encoded = buildSitemapEntries({
+      siteUrl: "https://dhruv2mars.com",
+      posts: [{ ...samplePost, slug: "ai&design" }],
+    });
+    expect(encoded.map((e) => e.url)).toContain(
+      "https://dhruv2mars.com/writings/ai%26design",
+    );
   });
 
   test("sitemap with zero Posts still lists core routes", () => {

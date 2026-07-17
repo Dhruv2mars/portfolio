@@ -116,4 +116,32 @@ Body
 `;
     expect(() => parsePostSource("block", source)).toThrow(/block syntax/);
   });
+
+  test("treats YAML truthy draft values as draft", () => {
+    for (const draft of ["yes", "on", "1", "TRUE"]) {
+      const source = `---
+title: Hidden
+publishedAt: 2026-01-01
+summary: Should stay unpublished.
+draft: ${draft}
+---
+
+Body
+`;
+      expect(parsePostSource("hidden", source).draft).toBe(true);
+    }
+  });
+
+  test("rejects folded/literal block scalar markers like >- and |-", () => {
+    const source = `---
+title: Folded
+publishedAt: 2026-01-01
+summary: >-
+draft: false
+---
+
+Body
+`;
+    expect(() => parsePostSource("folded", source)).toThrow(/block syntax/);
+  });
 });

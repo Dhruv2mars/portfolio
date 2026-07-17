@@ -36,7 +36,7 @@ function parseTags(raw: string | undefined): string[] | undefined {
 
 function parseBool(raw: string | undefined): boolean {
   if (!raw) return false;
-  return raw.toLowerCase() === "true";
+  return ["true", "yes", "on", "1"].includes(raw.toLowerCase());
 }
 
 function parseFrontmatterFields(
@@ -60,13 +60,8 @@ function parseFrontmatterFields(
     if (sep === -1) continue;
     const key = trimmed.slice(0, sep).trim();
     let value = trimmed.slice(sep + 1).trim();
-    // Single-line frontmatter only — reject YAML block scalars.
-    if (
-      value === ">" ||
-      value === "|" ||
-      value.startsWith("> ") ||
-      value.startsWith("| ")
-    ) {
+    // Single-line frontmatter only — reject YAML block scalars (>, |, >-, |-, etc.).
+    if (value === ">" || value === "|" || value.startsWith(">") || value.startsWith("|")) {
       throw new Error(
         `Post "${slug}" field "${key}" uses unsupported YAML block syntax; use a single-line value`,
       );

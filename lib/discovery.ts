@@ -68,7 +68,7 @@ export function buildSitemapEntries({
   }));
 
   const writingEntries = posts.map((post) => ({
-    url: `${siteUrl}/writings/${post.slug}`,
+    url: `${siteUrl}/writings/${encodeURIComponent(post.slug)}`,
     lastModified: post.publishedAt,
   }));
 
