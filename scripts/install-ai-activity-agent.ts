@@ -58,7 +58,7 @@ if (!existsSync(ENV_FILE)) {
   writeFileSync(
     ENV_FILE,
     `# Portfolio AI Activity sync secrets (chmod 600)
-AI_ACTIVITY_INGEST_URL=https://dhruv2mars.com/api/ai-activity/ingest
+AI_ACTIVITY_INGEST_URL=https://www.dhruv2mars.com/api/ai-activity/ingest
 AI_ACTIVITY_INGEST_SECRET=replace-me
 `,
   );
