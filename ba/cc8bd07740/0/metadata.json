@@ -1,0 +1,44 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "bacc8bd07740",
+  "session_id": "dac4bf2f-74c5-4151-8f90-8a7b81d5ad8b",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-17T14:44:19.38618Z",
+  "branch": "feat/ai-activity-nightly-sync",
+  "checkpoints_count": 6,
+  "save_step_count": 1,
+  "files_touched": [
+    ".gitignore",
+    "app/page.tsx",
+    "bun.lock",
+    "components/ai-activity-heatmap.tsx",
+    "components/home-ai-activity.tsx",
+    "docs/adr/0001-ai-activity-read-model-first.md",
+    "docs/ai-activity-sync.md",
+    "lib/ai-activity-payload.test.ts",
+    "lib/ai-activity-payload.ts",
+    "lib/ai-activity-store.ts",
+    "lib/ai-activity.test.ts",
+    "lib/ai-activity.ts",
+    "package.json"
+  ],
+  "agent": "Cursor",
+  "model": "cursor-grok-4.5-high",
+  "turn_id": "3267cb753a02",
+  "compact_transcript_start": 0,
+  "session_metrics": {
+    "turn_count": 6
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-17T14:44:19.315165Z",
+    "agent_lines": 539,
+    "agent_removed": 32,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 539,
+    "total_lines_changed": 571,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}

@@ -1,0 +1,27 @@
+i have thought about a better way. how about, the current day's data only gets when a user opens the site. ie, if toDay is 17th. So the portfolio will have the data till yesterday's 16th. So now when a user or someone opens the portfolio, they can see tilt 16 and now comes the interesting part where on the 17th they will get the live incremental token usage. How we will do that is as soon as a user opens the site, at that moment the data from totescale till that time will be used and then shown to the user. Suppose let's say it's 17 today and the daily update we have set is for 12 a.m. every night. So that way when And Then suppose a user has opened the site at 7 p.m. in the night. So it will show Data till 16, which was updated in the night, and till 7 p.m. It will touch the data how much tokens was used. Suppose it was 50 million, then it will show thirty percent or somewhere around that line less and start the increment at fifty tokens per second. Now you may say if a user refreshes or another user opens, it will just hammer our infrastructure to mitigate that. For one hour the data that was fetched will be cached so that if 30 users open the site in the same banner window or a single user is refreshing the page, they will get the same data. ur thoughts on this
+
+---
+
+few things:
+- persisted days where it will run a schedule every day at some time that's clear, that's simple and achievable.
+- I meant with one hour was not that the schedule run will start every hour. It a schedule will only run when a user opens the site. At that moment, it will start fetching the data, and that data will stay for one hour for cases if other users also from the site they will get the same data. 
+- Regarding the thirty percent math, that was just a number because to store it and to make it feel like it is live and the tokens are streaming, It has to start some percentage back from the persisted data of total tokens used and implement at a certain speed. Now you can decide how much percent back and how quick you want that increment to do.
+
+---
+
+here is the thing:
+- our main problem now is, how to take the data from tokscale to my site. 
+
+also, i dont want to send that data every hour in any case. once nightly is enough. because i dont have many users at my site, every 1 hr doesnt make sense.
+
+---
+
+the thing is, i want that live feeling for current day. so daytime push is needed. but i want that not to run at every hour, but to only run when a user is at my site. thats what we need to figure out
+
+---
+
+before merge, test if its working or not
+
+---
+
+is the draft pr up? if not, do it. start the code review loop and babysit it
