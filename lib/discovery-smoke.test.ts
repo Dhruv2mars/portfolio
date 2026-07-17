@@ -2,13 +2,15 @@ import { describe, expect, test } from "bun:test";
 import { GET as getFeed } from "@/app/feed.xml/route";
 import sitemap from "@/app/sitemap";
 import robots from "@/app/robots";
+import { getPublishedPosts } from "@/lib/writings";
 
 /**
  * Thin secondary smoke: discovery endpoints respond with sensible payloads
- * even when zero Posts are published.
+ * for the current published Post set (may be empty or non-empty).
  */
 describe("discovery route smoke", () => {
-  test("RSS feed responds with an empty channel when no Posts", async () => {
+  test("RSS feed responds with channel matching published Posts", async () => {
+    const published = getPublishedPosts();
     const response = await getFeed();
     expect(response.status).toBe(200);
     expect(response.headers.get("Content-Type")).toContain(
@@ -16,7 +18,17 @@ describe("discovery route smoke", () => {
     );
     const body = await response.text();
     expect(body).toContain("<rss");
-    expect(body).not.toContain("<item>");
+    expect(body).toContain("<channel>");
+
+    if (published.length === 0) {
+      expect(body).not.toContain("<item>");
+    } else {
+      expect(body).toContain("<item>");
+      for (const post of published) {
+        expect(body).toContain(`/writings/${post.slug}`);
+        expect(body).toContain(post.title);
+      }
+    }
   });
 
   test("sitemap and robots cover core IA routes", () => {
