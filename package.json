@@ -9,7 +9,7 @@
     "start": "bunx next start",
     "lint": "bunx eslint .",
     "test": "bunx vitest run",
-    "typecheck": "bunx tsc --noEmit"
+    "typecheck": "bunx next typegen && bunx tsc --noEmit"
   },
   "dependencies": {
     "geist": "^1.7.2",
