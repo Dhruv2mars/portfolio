@@ -1,10 +1,14 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { SiteHeader } from "@/components/site-header";
+
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/",
+}));
 
 describe("SiteHeader", () => {
   it("renders primary nav and contact links", () => {
-    render(<SiteHeader pathname="/" />);
+    render(<SiteHeader />);
 
     expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
       "href",

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Newsreader } from "next/font/google";
-import { SiteChrome } from "@/components/site-chrome";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -30,9 +29,7 @@ export default function RootLayout({
       lang="en"
       className={`dark ${GeistSans.variable} ${newsreader.variable}`}
     >
-      <body className={`${GeistSans.className} antialiased`}>
-        <SiteChrome>{children}</SiteChrome>
-      </body>
+      <body className={`${GeistSans.className} antialiased`}>{children}</body>
     </html>
   );
 }
