@@ -6,31 +6,43 @@ export function HomeWritings() {
   const posts = getLatestPublishedPosts(3);
 
   return (
-    <section
-      aria-labelledby="home-writings-heading"
-      className="section-home"
-    >
-      <h2
-        id="home-writings-heading"
-        className="text-[1.125rem] font-semibold tracking-tight text-foreground"
+    <section aria-labelledby="home-writings-heading" className="section-home">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 id="home-writings-heading" className="section-title">
+            {HOME_SECTION_COPY.writings}
+          </h2>
+          <p className="mt-2 text-[15px] font-medium tracking-[-0.01em] text-foreground">
+            Recent thinking
+          </p>
+        </div>
+        <Link
+          href="/writings"
+          className="link-editorial-muted text-[13px] font-medium"
+        >
+          View all
+        </Link>
+      </div>
+      <ul
+        className="mt-5 divide-y divide-border"
+        aria-labelledby="home-writings-heading"
       >
-        {HOME_SECTION_COPY.writings}
-      </h2>
-      <ul className="mt-6 space-y-5" aria-labelledby="home-writings-heading">
         {posts.map((post) => (
           <li key={post.slug}>
             <Link
               href={`/writings/${post.slug}`}
-              className="link-editorial text-[15px] font-medium"
+              className="row-interactive block no-underline"
             >
-              {post.title}
+              <span className="text-[15px] font-medium tracking-[-0.01em] text-foreground">
+                {post.title}
+              </span>
+              <p className="meta-copy mt-1.5">
+                {formatPostDate(post.publishedAt)}
+              </p>
+              <p className="mt-1.5 max-w-[38rem] text-[13px] leading-5 text-muted text-pretty">
+                {post.summary}
+              </p>
             </Link>
-            <p className="mt-1 text-sm text-muted">
-              {formatPostDate(post.publishedAt)}
-            </p>
-            <p className="mt-1 max-w-[38rem] text-[14px] leading-6 text-muted text-pretty">
-              {post.summary}
-            </p>
           </li>
         ))}
       </ul>

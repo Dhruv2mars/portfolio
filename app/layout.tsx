@@ -71,7 +71,8 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-[100dvh] flex-col">
+      <body className="relative flex min-h-[100dvh] flex-col">
+        <div className="site-atmosphere" aria-hidden="true" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -84,7 +85,7 @@ export default function RootLayout({
           <main
             id={FOCUSABLE_CHROME.mainContentId}
             tabIndex={-1}
-            className="container-editorial flex-1 py-2 outline-none"
+            className="container-wide flex-1 outline-none"
           >
             {children}
           </main>

@@ -1,35 +1,44 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
 import { site } from "@/lib/site";
 
 export function HomeIntro() {
+  const reduce = useReducedMotion();
+
   return (
-    <section
+    <motion.section
       aria-labelledby="home-intro-heading"
-      className="pt-10 pb-8 sm:pt-14 sm:pb-10"
+      className="pt-14 pb-12 sm:pt-[4.5rem] sm:pb-14"
+      initial={reduce ? false : { opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
     >
-      <h1
-        id="home-intro-heading"
-        className="text-[1.75rem] font-semibold tracking-tight text-foreground text-pretty sm:text-[2rem]"
-      >
+      <p className="meta-copy mb-4">Portfolio</p>
+      <h1 id="home-intro-heading" className="display-title">
         {site.name}
       </h1>
-      <p className="mt-4 max-w-[38rem] text-[15px] leading-7 text-muted text-pretty">
-        {site.positioning}
-      </p>
-      <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-[15px]">
-        {site.socials.map((social) => (
-          <li key={social.label}>
+      <p className="body-copy mt-5 max-w-[36rem]">{site.positioning}</p>
+      <ul className="mt-7 flex flex-wrap items-center gap-x-1 gap-y-2 text-[13px]">
+        {site.socials.map((social, index) => (
+          <li key={social.label} className="flex items-center">
+            {index > 0 ? (
+              <span className="mx-2.5 text-border-strong" aria-hidden>
+                /
+              </span>
+            ) : null}
             <a
               href={social.href}
               {...(social.href.startsWith("mailto:")
                 ? {}
                 : { target: "_blank", rel: "noopener noreferrer" })}
-              className="link-editorial"
+              className="link-editorial min-h-8 font-medium"
             >
               {social.label}
             </a>
           </li>
         ))}
       </ul>
-    </section>
+    </motion.section>
   );
 }

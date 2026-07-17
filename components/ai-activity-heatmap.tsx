@@ -1,6 +1,7 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useMemo, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import type { ActivityDay, AiActivity } from "@/lib/ai-activity";
 import { formatTokenCount } from "@/lib/ai-activity";
 import { HOME_SECTION_COPY } from "@/lib/home";
@@ -22,20 +23,50 @@ function formatTooltipDate(date: string): string {
   });
 }
 
-/** Pad so the grid starts on Sunday (GitHub-style columns = weeks). */
 function padToWeeks(days: readonly ActivityDay[]): (ActivityDay | null)[] {
   if (days.length === 0) return [];
   const first = parseUTCDate(days[0]!.date);
-  const pad = first.getUTCDay(); // 0 = Sunday
+  const pad = first.getUTCDay();
   return [...Array.from({ length: pad }, () => null), ...days];
 }
 
-function chunkWeeks(cells: readonly (ActivityDay | null)[]): (ActivityDay | null)[][] {
+function chunkWeeks(
+  cells: readonly (ActivityDay | null)[],
+): (ActivityDay | null)[][] {
   const weeks: (ActivityDay | null)[][] = [];
   for (let i = 0; i < cells.length; i += 7) {
     weeks.push(cells.slice(i, i + 7));
   }
   return weeks;
+}
+
+/** Month labels aligned to week columns (first week that contains day 1 of a month). */
+function monthLabels(
+  weeks: (ActivityDay | null)[][],
+): { index: number; label: string }[] {
+  const labels: { index: number; label: string }[] = [];
+  let lastMonth = -1;
+
+  weeks.forEach((week, index) => {
+    for (const day of week) {
+      if (!day) continue;
+      const date = parseUTCDate(day.date);
+      const month = date.getUTCMonth();
+      if (month !== lastMonth) {
+        labels.push({
+          index,
+          label: date.toLocaleDateString("en-US", {
+            month: "short",
+            timeZone: "UTC",
+          }),
+        });
+        lastMonth = month;
+      }
+      break;
+    }
+  });
+
+  return labels;
 }
 
 type AiActivityHeatmapProps = {
@@ -44,91 +75,138 @@ type AiActivityHeatmapProps = {
 
 export function AiActivityHeatmap({ activity }: AiActivityHeatmapProps) {
   const labelId = useId();
+  const reduce = useReducedMotion();
   const [hover, setHover] = useState<ActivityDay | null>(null);
-  const weeks = chunkWeeks(padToWeeks(activity.days));
+  const weeks = useMemo(
+    () => chunkWeeks(padToWeeks(activity.days)),
+    [activity.days],
+  );
+  const months = useMemo(() => monthLabels(weeks), [weeks]);
 
   return (
-    <section aria-labelledby={labelId} className="section-home">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
-        <h2
-          id={labelId}
-          className="text-[1.125rem] font-semibold tracking-tight text-foreground"
-        >
-          {HOME_SECTION_COPY["ai-activity"]}
-        </h2>
-        <p className="text-sm text-muted tabular-nums">
-          {formatTokenCount(activity.lifetimeTokens)} lifetime tokens
+    <motion.section
+      aria-labelledby={labelId}
+      className="section-home"
+      initial={reduce ? false : { opacity: 0, y: 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+        <div>
+          <h2 id={labelId} className="section-title">
+            {HOME_SECTION_COPY["ai-activity"]}
+          </h2>
+          <p className="mt-2 text-[15px] font-medium tracking-[-0.01em] text-foreground">
+            Token usage over the last year
+          </p>
+        </div>
+        <p className="meta-copy rounded-full border border-border bg-background-muted px-2.5 py-1">
+          {formatTokenCount(activity.lifetimeTokens)} lifetime
         </p>
       </div>
 
-      <div className="mt-5 overflow-x-auto pb-1">
-        <div
-          className="inline-grid gap-[3px]"
-          style={{
-            gridTemplateColumns: `auto repeat(${weeks.length}, minmax(0, 1fr))`,
-          }}
-          role="img"
-          aria-label="Year of daily AI token usage"
-        >
-          <div className="grid grid-rows-7 gap-[3px] pr-1.5 text-[10px] leading-none text-muted">
-            {WEEKDAYS.map((day, i) => (
-              <span
-                key={day}
-                className="flex h-[11px] items-center"
-                style={{ visibility: i % 2 === 1 ? "visible" : "hidden" }}
-              >
-                {day}
-              </span>
-            ))}
+      <div className="mt-6 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="min-w-[640px]">
+          <div
+            className="mb-2 grid gap-[3px] pl-[28px]"
+            style={{
+              gridTemplateColumns: `repeat(${weeks.length}, 12px)`,
+            }}
+            aria-hidden
+          >
+            {weeks.map((_, wi) => {
+              const month = months.find((m) => m.index === wi);
+              return (
+                <span
+                  key={wi}
+                  className="meta-copy h-4 overflow-visible whitespace-nowrap"
+                >
+                  {month?.label ?? ""}
+                </span>
+              );
+            })}
           </div>
 
-          {weeks.map((week, wi) => (
-            <div key={wi} className="grid grid-rows-7 gap-[3px]">
-              {week.map((day, di) => {
-                if (!day) {
+          <div
+            className="inline-grid gap-[3px]"
+            style={{
+              gridTemplateColumns: `auto repeat(${weeks.length}, 12px)`,
+            }}
+            role="img"
+            aria-label="Year of daily AI token usage"
+          >
+            <div className="grid grid-rows-7 gap-[3px] pr-2 text-[10px] leading-none text-faint">
+              {WEEKDAYS.map((day, i) => (
+                <span
+                  key={day}
+                  className="flex h-3 items-center"
+                  style={{ visibility: i % 2 === 1 ? "visible" : "hidden" }}
+                >
+                  {day.slice(0, 3)}
+                </span>
+              ))}
+            </div>
+
+            {weeks.map((week, wi) => (
+              <div key={wi} className="grid grid-rows-7 gap-[3px]">
+                {week.map((day, di) => {
+                  if (!day) {
+                    return (
+                      <span
+                        key={`pad-${wi}-${di}`}
+                        className="size-3"
+                        aria-hidden
+                      />
+                    );
+                  }
                   return (
-                    <span
-                      key={`pad-${wi}-${di}`}
-                      className="h-[11px] w-[11px]"
-                      aria-hidden
+                    <button
+                      key={day.date}
+                      type="button"
+                      className={`activity-cell intensity-${day.intensity} size-3`}
+                      aria-label={`${formatTooltipDate(day.date)}: ${formatTokenCount(day.tokens)} tokens`}
+                      onMouseEnter={() => setHover(day)}
+                      onMouseLeave={() => setHover(null)}
+                      onFocus={() => setHover(day)}
+                      onBlur={() => setHover(null)}
                     />
                   );
-                }
-                return (
-                  <button
-                    key={day.date}
-                    type="button"
-                    className={`activity-cell intensity-${day.intensity} h-[11px] w-[11px] rounded-[2px] transition-opacity duration-150 ease-[var(--ease-editorial)] hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground`}
-                    aria-label={`${formatTooltipDate(day.date)}: ${formatTokenCount(day.tokens)} tokens`}
-                    onMouseEnter={() => setHover(day)}
-                    onMouseLeave={() => setHover(null)}
-                    onFocus={() => setHover(day)}
-                    onBlur={() => setHover(null)}
-                  />
-                );
-              })}
-            </div>
-          ))}
+                })}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-muted">
-        <p className="min-h-[1.25rem] tabular-nums" aria-live="polite">
-          {hover
-            ? `${formatTooltipDate(hover.date)} · ${formatTokenCount(hover.tokens)} tokens`
-            : "\u00a0"}
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+        <p
+          className="min-h-5 text-[13px] tabular-nums text-muted"
+          aria-live="polite"
+        >
+          {hover ? (
+            <>
+              <span className="text-foreground">
+                {formatTokenCount(hover.tokens)}
+              </span>
+              <span className="text-faint"> tokens · </span>
+              <span>{formatTooltipDate(hover.date)}</span>
+            </>
+          ) : (
+            <span className="text-faint">Hover a day for detail</span>
+          )}
         </p>
-        <div className="flex items-center gap-1.5" aria-hidden>
+        <div className="flex items-center gap-1.5 text-[11px] text-faint" aria-hidden>
           <span>Less</span>
           {[0, 1, 2, 3, 4].map((level) => (
             <span
               key={level}
-              className={`activity-cell intensity-${level} h-[11px] w-[11px] rounded-[2px]`}
+              className={`activity-cell intensity-${level} size-2.5`}
             />
           ))}
           <span>More</span>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

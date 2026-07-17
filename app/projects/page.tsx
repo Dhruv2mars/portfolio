@@ -15,15 +15,13 @@ export default function ProjectsPage() {
   const projects = getProjects();
 
   return (
-    <section className="pt-10 pb-16 sm:pt-14" aria-labelledby="projects-heading">
-      <h1
-        id="projects-heading"
-        className="text-[1.75rem] font-semibold tracking-tight text-foreground text-pretty sm:text-[2rem]"
-      >
+    <section className="pt-14 pb-20 sm:pt-16" aria-labelledby="projects-heading">
+      <p className="meta-copy mb-4">Index</p>
+      <h1 id="projects-heading" className="display-title">
         Projects
       </h1>
-      <p className="mt-4 max-w-[38rem] text-[15px] leading-7 text-muted text-pretty">
-        Shipped work as proof. Each link goes out to the repo or demo.
+      <p className="body-copy mt-5 max-w-[36rem]">
+        Shipped work as proof. Each item opens the repo or live demo.
       </p>
       <ProjectList projects={projects} headingId="projects-heading" />
     </section>

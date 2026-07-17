@@ -13,7 +13,7 @@ export default function HomePage() {
   });
 
   return (
-    <div className="pb-10 sm:pb-14">
+    <div className="pb-16 sm:pb-20">
       {sections.map((section) => {
         switch (section) {
           case "intro":

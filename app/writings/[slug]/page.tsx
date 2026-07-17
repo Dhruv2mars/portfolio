@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx";
 import { ogImagePath } from "@/lib/discovery";
@@ -70,21 +71,25 @@ export default async function WritingPostPage({ params }: PageProps) {
   };
 
   return (
-    <article className="pt-10 pb-16 sm:pt-14">
+    <article className="mx-auto max-w-[42rem] pt-14 pb-20 sm:pt-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="text-[1.75rem] font-semibold tracking-tight text-foreground sm:text-[2rem]">
-        {post.title}
-      </h1>
-      <p className="mt-3 text-sm text-muted">
+      <Link
+        href="/writings"
+        className="link-editorial-muted meta-copy min-h-8 no-underline"
+      >
+        ← Writings
+      </Link>
+      <h1 className="display-title mt-6">{post.title}</h1>
+      <p className="meta-copy mt-4">
         {formatPostDate(post.publishedAt)}
-        <span aria-hidden="true"> · </span>
+        <span aria-hidden> · </span>
         {post.readingTimeMinutes} min read
       </p>
       {post.tags && post.tags.length > 0 ? (
-        <p className="mt-2 text-sm text-muted">{post.tags.join(" · ")}</p>
+        <p className="meta-copy mt-2">{post.tags.join(" · ")}</p>
       ) : null}
       <div className="prose-editorial mt-10">
         <CustomMDX source={post.content} />

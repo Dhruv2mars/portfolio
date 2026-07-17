@@ -8,7 +8,7 @@ export const site = {
   handle: "Dhruv2mars",
   /** Short Home positioning — not the old bio. */
   positioning:
-    "AI-pilled Design Engineer. I ship interface craft and write with product judgment.",
+    "Design Engineer building with AI as the default. I care about how products feel — and write down the judgment that got them there.",
   url: "https://dhruv2mars.com",
   socials: [
     { label: "X", href: "https://x.com/Dhruv2mars" },
