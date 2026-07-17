@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "d1593f148181",
+  "strategy": "manual-commit",
+  "branch": "fix/mdx-security-hardening",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "app/layout.tsx",
+    "app/writings/[slug]/page.tsx",
+    "bun.lock",
+    "components/mdx.tsx",
+    "lib/json-ld.test.ts",
+    "lib/json-ld.ts",
+    "lib/mdx-links.test.ts",
+    "lib/mdx-links.ts",
+    "package.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d1/593f148181/0/metadata.json",
+      "transcript": "/d1/593f148181/0/full.jsonl",
+      "compact_transcript": "/d1/593f148181/0/transcript.jsonl",
+      "content_hash": "/d1/593f148181/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
