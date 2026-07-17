@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Newsreader } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 import { site } from "@/lib/site";
+import { themeBootScript } from "@/lib/theme-boot";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -27,9 +29,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${GeistSans.variable} ${newsreader.variable}`}
+      className={`${GeistSans.variable} ${newsreader.variable}`}
+      suppressHydrationWarning
     >
-      <body className="antialiased">{children}</body>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript() }} />
+      </head>
+      <body className="antialiased">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

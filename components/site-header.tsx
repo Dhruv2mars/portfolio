@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ContactLinks } from "@/components/contact-links";
 import { SiteNav } from "@/components/site-nav";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { site } from "@/lib/site";
 
 export function SiteHeader() {
@@ -13,7 +14,10 @@ export function SiteHeader() {
 
         <SiteNav />
 
-        <ContactLinks className="site-contact site-contact--header" />
+        <div className="site-header__tools">
+          <ThemeToggle />
+          <ContactLinks className="site-contact site-contact--header" />
+        </div>
       </div>
     </header>
   );

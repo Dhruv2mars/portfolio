@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 /* Dark Editorial canvas — brand default (ADR-0007). Light mode: #13. */
-:root {
+:root,
+html.dark {
   --canvas: #0c0c0d;
   --canvas-elevated: #141416;
   --ink: #ececef;
@@ -12,6 +13,17 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --site-max: 72rem;
   --measure: 38rem;
+}
+
+/* Light is a first-class Editorial peer, not an invert (ADR-0007). */
+html.light {
+  --canvas: #f4f3ef;
+  --canvas-elevated: #ffffff;
+  --ink: #161618;
+  --ink-muted: #5c5c63;
+  --ink-faint: #8a8a92;
+  --rule: color-mix(in srgb, var(--ink) 10%, transparent);
+  --focus: color-mix(in srgb, var(--ink) 40%, transparent);
 }
 
 @theme inline {
@@ -27,6 +39,30 @@
 html {
   height: 100%;
   color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* Sparse theme transition only — no ambient motion (ADR-0011). */
+html.theme-transition,
+html.theme-transition *:not(svg *):not(path):not(circle) {
+  transition:
+    background-color 180ms var(--ease-out),
+    color 180ms var(--ease-out),
+    border-color 180ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transition,
+  html.theme-transition * {
+    transition: none !important;
+  }
 }
 
 body {
@@ -90,9 +126,66 @@ a:hover {
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   }
 
-  .site-contact--header {
+  .site-header__tools {
     justify-content: flex-end;
   }
+}
+
+.site-header__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem 1.25rem;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0.2rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink-faint);
+  font: inherit;
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: color 180ms var(--ease-out);
+}
+
+.theme-toggle:hover {
+  color: var(--ink-muted);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.theme-toggle__mark {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.theme-toggle__mark[data-mode="dark"] {
+  background: currentColor;
+}
+
+.theme-toggle__mark[data-mode="system"] {
+  background: linear-gradient(
+    90deg,
+    currentColor 50%,
+    transparent 50%
+  );
+}
+
+.theme-toggle__text {
+  line-height: 1;
 }
 
 .site-brand {
