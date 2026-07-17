@@ -71,3 +71,60 @@
 .container-editorial {
   @apply mx-auto w-full max-w-[42rem] px-5 sm:px-6;
 }
+
+/* MDX / Post body — quiet editorial prose */
+.prose-editorial {
+  @apply text-[15px] leading-7 text-foreground;
+}
+
+.prose-editorial :where(p, ul, ol, blockquote, pre, table) {
+  @apply my-5;
+}
+
+.prose-editorial :where(h2, h3, h4) {
+  @apply mt-10 mb-3 font-semibold tracking-tight text-foreground;
+}
+
+.prose-editorial h2 {
+  @apply text-xl;
+}
+
+.prose-editorial h3 {
+  @apply text-lg;
+}
+
+.prose-editorial :where(ul, ol) {
+  @apply pl-5;
+}
+
+.prose-editorial ul {
+  @apply list-disc;
+}
+
+.prose-editorial ol {
+  @apply list-decimal;
+}
+
+.prose-editorial a {
+  @apply underline underline-offset-4;
+}
+
+.prose-editorial a.anchor {
+  @apply no-underline;
+}
+
+.prose-editorial :where(code):not(pre code) {
+  @apply rounded bg-border/60 px-1 py-0.5 font-mono text-[0.875em];
+}
+
+.prose-editorial pre {
+  @apply overflow-x-auto rounded-md border border-border bg-surface p-4 font-mono text-[13px] leading-6;
+}
+
+.prose-editorial blockquote {
+  @apply border-l-2 border-border pl-4 text-muted;
+}
+
+.prose-editorial img {
+  @apply my-6 h-auto w-full;
+}
