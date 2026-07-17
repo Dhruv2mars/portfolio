@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { SurfaceStub } from "@/components/surface-stub";
+import { ProjectsIndex } from "@/components/projects-index";
+import { listIndexProjects } from "@/lib/projects";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -7,11 +8,19 @@ export const metadata: Metadata = {
 };
 
 export default function ProjectsPage() {
+  const projects = listIndexProjects();
+
   return (
-    <SurfaceStub
-      title="Projects"
-      lede="An Editorial index of selected work — title, lede, link, and a still on every row. Catalog content lands next."
-      note="Stub surface. Projects catalog lands in a follow-up ticket."
-    />
+    <section className="projects-surface">
+      <header className="projects-surface__intro">
+        <h1 className="projects-surface__title">Projects</h1>
+        <p className="projects-surface__lede">
+          Selected work that proves shipping and taste — each with a still,
+          title, and lede.
+        </p>
+      </header>
+
+      <ProjectsIndex projects={projects} />
+    </section>
   );
 }

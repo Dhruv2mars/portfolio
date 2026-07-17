@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-label="Cinemasketch">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#241c1c"/>
+      <stop offset="100%" stop-color="#3a2a2a"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="600" fill="#141416"/>
+  <rect x="48" y="48" width="864" height="504" rx="0" fill="url(#g)" opacity="0.92"/>
+  <rect x="48" y="48" width="864" height="504" fill="none" stroke="rgba(236,236,239,0.12)" stroke-width="1"/>
+  <text x="96" y="480" fill="#ececef" font-family="ui-sans-serif, system-ui, sans-serif" font-size="42" font-weight="500" letter-spacing="-0.03em">Cinemasketch</text>
+</svg>
