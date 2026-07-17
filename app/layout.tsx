@@ -1,9 +1,23 @@
 import type { Metadata } from "next";
+import { GeistSans } from "geist/font/sans";
+import { Newsreader } from "next/font/google";
+import { SiteChrome } from "@/components/site-chrome";
+import { site } from "@/lib/site";
 import "./globals.css";
 
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-newsreader",
+  display: "swap",
+  style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
-  title: "Dhruv Sharma",
-  description: "Portfolio of Dhruv Sharma",
+  title: {
+    default: site.name,
+    template: `%s · ${site.name}`,
+  },
+  description: site.description,
 };
 
 export default function RootLayout({
@@ -12,11 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="antialiased">
-        {children}
+    <html
+      lang="en"
+      className={`dark ${GeistSans.variable} ${newsreader.variable}`}
+    >
+      <body className={`${GeistSans.className} antialiased`}>
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );
 }
-
