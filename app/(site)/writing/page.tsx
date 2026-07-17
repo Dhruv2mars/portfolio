@@ -1,17 +1,26 @@
 import type { Metadata } from "next";
-import { SurfaceStub } from "@/components/surface-stub";
+import {
+  WritingComingSoon,
+  WritingIndexList,
+} from "@/components/writing/writing-index";
+import { getPublishedWriting } from "@/lib/writing";
 
 export const metadata: Metadata = {
   title: "Writing",
   description: "Long-form Writing that shows how Dhruv thinks and decides.",
+  alternates: {
+    types: {
+      "application/rss+xml": "/rss",
+    },
+  },
 };
 
 export default function WritingPage() {
-  return (
-    <SurfaceStub
-      title="Writing"
-      lede="Long-form pieces that prove product sense. Index and MDX plumbing arrive next; this surface stays honest with no fake posts."
-      note="Stub surface. Writing MDX platform lands in a follow-up ticket."
-    />
-  );
+  const pieces = getPublishedWriting();
+
+  if (pieces.length === 0) {
+    return <WritingComingSoon />;
+  }
+
+  return <WritingIndexList pieces={pieces} />;
 }

@@ -14,8 +14,10 @@
   "dependencies": {
     "geist": "^1.7.2",
     "next": "^16.2.10",
+    "next-mdx-remote": "^6.0.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "sugar-high": "^1.2.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

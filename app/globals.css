@@ -765,3 +765,154 @@ a:hover {
     transform: none;
   }
 }
+
+
+/* Writing surface — calm editorial index / coming-soon / piece (ADR-0013). */
+.writing-surface,
+.writing-piece {
+  max-width: var(--measure);
+  animation: surface-enter 420ms var(--ease-out) both;
+}
+
+.writing-eyebrow {
+  margin: 0 0 1rem;
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.writing-title {
+  margin: 0 0 1rem;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 3.75rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.writing-lede {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.writing-list {
+  list-style: none;
+  margin: 2.75rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.writing-list__item {
+  border-bottom: 1px solid var(--rule);
+}
+
+.writing-list__link {
+  display: grid;
+  gap: 0.45rem;
+  padding-block: 1.35rem;
+  text-decoration: none;
+  transition: color 180ms var(--ease-out);
+}
+
+.writing-list__meta {
+  color: var(--ink-faint);
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+}
+
+.writing-list__title {
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.writing-list__summary {
+  color: var(--ink-muted);
+  font-size: 0.975rem;
+  line-height: 1.55;
+}
+
+.writing-list__link:hover .writing-list__title {
+  color: var(--ink);
+}
+
+.writing-piece .writing-lede {
+  margin-bottom: 2.5rem;
+}
+
+.writing-prose {
+  color: var(--ink);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+.writing-prose > *:first-child {
+  margin-top: 0;
+}
+
+.writing-prose p,
+.writing-prose ul,
+.writing-prose ol,
+.writing-prose pre,
+.writing-prose blockquote {
+  margin-block: 1.15rem;
+}
+
+.writing-prose h2,
+.writing-prose h3,
+.writing-prose h4 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.writing-prose a {
+  text-decoration: underline;
+}
+
+.writing-prose code {
+  font-size: 0.9em;
+}
+
+.writing-prose pre {
+  overflow-x: auto;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--rule);
+  background: var(--canvas-elevated);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.writing-prose pre code {
+  background: transparent;
+}
+
+.writing-anchor {
+  text-decoration: none;
+}
+
+.writing-image {
+  width: 100%;
+  height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .writing-surface,
+  .writing-piece {
+    animation: none;
+  }
+
+  .writing-list__link {
+    transition: none;
+  }
+}
