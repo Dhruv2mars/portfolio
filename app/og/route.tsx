@@ -5,7 +5,7 @@ export const runtime = "edge";
 
 export function GET(request: Request) {
   const url = new URL(request.url);
-  const title = url.searchParams.get("title") || site.name;
+  const title = (url.searchParams.get("title") || site.name).slice(0, 140);
 
   return new ImageResponse(
     (

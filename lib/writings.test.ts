@@ -4,6 +4,7 @@ import {
   parsePostSource,
   selectLatestPublished,
   selectPublishedPosts,
+  tryParsePostSource,
   type PostRecord,
 } from "./writings";
 
@@ -77,5 +78,42 @@ eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twen
     expect(parsed.readingTimeMinutes).toBe(
       estimateReadingTimeMinutes(parsed.content),
     );
+  });
+
+  test("incomplete drafts are skipped; incomplete published Posts throw", () => {
+    const incompleteDraft = `---
+title: WIP
+draft: true
+---
+
+Body
+`;
+    expect(tryParsePostSource("wip", incompleteDraft)).toBeNull();
+
+    const incompletePublished = `---
+title: Broken
+publishedAt: 2026-01-01
+draft: false
+---
+
+Body
+`;
+    expect(() => tryParsePostSource("broken", incompletePublished)).toThrow(
+      /summary/,
+    );
+  });
+
+  test("rejects YAML block scalars in frontmatter", () => {
+    const source = `---
+title: Block
+publishedAt: 2026-01-01
+summary: >
+  multiline summary
+draft: false
+---
+
+Body
+`;
+    expect(() => parsePostSource("block", source)).toThrow(/block syntax/);
   });
 });

@@ -36,8 +36,8 @@ export function buildRssXml({
     .map(
       (post) => `    <item>
       <title>${escapeXml(post.title)}</title>
-      <link>${siteUrl}/writings/${post.slug}</link>
-      <guid>${siteUrl}/writings/${post.slug}</guid>
+      <link>${escapeXml(`${siteUrl}/writings/${encodeURIComponent(post.slug)}`)}</link>
+      <guid>${escapeXml(`${siteUrl}/writings/${encodeURIComponent(post.slug)}`)}</guid>
       <description>${escapeXml(post.summary)}</description>
       <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
     </item>`,

@@ -39,7 +39,10 @@ function parseBool(raw: string | undefined): boolean {
   return raw.toLowerCase() === "true";
 }
 
-export function parsePostSource(slug: string, fileContent: string): PostRecord {
+function parseFrontmatterFields(
+  slug: string,
+  fileContent: string,
+): { fields: Record<string, string>; content: string } {
   const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*/;
   const match = frontmatterRegex.exec(fileContent);
   if (!match) {
@@ -57,15 +60,41 @@ export function parsePostSource(slug: string, fileContent: string): PostRecord {
     if (sep === -1) continue;
     const key = trimmed.slice(0, sep).trim();
     let value = trimmed.slice(sep + 1).trim();
+    // Single-line frontmatter only — reject YAML block scalars.
+    if (
+      value === ">" ||
+      value === "|" ||
+      value.startsWith("> ") ||
+      value.startsWith("| ")
+    ) {
+      throw new Error(
+        `Post "${slug}" field "${key}" uses unsupported YAML block syntax; use a single-line value`,
+      );
+    }
     value = value.replace(/^['"](.*)['"]$/, "$1");
     fields[key] = value;
   }
 
+  return { fields, content };
+}
+
+/**
+ * Parses a Post from MDX source. Incomplete drafts (missing required
+ * frontmatter) return `null` so WIP files cannot break public builds.
+ * Incomplete published Posts still throw.
+ */
+export function tryParsePostSource(
+  slug: string,
+  fileContent: string,
+): PostRecord | null {
+  const { fields, content } = parseFrontmatterFields(slug, fileContent);
   const title = fields.title;
   const publishedAt = fields.publishedAt;
   const summary = fields.summary;
+  const draft = parseBool(fields.draft);
 
   if (!title || !publishedAt || !summary) {
+    if (draft) return null;
     throw new Error(
       `Post "${slug}" requires title, publishedAt, and summary frontmatter`,
     );
@@ -77,11 +106,21 @@ export function parsePostSource(slug: string, fileContent: string): PostRecord {
     publishedAt,
     summary,
     tags: parseTags(fields.tags),
-    draft: parseBool(fields.draft),
+    draft,
     image: fields.image,
     content,
     readingTimeMinutes: estimateReadingTimeMinutes(content),
   };
+}
+
+export function parsePostSource(slug: string, fileContent: string): PostRecord {
+  const post = tryParsePostSource(slug, fileContent);
+  if (!post) {
+    throw new Error(
+      `Post "${slug}" is an incomplete draft (missing title, publishedAt, or summary)`,
+    );
+  }
+  return post;
 }
 
 export function selectPublishedPosts(
@@ -108,12 +147,13 @@ function listMdxFiles(dir: string): string[] {
   return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
 }
 
-/** All Posts from disk (including drafts). */
+/** All Posts from disk (including complete drafts; skips incomplete drafts). */
 export function getAllPosts(): PostRecord[] {
-  return listMdxFiles(WRITINGS_DIR).map((file) => {
+  return listMdxFiles(WRITINGS_DIR).flatMap((file) => {
     const slug = path.basename(file, path.extname(file));
     const raw = fs.readFileSync(path.join(WRITINGS_DIR, file), "utf-8");
-    return parsePostSource(slug, raw);
+    const post = tryParsePostSource(slug, raw);
+    return post ? [post] : [];
   });
 }
 

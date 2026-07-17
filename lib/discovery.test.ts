@@ -34,6 +34,17 @@ describe("discovery contracts", () => {
     expect(withPost).toContain("https://dhruv2mars.com/writings/judgment");
     expect(withPost).toContain("Product &amp; judgment");
     expect(withPost).not.toContain("/blog/");
+
+    const ampersandSlug = buildRssXml({
+      siteUrl: "https://dhruv2mars.com",
+      siteName: "Dhruv Sharma",
+      description: "AI-pilled Design Engineer.",
+      posts: [{ ...samplePost, slug: "ai&design" }],
+    });
+    expect(ampersandSlug).toContain(
+      "https://dhruv2mars.com/writings/ai%26design",
+    );
+    expect(ampersandSlug).not.toContain("/writings/ai&design");
   });
 
   test("sitemap lists Home, Writings, Projects, and published Posts", () => {
