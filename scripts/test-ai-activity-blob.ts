@@ -1,16 +1,24 @@
 import { put, list } from "@vercel/blob";
 import { readFileSync } from "node:fs";
+import { isAiActivityPayload } from "../lib/ai-activity-payload";
 
 const token = process.env.BLOB_READ_WRITE_TOKEN;
 if (!token) throw new Error("missing BLOB_READ_WRITE_TOKEN");
 
-const fallback = JSON.parse(
+const fallback: unknown = JSON.parse(
   readFileSync("data/ai-activity.fallback.json", "utf8"),
 );
+if (!isAiActivityPayload(fallback)) {
+  throw new Error("fallback payload failed validation");
+}
+
 const payload = {
   ...fallback,
   generatedAt: new Date().toISOString(),
 };
+if (!isAiActivityPayload(payload)) {
+  throw new Error("test payload failed validation");
+}
 
 const blob = await put("ai-activity/latest.json", JSON.stringify(payload), {
   access: "public",
@@ -29,21 +37,17 @@ console.log("LIST_OK", Boolean(match?.url));
 
 const res = await fetch(blob.url, { cache: "no-store" });
 console.log("FETCH_STATUS", res.status);
-const json = (await res.json()) as {
-  version?: number;
-  days?: unknown[];
-  timezone?: string;
-};
+const json: unknown = await res.json();
+if (!isAiActivityPayload(json)) {
+  throw new Error("invalid payload roundtrip");
+}
 console.log(
   "FETCH_DAYS",
-  json.days?.length,
+  json.days.length,
   "version",
   json.version,
   "tz",
   json.timezone,
 );
-if (json.version !== 1 || !Array.isArray(json.days) || json.days.length < 1) {
-  throw new Error("invalid payload roundtrip");
-}
 console.log("BLOB_ROUNDTRIP_PASS");
 console.log(`BLOB_URL=${blob.url}`);

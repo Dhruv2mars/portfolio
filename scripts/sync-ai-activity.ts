@@ -22,8 +22,14 @@ import {
 } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
+import {
+  AI_ACTIVITY_TIMEZONE,
+  type AiActivityPayload,
+  isAiActivityPayload,
+  yesterdayInTimeZone,
+} from "../lib/ai-activity-payload";
 
-const TIMEZONE = process.env.AI_ACTIVITY_TIMEZONE ?? "Asia/Kolkata";
+const TIMEZONE = process.env.AI_ACTIVITY_TIMEZONE ?? AI_ACTIVITY_TIMEZONE;
 const STATE_DIR =
   process.env.AI_ACTIVITY_STATE_DIR ??
   join(homedir(), ".config", "portfolio-ai-activity");
@@ -31,6 +37,7 @@ const STALE_HOURS = Number(process.env.AI_ACTIVITY_STALE_HOURS ?? 26);
 const FORCE = process.env.AI_ACTIVITY_FORCE === "1";
 const INGEST_URL = process.env.AI_ACTIVITY_INGEST_URL;
 const INGEST_SECRET = process.env.AI_ACTIVITY_INGEST_SECRET;
+const MAX_DAYS = 800;
 
 type GraphContribution = {
   date: string;
@@ -39,14 +46,6 @@ type GraphContribution = {
 
 type GraphFile = {
   contributions?: GraphContribution[];
-};
-
-type Payload = {
-  version: 1;
-  generatedAt: string;
-  timezone: string;
-  days: { date: string; tokens: number }[];
-  lifetimeTokens: number;
 };
 
 type Status = {
@@ -58,23 +57,6 @@ type Status = {
 
 function log(msg: string) {
   console.log(`[ai-activity-sync] ${msg}`);
-}
-
-function calendarDate(date = new Date(), timeZone = TIMEZONE): string {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
-}
-
-function yesterday(timeZone = TIMEZONE): string {
-  const today = calendarDate(new Date(), timeZone);
-  const [y, m, d] = today.split("-").map(Number);
-  const utcNoon = new Date(Date.UTC(y!, m! - 1, d!, 12, 0, 0));
-  utcNoon.setUTCDate(utcNoon.getUTCDate() - 1);
-  return calendarDate(utcNoon, timeZone);
 }
 
 function readStatus(): Status {
@@ -134,7 +116,7 @@ function whichTokscale(): string {
   return "tokscale";
 }
 
-function exportPayload(): Payload {
+function exportPayload(): AiActivityPayload {
   const tokscale = whichTokscale();
   run(tokscale, ["cursor", "sync", "--json"], true);
 
@@ -142,7 +124,7 @@ function exportPayload(): Payload {
   run(tokscale, ["graph", "--output", graphPath, "--no-spinner"]);
 
   const graph = JSON.parse(readFileSync(graphPath, "utf8")) as GraphFile;
-  const cutoff = yesterday();
+  const cutoff = yesterdayInTimeZone(new Date(), TIMEZONE);
   const days = (graph.contributions ?? [])
     .map((c) => ({
       date: c.date,
@@ -154,18 +136,25 @@ function exportPayload(): Payload {
   if (days.length === 0) {
     throw new Error("tokscale graph produced zero historical days");
   }
+  if (days.length > MAX_DAYS) {
+    throw new Error(`tokscale graph too large (${days.length} > ${MAX_DAYS})`);
+  }
 
   const lifetimeTokens = days.reduce((sum, d) => sum + d.tokens, 0);
-  return {
+  const payload: AiActivityPayload = {
     version: 1,
     generatedAt: new Date().toISOString(),
     timezone: TIMEZONE,
     days,
     lifetimeTokens,
   };
+  if (!isAiActivityPayload(payload)) {
+    throw new Error("built payload failed validation");
+  }
+  return payload;
 }
 
-function saveLastGood(payload: Payload) {
+function saveLastGood(payload: AiActivityPayload) {
   mkdirSync(STATE_DIR, { recursive: true });
   const path = join(STATE_DIR, "last-good.json");
   const tmp = `${path}.${process.pid}.tmp`;
@@ -173,7 +162,7 @@ function saveLastGood(payload: Payload) {
   renameSync(tmp, path);
 }
 
-async function publish(payload: Payload): Promise<string> {
+async function publish(payload: AiActivityPayload): Promise<string> {
   if (!INGEST_URL || !INGEST_SECRET) {
     throw new Error(
       "Set AI_ACTIVITY_INGEST_URL and AI_ACTIVITY_INGEST_SECRET to publish",

@@ -20,7 +20,11 @@ export function isAiActivityPayload(value: unknown): value is AiActivityPayload 
   if (v.version !== 1) return false;
   if (typeof v.generatedAt !== "string") return false;
   if (typeof v.timezone !== "string") return false;
-  if (typeof v.lifetimeTokens !== "number" || !Number.isFinite(v.lifetimeTokens)) {
+  if (
+    typeof v.lifetimeTokens !== "number" ||
+    !Number.isFinite(v.lifetimeTokens) ||
+    v.lifetimeTokens < 0
+  ) {
     return false;
   }
   if (!Array.isArray(v.days)) return false;

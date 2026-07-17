@@ -40,6 +40,12 @@ export async function POST(req: Request) {
   }
 
   const payload = body as AiActivityPayload;
+  if (payload.days.length === 0 || payload.days.length > 800) {
+    return NextResponse.json(
+      { error: "Invalid day count" },
+      { status: 400 },
+    );
+  }
 
   try {
     const { url } = await publishAiActivityPayload(payload);

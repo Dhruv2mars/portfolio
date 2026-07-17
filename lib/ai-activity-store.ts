@@ -45,7 +45,8 @@ async function resolveBlobUrl(token?: string): Promise<string | null> {
     });
     const match = blobs.find((b) => b.pathname === AI_ACTIVITY_BLOB_PATH);
     return match?.url ?? null;
-  } catch {
+  } catch (error) {
+    console.warn("[ai-activity] blob list failed", error);
     return null;
   }
 }
@@ -59,10 +60,18 @@ export async function fetchPublishedAiActivityPayload(): Promise<AiActivityPaylo
     const res = await fetch(url, {
       next: { revalidate: 3600 },
     });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.warn(`[ai-activity] blob fetch HTTP ${res.status} for ${url}`);
+      return null;
+    }
     const json: unknown = await res.json();
-    return isAiActivityPayload(json) ? json : null;
-  } catch {
+    if (!isAiActivityPayload(json)) {
+      console.warn("[ai-activity] blob payload failed validation");
+      return null;
+    }
+    return json;
+  } catch (error) {
+    console.warn("[ai-activity] blob fetch failed", error);
     return null;
   }
 }

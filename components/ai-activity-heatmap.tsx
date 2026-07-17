@@ -7,10 +7,13 @@ import {
   formatTokenCount,
   LIVE_COUNT_DURATION_MS,
   LIVE_COUNT_START_RATIO,
+  materializeAiActivity,
 } from "@/lib/ai-activity";
+import type { AiActivityPayload } from "@/lib/ai-activity-payload";
 import { HOME_SECTION_COPY } from "@/lib/home";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
+const LIVE_REFRESH_MS = 60_000;
 
 function parseUTCDate(date: string): Date {
   const [y, m, d] = date.split("-").map(Number);
@@ -80,7 +83,7 @@ function useLiveTokenDisplay(
   day: ActivityDay | null,
   reduceMotion: boolean | null,
 ): number | null {
-  const [display, setDisplay] = useState<number | null>(null);
+  const [display, setDisplay] = useState<number | null>(day?.tokens ?? null);
 
   useEffect(() => {
     if (!day) {
@@ -109,17 +112,36 @@ function useLiveTokenDisplay(
     return () => cancelAnimationFrame(frame);
   }, [day, reduceMotion]);
 
-  return display;
+  // Avoid a one-frame “Hover a day…” flash before the effect runs.
+  return display ?? day?.tokens ?? null;
 }
 
 type AiActivityHeatmapProps = {
-  activity: AiActivity;
+  payload: AiActivityPayload;
+  source: AiActivity["source"];
 };
 
-export function AiActivityHeatmap({ activity }: AiActivityHeatmapProps) {
+export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
   const labelId = useId();
   const reduce = useReducedMotion();
   const [hover, setHover] = useState<ActivityDay | null>(null);
+  const [liveNow, setLiveNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setLiveNow(new Date());
+    const id = window.setInterval(() => setLiveNow(new Date()), LIVE_REFRESH_MS);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const activity = useMemo(() => {
+    if (!liveNow) {
+      return materializeAiActivity(payload, new Date(), source, {
+        includeLiveToday: false,
+      });
+    }
+    return materializeAiActivity(payload, liveNow, source);
+  }, [payload, source, liveNow]);
+
   const liveDisplay = useLiveTokenDisplay(hover, reduce);
   const weeks = useMemo(
     () => chunkWeeks(padToWeeks(activity.days)),

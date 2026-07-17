@@ -71,20 +71,34 @@ let plist = readFileSync(PLIST_SRC, "utf8")
   .replaceAll("__REPO__", REPO)
   .replaceAll("__HOME__", HOME);
 
+function escapeXml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
 // Inject env keys into the plist EnvironmentVariables dict
 const envEntries = Object.entries(env)
-  .map(
-    ([k, v]) =>
-      `      <key>${k}</key>\n      <string>${v.replaceAll("&", "&amp;").replaceAll("<", "&lt;")}</string>`,
-  )
+  .map(([k, v]) => `      <key>${escapeXml(k)}</key>\n      <string>${escapeXml(v)}</string>`)
   .join("\n");
 
-plist = plist.replace(
-  `      <key>HOME</key>\n      <string>${HOME}</string>\n    </dict>`,
-  `      <key>HOME</key>\n      <string>${HOME}</string>\n${envEntries}\n    </dict>`,
-);
+const homeAnchor = `      <key>HOME</key>\n      <string>${HOME}</string>`;
+if (!plist.includes(homeAnchor)) {
+  console.error("Plist template missing HOME EnvironmentVariables anchor");
+  process.exit(1);
+}
 
-writeFileSync(PLIST_DST, plist);
+const injected = `${homeAnchor}\n${envEntries}`;
+plist = plist.replace(homeAnchor, injected);
+if (!plist.includes("AI_ACTIVITY_INGEST_SECRET")) {
+  console.error("Failed to inject secrets into LaunchAgent plist");
+  process.exit(1);
+}
+
+writeFileSync(PLIST_DST, plist, { mode: 0o600 });
+chmodSync(PLIST_DST, 0o600);
 
 spawnSync("launchctl", ["bootout", `gui/${process.getuid?.() ?? 501}/${LABEL}`], {
   encoding: "utf8",

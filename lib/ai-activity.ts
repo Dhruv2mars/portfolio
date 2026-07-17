@@ -1,11 +1,11 @@
-import fallbackPayload from "@/data/ai-activity.fallback.json";
 import {
   AI_ACTIVITY_TIMEZONE,
+  calendarDateInTimeZone,
   type AiActivityPayload,
   isAiActivityPayload,
   projectTodayTokens,
+  yesterdayInTimeZone,
 } from "@/lib/ai-activity-payload";
-import { fetchPublishedAiActivityPayload } from "@/lib/ai-activity-store";
 
 export type DailyTokens = {
   date: string;
@@ -26,21 +26,14 @@ export type AiActivity = {
   /** ISO timestamp of the nightly payload, when known. */
   generatedAt: string | null;
   source: "blob" | "fallback";
+  timezone: string;
 };
 
-/**
- * Absolute thresholds (tests / small fixtures).
- * Real volumes use relative scaling in `buildAiActivity`.
- */
-export function intensityFromTokens(tokens: number): Intensity {
-  if (tokens <= 0) return 0;
-  if (tokens <= 5_000) return 1;
-  if (tokens <= 20_000) return 2;
-  if (tokens <= 50_000) return 3;
-  return 4;
-}
-
-function relativeIntensity(tokens: number, maxTokens: number): Intensity {
+/** GitHub-like 5-level scale relative to the densest day in the series. */
+export function intensityFromTokens(
+  tokens: number,
+  maxTokens = tokens,
+): Intensity {
   if (tokens <= 0 || maxTokens <= 0) return 0;
   const ratio = tokens / maxTokens;
   if (ratio <= 0.25) return 1;
@@ -49,83 +42,67 @@ function relativeIntensity(tokens: number, maxTokens: number): Intensity {
   return 4;
 }
 
+function addCalendarDays(date: string, delta: number): string {
+  const [y, m, d] = date.split("-").map(Number);
+  const utcNoon = new Date(Date.UTC(y!, m! - 1, d!, 12, 0, 0));
+  utcNoon.setUTCDate(utcNoon.getUTCDate() + delta);
+  return calendarDateInTimeZone(utcNoon, "UTC");
+}
+
+/**
+ * Expand a sparse daily series into consecutive calendar days (0-filled gaps)
+ * ending on `endDate`, keeping at most `windowDays` cells.
+ */
+export function fillSparseDailySeries(
+  days: readonly DailyTokens[],
+  endDate: string,
+  windowDays = 365,
+): DailyTokens[] {
+  const byDate = new Map(days.map((d) => [d.date, d.tokens]));
+  const startDate = addCalendarDays(endDate, -(windowDays - 1));
+  const filled: DailyTokens[] = [];
+  for (
+    let cursor = startDate;
+    cursor <= endDate;
+    cursor = addCalendarDays(cursor, 1)
+  ) {
+    filled.push({ date: cursor, tokens: byDate.get(cursor) ?? 0 });
+  }
+  return filled;
+}
+
 export function buildAiActivity(
   series: readonly DailyTokens[],
-  options?: { liveDates?: ReadonlySet<string>; generatedAt?: string | null; source?: AiActivity["source"] },
+  options?: {
+    liveDate?: string;
+    generatedAt?: string | null;
+    source?: AiActivity["source"];
+    timezone?: string;
+    /** Authoritative lifetime from the payload (preferred over series sum). */
+    lifetimeTokens?: number;
+  },
 ): AiActivity {
   const max = Math.max(0, ...series.map((d) => d.tokens));
-  const useRelative = max > 50_000;
-  const liveDates = options?.liveDates;
+  const liveDate = options?.liveDate;
 
   const days: ActivityDay[] = series.map((day) => ({
     ...day,
-    intensity: useRelative
-      ? relativeIntensity(day.tokens, max)
-      : intensityFromTokens(day.tokens),
-    live: liveDates?.has(day.date) || undefined,
+    intensity: intensityFromTokens(day.tokens, max),
+    live: liveDate === day.date ? true : undefined,
   }));
 
-  const lifetimeTokens = series.reduce((sum, day) => sum + day.tokens, 0);
+  const seriesSum = series.reduce((sum, day) => sum + day.tokens, 0);
+  const lifetimeTokens =
+    options?.lifetimeTokens !== undefined
+      ? options.lifetimeTokens
+      : seriesSum;
 
   return {
     days,
     lifetimeTokens,
     generatedAt: options?.generatedAt ?? null,
     source: options?.source ?? "fallback",
-  };
-}
-
-function formatDateUTC(date: Date): string {
-  const y = date.getUTCFullYear();
-  const m = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const d = String(date.getUTCDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
-}
-
-/**
- * Deterministic fixture year ending on the given end date (UTC).
- * Used only when no published/fallback payload is available.
- */
-export function createFixtureSeries(endDate = new Date("2026-07-17")): DailyTokens[] {
-  const end = new Date(
-    Date.UTC(endDate.getUTCFullYear(), endDate.getUTCMonth(), endDate.getUTCDate()),
-  );
-  const start = new Date(end);
-  start.setUTCDate(start.getUTCDate() - 364);
-
-  const series: DailyTokens[] = [];
-  for (
-    let cursor = new Date(start);
-    cursor.getTime() <= end.getTime();
-    cursor.setUTCDate(cursor.getUTCDate() + 1)
-  ) {
-    const dayOfYear = Math.floor(
-      (cursor.getTime() - Date.UTC(cursor.getUTCFullYear(), 0, 0)) / 86_400_000,
-    );
-    const weekday = cursor.getUTCDay();
-    let tokens = 0;
-    if (weekday !== 0 && weekday !== 6) {
-      const wave = (Math.sin(dayOfYear / 11) + 1) / 2;
-      const burst = dayOfYear % 17 === 0 ? 2.4 : 1;
-      tokens = Math.round((800 + wave * 42_000) * burst);
-    } else if (dayOfYear % 9 === 0) {
-      tokens = 2_400;
-    }
-    series.push({ date: formatDateUTC(cursor), tokens });
-  }
-  return series;
-}
-
-export const AI_ACTIVITY_FIXTURE = createFixtureSeries();
-
-function payloadFromFallback(): AiActivityPayload {
-  if (isAiActivityPayload(fallbackPayload)) return fallbackPayload;
-  return {
-    version: 1,
-    generatedAt: new Date(0).toISOString(),
-    timezone: AI_ACTIVITY_TIMEZONE,
-    days: AI_ACTIVITY_FIXTURE,
-    lifetimeTokens: AI_ACTIVITY_FIXTURE.reduce((s, d) => s + d.tokens, 0),
+    timezone: options?.timezone ?? AI_ACTIVITY_TIMEZONE,
   };
 }
 
@@ -133,40 +110,51 @@ export function materializeAiActivity(
   payload: AiActivityPayload,
   now = new Date(),
   source: AiActivity["source"] = "fallback",
+  options?: { includeLiveToday?: boolean },
 ): AiActivity {
+  const includeLiveToday = options?.includeLiveToday ?? true;
   const timeZone = payload.timezone || AI_ACTIVITY_TIMEZONE;
-  const history = [...payload.days].sort((a, b) => a.date.localeCompare(b.date));
-  const projection = projectTodayTokens(history, now, timeZone);
+  const endHistory = yesterdayInTimeZone(now, timeZone);
+  const history = [...payload.days]
+    .filter((d) => d.date <= endHistory)
+    .sort((a, b) => a.date.localeCompare(b.date));
 
-  const withoutToday = history.filter((d) => d.date < projection.date);
+  const filledHistory = fillSparseDailySeries(history, endHistory, 364);
+
+  if (!includeLiveToday) {
+    return buildAiActivity(filledHistory, {
+      generatedAt: payload.generatedAt,
+      source,
+      timezone: timeZone,
+      lifetimeTokens: payload.lifetimeTokens,
+    });
+  }
+
+  const projection = projectTodayTokens(history, now, timeZone);
   const series: DailyTokens[] = [
-    ...withoutToday,
+    ...filledHistory,
     { date: projection.date, tokens: projection.tokens },
   ];
 
-  // Keep ~one year of cells for the heatmap.
-  const trimmed = series.slice(-365);
-
-  return buildAiActivity(trimmed, {
-    liveDates: new Set([projection.date]),
+  return buildAiActivity(series, {
+    liveDate: projection.date,
     generatedAt: payload.generatedAt,
     source,
+    timezone: timeZone,
+    // History lifetime from payload + projected today (not in nightly sum).
+    lifetimeTokens: payload.lifetimeTokens + projection.tokens,
   });
-}
-
-export async function getAiActivity(now = new Date()): Promise<AiActivity> {
-  const published = await fetchPublishedAiActivityPayload();
-  if (published) {
-    return materializeAiActivity(published, now, "blob");
-  }
-  return materializeAiActivity(payloadFromFallback(), now, "fallback");
 }
 
 export function formatTokenCount(tokens: number): string {
   return new Intl.NumberFormat("en-US").format(tokens);
 }
 
-/** Live counter: start this fraction below the target. */
 export const LIVE_COUNT_START_RATIO = 0.8;
-/** Live counter: seconds to ease from start → target. */
 export const LIVE_COUNT_DURATION_MS = 90_000;
+
+export function assertValidPayload(payload: unknown): asserts payload is AiActivityPayload {
+  if (!isAiActivityPayload(payload)) {
+    throw new Error("Invalid AI Activity payload");
+  }
+}
