@@ -8,6 +8,10 @@ import {
 export const metadata: Metadata = {
   title: "Writings",
   description: "Product thinking in writing.",
+  openGraph: {
+    title: "Writings",
+    description: "Product thinking in writing.",
+  },
 };
 
 export default function WritingsPage() {

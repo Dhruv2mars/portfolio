@@ -5,6 +5,10 @@ import { getProjects } from "@/lib/projects";
 export const metadata: Metadata = {
   title: "Projects",
   description: "Shipped work as proof — editorial list of outbound projects.",
+  openGraph: {
+    title: "Projects",
+    description: "Shipped work as proof — editorial list of outbound projects.",
+  },
 };
 
 export default function ProjectsPage() {
