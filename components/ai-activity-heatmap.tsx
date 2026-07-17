@@ -129,7 +129,7 @@ type AiActivityHeatmapProps = {
 export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
   const labelId = useId();
   const reduce = useReducedMotion();
-  const [hover, setHover] = useState<ActivityDay | null>(null);
+  const [hoverDate, setHoverDate] = useState<string | null>(null);
   const [liveNow, setLiveNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -145,6 +145,15 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
     if (!liveNow) return history;
     return withLiveToday(history, liveNow);
   }, [history, liveNow]);
+
+  // Resolve from current activity so live-cell refreshes keep the footer in sync.
+  const hover = useMemo(
+    () =>
+      hoverDate
+        ? (activity.days.find((d) => d.date === hoverDate) ?? null)
+        : null,
+    [activity.days, hoverDate],
+  );
 
   const liveDisplay = useLiveTokenDisplay(hover, reduce);
   const weeks = useMemo(
@@ -238,10 +247,10 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
                       type="button"
                       className={`activity-cell intensity-${day.intensity} size-3`}
                       aria-label={`${formatTooltipDate(day.date)}: ${formatTokenCount(day.tokens)} tokens${day.live ? " (live estimate)" : ""}`}
-                      onMouseEnter={() => setHover(day)}
-                      onMouseLeave={() => setHover(null)}
-                      onFocus={() => setHover(day)}
-                      onBlur={() => setHover(null)}
+                      onMouseEnter={() => setHoverDate(day.date)}
+                      onMouseLeave={() => setHoverDate(null)}
+                      onFocus={() => setHoverDate(day.date)}
+                      onBlur={() => setHoverDate(null)}
                     />
                   );
                 })}
