@@ -1,13 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import rehypeSanitize from "rehype-sanitize";
 import { highlight } from "sugar-high";
 import React from "react";
+import { isSafeHref } from "@/lib/mdx-links";
 
 function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   const href = props.href ?? "";
 
-  if (href.startsWith("/")) {
+  if (!isSafeHref(href)) {
+    return <span>{props.children}</span>;
+  }
+
+  if (href.startsWith("/") && !href.startsWith("//")) {
     return (
       <Link href={href} {...props}>
         {props.children}
@@ -35,6 +41,20 @@ function Code({
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
 }
 
+function textFromChildren(children: React.ReactNode): string {
+  return React.Children.toArray(children)
+    .map((child) => {
+      if (typeof child === "string" || typeof child === "number") {
+        return String(child);
+      }
+      if (React.isValidElement<{ children?: React.ReactNode }>(child)) {
+        return textFromChildren(child.props.children);
+      }
+      return "";
+    })
+    .join("");
+}
+
 function slugify(str: unknown): string {
   return String(str)
     .toLowerCase()
@@ -47,7 +67,7 @@ function slugify(str: unknown): string {
 
 function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
   function Heading({ children }: { children?: React.ReactNode }) {
-    const slug = slugify(children);
+    const slug = slugify(textFromChildren(children));
     return React.createElement(
       `h${level}`,
       { id: slug },
@@ -82,6 +102,16 @@ export function CustomMDX(props: React.ComponentProps<typeof MDXRemote>) {
     <MDXRemote
       {...props}
       components={{ ...components, ...(props.components || {}) }}
+      options={{
+        ...props.options,
+        mdxOptions: {
+          ...props.options?.mdxOptions,
+          rehypePlugins: [
+            ...(props.options?.mdxOptions?.rehypePlugins ?? []),
+            rehypeSanitize,
+          ],
+        },
+      }}
     />
   );
 }
