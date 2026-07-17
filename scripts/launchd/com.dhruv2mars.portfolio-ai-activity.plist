@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Nightly AI Activity sync + catch-up on login if last success is stale.
+
+  Install:
+    bun run ai-activity:install-agent
+
+  Logs:
+    ~/.config/portfolio-ai-activity/launchd.out.log
+    ~/.config/portfolio-ai-activity/launchd.err.log
+-->
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.dhruv2mars.portfolio-ai-activity</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>__BUN_BIN__</string>
+      <string>__REPO__/scripts/sync-ai-activity.ts</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__REPO__</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>PATH</key>
+      <string>__HOME__/.bun/bin:/usr/local/bin:/usr/bin:/bin</string>
+      <key>HOME</key>
+      <string>__HOME__</string>
+    </dict>
+
+    <!-- Nightly 00:20 local time -->
+    <key>StartCalendarInterval</key>
+    <dict>
+      <key>Hour</key>
+      <integer>0</integer>
+      <key>Minute</key>
+      <integer>20</integer>
+    </dict>
+
+    <!-- Catch-up when the Mac wakes / you log in (script no-ops if not stale) -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>__HOME__/.config/portfolio-ai-activity/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/.config/portfolio-ai-activity/launchd.err.log</string>
+  </dict>
+</plist>

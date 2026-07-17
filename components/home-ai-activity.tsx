@@ -1,7 +1,7 @@
 import { AiActivityHeatmap } from "@/components/ai-activity-heatmap";
-import { getAiActivity } from "@/lib/ai-activity";
+import { getAiActivityPayload } from "@/lib/ai-activity-store";
 
-export function HomeAiActivity() {
-  const activity = getAiActivity();
-  return <AiActivityHeatmap activity={activity} />;
+export async function HomeAiActivity() {
+  const { payload, source } = await getAiActivityPayload();
+  return <AiActivityHeatmap payload={payload} source={source} />;
 }
