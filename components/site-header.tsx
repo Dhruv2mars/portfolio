@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { contactLinks, primaryNav, site } from "@/lib/site";
+import { ContactLinks } from "@/components/contact-links";
+import { primaryNav, site } from "@/lib/site";
 
 type SiteHeaderProps = {
   pathname: string;
@@ -34,20 +35,7 @@ export function SiteHeader({ pathname }: SiteHeaderProps) {
           })}
         </nav>
 
-        <div className="site-contact site-contact--header">
-          {contactLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="site-contact__link"
-              {...(link.href.startsWith("mailto:")
-                ? {}
-                : { target: "_blank", rel: "noopener noreferrer" })}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
+        <ContactLinks className="site-contact site-contact--header" />
       </div>
     </header>
   );
