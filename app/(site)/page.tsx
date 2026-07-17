@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { SurfaceStub } from "@/components/surface-stub";
+import { ContactLinks } from "@/components/contact-links";
+import { TokenActivitySection } from "@/components/token-activity-section";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -9,10 +10,18 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <SurfaceStub
-      title={site.name}
-      lede="AI-pilled design engineer. Home will carry selected proof — Token activity, Projects, and Writing — in an Editorial composition."
-      note="Stub surface. Full Home composition lands in a follow-up ticket."
-    />
+    <div className="home">
+      <section className="home-hero" aria-labelledby="home-hero-title">
+        <h1 id="home-hero-title" className="home-hero__title">
+          {site.name}
+        </h1>
+        <p className="home-hero__lede">
+          AI-pilled design engineer with product sense.
+        </p>
+        <ContactLinks className="site-contact home-hero__contact" />
+      </section>
+
+      <TokenActivitySection />
+    </div>
   );
 }
