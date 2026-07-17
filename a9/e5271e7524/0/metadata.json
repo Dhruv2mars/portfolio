@@ -1,0 +1,45 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "a9e5271e7524",
+  "session_id": "dac4bf2f-74c5-4151-8f90-8a7b81d5ad8b",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-17T14:54:37.191166Z",
+  "branch": "feat/ai-activity-nightly-sync",
+  "checkpoints_count": 6,
+  "files_touched": [
+    "app/api/ai-activity/ingest/route.ts",
+    "components/ai-activity-heatmap.tsx",
+    "components/home-ai-activity.tsx",
+    "lib/ai-activity-load.ts",
+    "lib/ai-activity-payload.ts",
+    "lib/ai-activity-store.ts",
+    "lib/ai-activity.test.ts",
+    "lib/ai-activity.ts",
+    "scripts/install-ai-activity-agent.ts",
+    "scripts/sync-ai-activity.ts",
+    "scripts/test-ai-activity-blob.ts"
+  ],
+  "agent": "Cursor",
+  "model": "cursor-grok-4.5-high",
+  "turn_id": "3267cb753a02",
+  "checkpoint_transcript_start": 439,
+  "transcript_lines_at_start": 439,
+  "compact_transcript_start": 193,
+  "session_metrics": {
+    "turn_count": 6,
+    "context_tokens": 238976,
+    "context_window_size": 256000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-17T14:54:37.088362Z",
+    "agent_lines": 308,
+    "agent_removed": 172,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 308,
+    "total_lines_changed": 480,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}

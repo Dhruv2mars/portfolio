@@ -1,0 +1,29 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "a9e5271e7524",
+  "strategy": "manual-commit",
+  "branch": "feat/ai-activity-nightly-sync",
+  "checkpoints_count": 6,
+  "files_touched": [
+    "app/api/ai-activity/ingest/route.ts",
+    "components/ai-activity-heatmap.tsx",
+    "components/home-ai-activity.tsx",
+    "lib/ai-activity-load.ts",
+    "lib/ai-activity-payload.ts",
+    "lib/ai-activity-store.ts",
+    "lib/ai-activity.test.ts",
+    "lib/ai-activity.ts",
+    "scripts/install-ai-activity-agent.ts",
+    "scripts/sync-ai-activity.ts",
+    "scripts/test-ai-activity-blob.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a9/e5271e7524/0/metadata.json",
+      "transcript": "/a9/e5271e7524/0/full.jsonl",
+      "compact_transcript": "/a9/e5271e7524/0/transcript.jsonl",
+      "content_hash": "/a9/e5271e7524/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
