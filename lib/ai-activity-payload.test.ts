@@ -16,7 +16,7 @@ describe("AI Activity payload helpers", () => {
     expect(yesterdayInTimeZone(d, "Asia/Kolkata")).toBe("2026-07-16");
   });
 
-  test("isAiActivityPayload rejects empty or oversized day arrays", () => {
+  test("isAiActivityPayload rejects empty, oversized, duplicate, or bad timezone", () => {
     expect(
       isAiActivityPayload({
         version: 1,
@@ -24,6 +24,29 @@ describe("AI Activity payload helpers", () => {
         timezone: "Asia/Kolkata",
         days: [],
         lifetimeTokens: 0,
+      }),
+    ).toBe(false);
+
+    expect(
+      isAiActivityPayload({
+        version: 1,
+        generatedAt: "2026-07-17T00:00:00.000Z",
+        timezone: "Not/AZone",
+        days: [{ date: "2026-07-16", tokens: 10 }],
+        lifetimeTokens: 10,
+      }),
+    ).toBe(false);
+
+    expect(
+      isAiActivityPayload({
+        version: 1,
+        generatedAt: "2026-07-17T00:00:00.000Z",
+        timezone: "Asia/Kolkata",
+        days: [
+          { date: "2026-07-16", tokens: 10 },
+          { date: "2026-07-16", tokens: 1 },
+        ],
+        lifetimeTokens: 11,
       }),
     ).toBe(false);
 

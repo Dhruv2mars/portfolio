@@ -39,6 +39,8 @@ bun run ai-activity:install-agent
 AI_ACTIVITY_FORCE=1 bun run ai-activity:sync
 ```
 
+The LaunchAgent plist only sets PATH/HOME/WorkingDirectory. Secrets stay in `env` (chmod 600); the sync script loads that file at runtime.
+
 State / logs live under `~/.config/portfolio-ai-activity/` (`last-good.json`, `status.json`, launchd logs).
 
 ## Failure mitigation

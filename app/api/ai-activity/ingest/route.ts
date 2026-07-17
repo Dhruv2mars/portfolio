@@ -1,14 +1,16 @@
-import { timingSafeEqual } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
-import { parseAiActivityPayload } from "@/lib/ai-activity-payload";
+import {
+  parseAiActivityPayload,
+  payloadDaysWithinHistory,
+} from "@/lib/ai-activity-payload";
 import { publishAiActivityPayload } from "@/lib/ai-activity-store";
 
 export const runtime = "nodejs";
 
 function secretsEqual(a: string, b: string): boolean {
-  const left = Buffer.from(a);
-  const right = Buffer.from(b);
-  if (left.length !== right.length) return false;
+  const left = createHash("sha256").update(a).digest();
+  const right = createHash("sha256").update(b).digest();
   return timingSafeEqual(left, right);
 }
 
@@ -33,7 +35,7 @@ export async function POST(req: Request) {
   }
 
   const payload = parseAiActivityPayload(body);
-  if (!payload) {
+  if (!payload || !payloadDaysWithinHistory(payload)) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 

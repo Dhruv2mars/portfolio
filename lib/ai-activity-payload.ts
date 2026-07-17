@@ -14,13 +14,39 @@ export type AiActivityPayload = {
 export const AI_ACTIVITY_TIMEZONE = "Asia/Kolkata";
 export const AI_ACTIVITY_BLOB_PATH = "ai-activity/latest.json";
 export const AI_ACTIVITY_MAX_DAYS = 800;
+const MAX_GENERATED_AT_LEN = 40;
+const MAX_TIMEZONE_LEN = 64;
+
+export function isValidIanaTimeZone(timeZone: string): boolean {
+  if (
+    timeZone.length < 1 ||
+    timeZone.length > MAX_TIMEZONE_LEN ||
+    timeZone !== timeZone.trim()
+  ) {
+    return false;
+  }
+  try {
+    Intl.DateTimeFormat("en-US", { timeZone });
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 export function isAiActivityPayload(value: unknown): value is AiActivityPayload {
   if (!value || typeof value !== "object") return false;
   const v = value as Record<string, unknown>;
   if (v.version !== 1) return false;
-  if (typeof v.generatedAt !== "string") return false;
-  if (typeof v.timezone !== "string") return false;
+  if (
+    typeof v.generatedAt !== "string" ||
+    v.generatedAt.length === 0 ||
+    v.generatedAt.length > MAX_GENERATED_AT_LEN
+  ) {
+    return false;
+  }
+  if (typeof v.timezone !== "string" || !isValidIanaTimeZone(v.timezone)) {
+    return false;
+  }
   if (
     typeof v.lifetimeTokens !== "number" ||
     !Number.isFinite(v.lifetimeTokens) ||
@@ -30,22 +56,41 @@ export function isAiActivityPayload(value: unknown): value is AiActivityPayload 
   }
   if (!Array.isArray(v.days)) return false;
   if (v.days.length === 0 || v.days.length > AI_ACTIVITY_MAX_DAYS) return false;
-  return v.days.every(
-    (day) =>
-      day &&
-      typeof day === "object" &&
-      typeof (day as { date?: unknown }).date === "string" &&
-      /^\d{4}-\d{2}-\d{2}$/.test((day as { date: string }).date) &&
-      typeof (day as { tokens?: unknown }).tokens === "number" &&
-      Number.isFinite((day as { tokens: number }).tokens) &&
-      (day as { tokens: number }).tokens >= 0,
-  );
+
+  const seen = new Set<string>();
+  for (const day of v.days) {
+    if (!day || typeof day !== "object") return false;
+    const date = (day as { date?: unknown }).date;
+    const tokens = (day as { tokens?: unknown }).tokens;
+    if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return false;
+    }
+    if (seen.has(date)) return false;
+    seen.add(date);
+    if (
+      typeof tokens !== "number" ||
+      !Number.isFinite(tokens) ||
+      tokens < 0
+    ) {
+      return false;
+    }
+  }
+  return true;
 }
 
 export function parseAiActivityPayload(
   value: unknown,
 ): AiActivityPayload | null {
   return isAiActivityPayload(value) ? value : null;
+}
+
+/** Reject payloads whose days extend past yesterday in the payload timezone. */
+export function payloadDaysWithinHistory(
+  payload: AiActivityPayload,
+  now = new Date(),
+): boolean {
+  const cutoff = yesterdayInTimeZone(now, payload.timezone);
+  return payload.days.every((d) => d.date <= cutoff);
 }
 
 /** Calendar YYYY-MM-DD in a timezone. */

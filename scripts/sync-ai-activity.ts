@@ -2,6 +2,9 @@
 /**
  * Nightly AI Activity sync (Mac → portfolio ingest API → Vercel Blob).
  *
+ * Loads optional KEY=VALUE lines from ~/.config/portfolio-ai-activity/env
+ * (so LaunchAgent need not embed secrets in the plist).
+ *
  * Env (required for publish):
  *   AI_ACTIVITY_INGEST_URL   e.g. https://dhruv2mars.com/api/ai-activity/ingest
  *   AI_ACTIVITY_INGEST_SECRET
@@ -18,6 +21,7 @@ import {
   mkdirSync,
   readFileSync,
   renameSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 import { homedir, tmpdir } from "node:os";
@@ -30,11 +34,32 @@ import {
   yesterdayInTimeZone,
 } from "../lib/ai-activity-payload";
 
-const TIMEZONE = process.env.AI_ACTIVITY_TIMEZONE ?? AI_ACTIVITY_TIMEZONE;
 const STATE_DIR =
   process.env.AI_ACTIVITY_STATE_DIR ??
   join(homedir(), ".config", "portfolio-ai-activity");
-const STALE_HOURS = Number(process.env.AI_ACTIVITY_STALE_HOURS ?? 26);
+const ENV_FILE = join(STATE_DIR, "env");
+
+function loadEnvFile(path: string) {
+  if (!existsSync(path)) return;
+  for (const line of readFileSync(path, "utf8").split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eq = trimmed.indexOf("=");
+    if (eq < 0) continue;
+    const key = trimmed.slice(0, eq).trim();
+    const value = trimmed.slice(eq + 1).trim();
+    if (!(key in process.env) || process.env[key] === "") {
+      process.env[key] = value;
+    }
+  }
+}
+
+loadEnvFile(ENV_FILE);
+
+const TIMEZONE = process.env.AI_ACTIVITY_TIMEZONE ?? AI_ACTIVITY_TIMEZONE;
+const parsedStale = Number(process.env.AI_ACTIVITY_STALE_HOURS ?? 26);
+const STALE_HOURS =
+  Number.isFinite(parsedStale) && parsedStale > 0 ? parsedStale : 26;
 const FORCE = process.env.AI_ACTIVITY_FORCE === "1";
 const INGEST_URL = process.env.AI_ACTIVITY_INGEST_URL;
 const INGEST_SECRET = process.env.AI_ACTIVITY_INGEST_SECRET;
@@ -57,6 +82,13 @@ type Status = {
 
 function log(msg: string) {
   console.log(`[ai-activity-sync] ${msg}`);
+}
+
+function writeJsonAtomic(path: string, value: unknown) {
+  mkdirSync(STATE_DIR, { recursive: true });
+  const tmp = `${path}.${process.pid}.tmp`;
+  writeFileSync(tmp, `${JSON.stringify(value, null, 2)}\n`);
+  renameSync(tmp, path);
 }
 
 function readStatus(): Status {
@@ -82,16 +114,13 @@ function readStatus(): Status {
 }
 
 function writeStatus(status: Status) {
-  mkdirSync(STATE_DIR, { recursive: true });
-  const path = join(STATE_DIR, "status.json");
-  const tmp = `${path}.${process.pid}.tmp`;
-  writeFileSync(tmp, `${JSON.stringify(status, null, 2)}\n`);
-  renameSync(tmp, path);
+  writeJsonAtomic(join(STATE_DIR, "status.json"), status);
 }
 
 function isStale(status: Status): boolean {
   if (!status.lastSuccessAt) return true;
   const ageMs = Date.now() - Date.parse(status.lastSuccessAt);
+  if (!Number.isFinite(ageMs)) return true;
   return ageMs > STALE_HOURS * 3_600_000;
 }
 
@@ -121,47 +150,51 @@ function exportPayload(): AiActivityPayload {
   run(tokscale, ["cursor", "sync", "--json"], true);
 
   const graphPath = join(tmpdir(), `tokscale-graph-${Date.now()}.json`);
-  run(tokscale, ["graph", "--output", graphPath, "--no-spinner"]);
+  try {
+    run(tokscale, ["graph", "--output", graphPath, "--no-spinner"]);
 
-  const graph = JSON.parse(readFileSync(graphPath, "utf8")) as GraphFile;
-  const cutoff = yesterdayInTimeZone(new Date(), TIMEZONE);
-  const days = (graph.contributions ?? [])
-    .map((c) => ({
-      date: c.date,
-      tokens: Math.max(0, Math.round(c.totals?.tokens ?? 0)),
-    }))
-    .filter((d) => d.date <= cutoff)
-    .sort((a, b) => a.date.localeCompare(b.date));
+    const graph = JSON.parse(readFileSync(graphPath, "utf8")) as GraphFile;
+    const cutoff = yesterdayInTimeZone(new Date(), TIMEZONE);
+    const days = (graph.contributions ?? [])
+      .map((c) => ({
+        date: c.date,
+        tokens: Math.max(0, Math.round(c.totals?.tokens ?? 0)),
+      }))
+      .filter((d) => d.date <= cutoff)
+      .sort((a, b) => a.date.localeCompare(b.date));
 
-  if (days.length === 0) {
-    throw new Error("tokscale graph produced zero historical days");
-  }
-  if (days.length > AI_ACTIVITY_MAX_DAYS) {
-    throw new Error(
-      `tokscale graph too large (${days.length} > ${AI_ACTIVITY_MAX_DAYS})`,
-    );
-  }
+    if (days.length === 0) {
+      throw new Error("tokscale graph produced zero historical days");
+    }
+    if (days.length > AI_ACTIVITY_MAX_DAYS) {
+      throw new Error(
+        `tokscale graph too large (${days.length} > ${AI_ACTIVITY_MAX_DAYS})`,
+      );
+    }
 
-  const lifetimeTokens = days.reduce((sum, d) => sum + d.tokens, 0);
-  const payload: AiActivityPayload = {
-    version: 1,
-    generatedAt: new Date().toISOString(),
-    timezone: TIMEZONE,
-    days,
-    lifetimeTokens,
-  };
-  if (!isAiActivityPayload(payload)) {
-    throw new Error("built payload failed validation");
+    const lifetimeTokens = days.reduce((sum, d) => sum + d.tokens, 0);
+    const payload: AiActivityPayload = {
+      version: 1,
+      generatedAt: new Date().toISOString(),
+      timezone: TIMEZONE,
+      days,
+      lifetimeTokens,
+    };
+    if (!isAiActivityPayload(payload)) {
+      throw new Error("built payload failed validation");
+    }
+    return payload;
+  } finally {
+    try {
+      unlinkSync(graphPath);
+    } catch {
+      // ignore missing temp
+    }
   }
-  return payload;
 }
 
 function saveLastGood(payload: AiActivityPayload) {
-  mkdirSync(STATE_DIR, { recursive: true });
-  const path = join(STATE_DIR, "last-good.json");
-  const tmp = `${path}.${process.pid}.tmp`;
-  writeFileSync(tmp, `${JSON.stringify(payload, null, 2)}\n`);
-  renameSync(tmp, path);
+  writeJsonAtomic(join(STATE_DIR, "last-good.json"), payload);
 }
 
 async function publish(payload: AiActivityPayload): Promise<string> {

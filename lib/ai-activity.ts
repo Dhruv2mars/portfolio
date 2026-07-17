@@ -3,7 +3,6 @@ import {
   calendarDateInTimeZone,
   type AiActivityPayload,
   shiftYmd,
-  yesterdayInTimeZone,
 } from "@/lib/ai-activity-payload";
 
 export type DailyTokens = {
@@ -143,16 +142,13 @@ export function projectTodayTokens(
   return { date: today, tokens, baseline };
 }
 
-/** Cacheable history through yesterday (no live today cell). */
-export function materializeHistory(
-  payload: AiActivityPayload,
-  now = new Date(),
-): AiActivity {
+/** Cacheable history through the payload’s last published day (no live today). */
+export function materializeHistory(payload: AiActivityPayload): AiActivity {
   const timeZone = payload.timezone || AI_ACTIVITY_TIMEZONE;
-  const endHistory = yesterdayInTimeZone(now, timeZone);
-  const history = [...payload.days]
-    .filter((d) => d.date <= endHistory)
-    .sort((a, b) => a.date.localeCompare(b.date));
+  const history = [...payload.days].sort((a, b) =>
+    a.date.localeCompare(b.date),
+  );
+  const endHistory = history.at(-1)!.date;
 
   return buildAiActivity(fillSparseDailySeries(history, endHistory, 364), {
     generatedAt: payload.generatedAt,
@@ -164,6 +160,7 @@ export function materializeHistory(
 /**
  * Append the live today cell. Projection is ≤ recent positive days, so
  * existing intensities stay valid without a full rebuild.
+ * Lifetime stays the published nightly total (excludes synthetic today).
  */
 export function withLiveToday(history: AiActivity, now = new Date()): AiActivity {
   const projection = projectTodayTokens(
@@ -171,6 +168,10 @@ export function withLiveToday(history: AiActivity, now = new Date()): AiActivity
     now,
     history.timezone,
   );
+  // Avoid duplicating the last published day if clocks briefly disagree.
+  if (projection.date <= (history.days.at(-1)?.date ?? "")) {
+    return history;
+  }
   const max = Math.max(0, ...history.days.map((d) => d.tokens));
 
   return {
@@ -183,7 +184,7 @@ export function withLiveToday(history: AiActivity, now = new Date()): AiActivity
         live: true,
       },
     ],
-    lifetimeTokens: history.lifetimeTokens + projection.tokens,
+    lifetimeTokens: history.lifetimeTokens,
     generatedAt: history.generatedAt,
     timezone: history.timezone,
   };
@@ -194,7 +195,7 @@ export function materializeAiActivity(
   now = new Date(),
   options?: { includeLiveToday?: boolean },
 ): AiActivity {
-  const history = materializeHistory(payload, now);
+  const history = materializeHistory(payload);
   if (options?.includeLiveToday === false) return history;
   return withLiveToday(history, now);
 }

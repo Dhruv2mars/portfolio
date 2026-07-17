@@ -1,7 +1,8 @@
 #!/usr/bin/env bun
 /**
  * Install LaunchAgent for nightly AI Activity sync.
- * Reads secrets from ~/.config/portfolio-ai-activity/env (KEY=VALUE lines).
+ * Secrets stay in ~/.config/portfolio-ai-activity/env (chmod 600);
+ * the sync script loads that file — they are not copied into the plist.
  */
 import {
   chmodSync,
@@ -44,6 +45,12 @@ function loadEnvFile(path: string): Record<string, string> {
   return out;
 }
 
+const uid = process.getuid?.();
+if (typeof uid !== "number") {
+  console.error("process.getuid() unavailable — install on macOS as a logged-in user");
+  process.exit(1);
+}
+
 mkdirSync(STATE, { recursive: true });
 mkdirSync(join(HOME, "Library/LaunchAgents"), { recursive: true });
 
@@ -65,51 +72,28 @@ if (!env.AI_ACTIVITY_INGEST_SECRET || env.AI_ACTIVITY_INGEST_SECRET === "replace
   console.error(`Set AI_ACTIVITY_INGEST_SECRET in ${ENV_FILE}`);
   process.exit(1);
 }
+chmodSync(ENV_FILE, 0o600);
 
-let plist = readFileSync(PLIST_SRC, "utf8")
+const plist = readFileSync(PLIST_SRC, "utf8")
   .replaceAll("__BUN_BIN__", BUN)
   .replaceAll("__REPO__", REPO)
   .replaceAll("__HOME__", HOME);
 
-function escapeXml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
-
-// Inject env keys into the plist EnvironmentVariables dict
-const envEntries = Object.entries(env)
-  .map(([k, v]) => `      <key>${escapeXml(k)}</key>\n      <string>${escapeXml(v)}</string>`)
-  .join("\n");
-
-const homeAnchor = `      <key>HOME</key>\n      <string>${HOME}</string>`;
-if (!plist.includes(homeAnchor)) {
-  console.error("Plist template missing HOME EnvironmentVariables anchor");
-  process.exit(1);
-}
-
-const injected = `${homeAnchor}\n${envEntries}`;
-plist = plist.replace(homeAnchor, injected);
-if (!plist.includes("AI_ACTIVITY_INGEST_SECRET")) {
-  console.error("Failed to inject secrets into LaunchAgent plist");
+if (plist.includes("AI_ACTIVITY_INGEST_SECRET")) {
+  console.error("Refusing to install: plist template must not embed ingest secrets");
   process.exit(1);
 }
 
 writeFileSync(PLIST_DST, plist, { mode: 0o600 });
 chmodSync(PLIST_DST, 0o600);
 
-spawnSync("launchctl", ["bootout", `gui/${process.getuid?.() ?? 501}/${LABEL}`], {
+spawnSync("launchctl", ["bootout", `gui/${uid}/${LABEL}`], {
   encoding: "utf8",
 });
-const boot = spawnSync(
-  "launchctl",
-  ["bootstrap", `gui/${process.getuid?.() ?? 501}`, PLIST_DST],
-  { encoding: "utf8" },
-);
+const boot = spawnSync("launchctl", ["bootstrap", `gui/${uid}`, PLIST_DST], {
+  encoding: "utf8",
+});
 if (boot.status !== 0) {
-  // fallback older macOS
   spawnSync("launchctl", ["unload", PLIST_DST], { encoding: "utf8" });
   const load = spawnSync("launchctl", ["load", PLIST_DST], { encoding: "utf8" });
   if (load.status !== 0) {
@@ -119,8 +103,7 @@ if (boot.status !== 0) {
 }
 
 console.log(`Installed ${PLIST_DST}`);
+console.log(`Secrets loaded at runtime from ${ENV_FILE}`);
 console.log("Kickstart once:");
-console.log(
-  `  launchctl kickstart -k gui/${process.getuid?.() ?? 501}/${LABEL}`,
-);
+console.log(`  launchctl kickstart -k gui/${uid}/${LABEL}`);
 console.log(`Or: AI_ACTIVITY_FORCE=1 bun ${REPO}/scripts/sync-ai-activity.ts`);

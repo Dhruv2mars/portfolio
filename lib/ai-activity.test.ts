@@ -78,7 +78,7 @@ describe("AI Activity read model", () => {
       lifetimeTokens: 490,
     };
     const noon = new Date("2026-07-17T12:00:00+05:30");
-    const history = materializeHistory(payload, noon);
+    const history = materializeHistory(payload);
     expect(history.days.at(-1)?.date).toBe("2026-07-16");
     expect(history.lifetimeTokens).toBe(490);
 
@@ -88,7 +88,8 @@ describe("AI Activity read model", () => {
     expect(today?.live).toBe(true);
     expect(today?.tokens).toBeGreaterThan(0);
     expect(today?.tokens).toBeLessThanOrEqual(40);
-    expect(activity.lifetimeTokens).toBe(490 + today!.tokens);
+    // Lifetime stays published nightly total (excludes synthetic today).
+    expect(activity.lifetimeTokens).toBe(490);
   });
 
   test("materializeAiActivity can omit live today for SSR", () => {
@@ -119,8 +120,7 @@ describe("AI Activity read model", () => {
       ],
       lifetimeTokens: 30,
     };
-    const noon = new Date("2026-07-17T12:00:00+05:30");
-    const activity = materializeAiActivity(payload, noon, {
+    const activity = materializeAiActivity(payload, new Date(), {
       includeLiveToday: false,
     });
     const window = activity.days.slice(-7);
