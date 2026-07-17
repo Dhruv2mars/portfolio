@@ -6,6 +6,9 @@ import { composeHomeContentSections } from "@/lib/home";
 import { getSelectedProjects } from "@/lib/projects";
 import { getPublishedPosts } from "@/lib/writings";
 
+/** Pick up nightly Blob publishes without a redeploy. */
+export const revalidate = 3600;
+
 export default function HomePage() {
   const sections = composeHomeContentSections({
     selectedProjectCount: getSelectedProjects().length,
