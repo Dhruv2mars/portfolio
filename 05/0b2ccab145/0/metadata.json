@@ -1,0 +1,58 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "050b2ccab145",
+  "session_id": "dac4bf2f-74c5-4151-8f90-8a7b81d5ad8b",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-17T15:10:55.577305Z",
+  "branch": "fix/ai-activity-www-ingest-url",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "docs/ai-activity-sync.md",
+    "scripts/install-ai-activity-agent.ts",
+    "scripts/sync-ai-activity.ts"
+  ],
+  "agent": "Cursor",
+  "model": "cursor-grok-4.5-high",
+  "turn_id": "db9d1dd21737",
+  "checkpoint_transcript_start": 439,
+  "transcript_lines_at_start": 439,
+  "compact_transcript_start": 196,
+  "session_metrics": {
+    "turn_count": 8,
+    "context_tokens": 238976,
+    "context_window_size": 256000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-17T15:10:55.486597Z",
+    "agent_lines": 100,
+    "agent_removed": 79,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 100,
+    "total_lines_changed": 179,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}
