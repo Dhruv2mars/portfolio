@@ -23,6 +23,7 @@ import {
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 import {
+  AI_ACTIVITY_MAX_DAYS,
   AI_ACTIVITY_TIMEZONE,
   type AiActivityPayload,
   isAiActivityPayload,
@@ -37,7 +38,6 @@ const STALE_HOURS = Number(process.env.AI_ACTIVITY_STALE_HOURS ?? 26);
 const FORCE = process.env.AI_ACTIVITY_FORCE === "1";
 const INGEST_URL = process.env.AI_ACTIVITY_INGEST_URL;
 const INGEST_SECRET = process.env.AI_ACTIVITY_INGEST_SECRET;
-const MAX_DAYS = 800;
 
 type GraphContribution = {
   date: string;
@@ -136,8 +136,10 @@ function exportPayload(): AiActivityPayload {
   if (days.length === 0) {
     throw new Error("tokscale graph produced zero historical days");
   }
-  if (days.length > MAX_DAYS) {
-    throw new Error(`tokscale graph too large (${days.length} > ${MAX_DAYS})`);
+  if (days.length > AI_ACTIVITY_MAX_DAYS) {
+    throw new Error(
+      `tokscale graph too large (${days.length} > ${AI_ACTIVITY_MAX_DAYS})`,
+    );
   }
 
   const lifetimeTokens = days.reduce((sum, d) => sum + d.tokens, 0);

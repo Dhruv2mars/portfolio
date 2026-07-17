@@ -18,9 +18,10 @@ No git push. No hourly jobs.
 ```bash
 BLOB_READ_WRITE_TOKEN=...          # from the Blob store
 AI_ACTIVITY_INGEST_SECRET=...      # long random string you choose
+AI_ACTIVITY_BLOB_URL=...           # public URL of ai-activity/latest.json (from first ingest)
 ```
 
-`AI_ACTIVITY_BLOB_URL` is optional — the server can resolve the blob via the token after the first upload.
+Set `AI_ACTIVITY_BLOB_URL` after the first successful ingest (response includes `url`), or copy it from the Blob store UI.
 
 3. Redeploy so the ingest route sees the env vars.
 

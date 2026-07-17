@@ -2,8 +2,7 @@ import {
   AI_ACTIVITY_TIMEZONE,
   calendarDateInTimeZone,
   type AiActivityPayload,
-  isAiActivityPayload,
-  projectTodayTokens,
+  shiftYmd,
   yesterdayInTimeZone,
 } from "@/lib/ai-activity-payload";
 
@@ -25,14 +24,15 @@ export type AiActivity = {
   lifetimeTokens: number;
   /** ISO timestamp of the nightly payload, when known. */
   generatedAt: string | null;
-  source: "blob" | "fallback";
   timezone: string;
 };
+
+export type AiActivitySource = "blob" | "fallback";
 
 /** GitHub-like 5-level scale relative to the densest day in the series. */
 export function intensityFromTokens(
   tokens: number,
-  maxTokens = tokens,
+  maxTokens: number,
 ): Intensity {
   if (tokens <= 0 || maxTokens <= 0) return 0;
   const ratio = tokens / maxTokens;
@@ -40,13 +40,6 @@ export function intensityFromTokens(
   if (ratio <= 0.5) return 2;
   if (ratio <= 0.75) return 3;
   return 4;
-}
-
-function addCalendarDays(date: string, delta: number): string {
-  const [y, m, d] = date.split("-").map(Number);
-  const utcNoon = new Date(Date.UTC(y!, m! - 1, d!, 12, 0, 0));
-  utcNoon.setUTCDate(utcNoon.getUTCDate() + delta);
-  return calendarDateInTimeZone(utcNoon, "UTC");
 }
 
 /**
@@ -59,12 +52,12 @@ export function fillSparseDailySeries(
   windowDays = 365,
 ): DailyTokens[] {
   const byDate = new Map(days.map((d) => [d.date, d.tokens]));
-  const startDate = addCalendarDays(endDate, -(windowDays - 1));
+  const startDate = shiftYmd(endDate, -(windowDays - 1));
   const filled: DailyTokens[] = [];
   for (
     let cursor = startDate;
     cursor <= endDate;
-    cursor = addCalendarDays(cursor, 1)
+    cursor = shiftYmd(cursor, 1)
   ) {
     filled.push({ date: cursor, tokens: byDate.get(cursor) ?? 0 });
   }
@@ -76,7 +69,6 @@ export function buildAiActivity(
   options?: {
     liveDate?: string;
     generatedAt?: string | null;
-    source?: AiActivity["source"];
     timezone?: string;
     /** Authoritative lifetime from the payload (preferred over series sum). */
     lifetimeTokens?: number;
@@ -101,49 +93,110 @@ export function buildAiActivity(
     days,
     lifetimeTokens,
     generatedAt: options?.generatedAt ?? null,
-    source: options?.source ?? "fallback",
     timezone: options?.timezone ?? AI_ACTIVITY_TIMEZONE,
   };
 }
 
-export function materializeAiActivity(
+/**
+ * Fraction of the local calendar day elapsed [0, 1].
+ */
+export function dayFractionElapsed(now: Date, timeZone: string): number {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hourCycle: "h23",
+  }).formatToParts(now);
+  const hour = Number(parts.find((p) => p.type === "hour")?.value ?? 0);
+  const minute = Number(parts.find((p) => p.type === "minute")?.value ?? 0);
+  const second = Number(parts.find((p) => p.type === "second")?.value ?? 0);
+  const elapsed = hour * 3600 + minute * 60 + second;
+  return Math.min(1, Math.max(0, elapsed / 86_400));
+}
+
+/**
+ * Conservative full-day baseline: minimum of the last up-to-7 days
+ * before `beforeDate` that have tokens > 0.
+ */
+export function sevenDayMinBaseline(
+  days: readonly { date: string; tokens: number }[],
+  beforeDate: string,
+): number {
+  const prior = days
+    .filter((d) => d.date < beforeDate && d.tokens > 0)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(-7);
+  if (prior.length === 0) return 0;
+  return Math.min(...prior.map((d) => d.tokens));
+}
+
+/** Projected tokens “so far today” from the 7-day min baseline. */
+export function projectTodayTokens(
+  days: readonly { date: string; tokens: number }[],
+  now: Date,
+  timeZone: string,
+): { date: string; tokens: number; baseline: number } {
+  const today = calendarDateInTimeZone(now, timeZone);
+  const baseline = sevenDayMinBaseline(days, today);
+  const tokens = Math.round(baseline * dayFractionElapsed(now, timeZone));
+  return { date: today, tokens, baseline };
+}
+
+/** Cacheable history through yesterday (no live today cell). */
+export function materializeHistory(
   payload: AiActivityPayload,
   now = new Date(),
-  source: AiActivity["source"] = "fallback",
-  options?: { includeLiveToday?: boolean },
 ): AiActivity {
-  const includeLiveToday = options?.includeLiveToday ?? true;
   const timeZone = payload.timezone || AI_ACTIVITY_TIMEZONE;
   const endHistory = yesterdayInTimeZone(now, timeZone);
   const history = [...payload.days]
     .filter((d) => d.date <= endHistory)
     .sort((a, b) => a.date.localeCompare(b.date));
 
-  const filledHistory = fillSparseDailySeries(history, endHistory, 364);
-
-  if (!includeLiveToday) {
-    return buildAiActivity(filledHistory, {
-      generatedAt: payload.generatedAt,
-      source,
-      timezone: timeZone,
-      lifetimeTokens: payload.lifetimeTokens,
-    });
-  }
-
-  const projection = projectTodayTokens(history, now, timeZone);
-  const series: DailyTokens[] = [
-    ...filledHistory,
-    { date: projection.date, tokens: projection.tokens },
-  ];
-
-  return buildAiActivity(series, {
-    liveDate: projection.date,
+  return buildAiActivity(fillSparseDailySeries(history, endHistory, 364), {
     generatedAt: payload.generatedAt,
-    source,
     timezone: timeZone,
-    // History lifetime from payload + projected today (not in nightly sum).
-    lifetimeTokens: payload.lifetimeTokens + projection.tokens,
+    lifetimeTokens: payload.lifetimeTokens,
   });
+}
+
+/**
+ * Append the live today cell. Projection is ≤ recent positive days, so
+ * existing intensities stay valid without a full rebuild.
+ */
+export function withLiveToday(history: AiActivity, now = new Date()): AiActivity {
+  const projection = projectTodayTokens(
+    history.days,
+    now,
+    history.timezone,
+  );
+  const max = Math.max(0, ...history.days.map((d) => d.tokens));
+
+  return {
+    days: [
+      ...history.days,
+      {
+        date: projection.date,
+        tokens: projection.tokens,
+        intensity: intensityFromTokens(projection.tokens, max),
+        live: true,
+      },
+    ],
+    lifetimeTokens: history.lifetimeTokens + projection.tokens,
+    generatedAt: history.generatedAt,
+    timezone: history.timezone,
+  };
+}
+
+export function materializeAiActivity(
+  payload: AiActivityPayload,
+  now = new Date(),
+  options?: { includeLiveToday?: boolean },
+): AiActivity {
+  const history = materializeHistory(payload, now);
+  if (options?.includeLiveToday === false) return history;
+  return withLiveToday(history, now);
 }
 
 export function formatTokenCount(tokens: number): string {
@@ -152,9 +205,3 @@ export function formatTokenCount(tokens: number): string {
 
 export const LIVE_COUNT_START_RATIO = 0.8;
 export const LIVE_COUNT_DURATION_MS = 90_000;
-
-export function assertValidPayload(payload: unknown): asserts payload is AiActivityPayload {
-  if (!isAiActivityPayload(payload)) {
-    throw new Error("Invalid AI Activity payload");
-  }
-}

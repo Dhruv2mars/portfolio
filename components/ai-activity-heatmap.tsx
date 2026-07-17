@@ -2,12 +2,17 @@
 
 import { useEffect, useId, useMemo, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import type { ActivityDay, AiActivity } from "@/lib/ai-activity";
+import type {
+  ActivityDay,
+  AiActivity,
+  AiActivitySource,
+} from "@/lib/ai-activity";
 import {
   formatTokenCount,
   LIVE_COUNT_DURATION_MS,
   LIVE_COUNT_START_RATIO,
-  materializeAiActivity,
+  materializeHistory,
+  withLiveToday,
 } from "@/lib/ai-activity";
 import type { AiActivityPayload } from "@/lib/ai-activity-payload";
 import { HOME_SECTION_COPY } from "@/lib/home";
@@ -118,7 +123,7 @@ function useLiveTokenDisplay(
 
 type AiActivityHeatmapProps = {
   payload: AiActivityPayload;
-  source: AiActivity["source"];
+  source: AiActivitySource;
 };
 
 export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
@@ -133,14 +138,13 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
     return () => window.clearInterval(id);
   }, []);
 
-  const activity = useMemo(() => {
-    if (!liveNow) {
-      return materializeAiActivity(payload, new Date(), source, {
-        includeLiveToday: false,
-      });
-    }
-    return materializeAiActivity(payload, liveNow, source);
-  }, [payload, source, liveNow]);
+  // History is cacheable; only the live today cell refreshes on the interval.
+  const history = useMemo(() => materializeHistory(payload), [payload]);
+
+  const activity: AiActivity = useMemo(() => {
+    if (!liveNow) return history;
+    return withLiveToday(history, liveNow);
+  }, [history, liveNow]);
 
   const liveDisplay = useLiveTokenDisplay(hover, reduce);
   const weeks = useMemo(
@@ -148,7 +152,7 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
     [activity.days],
   );
   const months = useMemo(() => monthLabels(weeks), [weeks]);
-  const isSample = activity.source === "fallback";
+  const isSample = source === "fallback";
 
   return (
     <motion.section

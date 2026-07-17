@@ -1,9 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
-import {
-  type AiActivityPayload,
-  isAiActivityPayload,
-} from "@/lib/ai-activity-payload";
+import { parseAiActivityPayload } from "@/lib/ai-activity-payload";
 import { publishAiActivityPayload } from "@/lib/ai-activity-store";
 
 export const runtime = "nodejs";
@@ -35,16 +32,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  if (!isAiActivityPayload(body)) {
+  const payload = parseAiActivityPayload(body);
+  if (!payload) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
-  }
-
-  const payload = body as AiActivityPayload;
-  if (payload.days.length === 0 || payload.days.length > 800) {
-    return NextResponse.json(
-      { error: "Invalid day count" },
-      { status: 400 },
-    );
   }
 
   try {

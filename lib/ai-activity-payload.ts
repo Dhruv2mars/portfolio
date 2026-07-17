@@ -13,6 +13,7 @@ export type AiActivityPayload = {
 
 export const AI_ACTIVITY_TIMEZONE = "Asia/Kolkata";
 export const AI_ACTIVITY_BLOB_PATH = "ai-activity/latest.json";
+export const AI_ACTIVITY_MAX_DAYS = 800;
 
 export function isAiActivityPayload(value: unknown): value is AiActivityPayload {
   if (!value || typeof value !== "object") return false;
@@ -28,6 +29,7 @@ export function isAiActivityPayload(value: unknown): value is AiActivityPayload 
     return false;
   }
   if (!Array.isArray(v.days)) return false;
+  if (v.days.length === 0 || v.days.length > AI_ACTIVITY_MAX_DAYS) return false;
   return v.days.every(
     (day) =>
       day &&
@@ -40,6 +42,12 @@ export function isAiActivityPayload(value: unknown): value is AiActivityPayload 
   );
 }
 
+export function parseAiActivityPayload(
+  value: unknown,
+): AiActivityPayload | null {
+  return isAiActivityPayload(value) ? value : null;
+}
+
 /** Calendar YYYY-MM-DD in a timezone. */
 export function calendarDateInTimeZone(date: Date, timeZone: string): string {
   return new Intl.DateTimeFormat("en-CA", {
@@ -50,58 +58,15 @@ export function calendarDateInTimeZone(date: Date, timeZone: string): string {
   }).format(date);
 }
 
+/** Shift a YYYY-MM-DD by whole calendar days (noon-UTC probe). */
+export function shiftYmd(date: string, deltaDays: number): string {
+  const [y, m, d] = date.split("-").map(Number);
+  const utcNoon = new Date(Date.UTC(y!, m! - 1, d!, 12, 0, 0));
+  utcNoon.setUTCDate(utcNoon.getUTCDate() + deltaDays);
+  return calendarDateInTimeZone(utcNoon, "UTC");
+}
+
 /** Previous calendar day (YYYY-MM-DD) in a timezone. */
 export function yesterdayInTimeZone(now: Date, timeZone: string): string {
-  // Noon UTC probe days avoid DST edge cases when shifting by 24h from local midnight.
-  const today = calendarDateInTimeZone(now, timeZone);
-  const [y, m, d] = today.split("-").map(Number);
-  const utcNoon = new Date(Date.UTC(y!, m! - 1, d!, 12, 0, 0));
-  utcNoon.setUTCDate(utcNoon.getUTCDate() - 1);
-  return calendarDateInTimeZone(utcNoon, timeZone);
-}
-
-/**
- * Fraction of the local calendar day elapsed [0, 1].
- */
-export function dayFractionElapsed(now: Date, timeZone: string): number {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone,
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hourCycle: "h23",
-  }).formatToParts(now);
-  const hour = Number(parts.find((p) => p.type === "hour")?.value ?? 0);
-  const minute = Number(parts.find((p) => p.type === "minute")?.value ?? 0);
-  const second = Number(parts.find((p) => p.type === "second")?.value ?? 0);
-  const elapsed = hour * 3600 + minute * 60 + second;
-  return Math.min(1, Math.max(0, elapsed / 86_400));
-}
-
-/**
- * Conservative full-day baseline: minimum of the last up-to-7 days
- * before `beforeDate` that have tokens > 0.
- */
-export function sevenDayMinBaseline(
-  days: readonly { date: string; tokens: number }[],
-  beforeDate: string,
-): number {
-  const prior = days
-    .filter((d) => d.date < beforeDate && d.tokens > 0)
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(-7);
-  if (prior.length === 0) return 0;
-  return Math.min(...prior.map((d) => d.tokens));
-}
-
-/** Projected tokens “so far today” from the 7-day min baseline. */
-export function projectTodayTokens(
-  days: readonly { date: string; tokens: number }[],
-  now: Date,
-  timeZone: string,
-): { date: string; tokens: number; baseline: number } {
-  const today = calendarDateInTimeZone(now, timeZone);
-  const baseline = sevenDayMinBaseline(days, today);
-  const tokens = Math.round(baseline * dayFractionElapsed(now, timeZone));
-  return { date: today, tokens, baseline };
+  return shiftYmd(calendarDateInTimeZone(now, timeZone), -1);
 }
