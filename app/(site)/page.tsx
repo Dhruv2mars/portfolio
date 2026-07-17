@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 /**
  * Home composition (ADR-0008):
- * craft-first hero → Token activity → selected Projects → selected Writing → footer (chrome).
+ * craft-first hero → Token activity → selected Projects → selected Writing → footer.
  */
 export default function HomePage() {
   return (
@@ -21,13 +21,14 @@ export default function HomePage() {
         <h1 id="home-hero-title" className="home-hero__title">
           {site.name}
         </h1>
-        <p className="home-hero__lede">
-          AI-pilled design engineer with product sense.
-        </p>
+        <p className="home-hero__lede">{site.tagline}</p>
         <ContactLinks className="site-contact home-hero__contact" />
       </section>
 
-      <TokenActivitySection />
+      <div className="home-band">
+        <TokenActivitySection />
+      </div>
+
       <HomeSelectedProjects />
       <HomeSelectedWriting />
     </div>

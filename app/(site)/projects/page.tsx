@@ -12,11 +12,11 @@ export default function ProjectsPage() {
 
   return (
     <section className="projects-surface">
-      <header className="projects-surface__intro">
-        <h1 className="projects-surface__title">Projects</h1>
-        <p className="projects-surface__lede">
-          Selected work that proves shipping and taste — each with a still,
-          title, and lede.
+      <header className="page-intro">
+        <h1 className="page-intro__title">Projects</h1>
+        <p className="page-intro__lede">
+          Selected work across local-first AI, tools, and interfaces — each with
+          a still, a title, and a short lede.
         </p>
       </header>
 

@@ -20,9 +20,9 @@ describe("Home page", () => {
     });
     const token = screen.getByRole("region", { name: /Token activity/i });
     const projects = screen.getByRole("region", {
-      name: /Selected projects/i,
+      name: /^Projects$/i,
     });
-    const writing = screen.getByRole("region", { name: /Writing/i });
+    const writing = screen.getByRole("region", { name: /^Writing$/i });
 
     expect(
       title.compareDocumentPosition(token) & Node.DOCUMENT_POSITION_FOLLOWING,
@@ -36,7 +36,9 @@ describe("Home page", () => {
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
 
-    expect(screen.getByText(/AI-pilled design engineer/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/AI-native products end to end/i),
+    ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /^X$/i })).toBeInTheDocument();
     expect(
       screen.getByRole("tablist", { name: /Activity range/i }),
@@ -45,7 +47,7 @@ describe("Home page", () => {
       screen.getByRole("grid", { name: /Contribution grid/i }),
     ).toBeInTheDocument();
 
-    // Selected Projects use still + title editorial rows (ADR-0006).
+    // Selected Projects use still + title editorial grid (ADR-0006).
     expect(
       screen.getByRole("heading", { name: /Gunmetal/i }),
     ).toBeInTheDocument();
@@ -53,6 +55,6 @@ describe("Home page", () => {
 
     // Empty Writing stays honest — no invented pieces (ADR-0013).
     expect(screen.getByText(/Coming soon/i)).toBeInTheDocument();
-    expect(screen.getByText(/no stand-ins/i)).toBeInTheDocument();
+    expect(screen.getByText(/no placeholders/i)).toBeInTheDocument();
   });
 });

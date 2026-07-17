@@ -8,8 +8,8 @@ import {
 function HomeWritingEmpty() {
   return (
     <p className="home-writing__empty">
-      Coming soon — the Writing pipeline is ready; published pieces will appear
-      here with no stand-ins in the meantime.
+      Coming soon. Long-form Writing will land here when it is ready — no
+      placeholders in the meantime.
     </p>
   );
 }
@@ -25,9 +25,11 @@ function HomeWritingList({ pieces }: { pieces: WritingPiece[] }) {
                 {formatWritingDate(piece.metadata.publishedAt)}
               </time>
             </span>
-            <span className="home-writing__title">{piece.metadata.title}</span>
-            <span className="home-writing__summary">
-              {piece.metadata.summary}
+            <span>
+              <span className="home-writing__title">{piece.metadata.title}</span>
+              <span className="home-writing__summary">
+                {piece.metadata.summary}
+              </span>
             </span>
           </Link>
         </li>
@@ -36,22 +38,24 @@ function HomeWritingList({ pieces }: { pieces: WritingPiece[] }) {
   );
 }
 
-/** Home selected Writing — honest empty/coming-soon when the collection is empty (ADR-0013). */
+/** Home selected Writing — honest empty/coming-soon when empty (ADR-0013). */
 export function HomeSelectedWriting() {
   const pieces = listSelectedWriting();
 
   return (
-    <section
-      className="home-section home-section--writing"
-      aria-labelledby="home-writing-heading"
-    >
-      <header className="home-section__intro">
-        <h2 id="home-writing-heading" className="home-section__title">
-          Writing
-        </h2>
-        <p className="home-section__lede">
-          Long-form pieces that show how Dhruv thinks and decides.
-        </p>
+    <section className="home-band" aria-labelledby="home-writing-heading">
+      <header className="home-band__head">
+        <div>
+          <h2 id="home-writing-heading" className="home-band__title">
+            Writing
+          </h2>
+          <p className="home-band__lede">
+            How I think about products, agents, and craft.
+          </p>
+        </div>
+        <Link href="/writing" className="home-band__link">
+          View all
+        </Link>
       </header>
       {pieces.length === 0 ? (
         <HomeWritingEmpty />

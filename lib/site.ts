@@ -26,8 +26,10 @@ export const contactLinks: readonly ContactLink[] = [
 export const site = {
   name: "Dhruv Sharma",
   handle: "@Dhruv2mars",
+  tagline:
+    "I build AI-native products end to end — from the interface to the agent loop.",
   description:
-    "Personal brand Portfolio — AI-pilled design engineer with product sense.",
+    "Dhruv Sharma — AI-native builder and design engineer. Writing, projects, and token activity.",
   /** Canonical origin for RSS, sitemap, OG, and JSON-LD. */
   url: "https://dhruv2mars.com",
 } as const;

@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { TokenActivity } from "@/components/token-activity";
 import {
@@ -77,10 +77,8 @@ describe("TokenActivity", () => {
     );
     expect(screen.getByText("This week")).toBeInTheDocument();
     expect(screen.getByText("Weekly avg")).toBeInTheDocument();
-
-    const chart = screen.getByRole("img", { name: /Activity series/i });
-    expect(within(chart).getAllByRole("presentation").length).toBe(
-      weekly.series.length,
-    );
+    expect(
+      screen.getByRole("grid", { name: /Contribution grid/i }),
+    ).toBeInTheDocument();
   });
 });

@@ -42,7 +42,7 @@ const RANGE_COPY: Record<
 > = {
   daily: {
     title: "Token activity",
-    description: "Day-by-day AI usage — proof of staying AI-pilled.",
+    description: "Day-by-day AI usage across tools — a year of building in the open.",
   },
   weekly: {
     title: "Token activity",

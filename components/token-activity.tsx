@@ -21,7 +21,6 @@ type TokenActivityProps = {
 
 export function TokenActivity({ model, onRangeChange }: TokenActivityProps) {
   const weeks = groupCellsByWeek(model.cells);
-  const seriesMax = Math.max(1, ...model.series.map((point) => point.value));
 
   return (
     <section
@@ -78,29 +77,14 @@ export function TokenActivity({ model, onRangeChange }: TokenActivityProps) {
         ))}
       </dl>
 
-      <div
-        className="token-activity__series"
-        role="img"
-        aria-label={`Activity series (${model.range})`}
-      >
-        {model.series.map((point) => {
-          const height = Math.max(4, Math.round((point.value / seriesMax) * 100));
-          return (
-            <div
-              key={point.key}
-              className="token-activity__bar"
-              role="presentation"
-              title={`${point.label}: ${formatTokens(point.value)}`}
-              style={{ height: `${height}%` }}
-            />
-          );
-        })}
-      </div>
-
       <div className="token-activity__grid-wrap">
         <div className="token-activity__weekday-labels" aria-hidden="true">
           {WEEKDAY_LABELS.map((label, index) =>
-            index % 2 === 1 ? <span key={label}>{label}</span> : <span key={label} />,
+            index % 2 === 1 ? (
+              <span key={label}>{label}</span>
+            ) : (
+              <span key={label} />
+            ),
           )}
         </div>
 

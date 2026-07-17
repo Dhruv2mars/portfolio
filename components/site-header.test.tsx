@@ -19,7 +19,7 @@ function renderWithTheme(ui: React.ReactElement) {
 }
 
 describe("SiteHeader", () => {
-  it("renders primary nav, theme toggle, and contact links", () => {
+  it("renders primary nav and theme toggle without About or Activity", () => {
     window.localStorage.removeItem(THEME_STORAGE_KEY);
     renderWithTheme(<SiteHeader />);
 
@@ -38,10 +38,6 @@ describe("SiteHeader", () => {
     expect(
       screen.getByRole("button", { name: /Theme: System/i }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Email" })).toHaveAttribute(
-      "href",
-      "mailto:Dhruv2mars@gmail.com",
-    );
     expect(screen.queryByRole("link", { name: "About" })).toBeNull();
     expect(screen.queryByRole("link", { name: "Activity" })).toBeNull();
   });

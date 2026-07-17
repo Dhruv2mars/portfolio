@@ -5,14 +5,15 @@ import { formatWritingDate } from "@/lib/writing";
 export function WritingComingSoon() {
   return (
     <section className="writing-surface" aria-labelledby="writing-heading">
-      <p className="writing-eyebrow">Writing</p>
-      <h1 id="writing-heading" className="writing-title">
-        Coming soon
-      </h1>
-      <p className="writing-lede">
-        Long-form pieces that show how Dhruv thinks and decides. The pipeline is
-        ready; published Writing will appear here — no stand-ins in the meantime.
-      </p>
+      <header className="page-intro">
+        <h1 id="writing-heading" className="page-intro__title">
+          Writing
+        </h1>
+        <p className="page-intro__lede">
+          Coming soon. Long-form pieces will appear here when they are ready —
+          the pipeline is live; the shelf is empty on purpose.
+        </p>
+      </header>
     </section>
   );
 }
@@ -20,13 +21,14 @@ export function WritingComingSoon() {
 export function WritingIndexList({ pieces }: { pieces: WritingPiece[] }) {
   return (
     <section className="writing-surface" aria-labelledby="writing-heading">
-      <p className="writing-eyebrow">Writing</p>
-      <h1 id="writing-heading" className="writing-title">
-        Writing
-      </h1>
-      <p className="writing-lede">
-        Long-form pieces that show how Dhruv thinks and decides.
-      </p>
+      <header className="page-intro">
+        <h1 id="writing-heading" className="page-intro__title">
+          Writing
+        </h1>
+        <p className="page-intro__lede">
+          How I think about products, agents, and craft.
+        </p>
+      </header>
       <ul className="writing-list">
         {pieces.map((piece) => (
           <li key={piece.slug} className="writing-list__item">
@@ -39,9 +41,13 @@ export function WritingIndexList({ pieces }: { pieces: WritingPiece[] }) {
                   {formatWritingDate(piece.metadata.publishedAt)}
                 </time>
               </span>
-              <span className="writing-list__title">{piece.metadata.title}</span>
-              <span className="writing-list__summary">
-                {piece.metadata.summary}
+              <span>
+                <span className="writing-list__title">
+                  {piece.metadata.title}
+                </span>
+                <span className="writing-list__summary">
+                  {piece.metadata.summary}
+                </span>
               </span>
             </Link>
           </li>

@@ -12,21 +12,20 @@ export function ProjectIndexRowView({ project }: ProjectIndexRowProps) {
         className="project-row__link"
         href={project.href}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
       >
         <div className="project-row__still">
           <Image
             src={project.stillSrc}
             alt=""
             width={960}
-            height={600}
+            height={960}
             className="project-row__image"
           />
         </div>
         <div className="project-row__copy">
           <h2 className="project-row__title">{project.title}</h2>
           <p className="project-row__lede">{project.lede}</p>
-          <span className="project-row__cta">View project</span>
         </div>
       </a>
     </li>
