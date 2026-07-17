@@ -28,4 +28,6 @@ export const site = {
   handle: "@Dhruv2mars",
   description:
     "Personal brand Portfolio — AI-pilled design engineer with product sense.",
+  /** Canonical origin for RSS, sitemap, OG, and JSON-LD. */
+  url: "https://dhruv2mars.com",
 } as const;
