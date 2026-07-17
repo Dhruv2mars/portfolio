@@ -29,7 +29,7 @@ export default function RootLayout({
       lang="en"
       className={`dark ${GeistSans.variable} ${newsreader.variable}`}
     >
-      <body className={`${GeistSans.className} antialiased`}>{children}</body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
