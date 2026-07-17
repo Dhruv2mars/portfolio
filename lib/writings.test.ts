@@ -144,4 +144,17 @@ Body
 `;
     expect(() => parsePostSource("folded", source)).toThrow(/block syntax/);
   });
+
+  test("skips drafts that use unsupported block scalars instead of breaking", () => {
+    const source = `---
+title: WIP
+publishedAt: 2026-01-01
+summary: >-
+draft: yes
+---
+
+Body
+`;
+    expect(tryParsePostSource("wip-folded", source)).toBeNull();
+  });
 });

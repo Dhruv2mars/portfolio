@@ -82,7 +82,18 @@ export function tryParsePostSource(
   slug: string,
   fileContent: string,
 ): PostRecord | null {
-  const { fields, content } = parseFrontmatterFields(slug, fileContent);
+  let fields: Record<string, string>;
+  let content: string;
+  try {
+    ({ fields, content } = parseFrontmatterFields(slug, fileContent));
+  } catch (error) {
+    // WIP drafts with unsupported YAML must not break Home / RSS / sitemap.
+    if (/\bdraft:\s*(true|yes|on|1)\b/i.test(fileContent)) {
+      return null;
+    }
+    throw error;
+  }
+
   const title = fields.title;
   const publishedAt = fields.publishedAt;
   const summary = fields.summary;
