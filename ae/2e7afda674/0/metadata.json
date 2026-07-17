@@ -1,0 +1,104 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "ae2e7afda674",
+  "session_id": "dac4bf2f-74c5-4151-8f90-8a7b81d5ad8b",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-17T14:44:01.135417Z",
+  "branch": "feat/ai-activity-nightly-sync",
+  "checkpoints_count": 6,
+  "save_step_count": 2,
+  "files_touched": [
+    ".env.example",
+    "app/api/ai-activity/ingest/route.ts",
+    "data/ai-activity.fallback.json",
+    "scripts/install-ai-activity-agent.ts",
+    "scripts/launchd/com.dhruv2mars.portfolio-ai-activity.plist",
+    "scripts/sync-ai-activity.ts",
+    "scripts/test-ai-activity-blob.ts"
+  ],
+  "agent": "Cursor",
+  "model": "cursor-grok-4.5-high",
+  "turn_id": "3267cb753a02",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 30058,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 8967808,
+    "output_tokens": 11443,
+    "api_call_count": 2
+  },
+  "session_metrics": {
+    "turn_count": 6
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-17T14:44:01.064346Z",
+    "agent_lines": 1136,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1136,
+    "total_lines_changed": 1136,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1626,
+      "agent_lines_removed": 32,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1675,
+      "agent_lines_removed": 32,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}

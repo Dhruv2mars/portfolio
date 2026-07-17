@@ -1,0 +1,32 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "ae2e7afda674",
+  "strategy": "manual-commit",
+  "branch": "feat/ai-activity-nightly-sync",
+  "checkpoints_count": 6,
+  "files_touched": [
+    ".env.example",
+    "app/api/ai-activity/ingest/route.ts",
+    "data/ai-activity.fallback.json",
+    "scripts/install-ai-activity-agent.ts",
+    "scripts/launchd/com.dhruv2mars.portfolio-ai-activity.plist",
+    "scripts/sync-ai-activity.ts",
+    "scripts/test-ai-activity-blob.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ae/2e7afda674/0/metadata.json",
+      "transcript": "/ae/2e7afda674/0/full.jsonl",
+      "compact_transcript": "/ae/2e7afda674/0/transcript.jsonl",
+      "content_hash": "/ae/2e7afda674/0/content_hash.txt",
+      "prompt": "/ae/2e7afda674/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 30058,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 8967808,
+    "output_tokens": 11443,
+    "api_call_count": 2
+  }
+}
