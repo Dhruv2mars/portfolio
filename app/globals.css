@@ -1,30 +1,222 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --bg: #0f0f10;
-  --fg: #e5e7eb;
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-background: #fafafa;
+  --color-foreground: #171717;
+  --color-muted: #737373;
+  --color-border: #e5e5e5;
+  --color-surface: #ffffff;
+  --color-link: #171717;
+
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html, body { height: 100%; }
-
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-feature-settings: "liga" 1, "calt" 1;
+.dark {
+  --color-background: #0a0a0a;
+  --color-foreground: #ededed;
+  --color-muted: #a3a3a3;
+  --color-border: #262626;
+  --color-surface: #111111;
+  --color-link: #ededed;
 }
 
-/* Base typography to better match reference */
 @layer base {
-  :root {
-    --container-narrow: 720px;
+  html {
+    color-scheme: light;
   }
-  h1 { @apply text-3xl font-bold tracking-tight; }
-  h2 { @apply text-xl font-bold; }
-  p { @apply text-[15px] leading-7 text-gray-300; }
-  ul { @apply text-gray-300; }
-  a { @apply underline text-white; }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "liga" 1, "calt" 1;
+  }
+
+  a {
+    @apply text-link underline-offset-4 transition-colors duration-200;
+  }
+
+  a:hover {
+    @apply underline;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-foreground;
+  }
 }
 
-.container-narrow { max-width: var(--container-narrow); }
+/* Keyboard skip link — off-screen until focused */
+.skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 50;
+  width: auto;
+  height: auto;
+  margin: 0;
+  clip: auto;
+  overflow: visible;
+  white-space: normal;
+  border-radius: 0.375rem;
+  background-color: var(--color-foreground);
+  color: var(--color-background);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  outline: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    transition: color 180ms var(--ease-editorial),
+      background-color 180ms var(--ease-editorial);
+  }
+
+  body,
+  header,
+  footer,
+  main {
+    transition: color 180ms var(--ease-editorial),
+      background-color 180ms var(--ease-editorial),
+      border-color 180ms var(--ease-editorial);
+  }
+}
+
+.container-editorial {
+  @apply mx-auto w-full max-w-[42rem] px-5 sm:px-6;
+}
+
+/* Shared editorial interactive + Home strip rhythm */
+.link-editorial {
+  @apply inline-flex min-h-9 items-center text-foreground no-underline transition-opacity duration-200 ease-[var(--ease-editorial)] hover:underline;
+}
+
+.link-editorial-muted {
+  @apply inline-flex min-h-9 items-center text-muted no-underline transition-colors duration-200 ease-[var(--ease-editorial)] hover:text-foreground hover:underline;
+}
+
+.section-home {
+  @apply border-t border-border pt-10 pb-8 sm:pt-12 sm:pb-10;
+}
+
+/* MDX / Post body — quiet editorial prose */
+.prose-editorial {
+  @apply text-[15px] leading-7 text-foreground;
+}
+
+.prose-editorial :where(p, ul, ol, blockquote, pre, table) {
+  @apply my-5;
+}
+
+.prose-editorial :where(h2, h3, h4) {
+  @apply mt-10 mb-3 font-semibold tracking-tight text-foreground;
+}
+
+.prose-editorial h2 {
+  @apply text-xl;
+}
+
+.prose-editorial h3 {
+  @apply text-lg;
+}
+
+.prose-editorial :where(ul, ol) {
+  @apply pl-5;
+}
+
+.prose-editorial ul {
+  @apply list-disc;
+}
+
+.prose-editorial ol {
+  @apply list-decimal;
+}
+
+.prose-editorial a {
+  @apply underline underline-offset-4;
+}
+
+.prose-editorial a.anchor {
+  @apply no-underline;
+}
+
+.prose-editorial :where(code):not(pre code) {
+  @apply rounded bg-border/60 px-1 py-0.5 font-mono text-[0.875em];
+}
+
+.prose-editorial pre {
+  @apply overflow-x-auto rounded-md border border-border bg-surface p-4 font-mono text-[13px] leading-6;
+}
+
+.prose-editorial blockquote {
+  @apply border-l-2 border-border pl-4 text-muted;
+}
+
+.prose-editorial img {
+  @apply my-6 h-auto w-full;
+}
+
+/* AI Activity heatmap — GitHub-simple intensity cells */
+.activity-cell {
+  @apply border border-transparent;
+}
+
+.activity-cell.intensity-0 {
+  background-color: #ebedf0;
+}
+
+.activity-cell.intensity-1 {
+  background-color: #9be9a8;
+}
+
+.activity-cell.intensity-2 {
+  background-color: #40c463;
+}
+
+.activity-cell.intensity-3 {
+  background-color: #30a14e;
+}
+
+.activity-cell.intensity-4 {
+  background-color: #216e39;
+}
+
+.dark .activity-cell.intensity-0 {
+  background-color: #161b22;
+  border-color: #21262d;
+}
+
+.dark .activity-cell.intensity-1 {
+  background-color: #0e4429;
+}
+
+.dark .activity-cell.intensity-2 {
+  background-color: #006d32;
+}
+
+.dark .activity-cell.intensity-3 {
+  background-color: #26a641;
+}
+
+.dark .activity-cell.intensity-4 {
+  background-color: #39d353;
+}
