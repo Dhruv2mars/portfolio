@@ -498,6 +498,98 @@ a:hover {
   color: var(--ink);
 }
 
+.home-section {
+  animation: surface-enter 420ms var(--ease-out) both;
+}
+
+.home-section--projects {
+  animation-delay: 40ms;
+}
+
+.home-section--writing {
+  animation-delay: 80ms;
+}
+
+.home-section__intro {
+  max-width: var(--measure);
+  margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.home-section__title {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 1.875rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.home-section__lede {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+  max-width: 36rem;
+}
+
+.home-writing__empty {
+  margin: 0;
+  max-width: var(--measure);
+  color: var(--ink-faint);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.home-writing__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: var(--measure);
+}
+
+.home-writing__item {
+  border-bottom: 1px solid var(--rule);
+}
+
+.home-writing__item:first-child {
+  border-top: 1px solid var(--rule);
+}
+
+.home-writing__link {
+  display: grid;
+  gap: 0.4rem;
+  padding-block: 1.25rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-writing__link:hover .home-writing__title {
+  color: var(--ink-muted);
+}
+
+.home-writing__meta {
+  color: var(--ink-faint);
+  font-size: 0.8125rem;
+}
+
+.home-writing__title {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+.home-writing__summary {
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
 /* Token activity — editorial contribution surface (ADR-0004). */
 .token-activity {
   display: grid;
@@ -746,6 +838,7 @@ a:hover {
 @media (prefers-reduced-motion: reduce) {
   .surface-stub,
   .home-hero,
+  .home-section,
   .token-activity {
     animation: none;
   }

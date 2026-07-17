@@ -108,6 +108,14 @@ export function getPublishedWriting(
     );
 }
 
+/** Latest published Writing for Home — empty is honest (ADR-0008, ADR-0013). */
+export function listSelectedWriting(
+  limit = 3,
+  dir: string = writingContentDir,
+): WritingPiece[] {
+  return getPublishedWriting(dir).slice(0, Math.max(0, limit));
+}
+
 /** Lookup by slug among published Writing; null when missing or draft. */
 export function getWritingBySlug(
   slug: string,

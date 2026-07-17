@@ -6,6 +6,7 @@ import {
   buildRssFeed,
   getPublishedWriting,
   getWritingBySlug,
+  listSelectedWriting,
   parseFrontmatter,
   writingContentDir,
   writingJsonLd,
@@ -49,6 +50,39 @@ Body copy.`);
   it("returns an empty published list when the collection has no MDX", () => {
     const dir = makeWritingDir({});
     expect(getPublishedWriting(dir)).toEqual([]);
+  });
+
+  it("listSelectedWriting returns latest published pieces up to the limit", () => {
+    const dir = makeWritingDir({
+      "a.mdx": `---
+title: A
+publishedAt: '2025-01-01'
+summary: First.
+---
+
+A.`,
+      "b.mdx": `---
+title: B
+publishedAt: '2026-06-01'
+summary: Second.
+---
+
+B.`,
+      "c.mdx": `---
+title: C
+publishedAt: '2026-03-01'
+summary: Third.
+---
+
+C.`,
+    });
+
+    expect(listSelectedWriting(2, dir).map((piece) => piece.slug)).toEqual([
+      "b",
+      "c",
+    ]);
+    expect(listSelectedWriting(3, dir)).toHaveLength(3);
+    expect(listSelectedWriting(3, makeWritingDir({}))).toEqual([]);
   });
 
   it("uses the in-repo content/writing directory by default (empty is valid)", () => {

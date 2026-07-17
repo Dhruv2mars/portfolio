@@ -12,7 +12,7 @@ type TokenActivitySectionProps = {
   initialRange?: TokenActivityRange;
 };
 
-/** Fixture-backed Token activity — demoable until Home composition (#17) owns layout. */
+/** Fixture-backed Token activity for Home (ADR-0004, ADR-0008). */
 export function TokenActivitySection({
   initialRange = "daily",
 }: TokenActivitySectionProps) {
