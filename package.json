@@ -7,9 +7,9 @@
     "dev": "bunx next dev",
     "build": "bunx next build",
     "start": "bunx next start",
-    "lint": "bunx next lint",
+    "lint": "bunx eslint .",
     "test": "bun test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "bunx next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
@@ -30,6 +30,8 @@
     "@types/node": "^22.15.30",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.6",
+    "eslint": "9",
+    "eslint-config-next": "^16.2.10",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.8.3"
   }

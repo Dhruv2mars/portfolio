@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "@phosphor-icons/react";
+
+const emptySubscribe = () => () => {};
 
 /**
  * Quiet Vercel-like theme control: system by default, click cycles
@@ -10,20 +12,25 @@ import { Moon, Sun } from "@phosphor-icons/react";
  */
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isDark = mounted && resolvedTheme === "dark";
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const isDark = resolvedTheme === "dark";
 
   return (
     <button
       type="button"
-      className="inline-flex size-8 items-center justify-center rounded-md text-muted transition-[color,transform] duration-200 ease-[var(--ease-editorial)] hover:text-foreground active:scale-[0.97]"
-      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      disabled={!mounted}
+      className="inline-flex size-8 items-center justify-center rounded-md text-muted transition-[color,transform] duration-200 ease-[var(--ease-editorial)] hover:text-foreground active:scale-[0.97] disabled:pointer-events-none"
+      aria-label={
+        !mounted
+          ? "Theme"
+          : isDark
+            ? "Switch to light theme"
+            : "Switch to dark theme"
+      }
+      onClick={() => {
+        if (!mounted) return;
+        setTheme(isDark ? "light" : "dark");
+      }}
     >
       {mounted ? (
         isDark ? (

@@ -2,8 +2,9 @@ export type ColorScheme = "light" | "dark";
 export type ThemeOverride = ColorScheme | null;
 
 /**
- * Resolves the visible theme from system preference and an optional
- * persisted manual override (header control).
+ * Product policy for visible theme: system preference unless a manual
+ * override is persisted. Runtime applies this via `next-themes`
+ * (`defaultTheme="system"` + storage); this helper is the tested contract.
  */
 export function resolveTheme(
   systemPreference: ColorScheme,
