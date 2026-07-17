@@ -309,6 +309,142 @@ a:hover {
   line-height: 1.55;
 }
 
+
+/* Projects index — Editorial rows with mandatory stills (ADR-0006). */
+.projects-surface {
+  max-width: 52rem;
+  animation: surface-enter 420ms var(--ease-out) both;
+}
+
+.projects-surface__intro {
+  max-width: var(--measure);
+  margin-bottom: clamp(2.5rem, 6vw, 3.75rem);
+}
+
+.projects-surface__title {
+  margin: 0 0 1rem;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 3.75rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.projects-surface__lede {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.projects-index__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.projects-index__empty {
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.project-row {
+  border-top: 1px solid var(--rule);
+}
+
+.project-row:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.project-row__link {
+  display: grid;
+  gap: 1.25rem 1.75rem;
+  padding-block: 1.75rem;
+  text-decoration: none;
+  color: inherit;
+  align-items: center;
+  transition: opacity 180ms var(--ease-out);
+}
+
+@media (min-width: 640px) {
+  .project-row__link {
+    grid-template-columns: minmax(10rem, 14rem) minmax(0, 1fr);
+    padding-block: 2rem;
+  }
+}
+
+.project-row__link:hover {
+  opacity: 0.88;
+}
+
+.project-row__still {
+  overflow: hidden;
+  background: var(--canvas-elevated);
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--rule);
+}
+
+.project-row__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-row__copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.project-row__title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.375rem, 2.5vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.project-row__lede {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.9875rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+  max-width: 36rem;
+}
+
+.project-row__cta {
+  margin-top: 0.35rem;
+  color: var(--ink-faint);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+.project-row__link:hover .project-row__cta {
+  color: var(--ink-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projects-surface {
+    animation: none;
+  }
+
+  .project-row__link {
+    transition: none;
+  }
+}
+
 @keyframes surface-enter {
   from {
     opacity: 0;
