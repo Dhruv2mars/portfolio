@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { ogImagePath } from "@/lib/discovery";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -76,8 +77,17 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <ThemeProvider>
+          <a href={FOCUSABLE_CHROME.skipToContentHref} className="skip-link">
+            {FOCUSABLE_CHROME.skipToContentLabel}
+          </a>
           <SiteHeader />
-          <main className="container-editorial flex-1 py-2">{children}</main>
+          <main
+            id={FOCUSABLE_CHROME.mainContentId}
+            tabIndex={-1}
+            className="container-editorial flex-1 py-2 outline-none"
+          >
+            {children}
+          </main>
           <SiteFooter />
         </ThemeProvider>
         <Analytics />

@@ -18,11 +18,11 @@ export default function ProjectsPage() {
     <section className="pt-10 pb-16 sm:pt-14" aria-labelledby="projects-heading">
       <h1
         id="projects-heading"
-        className="text-[1.75rem] font-semibold tracking-tight text-foreground sm:text-[2rem]"
+        className="text-[1.75rem] font-semibold tracking-tight text-foreground text-pretty sm:text-[2rem]"
       >
         Projects
       </h1>
-      <p className="mt-4 max-w-[38rem] text-[15px] leading-7 text-muted">
+      <p className="mt-4 max-w-[38rem] text-[15px] leading-7 text-muted text-pretty">
         Shipped work as proof. Each link goes out to the repo or demo.
       </p>
       <ProjectList projects={projects} headingId="projects-heading" />

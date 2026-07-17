@@ -11,7 +11,7 @@ export function HomeSelectedProjects() {
   return (
     <section
       aria-labelledby="home-projects-heading"
-      className="border-t border-border pt-10 pb-4"
+      className="border-t border-border pt-10 pb-8 sm:pt-12 sm:pb-10"
     >
       <h2
         id="home-projects-heading"

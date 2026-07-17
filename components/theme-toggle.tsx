@@ -19,7 +19,7 @@ export function ThemeToggle() {
     <button
       type="button"
       disabled={!mounted}
-      className="inline-flex size-8 items-center justify-center rounded-md text-muted transition-[color,transform] duration-200 ease-[var(--ease-editorial)] hover:text-foreground active:scale-[0.97] disabled:pointer-events-none"
+      className="inline-flex size-9 items-center justify-center rounded-md text-muted transition-[color,transform] duration-200 ease-[var(--ease-editorial)] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground active:scale-[0.97] disabled:pointer-events-none"
       aria-label={
         !mounted
           ? "Theme"

@@ -52,6 +52,39 @@
   }
 }
 
+/* Keyboard skip link — off-screen until focused */
+.skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 50;
+  width: auto;
+  height: auto;
+  margin: 0;
+  clip: auto;
+  overflow: visible;
+  white-space: normal;
+  border-radius: 0.375rem;
+  background-color: var(--color-foreground);
+  color: var(--color-background);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  outline: none;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html {
     transition: color 180ms var(--ease-editorial),

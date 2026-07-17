@@ -24,7 +24,7 @@ export function ProjectList({
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[15px] font-medium text-foreground no-underline hover:underline"
+              className="inline-flex min-h-9 items-center text-[15px] font-medium text-foreground no-underline transition-opacity duration-200 ease-[var(--ease-editorial)] hover:underline"
             >
               {project.name}
             </a>
@@ -37,8 +37,8 @@ export function ProjectList({
           <p
             className={
               compact
-                ? "mt-1 max-w-[38rem] text-[14px] leading-6 text-muted"
-                : "mt-1 max-w-[38rem] text-[15px] leading-6 text-muted"
+                ? "mt-1 max-w-[38rem] text-[14px] leading-6 text-muted text-pretty"
+                : "mt-1 max-w-[38rem] text-[15px] leading-6 text-muted text-pretty"
             }
           >
             {project.description}

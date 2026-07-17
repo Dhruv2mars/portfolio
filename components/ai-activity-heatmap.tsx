@@ -49,7 +49,7 @@ export function AiActivityHeatmap({ activity }: AiActivityHeatmapProps) {
   return (
     <section
       aria-labelledby={labelId}
-      className="border-t border-border pt-10 pb-4"
+      className="border-t border-border pt-10 pb-8 sm:pt-12 sm:pb-10"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
         <h2
@@ -100,7 +100,7 @@ export function AiActivityHeatmap({ activity }: AiActivityHeatmapProps) {
                   <button
                     key={day.date}
                     type="button"
-                    className={`activity-cell intensity-${day.intensity} h-[11px] w-[11px] rounded-[2px] focus-visible:outline-offset-1`}
+                    className={`activity-cell intensity-${day.intensity} h-[11px] w-[11px] rounded-[2px] transition-opacity duration-150 ease-[var(--ease-editorial)] hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground`}
                     aria-label={`${formatTooltipDate(day.date)}: ${formatTokenCount(day.tokens)} tokens`}
                     onMouseEnter={() => setHover(day)}
                     onMouseLeave={() => setHover(null)}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { PRIMARY_NAV } from "@/lib/nav";
 import { site } from "@/lib/site";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -11,17 +12,17 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-10 border-b border-border/80 bg-background/85 backdrop-blur-md">
-      <div className="container-editorial flex h-14 items-center justify-between gap-4">
+      <div className="container-editorial flex h-14 items-center justify-between gap-3 sm:gap-4">
         <Link
           href="/"
-          className="shrink-0 text-sm font-medium tracking-tight text-foreground no-underline hover:opacity-70"
+          className="shrink-0 text-sm font-medium tracking-tight text-foreground no-underline transition-opacity duration-200 ease-[var(--ease-editorial)] hover:opacity-70"
         >
           {site.name}
         </Link>
 
         <nav
-          aria-label="Primary"
-          className="flex items-center gap-1 sm:gap-2"
+          aria-label={FOCUSABLE_CHROME.primaryNavLabel}
+          className="flex items-center gap-0.5 sm:gap-1"
         >
           {PRIMARY_NAV.map((item) => {
             const active =
@@ -35,9 +36,9 @@ export function SiteHeader() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={[
-                  "rounded-md px-2.5 py-1.5 text-sm no-underline transition-colors duration-200",
+                  "rounded-md px-2 py-2 text-sm no-underline transition-[color,background-color] duration-200 ease-[var(--ease-editorial)] sm:px-2.5",
                   active
-                    ? "text-foreground"
+                    ? "font-medium text-foreground"
                     : "text-muted hover:text-foreground",
                 ].join(" ")}
               >
