@@ -2,25 +2,34 @@ export type Project = {
   name: string;
   description: string;
   url: string;
+  year?: number;
+  selected?: boolean;
+  /** Rank among selected Projects on Home (ascending). */
+  homeRank?: number;
 };
 
-export const projects: readonly Project[] = [
+const PROJECTS: readonly Project[] = [
   {
     name: "GridFall",
     description: "Tetris in your terminal.",
     url: "https://github.com/Dhruv2mars/GridFall",
+    selected: true,
+    homeRank: 5,
   },
   {
     name: "Project-r",
     description:
       "AI tutor in your IDE — local, offline, voice-first (Gemma 3n).",
     url: "https://github.com/Dhruv2mars/project-r",
+    selected: true,
+    homeRank: 1,
   },
   {
     name: "Cinemasketch",
-    description:
-      "AI storyboard generator from a text prompt (NVIDIA).",
+    description: "AI storyboard generator from a text prompt (NVIDIA).",
     url: "https://github.com/Dhruv2mars/cinemasketch",
+    selected: true,
+    homeRank: 4,
   },
   {
     name: "SuperChant",
@@ -39,12 +48,16 @@ export const projects: readonly Project[] = [
     description:
       "Local-first Codex experience across phone, web, and a native bridge.",
     url: "https://github.com/Dhruv2mars/offdex",
+    selected: true,
+    homeRank: 2,
   },
   {
     name: "Gunmetal",
     description:
       "Local OpenAI-compatible API for routing your existing AI provider access.",
     url: "https://github.com/Dhruv2mars/gunmetal",
+    selected: true,
+    homeRank: 3,
   },
   {
     name: "MDV",
@@ -53,3 +66,20 @@ export const projects: readonly Project[] = [
     url: "https://github.com/Dhruv2mars/mdv",
   },
 ];
+
+export const PROJECT_NAMES = PROJECTS.map((p) => p.name);
+
+/** Full Projects index in stable editorial order. */
+export function getProjects(): readonly Project[] {
+  return PROJECTS;
+}
+
+/** Home selected Projects, ordered by homeRank. */
+export function getSelectedProjects(): readonly Project[] {
+  return PROJECTS.filter((p) => p.selected)
+    .slice()
+    .sort((a, b) => (a.homeRank ?? 0) - (b.homeRank ?? 0));
+}
+
+/** @deprecated Prefer getProjects() — kept for any transitional imports. */
+export const projects = PROJECTS;
