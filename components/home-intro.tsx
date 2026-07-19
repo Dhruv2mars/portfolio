@@ -19,6 +19,13 @@ export function HomeIntro() {
         {site.name}
       </h1>
       <p className="body-copy mt-5 max-w-[36rem]">{site.positioning}</p>
+      <p
+        role="status"
+        className="mt-5 max-w-[36rem] border-l-2 border-foreground/25 pl-3.5 text-[14px] leading-6 text-muted"
+      >
+        <span className="font-medium text-foreground">{site.statusNote.lead}</span>{" "}
+        {site.statusNote.detail}
+      </p>
       <ul className="mt-7 flex flex-wrap items-center gap-x-1 gap-y-2 text-[13px]">
         {site.socials.map((social, index) => (
           <li key={social.label} className="flex items-center">

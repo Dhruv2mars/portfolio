@@ -9,6 +9,11 @@ export const site = {
   /** Short Home positioning — not the old bio. */
   positioning:
     "Design Engineer building with AI as the default. I care about how products feel — and write down the judgment that got them there.",
+  /** Temporary Home status — remove when the site ships. */
+  statusNote: {
+    lead: "Under development.",
+    detail: "Waiting for Kimi K3 open-weights to drop.",
+  },
   url: "https://dhruv2mars.com",
   socials: [
     { label: "X", href: "https://x.com/Dhruv2mars" },
