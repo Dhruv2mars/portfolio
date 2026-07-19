@@ -9,6 +9,11 @@ describe("site intro", () => {
     expect(site.positioning.toLowerCase()).not.toContain("feedback addict");
   });
 
+  test("exposes a temporary under-development status note", () => {
+    expect(site.statusNote.lead).toBe("Under development.");
+    expect(site.statusNote.detail.toLowerCase()).toContain("kimi k3");
+  });
+
   test("exposes social destinations for X, GitHub, LinkedIn, and email", () => {
     const labels = site.socials.map((s) => s.label);
     expect(labels).toContain("X");
