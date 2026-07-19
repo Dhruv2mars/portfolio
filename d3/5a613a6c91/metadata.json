@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "d35a613a6c91",
+  "strategy": "manual-commit",
+  "branch": "feat/under-development-note",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "components/home-intro.tsx",
+    "lib/site.test.ts",
+    "lib/site.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d3/5a613a6c91/0/metadata.json",
+      "transcript": "/d3/5a613a6c91/0/full.jsonl",
+      "compact_transcript": "/d3/5a613a6c91/0/transcript.jsonl",
+      "content_hash": "/d3/5a613a6c91/0/content_hash.txt",
+      "prompt": "/d3/5a613a6c91/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 17671,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 1051520,
+    "output_tokens": 2748,
+    "api_call_count": 2
+  }
+}
