@@ -1,0 +1,177 @@
+https://eftakher.me/
+https://ericsin.com/
+https://dai.is-a.dev/
+https://www.pablostanley.com/
+https://pham.codes/
+https://loganliffick.com/
+https://www.evilrabbit.com/
+
+these are all the portfolios of peole that i really like. see each one of the fully and completely, checkout everything. and focus on everything. tell me what all is common in them, and why did i like them so much?
+
+***
+You like a specific taste culture — not “nice portfolios” in general. Across all seven, the shared DNA is quiet confidence: the site proves skill by restraint, not by volume.
+
+What’s common
+1. The person is the product
+None of these open like a generic agency site. It’s “I’m Eric,” “hola i’m pabs,” “Evil Rabbit is a designer…,” “john phamous.” Name, voice, and presence sit above role titles.
+
+2. Extreme restraint
+Especially Pablo, Pham, Logan, Evil Rabbit: narrow column, black/white, almost no chrome. The flex is “I don’t need a hero video.” Even the more visual ones (Eftakher, Eric, Dai) still feel edited, not stuffed.
+
+3. Monochrome + type does the work
+Near-black or near-white. Serif/sans mixes, or mono. Hierarchy from weight and spacing — not cards, gradients, or icon rows.
+
+4. Design × engineering identity
+Design engineers, “I ship in code,” components, systems, AI tools, Vercel orbit. You’re drawn to builders who make the site itself the proof, not just screenshots of Figma files.
+
+5. Alive, current signals
+Live clocks, location, “right now,” availability status, contribution graphs, “today / latest.” They feel like people who are currently shipping — not a frozen résumé from 2021.
+
+6. Craft in the small things
+Pill navs, hover underlines, theme toggles, ⌘K, name pronunciation, staggered fades, custom selection colors, playful easter eggs (Mello, obfuscated project names). Taste shows up in details, not decoration.
+
+7. Pedigree stated calmly
+Vercel, Auth0, NASA, acquisitions, angel checks — listed like facts, not trophies. Soft authority.
+
+8. Personality without performing
+Lowercase, dry humor, hobbies, side projects, essays. Human, but never try-hard or “fun startup” loud.
+
+9. Systems over case-study theater
+Components, design systems, creative tools, brand systems, AI products. Work about how things get made, not just “I redesigned a landing page.”
+
+Why you like them so much
+You’re responding to authored taste — sites that feel like one person’s hand, not a template.
+
+You want the feeling of: this person is so good they can afford to be quiet. That quietness reads as status in the design-engineer world.
+
+There’s a soft split in your list, but both sides feed the same craving:
+
+Cluster	Sites	What hits you
+Visual craft
+Eftakher, Eric Sin, Dai
+Grids, polish, beautiful work presentation, still restrained
+Text as flex
+Pablo, Pham, Logan, Evil Rabbit
+Ultra-minimal CVs where confidence = subtraction
+What you’re really attracted to isn’t “dark mode” or “minimalism” as trends. It’s:
+
+Clarity over salesiness
+Identity over portfolio theater
+Craft over decoration
+Builder energy over pure visual designer energy
+Calm ego — strong presence without shouting
+In one line: you like portfolios that feel like a signature, not a brochure.
+***
+
+if u want to take and and get their design systems. will u be able to do it? 
+this is because, i really like how they all have made their portfolios, and i want to make mine like them. 
+
+***
+Yes — I can extract their design systems and turn that into something you can actually build from.
+
+What I can pull from each site
+
+Color tokens (bg, text, muted, borders, accents)
+Typography (families, sizes, weights, line-height, tracking)
+Spacing / layout (max-width, column width, section rhythm, grid)
+Component patterns (nav, links, work lists, status pills, CTAs)
+Motion (fade-ins, hovers, selection, transitions)
+Voice/tone patterns (lowercase, first-person, “right now,” restraint)
+How I’d use it for you
+
+Extract systems from all 7
+Distill the shared language (not 7 clones)
+Build one your design system from that DNA
+Apply it to your portfolio
+What I won’t do is copy their logos, unique illustrations, or paste their code. You want the taste and structure, not a replica of one person’s site.
+***
+
+---
+
+https://eftakher.me/
+https://ericsin.com/
+https://dai.is-a.dev/
+https://www.pablostanley.com/
+https://pham.codes/
+https://loganliffick.com/
+https://www.evilrabbit.com/
+
+these are all the portfolios of peole that i really like. see each one of the fully and completely, checkout everything. and focus on everything. tell me what all is common in them, and why did i like them so much?
+
+***
+You like a specific taste culture — not “nice portfolios” in general. Across all seven, the shared DNA is quiet confidence: the site proves skill by restraint, not by volume.
+
+What’s common
+1. The person is the product
+None of these open like a generic agency site. It’s “I’m Eric,” “hola i’m pabs,” “Evil Rabbit is a designer…,” “john phamous.” Name, voice, and presence sit above role titles.
+
+2. Extreme restraint
+Especially Pablo, Pham, Logan, Evil Rabbit: narrow column, black/white, almost no chrome. The flex is “I don’t need a hero video.” Even the more visual ones (Eftakher, Eric, Dai) still feel edited, not stuffed.
+
+3. Monochrome + type does the work
+Near-black or near-white. Serif/sans mixes, or mono. Hierarchy from weight and spacing — not cards, gradients, or icon rows.
+
+4. Design × engineering identity
+Design engineers, “I ship in code,” components, systems, AI tools, Vercel orbit. You’re drawn to builders who make the site itself the proof, not just screenshots of Figma files.
+
+5. Alive, current signals
+Live clocks, location, “right now,” availability status, contribution graphs, “today / latest.” They feel like people who are currently shipping — not a frozen résumé from 2021.
+
+6. Craft in the small things
+Pill navs, hover underlines, theme toggles, ⌘K, name pronunciation, staggered fades, custom selection colors, playful easter eggs (Mello, obfuscated project names). Taste shows up in details, not decoration.
+
+7. Pedigree stated calmly
+Vercel, Auth0, NASA, acquisitions, angel checks — listed like facts, not trophies. Soft authority.
+
+8. Personality without performing
+Lowercase, dry humor, hobbies, side projects, essays. Human, but never try-hard or “fun startup” loud.
+
+9. Systems over case-study theater
+Components, design systems, creative tools, brand systems, AI products. Work about how things get made, not just “I redesigned a landing page.”
+
+Why you like them so much
+You’re responding to authored taste — sites that feel like one person’s hand, not a template.
+
+You want the feeling of: this person is so good they can afford to be quiet. That quietness reads as status in the design-engineer world.
+
+There’s a soft split in your list, but both sides feed the same craving:
+
+Cluster	Sites	What hits you
+Visual craft
+Eftakher, Eric Sin, Dai
+Grids, polish, beautiful work presentation, still restrained
+Text as flex
+Pablo, Pham, Logan, Evil Rabbit
+Ultra-minimal CVs where confidence = subtraction
+What you’re really attracted to isn’t “dark mode” or “minimalism” as trends. It’s:
+
+Clarity over salesiness
+Identity over portfolio theater
+Craft over decoration
+Builder energy over pure visual designer energy
+Calm ego — strong presence without shouting
+In one line: you like portfolios that feel like a signature, not a brochure.
+***
+
+if u want to take and and get their design systems. will u be able to do it? 
+this is because, i really like how they all have made their portfolios, and i want to make mine like them. 
+
+***
+Yes — I can extract their design systems and turn that into something you can actually build from.
+
+What I can pull from each site
+
+Color tokens (bg, text, muted, borders, accents)
+Typography (families, sizes, weights, line-height, tracking)
+Spacing / layout (max-width, column width, section rhythm, grid)
+Component patterns (nav, links, work lists, status pills, CTAs)
+Motion (fade-ins, hovers, selection, transitions)
+Voice/tone patterns (lowercase, first-person, “right now,” restraint)
+How I’d use it for you
+
+Extract systems from all 7
+Distill the shared language (not 7 clones)
+Build one your design system from that DNA
+Apply it to your portfolio
+What I won’t do is copy their logos, unique illustrations, or paste their code. You want the taste and structure, not a replica of one person’s site.
+***
