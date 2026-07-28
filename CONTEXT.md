@@ -25,8 +25,8 @@ Clear judgment about what to build, why, and where it fits — shown primarily t
 _Avoid_: Product manager, strategist, “visionary”
 
 **Editorial surface**:
-The Portfolio’s visual and UX north star — Vercel-style articles/blog craft (typography, spacing, quiet chrome), not a console and not a campaign landing page. Light is the primary theme; a polished dark theme is also available. Motion stays quiet and intentional (theme transition, hovers, heatmap tooltip) — craft through restraint, not spectacle.
-_Avoid_: Dashboard-first, marketing-campaign, “SaaS admin UI”, dark-only, scroll-jacking, particle heroes
+The Portfolio’s visual and UX north star — warm monochrome editorial craft in the lineage of pablostanley.com / loganliffick.com / evilrabbit.com: warm-tinted neutrals (never cool gray), hairline-divided CV rows (name → one-line description → url ↗ → year/date), 12px uppercase micro-labels with wide tracking, Geist type and spacing doing the work. No chromatic accent in chrome; blue survives only inside the AI Activity heatmap. Flat background — no gradients, no noise. Light is the primary theme; a polished warm dark theme is also available. Motion stays quiet and intentional (theme transition, hovers, heatmap tooltip, staggered fade-rise entrances) — craft through restraint, not spectacle. Signature details: inverted-ink text selection and a live local-time readout in the footer.
+_Avoid_: Dashboard-first, marketing-campaign, “SaaS admin UI”, dark-only, scroll-jacking, particle heroes, atmospheric gradients/noise, colored accents outside the heatmap
 
 **AI Activity**:
 A GitHub-contribution-style heatmap of Dhruv’s AI usage on Home under the profile/intro. Year grid of day cells (intensity by tokens), hover tooltip (date + tokens), quiet legend, plus a single lifetime-tokens summary. Fixture data until ingestion exists. Reference image was conceptual only — no Daily/Weekly/Cumulative tabs or streak/analytics chrome in v1.

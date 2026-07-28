@@ -73,7 +73,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="relative flex min-h-[100dvh] flex-col">
-        <div className="site-atmosphere" aria-hidden="true" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
