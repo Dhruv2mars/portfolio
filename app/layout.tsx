@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { IBM_Plex_Serif } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/next";
@@ -6,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { CommandMenu } from "@/components/command-menu";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { ogImagePath } from "@/lib/discovery";
 import { serializeJsonLd } from "@/lib/json-ld";
@@ -40,6 +42,15 @@ export const metadata: Metadata = {
   },
 };
 
+/** Display serif — editorial voice, used only for .display-title. */
+const displaySerif = IBM_Plex_Serif({
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-display-serif",
+  display: "swap",
+});
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -69,7 +80,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${GeistSans.variable} ${GeistMono.variable} ${displaySerif.variable}`}
       suppressHydrationWarning
     >
       <body className="relative flex min-h-[100dvh] flex-col">
@@ -90,6 +101,7 @@ export default function RootLayout({
             {children}
           </main>
           <SiteFooter />
+          <CommandMenu />
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
