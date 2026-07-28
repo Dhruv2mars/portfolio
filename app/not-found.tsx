@@ -16,6 +16,9 @@ export default function NotFound() {
           ← Home
         </Link>
       </p>
+      <p className="meta-copy mt-6">
+        or press ⌘K to go anywhere from here
+      </p>
     </section>
   );
 }

@@ -26,39 +26,61 @@ export function GET(request: Request) {
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            gap: "14px",
+            flexDirection: "column",
+            gap: "28px",
+            borderBottom: "1px solid #e7e5e4",
+            paddingBottom: "36px",
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              width: "26px",
-              height: "26px",
-              borderRadius: "6px",
-              background: "#1c1917",
+              gap: "14px",
             }}
           >
             <div
               style={{
-                width: "9px",
-                height: "9px",
-                borderRadius: "2px",
-                background: "#fafaf9",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "26px",
+                height: "26px",
+                borderRadius: "6px",
+                background: "#1c1917",
               }}
-            />
+            >
+              <div
+                style={{
+                  width: "9px",
+                  height: "9px",
+                  borderRadius: "2px",
+                  background: "#fafaf9",
+                }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                fontSize: 28,
+                color: "#57534e",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              {site.name}
+            </div>
           </div>
           <div
             style={{
               display: "flex",
-              fontSize: 28,
-              color: "#57534e",
-              letterSpacing: "-0.02em",
+              fontSize: 18,
+              fontFamily: "ui-monospace, monospace",
+              color: "#6e6e6a",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
             }}
           >
-            {site.name}
+            Design Engineer
           </div>
         </div>
         <div
@@ -76,9 +98,9 @@ export function GET(request: Request) {
         <div
           style={{
             display: "flex",
-            fontSize: 24,
-            color: "#8b8b88",
-            letterSpacing: "-0.01em",
+              fontSize: 24,
+              color: "#6e6e6a",
+              letterSpacing: "-0.01em",
           }}
         >
           {origin}
