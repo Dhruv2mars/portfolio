@@ -113,12 +113,12 @@
 }
 
 .container-wide {
-  @apply mx-auto w-full max-w-[52rem] px-5 sm:px-6;
+  @apply mx-auto w-full max-w-[42rem] px-5 sm:px-6;
 }
 
 /* Type */
 .display-title {
-  @apply text-[2rem] font-semibold tracking-[-0.04em] text-foreground text-pretty sm:text-[2.5rem] sm:leading-[1.1];
+  @apply text-[2.25rem] font-medium leading-[1.05] tracking-[-0.045em] text-foreground text-pretty sm:text-[3rem];
 }
 
 .section-title {
@@ -126,7 +126,7 @@
 }
 
 .body-copy {
-  @apply text-[15px] leading-7 text-muted text-pretty;
+  @apply text-[16px] leading-[1.7] text-muted text-pretty;
 }
 
 .meta-copy {
@@ -166,8 +166,38 @@
   color: var(--color-foreground);
 }
 
+/* Sections separate by whitespace only — hairlines belong to lists. */
 .section-home {
-  @apply border-t border-border pt-12 pb-10 sm:pt-14 sm:pb-12;
+  @apply mt-16;
+}
+
+/* Quiet status dot — ink pulse, functional not decorative. */
+.status-dot {
+  position: relative;
+  display: inline-flex;
+  border-radius: 9999px;
+  background: currentColor;
+}
+
+.status-dot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: ping-soft 2.4s var(--ease-out-quad) infinite;
+}
+
+@keyframes ping-soft {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  70%,
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
 }
 
 /* CV rows — divided editorial list (name → description → url ↗ → year).
@@ -271,7 +301,7 @@
 }
 
 .prose-editorial :where(h2, h3, h4) {
-  @apply mt-10 mb-3 font-semibold tracking-[-0.02em] text-foreground;
+  @apply mt-12 mb-3 font-semibold tracking-[-0.02em] text-foreground;
 }
 
 .prose-editorial h2 {
@@ -402,5 +432,9 @@
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .status-dot::before {
+    animation: none;
   }
 }

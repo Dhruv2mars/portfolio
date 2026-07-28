@@ -11,8 +11,8 @@ export function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-20 border-b border-border bg-background/80 backdrop-blur-xl backdrop-saturate-150">
-      <div className="container-wide flex h-[52px] items-center justify-between gap-4 sm:h-14">
+    <header>
+      <div className="container-wide flex h-16 items-center justify-between gap-4">
         <Link
           href="/"
           className="group flex min-h-9 items-center gap-2.5 no-underline"
@@ -56,7 +56,7 @@ export function SiteHeader() {
                   <span
                     aria-hidden
                     className={[
-                      "pointer-events-none absolute inset-x-2.5 -bottom-px h-px bg-foreground transition-opacity duration-200 ease-[var(--ease-out-expo)] sm:inset-x-3",
+                      "pointer-events-none absolute inset-x-2.5 bottom-1.5 h-px bg-foreground transition-opacity duration-200 ease-[var(--ease-out-expo)] sm:inset-x-3",
                       active ? "opacity-100" : "opacity-0",
                     ].join(" ")}
                   />
