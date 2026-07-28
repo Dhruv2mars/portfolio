@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
+import { setCommandMenuOpen } from "@/lib/command-menu-store";
 import { PRIMARY_NAV } from "@/lib/nav";
 import { site } from "@/lib/site";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -65,6 +66,14 @@ export function SiteHeader() {
             })}
           </nav>
           <div className="ml-1 h-4 w-px bg-border" aria-hidden />
+          <button
+            type="button"
+            onClick={() => setCommandMenuOpen(true)}
+            aria-label="Open command menu"
+            className="group hidden h-8 items-center gap-1 rounded-md px-2 text-muted transition-[color,background-color] duration-150 ease-[var(--ease-out-quad)] hover:bg-surface-hover hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:inline-flex"
+          >
+            <kbd className="kbd">⌘K</kbd>
+          </button>
           <ThemeToggle />
         </div>
       </div>
