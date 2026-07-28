@@ -22,7 +22,7 @@ export default function WritingsPage() {
       </h1>
 
       {posts.length === 0 ? (
-        <div className="mt-10 rounded-xl border border-dashed border-border-strong bg-background-muted/60 px-5 py-10 sm:px-8">
+        <div className="mt-10 rounded-lg border border-dashed border-border-strong bg-background-muted/60 px-5 py-10 sm:px-8">
           <p className="text-[15px] font-medium tracking-[-0.01em] text-foreground">
             Coming soon
           </p>
@@ -32,24 +32,21 @@ export default function WritingsPage() {
           </p>
         </div>
       ) : (
-        <ul className="mt-10 divide-y divide-border" aria-labelledby="writings-heading">
+        <ul className="cv-list mt-10" aria-labelledby="writings-heading">
           {posts.map((post) => (
             <li key={post.slug}>
-              <Link
-                href={`/writings/${post.slug}`}
-                className="row-interactive block no-underline"
-              >
-                <span className="text-[1.0625rem] font-medium tracking-[-0.015em] text-foreground">
-                  {post.title}
+              <Link href={`/writings/${post.slug}`} className="cv-row">
+                <span className="flex min-w-0 flex-1 flex-col gap-x-3 gap-y-0.5 sm:flex-row sm:items-baseline">
+                  <span className="cv-row-name">{post.title}</span>
+                  <span className="cv-row-desc">{post.summary}</span>
                 </span>
-                <p className="meta-copy mt-1.5">
-                  {formatPostDate(post.publishedAt)}
-                  <span aria-hidden> · </span>
-                  {post.readingTimeMinutes} min read
-                </p>
-                <p className="mt-2 max-w-[38rem] text-[14px] leading-6 text-muted text-pretty">
-                  {post.summary}
-                </p>
+                <span className="cv-row-meta">
+                  <span>
+                    {formatPostDate(post.publishedAt)}
+                    <span aria-hidden> · </span>
+                    {post.readingTimeMinutes} min
+                  </span>
+                </span>
               </Link>
             </li>
           ))}

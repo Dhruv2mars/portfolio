@@ -6,7 +6,10 @@ export function HomeWritings() {
   const posts = getLatestPublishedPosts(3);
 
   return (
-    <section aria-labelledby="home-writings-heading" className="section-home">
+    <section
+      aria-labelledby="home-writings-heading"
+      className="section-home reveal reveal-delay-3"
+    >
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 id="home-writings-heading" className="section-title">
@@ -23,25 +26,17 @@ export function HomeWritings() {
           View all
         </Link>
       </div>
-      <ul
-        className="mt-5 divide-y divide-border"
-        aria-labelledby="home-writings-heading"
-      >
+      <ul className="cv-list mt-5" aria-labelledby="home-writings-heading">
         {posts.map((post) => (
           <li key={post.slug}>
-            <Link
-              href={`/writings/${post.slug}`}
-              className="row-interactive block no-underline"
-            >
-              <span className="text-[15px] font-medium tracking-[-0.01em] text-foreground">
-                {post.title}
+            <Link href={`/writings/${post.slug}`} className="cv-row">
+              <span className="flex min-w-0 flex-1 flex-col gap-x-3 gap-y-0.5 sm:flex-row sm:items-baseline">
+                <span className="cv-row-name">{post.title}</span>
+                <span className="cv-row-desc">{post.summary}</span>
               </span>
-              <p className="meta-copy mt-1.5">
-                {formatPostDate(post.publishedAt)}
-              </p>
-              <p className="mt-1.5 max-w-[38rem] text-[13px] leading-5 text-muted text-pretty">
-                {post.summary}
-              </p>
+              <span className="cv-row-meta">
+                <span>{formatPostDate(post.publishedAt)}</span>
+              </span>
             </Link>
           </li>
         ))}

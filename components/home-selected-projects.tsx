@@ -9,7 +9,7 @@ export function HomeSelectedProjects() {
   return (
     <section
       aria-labelledby="home-projects-heading"
-      className="section-home"
+      className="section-home reveal reveal-delay-2"
     >
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
