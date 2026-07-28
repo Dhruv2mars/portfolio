@@ -3,8 +3,10 @@
   "checkpoint_id": "a49d11383385",
   "strategy": "manual-commit",
   "branch": "feat/warm-mono-redesign",
-  "checkpoints_count": 3,
-  "files_touched": null,
+  "checkpoints_count": 6,
+  "files_touched": [
+    "components/ai-activity-heatmap.tsx"
+  ],
   "sessions": [
     {
       "metadata": "/a4/9d11383385/0/metadata.json",
@@ -12,13 +14,20 @@
       "compact_transcript": "/a4/9d11383385/0/transcript.jsonl",
       "content_hash": "/a4/9d11383385/0/content_hash.txt",
       "prompt": "/a4/9d11383385/0/prompt.txt"
+    },
+    {
+      "metadata": "/a4/9d11383385/1/metadata.json",
+      "transcript": "/a4/9d11383385/1/full.jsonl",
+      "compact_transcript": "/a4/9d11383385/1/transcript.jsonl",
+      "content_hash": "/a4/9d11383385/1/content_hash.txt",
+      "prompt": "/a4/9d11383385/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 32370,
+    "input_tokens": 174352,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 455424,
-    "output_tokens": 16610,
-    "api_call_count": 16
+    "cache_read_tokens": 8355456,
+    "output_tokens": 62460,
+    "api_call_count": 74
   }
 }
