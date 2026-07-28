@@ -91,30 +91,37 @@ function useLiveTokenDisplay(
   const [display, setDisplay] = useState<number | null>(day?.tokens ?? null);
 
   useEffect(() => {
-    if (!day) {
-      setDisplay(null);
-      return;
-    }
-    if (!day.live || reduceMotion || day.tokens <= 0) {
-      setDisplay(day.tokens);
-      return;
-    }
-
-    const target = day.tokens;
-    const start = Math.round(target * LIVE_COUNT_START_RATIO);
-    const started = performance.now();
     let frame = 0;
+    // Defer one task so state updates leave the effect body (react-hooks rule).
+    const timeout = window.setTimeout(() => {
+      if (!day) {
+        setDisplay(null);
+        return;
+      }
+      if (!day.live || reduceMotion || day.tokens <= 0) {
+        setDisplay(day.tokens);
+        return;
+      }
 
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - started) / LIVE_COUNT_DURATION_MS);
-      const value = Math.round(start + (target - start) * easeOutCubic(t));
-      setDisplay(value);
-      if (t < 1) frame = requestAnimationFrame(tick);
+      const target = day.tokens;
+      const start = Math.round(target * LIVE_COUNT_START_RATIO);
+      const started = performance.now();
+
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - started) / LIVE_COUNT_DURATION_MS);
+        const value = Math.round(start + (target - start) * easeOutCubic(t));
+        setDisplay(value);
+        if (t < 1) frame = requestAnimationFrame(tick);
+      };
+
+      setDisplay(start);
+      frame = requestAnimationFrame(tick);
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeout);
+      cancelAnimationFrame(frame);
     };
-
-    setDisplay(start);
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
   }, [day, reduceMotion]);
 
   // Avoid a one-frame “Hover a day…” flash before the effect runs.
@@ -133,9 +140,13 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
   const [liveNow, setLiveNow] = useState<Date | null>(null);
 
   useEffect(() => {
-    setLiveNow(new Date());
-    const id = window.setInterval(() => setLiveNow(new Date()), LIVE_REFRESH_MS);
-    return () => window.clearInterval(id);
+    const update = () => setLiveNow(new Date());
+    const first = window.setTimeout(update, 0);
+    const id = window.setInterval(update, LIVE_REFRESH_MS);
+    return () => {
+      window.clearTimeout(first);
+      window.clearInterval(id);
+    };
   }, []);
 
   // History is cacheable; only the live today cell refreshes on the interval.
@@ -170,18 +181,12 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
       initial={reduce ? false : { opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.55, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
-        <div>
-          <h2 id={labelId} className="section-title">
-            {HOME_SECTION_COPY["ai-activity"]}
-          </h2>
-          <p className="mt-2 text-[15px] font-medium tracking-[-0.01em] text-foreground">
-            Combined token usage across agents
-            {isSample ? " (cached seed until first nightly sync)" : ""}
-          </p>
-        </div>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-3">
+        <h2 id={labelId} className="section-title">
+          {HOME_SECTION_COPY["ai-activity"]}
+        </h2>
         <p className="meta-copy rounded-full border border-border bg-background-muted px-2.5 py-1">
           {formatTokenCount(activity.lifetimeTokens)} lifetime
         </p>
@@ -277,7 +282,11 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
               ) : null}
             </>
           ) : (
-            <span className="text-faint">Hover a day for detail</span>
+            <span className="text-faint">
+              {isSample
+                ? "Sample data — hover a day for detail"
+                : "Hover a day for detail"}
+            </span>
           )}
         </p>
         <div className="flex items-center gap-1.5 text-[11px] text-faint" aria-hidden>
