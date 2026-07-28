@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "fc7d6e6c6187",
+  "strategy": "manual-commit",
+  "branch": "feat/editorial-polish",
+  "checkpoints_count": 6,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/fc/7d6e6c6187/0/metadata.json",
+      "transcript": "/fc/7d6e6c6187/0/full.jsonl",
+      "compact_transcript": "/fc/7d6e6c6187/0/transcript.jsonl",
+      "content_hash": "/fc/7d6e6c6187/0/content_hash.txt",
+      "prompt": "/fc/7d6e6c6187/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 227667,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 12817344,
+    "output_tokens": 57857,
+    "api_call_count": 156
+  }
+}
