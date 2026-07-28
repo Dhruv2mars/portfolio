@@ -3,7 +3,7 @@
   "checkpoint_id": "2de7ad61e6a9",
   "strategy": "manual-commit",
   "branch": "feat/editorial-polish",
-  "checkpoints_count": 6,
+  "checkpoints_count": 9,
   "files_touched": null,
   "sessions": [
     {
@@ -12,6 +12,13 @@
       "compact_transcript": "/2d/e7ad61e6a9/0/transcript.jsonl",
       "content_hash": "/2d/e7ad61e6a9/0/content_hash.txt",
       "prompt": "/2d/e7ad61e6a9/0/prompt.txt"
+    },
+    {
+      "metadata": "/2d/e7ad61e6a9/1/metadata.json",
+      "transcript": "/2d/e7ad61e6a9/1/full.jsonl",
+      "compact_transcript": "/2d/e7ad61e6a9/1/transcript.jsonl",
+      "content_hash": "/2d/e7ad61e6a9/1/content_hash.txt",
+      "prompt": "/2d/e7ad61e6a9/1/prompt.txt"
     }
   ],
   "token_usage": {
