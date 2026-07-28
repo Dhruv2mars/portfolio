@@ -19,11 +19,14 @@ export function SiteFooter() {
           </span>
           <LocalTime />
         </p>
-        <div className="flex flex-wrap items-center gap-x-1 gap-y-1 text-[13px]">
+        <nav
+          aria-label="Social links"
+          className="flex flex-wrap items-center gap-x-1 gap-y-1 font-mono text-[12px] leading-4 tracking-[-0.01em]"
+        >
           {site.socials.map((social, index) => (
             <span key={social.label} className="flex items-center">
               {index > 0 ? (
-                <span className="mx-2 text-border-strong" aria-hidden>
+                <span className="mx-2.5 text-border-strong" aria-hidden>
                   /
                 </span>
               ) : null}
@@ -32,19 +35,22 @@ export function SiteFooter() {
                 {...(social.href.startsWith("mailto:")
                   ? {}
                   : { target: "_blank", rel: "noopener noreferrer" })}
-                className="link-editorial-muted min-h-8"
+                className="inline-flex min-h-8 items-center text-muted no-underline underline-offset-[3px] decoration-current/0 transition-[color,text-decoration-color] duration-150 ease-[var(--ease-out-quad)] hover:text-foreground hover:underline hover:decoration-current/40"
               >
                 {social.label}
               </a>
             </span>
           ))}
-          <span className="mx-2 text-border-strong" aria-hidden>
+          <span className="mx-2.5 text-border-strong" aria-hidden>
             /
           </span>
-          <Link href={site.rssPath} className="link-editorial-muted min-h-8">
+          <Link
+            href={site.rssPath}
+            className="inline-flex min-h-8 items-center text-muted no-underline underline-offset-[3px] decoration-current/0 transition-[color,text-decoration-color] duration-150 ease-[var(--ease-out-quad)] hover:text-foreground hover:underline hover:decoration-current/40"
+          >
             RSS
           </Link>
-        </div>
+        </nav>
       </div>
     </footer>
   );

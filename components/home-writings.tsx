@@ -10,18 +10,13 @@ export function HomeWritings() {
       aria-labelledby="home-writings-heading"
       className="section-home reveal reveal-delay-3"
     >
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h2 id="home-writings-heading" className="section-title">
-            {HOME_SECTION_COPY.writings}
-          </h2>
-          <p className="mt-2 text-[15px] font-medium tracking-[-0.01em] text-foreground">
-            Recent thinking
-          </p>
-        </div>
+      <div className="flex items-baseline justify-between gap-4">
+        <h2 id="home-writings-heading" className="section-title">
+          {HOME_SECTION_COPY.writings}
+        </h2>
         <Link
           href="/writings"
-          className="link-editorial-muted text-[13px] font-medium"
+          className="link-editorial-muted text-[13px]"
         >
           View all
         </Link>

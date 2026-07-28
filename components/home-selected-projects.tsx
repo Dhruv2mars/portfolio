@@ -11,18 +11,13 @@ export function HomeSelectedProjects() {
       aria-labelledby="home-projects-heading"
       className="section-home reveal reveal-delay-2"
     >
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h2 id="home-projects-heading" className="section-title">
-            {HOME_SECTION_COPY["selected-projects"]}
-          </h2>
-          <p className="mt-2 text-[15px] font-medium tracking-[-0.01em] text-foreground">
-            Recent work worth opening
-          </p>
-        </div>
+      <div className="flex items-baseline justify-between gap-4">
+        <h2 id="home-projects-heading" className="section-title">
+          {HOME_SECTION_COPY["selected-projects"]}
+        </h2>
         <Link
           href="/projects"
-          className="link-editorial-muted text-[13px] font-medium"
+          className="link-editorial-muted text-[13px]"
         >
           View all
         </Link>
