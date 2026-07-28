@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import type {
   ActivityDay,
@@ -57,13 +57,15 @@ function monthLabels(
 ): { index: number; label: string }[] {
   const labels: { index: number; label: string }[] = [];
   let lastMonth = -1;
+  let lastLabelIndex = -Infinity;
 
   weeks.forEach((week, index) => {
     for (const day of week) {
       if (!day) continue;
       const date = parseUTCDate(day.date);
       const month = date.getUTCMonth();
-      if (month !== lastMonth) {
+      // Skip labels that would collide with the previous month label.
+      if (month !== lastMonth && index - lastLabelIndex >= 3) {
         labels.push({
           index,
           label: date.toLocaleDateString("en-US", {
@@ -71,6 +73,9 @@ function monthLabels(
             timeZone: "UTC",
           }),
         });
+        lastMonth = month;
+        lastLabelIndex = index;
+      } else if (month !== lastMonth) {
         lastMonth = month;
       }
       break;
@@ -137,7 +142,11 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
   const labelId = useId();
   const reduce = useReducedMotion();
   const [hoverDate, setHoverDate] = useState<string | null>(null);
+  const [tip, setTip] = useState<{ date: string; x: number; y: number } | null>(
+    null,
+  );
   const [liveNow, setLiveNow] = useState<Date | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const update = () => setLiveNow(new Date());
@@ -174,6 +183,24 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
   const months = useMemo(() => monthLabels(weeks), [weeks]);
   const isSample = source === "fallback";
 
+  /** Hover/focus: pin the tooltip above the cell, clamped to the viewport. */
+  const showTip = (date: string, target: HTMLElement) => {
+    setHoverDate(date);
+    const cell = target.getBoundingClientRect();
+    const x = cell.left + cell.width / 2;
+    const clamped = Math.max(72, Math.min(x, window.innerWidth - 72));
+    setTip({ date, x: clamped, y: cell.top - 8 });
+  };
+
+  const hideTip = () => {
+    setHoverDate(null);
+    setTip(null);
+  };
+
+  const tipDay = tip
+    ? (activity.days.find((d) => d.date === tip.date) ?? null)
+    : null;
+
   return (
     <motion.section
       aria-labelledby={labelId}
@@ -193,7 +220,7 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
       </div>
 
       <div className="mt-6 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="min-w-[640px]">
+        <div ref={gridRef} className="min-w-[640px]">
           <div
             className="mb-2 grid gap-[3px] pl-[28px]"
             style={{
@@ -250,12 +277,14 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
                     <button
                       key={day.date}
                       type="button"
-                      className={`activity-cell intensity-${day.intensity} size-3`}
+                      className={`activity-cell intensity-${day.intensity} size-3${day.live ? " activity-cell-live" : ""}`}
                       aria-label={`${formatTooltipDate(day.date)}: ${formatTokenCount(day.tokens)} tokens${day.live ? " (live estimate)" : ""}`}
-                      onMouseEnter={() => setHoverDate(day.date)}
-                      onMouseLeave={() => setHoverDate(null)}
-                      onFocus={() => setHoverDate(day.date)}
-                      onBlur={() => setHoverDate(null)}
+                      onMouseEnter={(event) =>
+                        showTip(day.date, event.currentTarget)
+                      }
+                      onMouseLeave={hideTip}
+                      onFocus={(event) => showTip(day.date, event.currentTarget)}
+                      onBlur={hideTip}
                     />
                   );
                 })}
@@ -264,6 +293,21 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
           </div>
         </div>
       </div>
+
+      {tip && tipDay && liveDisplay !== null ? (
+        <div
+          role="presentation"
+          className="activity-tooltip"
+          style={{ left: tip.x, top: tip.y }}
+        >
+          <span className="tabular-nums">{formatTokenCount(liveDisplay)}</span>
+          <span className="activity-tooltip-faint"> tokens on </span>
+          {formatTooltipDate(tip.date)}
+          {tipDay.live ? (
+            <span className="activity-tooltip-faint"> (live)</span>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <p
