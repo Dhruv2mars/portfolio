@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "a0b72e67d613",
+  "session_id": "ses_055eaa4b9ffe9zmZIztZWz0ifv",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-28T19:19:40.28968Z",
+  "branch": "feat/warm-mono-redesign",
+  "checkpoints_count": 3,
+  "save_step_count": 1,
+  "files_touched": [
+    "components/home-intro.tsx",
+    "components/site-footer.tsx",
+    "components/home-selected-projects.tsx",
+    "components/home-writings.tsx"
+  ],
+  "agent": "OpenCode",
+  "model": "moonshotai/Kimi-K3",
+  "turn_id": "04986b558e78",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 141982,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 7900032,
+    "output_tokens": 45850,
+    "api_call_count": 58
+  },
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-28T19:19:40.215696Z",
+    "agent_lines": 37,
+    "agent_removed": 36,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 37,
+    "total_lines_changed": 73,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}
