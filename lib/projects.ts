@@ -13,6 +13,7 @@ const PROJECTS: readonly Project[] = [
     name: "GridFall",
     description: "Tetris in your terminal.",
     url: "https://github.com/Dhruv2mars/GridFall",
+    year: 2025,
     selected: true,
     homeRank: 5,
   },
@@ -21,6 +22,7 @@ const PROJECTS: readonly Project[] = [
     description:
       "AI tutor in your IDE — local, offline, voice-first (Gemma 3n).",
     url: "https://github.com/Dhruv2mars/project-r",
+    year: 2025,
     selected: true,
     homeRank: 1,
   },
@@ -28,6 +30,7 @@ const PROJECTS: readonly Project[] = [
     name: "Cinemasketch",
     description: "AI storyboard generator from a text prompt (NVIDIA).",
     url: "https://github.com/Dhruv2mars/cinemasketch",
+    year: 2025,
     selected: true,
     homeRank: 4,
   },
@@ -36,18 +39,21 @@ const PROJECTS: readonly Project[] = [
     description:
       "Distraction-free Android mala for counting mantras with volume buttons.",
     url: "https://github.com/Dhruv2mars/superchant",
+    year: 2026,
   },
   {
     name: "Detox",
     description:
       "Privacy-first Android app blocker with local allowlists and blocking overlays.",
     url: "https://github.com/Dhruv2mars/detox",
+    year: 2026,
   },
   {
     name: "Offdex",
     description:
       "Local-first Codex experience across phone, web, and a native bridge.",
     url: "https://github.com/Dhruv2mars/offdex",
+    year: 2026,
     selected: true,
     homeRank: 2,
   },
@@ -56,6 +62,7 @@ const PROJECTS: readonly Project[] = [
     description:
       "Local OpenAI-compatible API for routing your existing AI provider access.",
     url: "https://github.com/Dhruv2mars/gunmetal",
+    year: 2026,
     selected: true,
     homeRank: 3,
   },
@@ -64,6 +71,7 @@ const PROJECTS: readonly Project[] = [
     description:
       "Terminal Markdown app with a live editor, formatted preview, and in-app guide.",
     url: "https://github.com/Dhruv2mars/mdv",
+    year: 2026,
   },
 ];
 

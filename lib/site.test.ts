@@ -9,9 +9,11 @@ describe("site intro", () => {
     expect(site.positioning.toLowerCase()).not.toContain("feedback addict");
   });
 
-  test("exposes a temporary under-development status note", () => {
-    expect(site.statusNote.lead).toBe("Under development.");
-    expect(site.statusNote.detail.toLowerCase()).toContain("kimi k3");
+  test("exposes a real status line and a fixed home timezone", () => {
+    expect(site.statusNote.lead.length).toBeGreaterThan(0);
+    expect(site.statusNote.lead.toLowerCase()).not.toContain("under development");
+    expect(site.city.length).toBeGreaterThan(0);
+    expect(site.timezone).toBe("Asia/Kolkata");
   });
 
   test("exposes social destinations for X, GitHub, LinkedIn, and email", () => {
