@@ -72,7 +72,7 @@ export default async function WritingPostPage({ params }: PageProps) {
   };
 
   return (
-    <article className="mx-auto max-w-[42rem] pt-14 pb-20 sm:pt-16">
+    <article className="pt-14 pb-20 sm:pt-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}

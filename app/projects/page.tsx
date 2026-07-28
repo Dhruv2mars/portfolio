@@ -15,8 +15,8 @@ export default function ProjectsPage() {
   const projects = getProjects();
 
   return (
-    <section className="pt-14 pb-20 sm:pt-16" aria-labelledby="projects-heading">
-      <p className="meta-copy mb-4">Index</p>
+    <section className="pt-14 pb-20 sm:pt-20" aria-labelledby="projects-heading">
+      <p className="section-title mb-4">Index</p>
       <h1 id="projects-heading" className="display-title">
         Projects
       </h1>

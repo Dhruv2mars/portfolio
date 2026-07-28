@@ -33,8 +33,8 @@ A GitHub-contribution-style heatmap of Dhruv’s AI usage on Home under the prof
 _Avoid_: Analytics dashboard, Observability, “stats section”, copying a specific product’s chrome
 
 **Home**:
-The landing surface. Section order: profile/intro → AI Activity → selected Projects → latest Writings (only if at least one Post is published) → footer. Primary nav destination. The intro is a short rewritten editorial block (name + brief positioning + socials) — not the old bio, and not omitted. Footer is minimal (name/©, socials if needed, RSS); no mega-footer.
-_Avoid_: Landing page, dashboard, feed, slogan stacks, long About essay on Home, empty Writings teaser on Home
+The landing surface. One centered 42rem column for everything — header, sections, footer. Section order: profile/intro → AI Activity → selected Projects → latest Writings (only if at least one Post is published) → footer. Primary nav destination. The intro is a short rewritten editorial block (name + brief positioning + pulsing status line + mono socials row) — not the old bio, and not omitted. Sections separate by whitespace (~64px) only; hairlines belong to lists, not section boundaries. Footer is minimal (name/©, live local time, mono socials + RSS); no mega-footer.
+_Avoid_: Landing page, dashboard, feed, slogan stacks, long About essay on Home, empty Writings teaser on Home, section divider lines, sticky/blurred header chrome
 
 **Writings**:
 The writing index and articles — where Product thinking is proven. Nav label and routes are **Writings**: `/writings` and `/writings/[slug]`. RSS at `/feed.xml` (head/footer discovery, not primary nav). At first ship there may be zero published Posts — the surface still exists with a quiet empty/coming-soon state; MDX pipeline, RSS, and SEO stay wired for when Posts land.
@@ -49,5 +49,5 @@ The project index — shipped work as proof. Presented as an editorial, text-onl
 _Avoid_: Work, Portfolio items, Case studies (unless a specific Post is a case study), template marketplace grid
 
 **Primary nav**:
-Exactly three items: Home, Writings, Projects. RSS exists as a feed URL, not a nav item. Header also includes a quiet theme control (Vercel-like) that follows system preference by default and persists a manual override.
-_Avoid_: About, Contact, Activity, Uses as top-level nav (unless later promoted deliberately)
+Exactly three items: Home, Writings, Projects. RSS exists as a feed URL, not a nav item. Header also includes a quiet theme control (Vercel-like) that follows system preference by default and persists a manual override. The header is non-sticky and un-chromed: no border, no blur, same 42rem column as content.
+_Avoid_: About, Contact, Activity, Uses as top-level nav (unless later promoted deliberately), sticky/backdrop-blur nav chrome
