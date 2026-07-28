@@ -1,0 +1,58 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "f75685ba20cf",
+  "session_id": "ses_055eaa4b9ffe9zmZIztZWz0ifv",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-28T19:57:08.477248Z",
+  "branch": "feat/editorial-polish",
+  "checkpoints_count": 6,
+  "save_step_count": 2,
+  "files_touched": [
+    "app/globals.css",
+    "app/layout.tsx"
+  ],
+  "agent": "OpenCode",
+  "model": "moonshotai/Kimi-K3",
+  "turn_id": "04986b558e78",
+  "checkpoint_transcript_start": 62,
+  "transcript_lines_at_start": 62,
+  "compact_transcript_start": 62,
+  "token_usage": {
+    "input_tokens": 285284,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 16896256,
+    "output_tokens": 95362,
+    "api_call_count": 120
+  },
+  "session_metrics": {
+    "turn_count": 9
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-28T19:57:08.408073Z",
+    "agent_lines": 11,
+    "agent_removed": 2,
+    "human_added": 150,
+    "human_modified": 2,
+    "human_removed": 0,
+    "total_committed": 163,
+    "total_lines_changed": 165,
+    "agent_percentage": 7.878787878787878,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    }
+  ]
+}
