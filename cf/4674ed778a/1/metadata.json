@@ -1,0 +1,36 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "cf4674ed778a",
+  "session_id": "ses_055eaa4b9ffe9zmZIztZWz0ifv",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-28T19:06:09.138761Z",
+  "branch": "feat/warm-mono-redesign",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "components/site-footer.tsx"
+  ],
+  "agent": "OpenCode",
+  "model": "",
+  "turn_id": "cc40a1805fee",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 114166,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 3094912,
+    "output_tokens": 23778,
+    "api_call_count": 29
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-28T19:06:09.093283Z",
+    "agent_lines": 5,
+    "agent_removed": 0,
+    "human_added": 32,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 37,
+    "total_lines_changed": 37,
+    "agent_percentage": 13.513513513513514,
+    "metric_version": 2
+  }
+}
