@@ -22,8 +22,8 @@ export function SiteHeader() {
             aria-hidden
             className="relative flex size-[18px] items-center justify-center"
           >
-            <span className="absolute inset-0 rounded-[4px] bg-foreground transition-transform duration-200 ease-[var(--ease-out-expo)] group-hover:scale-90" />
-            <span className="relative size-[7px] rounded-[1px] bg-background" />
+            <span className="absolute inset-0 rounded-[4px] bg-foreground transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:scale-90 group-hover:rotate-6" />
+            <span className="relative size-[7px] rounded-[1px] bg-background transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:-rotate-12" />
           </span>
           <span className="text-[13px] font-medium tracking-[-0.01em] text-foreground transition-opacity duration-150 group-hover:opacity-70">
             {site.handle}
