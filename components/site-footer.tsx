@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LocalTime } from "@/components/local-time";
 import { site } from "@/lib/site";
 
 export function SiteFooter() {
@@ -13,6 +14,10 @@ export function SiteFooter() {
             ·
           </span>
           <span>{year}</span>
+          <span className="mx-2 text-border-strong" aria-hidden>
+            ·
+          </span>
+          <LocalTime />
         </p>
         <div className="flex flex-wrap items-center gap-x-1 gap-y-1 text-[13px]">
           {site.socials.map((social, index) => (
