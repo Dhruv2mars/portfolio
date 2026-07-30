@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "721645355f3a",
+  "session_id": "ses_04c435ac8ffeVibUQeyS1K1w9F",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-30T15:59:37.975803Z",
+  "branch": "feat/redesign-dark",
+  "checkpoints_count": 1,
+  "files_touched": null,
+  "agent": "OpenCode",
+  "model": "",
+  "turn_id": "d5306238b00b",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 38014,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 206400,
+    "output_tokens": 6146,
+    "api_call_count": 9
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}

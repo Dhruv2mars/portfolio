@@ -1,0 +1,21 @@
+I want to redo the complete front end from scratch again of my portfolio. Below are the non-negotiables:
+
+- home, projects, blogs. 
+- my x, github, linkedin and email 
+- token usage heatmap style chart (like github contributions) 
+- rss feed 
+- dark/light mode. primary dark.
+
+these are just the top level, visioned functionalities and features i want. its your decision on how to implement it. u are a senior design engineer, figure it out. i want the most beautiful, utterly perfect frontend design. it should be the best ui and best ux possible. it should be utterly best design. the greatest frontend design ever. vercel/resend/raycast/chan dai are inspiration.
+
+---
+
+I want to redo the complete front end from scratch again of my portfolio. Below are the non-negotiables:
+
+- home, projects, blogs. 
+- my x, github, linkedin and email 
+- token usage heatmap style chart (like github contributions) 
+- rss feed 
+- dark/light mode. primary dark.
+
+these are just the top level, visioned functionalities and features i want. its your decision on how to implement it. u are a senior design engineer, figure it out. i want the most beautiful, utterly perfect frontend design. it should be the best ui and best ux possible. it should be utterly best design. the greatest frontend design ever. vercel/resend/raycast/chan dai are inspiration.
