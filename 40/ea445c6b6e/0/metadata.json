@@ -1,0 +1,64 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "40ea445c6b6e",
+  "session_id": "ae9ebd2c-8ad7-407b-bd40-f90ae9f74a4b",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-30T16:13:03.214026Z",
+  "branch": "feat/redesign-dark",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "next-env.d.ts"
+  ],
+  "agent": "Cursor",
+  "model": "cursor-grok-4.5-high",
+  "turn_id": "b0b282489284",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 94440,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 256,
+    "output_tokens": 526,
+    "api_call_count": 1
+  },
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-30T16:13:03.203792Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 318,
+    "human_modified": 1,
+    "human_removed": 0,
+    "total_committed": 318,
+    "total_lines_changed": 600,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 766,
+      "user_lines_removed": 1,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216,
+        "next-env.d.ts": 1
+      },
+      "user_removed_per_file": {
+        "next-env.d.ts": 1
+      }
+    }
+  ]
+}
