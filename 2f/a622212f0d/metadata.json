@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "2fa622212f0d",
+  "strategy": "manual-commit",
+  "branch": "feat/redesign-dark",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "CONTEXT.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2f/a622212f0d/0/metadata.json",
+      "transcript": "/2f/a622212f0d/0/full.jsonl",
+      "compact_transcript": "/2f/a622212f0d/0/transcript.jsonl",
+      "content_hash": "/2f/a622212f0d/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1824,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 614144,
+    "output_tokens": 3233,
+    "api_call_count": 6
+  }
+}
