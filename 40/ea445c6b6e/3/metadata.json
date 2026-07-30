@@ -1,0 +1,40 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "40ea445c6b6e",
+  "session_id": "ses_055e9b1e8ffe1vB1L0SfZciZs1",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-30T16:13:07.671917Z",
+  "branch": "feat/redesign-dark",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "next-env.d.ts"
+  ],
+  "agent": "OpenCode",
+  "model": "moonshotai/Kimi-K3",
+  "turn_id": "3c27b7e318bf",
+  "checkpoint_transcript_start": 17,
+  "transcript_lines_at_start": 17,
+  "compact_transcript_start": 17,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-30T16:13:07.656206Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 319,
+    "human_modified": 1,
+    "human_removed": 0,
+    "total_committed": 319,
+    "total_lines_changed": 601,
+    "agent_percentage": 0,
+    "metric_version": 2
+  }
+}

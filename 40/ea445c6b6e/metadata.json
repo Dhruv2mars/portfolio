@@ -3,7 +3,7 @@
   "checkpoint_id": "40ea445c6b6e",
   "strategy": "manual-commit",
   "branch": "feat/redesign-dark",
-  "checkpoints_count": 8,
+  "checkpoints_count": 11,
   "files_touched": [
     "app/blog/[slug]/page.tsx",
     "app/blog/page.tsx",
@@ -39,6 +39,13 @@
       "compact_transcript": "/40/ea445c6b6e/2/transcript.jsonl",
       "content_hash": "/40/ea445c6b6e/2/content_hash.txt",
       "prompt": "/40/ea445c6b6e/2/prompt.txt"
+    },
+    {
+      "metadata": "/40/ea445c6b6e/3/metadata.json",
+      "transcript": "/40/ea445c6b6e/3/full.jsonl",
+      "compact_transcript": "/40/ea445c6b6e/3/transcript.jsonl",
+      "content_hash": "/40/ea445c6b6e/3/content_hash.txt",
+      "prompt": "/40/ea445c6b6e/3/prompt.txt"
     }
   ],
   "token_usage": {
