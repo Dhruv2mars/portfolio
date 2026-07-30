@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "e49a841eb824",
+  "strategy": "manual-commit",
+  "branch": "feat/redesign-dark",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "components/icons.tsx",
+    "components/reveal.tsx",
+    "components/site-footer.tsx",
+    "components/site-header.tsx",
+    "components/theme-toggle.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/e4/9a841eb824/0/metadata.json",
+      "transcript": "/e4/9a841eb824/0/full.jsonl",
+      "compact_transcript": "/e4/9a841eb824/0/transcript.jsonl",
+      "content_hash": "/e4/9a841eb824/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 76526,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 7952384,
+    "output_tokens": 56766,
+    "api_call_count": 91
+  }
+}
