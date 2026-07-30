@@ -1,0 +1,45 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "e929b976f23c",
+  "strategy": "manual-commit",
+  "branch": "feat/redesign-dark",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/blog/[slug]/page.tsx",
+    "app/blog/page.tsx",
+    "app/feed.xml/route.ts",
+    "app/page.tsx",
+    "app/sitemap.ts",
+    "components/home-blog.tsx",
+    "content/blog/README.md",
+    "content/blog/shipping-with-agents.mdx",
+    "lib/a11y.test.ts",
+    "lib/blog.test.ts",
+    "lib/blog.ts",
+    "lib/discovery-smoke.test.ts",
+    "lib/discovery.test.ts",
+    "lib/discovery.ts",
+    "lib/home.test.ts",
+    "lib/home.ts",
+    "lib/mdx-links.test.ts",
+    "lib/nav.test.ts",
+    "lib/nav.ts",
+    "next.config.mjs"
+  ],
+  "sessions": [
+    {
+      "metadata": "/e9/29b976f23c/0/metadata.json",
+      "transcript": "/e9/29b976f23c/0/full.jsonl",
+      "compact_transcript": "/e9/29b976f23c/0/transcript.jsonl",
+      "content_hash": "/e9/29b976f23c/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 13124,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 978176,
+    "output_tokens": 10461,
+    "api_call_count": 17
+  }
+}
