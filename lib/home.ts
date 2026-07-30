@@ -6,7 +6,7 @@ export const HOME_SHELL_ORDER = [
   "intro",
   "ai-activity",
   "selected-projects",
-  "writings",
+  "blog",
   "footer",
 ] as const;
 
@@ -24,7 +24,7 @@ export const HOME_SECTION_COPY = {
   intro: null,
   "ai-activity": "AI Activity",
   "selected-projects": "Selected Projects",
-  writings: "Latest Writings",
+  blog: "Latest Posts",
   footer: null,
 } as const satisfies Record<HomeShellSectionId, string | null>;
 
@@ -38,7 +38,7 @@ function includeContentSection(
       return true;
     case "selected-projects":
       return input.selectedProjectCount > 0;
-    case "writings":
+    case "blog":
       return input.publishedPostCount > 0;
     default: {
       const _exhaustive: never = id;

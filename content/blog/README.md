@@ -1,4 +1,4 @@
-# Writings (Posts)
+# Blog (Posts)
 
 Add a Post as an `.mdx` file in this directory. The filename (without extension) is the slug.
 
@@ -14,4 +14,4 @@ draft: true
 Body in MDX. Set `draft: false` (or omit draft) to publish.
 ```
 
-Drafts never appear on `/writings`, Post detail routes, Home, or RSS.
+Drafts never appear on `/blog`, Post detail routes, Home, or RSS.

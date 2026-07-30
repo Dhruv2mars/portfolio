@@ -16,7 +16,7 @@ export type PostRecord = PostFrontmatter & {
   readingTimeMinutes: number;
 };
 
-const WRITINGS_DIR = path.join(process.cwd(), "content", "writings");
+const POSTS_DIR = path.join(process.cwd(), "content", "blog");
 
 /** ~200 wpm; minimum 1 minute when there is body text. */
 export function estimateReadingTimeMinutes(content: string): number {
@@ -155,9 +155,9 @@ function listMdxFiles(dir: string): string[] {
 
 /** All Posts from disk (including complete drafts; skips incomplete drafts). */
 export function getAllPosts(): PostRecord[] {
-  return listMdxFiles(WRITINGS_DIR).flatMap((file) => {
+  return listMdxFiles(POSTS_DIR).flatMap((file) => {
     const slug = path.basename(file, path.extname(file));
-    const raw = fs.readFileSync(path.join(WRITINGS_DIR, file), "utf-8");
+    const raw = fs.readFileSync(path.join(POSTS_DIR, file), "utf-8");
     const post = tryParsePostSource(slug, raw);
     return post ? [post] : [];
   });

@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { motion, useReducedMotion } from "motion/react";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { PRIMARY_NAV } from "@/lib/nav";
 import { site } from "@/lib/site";
@@ -9,65 +11,62 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const reduce = useReducedMotion();
 
   return (
-    <header className="sticky top-0 z-20 border-b border-border bg-background/80 backdrop-blur-xl backdrop-saturate-150">
-      <div className="container-wide flex h-[52px] items-center justify-between gap-4 sm:h-14">
+    <motion.header
+      className="pointer-events-none sticky top-4 z-30 flex justify-center px-4"
+      initial={reduce ? false : { opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div className="header-pill pointer-events-auto flex items-center gap-1 rounded-full p-1.5">
         <Link
           href="/"
-          className="group flex min-h-9 items-center gap-2.5 no-underline"
+          aria-label={`${site.name} — Home`}
+          className="group flex min-h-8 items-center gap-2 rounded-full pr-1 pl-1.5 no-underline"
         >
-          <span
-            aria-hidden
-            className="relative flex size-[18px] items-center justify-center"
-          >
-            <span className="absolute inset-0 rounded-[4px] bg-foreground transition-transform duration-200 ease-[var(--ease-out-expo)] group-hover:scale-90" />
-            <span className="relative size-[7px] rounded-[1px] bg-background" />
-          </span>
-          <span className="text-[13px] font-medium tracking-[-0.01em] text-foreground transition-opacity duration-150 group-hover:opacity-70">
+          <Image
+            src={site.avatar}
+            alt=""
+            width={22}
+            height={22}
+            className="size-[22px] rounded-full ring-1 ring-border transition-transform duration-200 ease-[var(--ease-spring)] group-hover:scale-105"
+          />
+          <span className="hidden text-[13px] font-medium tracking-[-0.01em] text-foreground transition-opacity duration-150 group-hover:opacity-70 min-[400px]:inline">
             {site.handle}
           </span>
         </Link>
 
-        <div className="flex items-center gap-1 sm:gap-1.5">
-          <nav
-            aria-label={FOCUSABLE_CHROME.primaryNavLabel}
-            className="flex items-center"
-          >
-            {PRIMARY_NAV.map((item) => {
-              const active =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+        <div className="mx-1 h-4 w-px bg-border" aria-hidden />
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  aria-current={active ? "page" : undefined}
-                  className={[
-                    "relative inline-flex min-h-9 items-center px-2.5 text-[13px] no-underline transition-colors duration-150 ease-[var(--ease-out-quad)] sm:px-3",
-                    active
-                      ? "font-medium text-foreground"
-                      : "text-muted hover:text-foreground",
-                  ].join(" ")}
-                >
-                  {item.label}
-                  <span
-                    aria-hidden
-                    className={[
-                      "pointer-events-none absolute inset-x-2.5 -bottom-px h-px bg-foreground transition-opacity duration-200 ease-[var(--ease-out-expo)] sm:inset-x-3",
-                      active ? "opacity-100" : "opacity-0",
-                    ].join(" ")}
-                  />
-                </Link>
-              );
-            })}
-          </nav>
-          <div className="ml-1 h-4 w-px bg-border" aria-hidden />
-          <ThemeToggle />
-        </div>
+        <nav
+          aria-label={FOCUSABLE_CHROME.primaryNavLabel}
+          className="flex items-center gap-0.5"
+        >
+          {PRIMARY_NAV.map((item) => {
+            const active =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                data-active={active}
+                className="nav-item"
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="mx-1 h-4 w-px bg-border" aria-hidden />
+        <ThemeToggle />
       </div>
-    </header>
+    </motion.header>
   );
 }

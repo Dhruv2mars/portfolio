@@ -9,12 +9,12 @@ import {
 } from "./home";
 
 describe("Home composition", () => {
-  test("shell order is intro → AI Activity → selected Projects → Writings → footer", () => {
+  test("shell order is intro → AI Activity → selected Projects → Blog → footer", () => {
     expect(HOME_SHELL_ORDER).toEqual([
       "intro",
       "ai-activity",
       "selected-projects",
-      "writings",
+      "blog",
       "footer",
     ]);
   });
@@ -29,11 +29,11 @@ describe("Home composition", () => {
       "intro",
       "ai-activity",
       "selected-projects",
-      "writings",
+      "blog",
     ]);
   });
 
-  test("omits Writings from Home content when no published Posts", () => {
+  test("omits Blog from Home content when no published Posts", () => {
     expect(
       composeHomeContentSections({
         selectedProjectCount: 5,
@@ -48,10 +48,10 @@ describe("Home composition", () => {
         selectedProjectCount: 0,
         publishedPostCount: 1,
       }),
-    ).toEqual(["intro", "ai-activity", "writings"]);
+    ).toEqual(["intro", "ai-activity", "blog"]);
   });
 
-  test("Visitor path language avoids Blog and dashboard copy", () => {
+  test("Visitor-facing language stays editorial, not dashboard copy", () => {
     const sectionTitles = Object.values(HOME_SECTION_COPY).filter(
       (title): title is string => title !== null,
     );
@@ -61,11 +61,10 @@ describe("Home composition", () => {
       ...sectionTitles,
     ].join(" ");
 
-    expect(labels).not.toMatch(/\bBlog\b/i);
     expect(labels).not.toMatch(/\bdashboard\b/i);
     expect(labels).not.toMatch(/\bArticles\b/i);
-    expect(PRIMARY_NAV.some((item) => item.label === "Writings")).toBe(true);
-    expect(HOME_SECTION_COPY.writings).toBe("Latest Writings");
+    expect(PRIMARY_NAV.some((item) => item.label === "Blog")).toBe(true);
+    expect(HOME_SECTION_COPY.blog).toBe("Latest Posts");
     expect(HOME_SECTION_COPY["selected-projects"]).toBe("Selected Projects");
     expect(HOME_SECTION_COPY["ai-activity"]).toBe("AI Activity");
   });

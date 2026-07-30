@@ -3,8 +3,8 @@ import { isSafeHref } from "./mdx-links";
 
 describe("isSafeHref", () => {
   test("allows internal paths, hashes, and http(s)/mailto", () => {
-    expect(isSafeHref("/writings")).toBe(true);
-    expect(isSafeHref("/writings/foo")).toBe(true);
+    expect(isSafeHref("/blog")).toBe(true);
+    expect(isSafeHref("/blog/foo")).toBe(true);
     expect(isSafeHref("#section")).toBe(true);
     expect(isSafeHref("https://example.com")).toBe(true);
     expect(isSafeHref("http://example.com")).toBe(true);

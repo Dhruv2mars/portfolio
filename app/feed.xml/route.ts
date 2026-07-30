@@ -1,6 +1,6 @@
 import { site } from "@/lib/site";
 import { buildRssXml } from "@/lib/discovery";
-import { getPublishedPosts } from "@/lib/writings";
+import { getPublishedPosts } from "@/lib/blog";
 
 export async function GET() {
   const xml = buildRssXml({

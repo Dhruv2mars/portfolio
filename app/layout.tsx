@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/next";
@@ -40,6 +40,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0c" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+  ],
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -73,7 +80,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="relative flex min-h-[100dvh] flex-col">
-        <div className="site-atmosphere" aria-hidden="true" />
+        <div className="site-backdrop" aria-hidden="true" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
@@ -86,7 +93,7 @@ export default function RootLayout({
           <main
             id={FOCUSABLE_CHROME.mainContentId}
             tabIndex={-1}
-            className="container-wide flex-1 outline-none"
+            className="container-site flex-1 outline-none"
           >
             {children}
           </main>

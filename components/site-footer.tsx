@@ -1,42 +1,39 @@
 import Link from "next/link";
+import { Rss } from "@/components/icons";
 import { site } from "@/lib/site";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto border-t border-border">
-      <div className="container-wide flex flex-col gap-4 py-8 sm:flex-row sm:items-center sm:justify-between">
+    <footer className="container-site mt-auto">
+      <div className="flex flex-col gap-3 border-t border-border py-8 sm:flex-row sm:items-center sm:justify-between">
         <p className="meta-copy">
-          <span className="text-muted">{site.name}</span>
+          <span className="text-muted">© {year}</span>
           <span className="mx-2 text-border-strong" aria-hidden>
             ·
           </span>
-          <span>{year}</span>
+          <span>{site.name}</span>
         </p>
-        <div className="flex flex-wrap items-center gap-x-1 gap-y-1 text-[13px]">
-          {site.socials.map((social, index) => (
-            <span key={social.label} className="flex items-center">
-              {index > 0 ? (
-                <span className="mx-2 text-border-strong" aria-hidden>
-                  /
-                </span>
-              ) : null}
-              <a
-                href={social.href}
-                {...(social.href.startsWith("mailto:")
-                  ? {}
-                  : { target: "_blank", rel: "noopener noreferrer" })}
-                className="link-editorial-muted min-h-8"
-              >
-                {social.label}
-              </a>
-            </span>
+        <div className="flex items-center gap-4 text-[13px]">
+          {site.socials.map((social) => (
+            <a
+              key={social.label}
+              href={social.href}
+              {...(social.href.startsWith("mailto:")
+                ? {}
+                : { target: "_blank", rel: "noopener noreferrer" })}
+              className="link-muted min-h-8"
+            >
+              {social.label}
+            </a>
           ))}
-          <span className="mx-2 text-border-strong" aria-hidden>
-            /
-          </span>
-          <Link href={site.rssPath} className="link-editorial-muted min-h-8">
+          <Link
+            href={site.rssPath}
+            aria-label="RSS feed"
+            className="link-muted min-h-8 gap-1.5"
+          >
+            <Rss size={13} weight="bold" aria-hidden />
             RSS
           </Link>
         </div>
