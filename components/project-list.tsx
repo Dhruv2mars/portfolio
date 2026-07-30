@@ -1,3 +1,4 @@
+import { ArrowUpRight } from "@/components/icons";
 import type { Project } from "@/lib/projects";
 
 type ProjectListProps = {
@@ -5,27 +6,6 @@ type ProjectListProps = {
   headingId?: string;
   compact?: boolean;
 };
-
-function ArrowIcon() {
-  return (
-    <svg
-      className="row-arrow mt-1 shrink-0"
-      width="14"
-      height="14"
-      viewBox="0 0 14 14"
-      fill="none"
-      aria-hidden
-    >
-      <path
-        d="M3.5 10.5L10.5 3.5M10.5 3.5H5M10.5 3.5V9"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export function ProjectList({
   projects,
@@ -35,7 +15,7 @@ export function ProjectList({
   return (
     <ul
       className={
-        compact ? "mt-5 divide-y divide-border" : "mt-8 divide-y divide-border"
+        compact ? "mt-5 divide-y divide-border/70" : "mt-8 divide-y divide-border/70"
       }
       {...(headingId ? { "aria-labelledby": headingId } : {})}
     >
@@ -59,14 +39,19 @@ export function ProjectList({
               <p
                 className={
                   compact
-                    ? "mt-1 max-w-[38rem] text-[13px] leading-5 text-muted text-pretty"
-                    : "mt-1.5 max-w-[38rem] text-[14px] leading-6 text-muted text-pretty"
+                    ? "mt-1 max-w-[36rem] text-[13px] leading-5 text-muted text-pretty"
+                    : "mt-1.5 max-w-[36rem] text-[14px] leading-6 text-muted text-pretty"
                 }
               >
                 {project.description}
               </p>
             </div>
-            <ArrowIcon />
+            <ArrowUpRight
+              size={14}
+              weight="bold"
+              aria-hidden
+              className="row-arrow mt-1 shrink-0"
+            />
           </a>
         </li>
       ))}

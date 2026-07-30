@@ -30,7 +30,7 @@ function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
 
 function RoundedImage(props: React.ComponentProps<typeof Image>) {
   const { alt = "", className, ...rest } = props;
-  return <Image alt={alt} className={`rounded-lg ${className ?? ""}`} {...rest} />;
+  return <Image alt={alt} className={`rounded-xl ${className ?? ""}`} {...rest} />;
 }
 
 function Code({

@@ -16,8 +16,8 @@ export function GET(request: Request) {
           width: "100%",
           height: "100%",
           justifyContent: "space-between",
-          background: "#fafafa",
-          color: "#171717",
+          background: "#0a0a0c",
+          color: "#ededf0",
           padding: "72px",
           fontFamily: "ui-sans-serif, system-ui, sans-serif",
         }}
@@ -25,11 +25,21 @@ export function GET(request: Request) {
         <div
           style={{
             display: "flex",
-            fontSize: 28,
-            color: "#737373",
+            alignItems: "center",
+            gap: 14,
+            fontSize: 26,
+            color: "#8f8f97",
             letterSpacing: "-0.02em",
           }}
         >
+          <div
+            style={{
+              width: 14,
+              height: 14,
+              borderRadius: 4,
+              background: "#4f74ff",
+            }}
+          />
           {site.name}
         </div>
         <div
@@ -38,11 +48,22 @@ export function GET(request: Request) {
             fontSize: title.length > 48 ? 48 : 64,
             fontWeight: 600,
             letterSpacing: "-0.04em",
-            lineHeight: 1.15,
-            maxWidth: "90%",
+            lineHeight: 1.12,
+            maxWidth: "92%",
           }}
         >
           {title}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 22,
+            color: "#63636c",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+          }}
+        >
+          dhruv2mars.com
         </div>
       </div>
     ),

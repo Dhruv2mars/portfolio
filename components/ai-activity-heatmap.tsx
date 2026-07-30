@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import type {
   ActivityDay,
@@ -17,7 +17,6 @@ import {
 import type { AiActivityPayload } from "@/lib/ai-activity-payload";
 import { HOME_SECTION_COPY } from "@/lib/home";
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 const LIVE_REFRESH_MS = 60_000;
 
 function parseUTCDate(date: string): Date {
@@ -88,18 +87,16 @@ function useLiveTokenDisplay(
   day: ActivityDay | null,
   reduceMotion: boolean | null,
 ): number | null {
-  const [display, setDisplay] = useState<number | null>(day?.tokens ?? null);
+  // Animated value for the hovered live cell, keyed by date so stale
+  // animation results never leak into another day's readout.
+  const [anim, setAnim] = useState<{ date: string; value: number } | null>(
+    null,
+  );
 
   useEffect(() => {
-    if (!day) {
-      setDisplay(null);
-      return;
-    }
-    if (!day.live || reduceMotion || day.tokens <= 0) {
-      setDisplay(day.tokens);
-      return;
-    }
+    if (!day?.live || reduceMotion || day.tokens <= 0) return;
 
+    const date = day.date;
     const target = day.tokens;
     const start = Math.round(target * LIVE_COUNT_START_RATIO);
     const started = performance.now();
@@ -108,17 +105,16 @@ function useLiveTokenDisplay(
     const tick = (now: number) => {
       const t = Math.min(1, (now - started) / LIVE_COUNT_DURATION_MS);
       const value = Math.round(start + (target - start) * easeOutCubic(t));
-      setDisplay(value);
+      setAnim({ date, value });
       if (t < 1) frame = requestAnimationFrame(tick);
     };
 
-    setDisplay(start);
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [day, reduceMotion]);
 
-  // Avoid a one-frame “Hover a day…” flash before the effect runs.
-  return display ?? day?.tokens ?? null;
+  if (!day) return null;
+  return anim && anim.date === day.date ? anim.value : day.tokens;
 }
 
 type AiActivityHeatmapProps = {
@@ -129,13 +125,19 @@ type AiActivityHeatmapProps = {
 export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
   const labelId = useId();
   const reduce = useReducedMotion();
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const [hoverDate, setHoverDate] = useState<string | null>(null);
   const [liveNow, setLiveNow] = useState<Date | null>(null);
 
+  // First clock read happens inside rAF to avoid hydration mismatch without a
+  // synchronous setState in the effect body.
   useEffect(() => {
-    setLiveNow(new Date());
     const id = window.setInterval(() => setLiveNow(new Date()), LIVE_REFRESH_MS);
-    return () => window.clearInterval(id);
+    const frame = window.requestAnimationFrame(() => setLiveNow(new Date()));
+    return () => {
+      window.clearInterval(id);
+      window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   // History is cacheable; only the live today cell refreshes on the interval.
@@ -163,132 +165,139 @@ export function AiActivityHeatmap({ payload, source }: AiActivityHeatmapProps) {
   const months = useMemo(() => monthLabels(weeks), [weeks]);
   const isSample = source === "fallback";
 
+  // Keep the most recent weeks in view when the grid overflows.
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (el) el.scrollLeft = el.scrollWidth;
+  }, [weeks.length]);
+
   return (
     <motion.section
       aria-labelledby={labelId}
       className="section-home"
-      initial={reduce ? false : { opacity: 0, y: 8 }}
+      initial={reduce ? false : { opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
         <div>
-          <h2 id={labelId} className="section-title">
+          <h2 id={labelId} className="eyebrow">
             {HOME_SECTION_COPY["ai-activity"]}
           </h2>
-          <p className="mt-2 text-[15px] font-medium tracking-[-0.01em] text-foreground">
-            Combined token usage across agents
-            {isSample ? " (cached seed until first nightly sync)" : ""}
+          <p className="mt-2.5 text-[15px] font-medium tracking-[-0.01em] text-foreground">
+            Tokens across every agent, daily
+            {isSample ? (
+              <span className="meta-copy ml-2.5 rounded-full border border-border px-2 py-0.5 align-middle">
+                cached seed
+              </span>
+            ) : null}
           </p>
         </div>
-        <p className="meta-copy rounded-full border border-border bg-background-muted px-2.5 py-1">
-          {formatTokenCount(activity.lifetimeTokens)} lifetime
+        <p className="text-right">
+          <span className="stat-value text-accent-muted">
+            {formatTokenCount(activity.lifetimeTokens)}
+          </span>
+          <span className="meta-copy mt-1 block">lifetime tokens</span>
         </p>
       </div>
 
-      <div className="mt-6 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="min-w-[640px]">
-          <div
-            className="mb-2 grid gap-[3px] pl-[28px]"
-            style={{
-              gridTemplateColumns: `repeat(${weeks.length}, 12px)`,
-            }}
-            aria-hidden
-          >
-            {weeks.map((_, wi) => {
-              const month = months.find((m) => m.index === wi);
-              return (
-                <span
-                  key={wi}
-                  className="meta-copy h-4 overflow-visible whitespace-nowrap"
-                >
-                  {month?.label ?? ""}
-                </span>
-              );
-            })}
-          </div>
-
-          <div
-            className="inline-grid gap-[3px]"
-            style={{
-              gridTemplateColumns: `auto repeat(${weeks.length}, 12px)`,
-            }}
-            role="img"
-            aria-label="Year of daily AI token usage"
-          >
-            <div className="grid grid-rows-7 gap-[3px] pr-2 text-[10px] leading-none text-faint">
-              {WEEKDAYS.map((day, i) => (
-                <span
-                  key={day}
-                  className="flex h-3 items-center"
-                  style={{ visibility: i % 2 === 1 ? "visible" : "hidden" }}
-                >
-                  {day.slice(0, 3)}
-                </span>
-              ))}
+      <div className="mt-7 rounded-2xl border border-border bg-surface/40 px-4 py-5 sm:px-5">
+        <div
+          ref={scrollerRef}
+          className="overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          <div className="min-w-fit">
+            <div
+              className="mb-2 grid gap-[2px]"
+              style={{
+                gridTemplateColumns: `repeat(${weeks.length}, 10px)`,
+              }}
+              aria-hidden
+            >
+              {weeks.map((_, wi) => {
+                const month = months.find((m) => m.index === wi);
+                return (
+                  <span
+                    key={wi}
+                    className="meta-copy h-4 overflow-visible !text-[10px] whitespace-nowrap"
+                  >
+                    {month?.label ?? ""}
+                  </span>
+                );
+              })}
             </div>
 
-            {weeks.map((week, wi) => (
-              <div key={wi} className="grid grid-rows-7 gap-[3px]">
-                {week.map((day, di) => {
-                  if (!day) {
+            <div
+              className="inline-grid gap-[2px]"
+              style={{
+                gridTemplateColumns: `repeat(${weeks.length}, 10px)`,
+              }}
+              role="group"
+              aria-label="Year of daily AI token usage"
+            >
+              {weeks.map((week, wi) => (
+                <div key={wi} className="grid grid-rows-7 gap-[2px]">
+                  {week.map((day, di) => {
+                    if (!day) {
+                      return (
+                        <span
+                          key={`pad-${wi}-${di}`}
+                          className="size-2.5"
+                          aria-hidden
+                        />
+                      );
+                    }
                     return (
-                      <span
-                        key={`pad-${wi}-${di}`}
-                        className="size-3"
-                        aria-hidden
+                      <button
+                        key={day.date}
+                        type="button"
+                        className={`activity-cell intensity-${day.intensity} size-2.5${day.live ? " live-pulse" : ""}`}
+                        aria-label={`${formatTooltipDate(day.date)}: ${formatTokenCount(day.tokens)} tokens${day.live ? " (live estimate)" : ""}`}
+                        onMouseEnter={() => setHoverDate(day.date)}
+                        onMouseLeave={() => setHoverDate(null)}
+                        onFocus={() => setHoverDate(day.date)}
+                        onBlur={() => setHoverDate(null)}
                       />
                     );
-                  }
-                  return (
-                    <button
-                      key={day.date}
-                      type="button"
-                      className={`activity-cell intensity-${day.intensity} size-3`}
-                      aria-label={`${formatTooltipDate(day.date)}: ${formatTokenCount(day.tokens)} tokens${day.live ? " (live estimate)" : ""}`}
-                      onMouseEnter={() => setHoverDate(day.date)}
-                      onMouseLeave={() => setHoverDate(null)}
-                      onFocus={() => setHoverDate(day.date)}
-                      onBlur={() => setHoverDate(null)}
-                    />
-                  );
-                })}
-              </div>
-            ))}
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <p
-          className="min-h-5 text-[13px] tabular-nums text-muted"
-          aria-live="polite"
-        >
-          {hover && liveDisplay !== null ? (
-            <>
-              <span className="text-foreground">
-                {formatTokenCount(liveDisplay)}
-              </span>
-              <span className="text-faint"> tokens · </span>
-              <span>{formatTooltipDate(hover.date)}</span>
-              {hover.live ? (
-                <span className="text-faint"> · live</span>
-              ) : null}
-            </>
-          ) : (
-            <span className="text-faint">Hover a day for detail</span>
-          )}
-        </p>
-        <div className="flex items-center gap-1.5 text-[11px] text-faint" aria-hidden>
-          <span>Less</span>
-          {[0, 1, 2, 3, 4].map((level) => (
-            <span
-              key={level}
-              className={`activity-cell intensity-${level} size-2.5`}
-            />
-          ))}
-          <span>More</span>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+          <p
+            className="min-h-5 text-[12px] tabular-nums text-muted"
+            aria-live="polite"
+          >
+            {hover && liveDisplay !== null ? (
+              <>
+                <span className="font-medium text-foreground">
+                  {formatTokenCount(liveDisplay)}
+                </span>
+                <span className="text-faint"> tokens · </span>
+                <span>{formatTooltipDate(hover.date)}</span>
+                {hover.live ? <span className="text-faint"> · live</span> : null}
+              </>
+            ) : (
+              <span className="text-faint">Hover a day for detail</span>
+            )}
+          </p>
+          <div
+            className="flex items-center gap-[3px] text-[10px] text-faint"
+            aria-hidden
+          >
+            <span className="mr-1">Less</span>
+            {[0, 1, 2, 3, 4].map((level) => (
+              <span
+                key={level}
+                className={`activity-cell intensity-${level} size-2.5`}
+              />
+            ))}
+            <span className="ml-1">More</span>
+          </div>
         </div>
       </div>
     </motion.section>
