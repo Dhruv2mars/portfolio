@@ -5,7 +5,7 @@ import {
 } from "./a11y";
 import { PRIMARY_NAV } from "./nav";
 import { getSelectedProjects } from "./projects";
-import { getLatestPublishedPosts } from "./writings";
+import { getLatestPublishedPosts } from "./blog";
 
 describe("Editorial keyboard chrome", () => {
   test("exposes skip-to-content and main landmark ids", () => {
@@ -54,7 +54,7 @@ describe("Editorial keyboard chrome", () => {
     }
   });
 
-  test("published Post links expose title and writings href shape", () => {
+  test("published Post links expose title and blog href shape", () => {
     for (const post of getLatestPublishedPosts(3)) {
       expect(
         isKeyboardReachableControl({

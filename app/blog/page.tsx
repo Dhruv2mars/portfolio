@@ -1,24 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { formatPostDate, getPublishedPosts } from "@/lib/writings";
+import { formatPostDate, getPublishedPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
-  title: "Writings",
+  title: "Blog",
   description: "Product thinking in writing.",
   openGraph: {
-    title: "Writings",
+    title: "Blog",
     description: "Product thinking in writing.",
   },
 };
 
-export default function WritingsPage() {
+export default function BlogPage() {
   const posts = getPublishedPosts();
 
   return (
-    <section className="pt-14 pb-20 sm:pt-16" aria-labelledby="writings-heading">
+    <section className="pt-14 pb-20 sm:pt-16" aria-labelledby="blog-heading">
       <p className="meta-copy mb-4">Index</p>
-      <h1 id="writings-heading" className="display-title">
-        Writings
+      <h1 id="blog-heading" className="display-title">
+        Blog
       </h1>
 
       {posts.length === 0 ? (
@@ -32,11 +32,11 @@ export default function WritingsPage() {
           </p>
         </div>
       ) : (
-        <ul className="mt-10 divide-y divide-border" aria-labelledby="writings-heading">
+        <ul className="mt-10 divide-y divide-border" aria-labelledby="blog-heading">
           {posts.map((post) => (
             <li key={post.slug}>
               <Link
-                href={`/writings/${post.slug}`}
+                href={`/blog/${post.slug}`}
                 className="row-interactive block no-underline"
               >
                 <span className="text-[1.0625rem] font-medium tracking-[-0.015em] text-foreground">

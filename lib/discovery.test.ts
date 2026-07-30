@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { buildRssXml, buildSitemapEntries } from "./discovery";
-import type { PostRecord } from "./writings";
+import type { PostRecord } from "./blog";
 
 const samplePost: PostRecord = {
   slug: "judgment",
@@ -31,9 +31,9 @@ describe("discovery contracts", () => {
       posts: [samplePost],
     });
     expect(withPost).toContain("<item>");
-    expect(withPost).toContain("https://dhruv2mars.com/writings/judgment");
+    expect(withPost).toContain("https://dhruv2mars.com/blog/judgment");
     expect(withPost).toContain("Product &amp; judgment");
-    expect(withPost).not.toContain("/blog/");
+    expect(withPost).not.toContain("/writings/");
 
     const ampersandSlug = buildRssXml({
       siteUrl: "https://dhruv2mars.com",
@@ -42,28 +42,28 @@ describe("discovery contracts", () => {
       posts: [{ ...samplePost, slug: "ai&design" }],
     });
     expect(ampersandSlug).toContain(
-      "https://dhruv2mars.com/writings/ai%26design",
+      "https://dhruv2mars.com/blog/ai%26design",
     );
-    expect(ampersandSlug).not.toContain("/writings/ai&design");
+    expect(ampersandSlug).not.toContain("/blog/ai&design");
   });
 
-  test("sitemap lists Home, Writings, Projects, and published Posts", () => {
+  test("sitemap lists Home, Blog, Projects, and published Posts", () => {
     const entries = buildSitemapEntries({
       siteUrl: "https://dhruv2mars.com",
       posts: [samplePost],
     });
     const urls = entries.map((e) => e.url);
     expect(urls).toContain("https://dhruv2mars.com");
-    expect(urls).toContain("https://dhruv2mars.com/writings");
+    expect(urls).toContain("https://dhruv2mars.com/blog");
     expect(urls).toContain("https://dhruv2mars.com/projects");
-    expect(urls).toContain("https://dhruv2mars.com/writings/judgment");
+    expect(urls).toContain("https://dhruv2mars.com/blog/judgment");
 
     const encoded = buildSitemapEntries({
       siteUrl: "https://dhruv2mars.com",
       posts: [{ ...samplePost, slug: "ai&design" }],
     });
     expect(encoded.map((e) => e.url)).toContain(
-      "https://dhruv2mars.com/writings/ai%26design",
+      "https://dhruv2mars.com/blog/ai%26design",
     );
   });
 
@@ -74,7 +74,7 @@ describe("discovery contracts", () => {
     });
     expect(entries.map((e) => e.url)).toEqual([
       "https://dhruv2mars.com",
-      "https://dhruv2mars.com/writings",
+      "https://dhruv2mars.com/blog",
       "https://dhruv2mars.com/projects",
     ]);
   });

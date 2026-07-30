@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { GET as getFeed } from "@/app/feed.xml/route";
 import sitemap from "@/app/sitemap";
 import robots from "@/app/robots";
-import { getPublishedPosts } from "@/lib/writings";
+import { getPublishedPosts } from "@/lib/blog";
 
 /**
  * Thin secondary smoke: discovery endpoints respond with sensible payloads
@@ -25,7 +25,7 @@ describe("discovery route smoke", () => {
     } else {
       expect(body).toContain("<item>");
       for (const post of published) {
-        expect(body).toContain(`/writings/${post.slug}`);
+        expect(body).toContain(`/blog/${post.slug}`);
         expect(body).toContain(post.title);
       }
     }
@@ -35,7 +35,7 @@ describe("discovery route smoke", () => {
     const entries = sitemap();
     const urls = entries.map((e) => e.url);
     expect(urls).toContain("https://dhruv2mars.com");
-    expect(urls).toContain("https://dhruv2mars.com/writings");
+    expect(urls).toContain("https://dhruv2mars.com/blog");
     expect(urls).toContain("https://dhruv2mars.com/projects");
 
     const robotsFile = robots();

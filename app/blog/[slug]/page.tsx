@@ -9,7 +9,7 @@ import {
   formatPostDate,
   getPostBySlug,
   getPublishedPosts,
-} from "@/lib/writings";
+} from "@/lib/blog";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -36,7 +36,7 @@ export async function generateMetadata({
       description: post.summary,
       type: "article",
       publishedTime: post.publishedAt,
-      url: `${site.url}/writings/${post.slug}`,
+      url: `${site.url}/blog/${post.slug}`,
       images: [{ url: ogImage }],
     },
     twitter: {
@@ -48,7 +48,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function WritingPostPage({ params }: PageProps) {
+export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
 
@@ -63,7 +63,7 @@ export default async function WritingPostPage({ params }: PageProps) {
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
     description: post.summary,
-    url: `${site.url}/writings/${post.slug}`,
+    url: `${site.url}/blog/${post.slug}`,
     author: {
       "@type": "Person",
       name: site.name,
@@ -78,10 +78,10 @@ export default async function WritingPostPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <Link
-        href="/writings"
+        href="/blog"
         className="link-editorial-muted meta-copy min-h-8 no-underline"
       >
-        ← Writings
+        ← Blog
       </Link>
       <h1 className="display-title mt-6">{post.title}</h1>
       <p className="meta-copy mt-4">

@@ -1,10 +1,10 @@
 import { HomeIntro } from "@/components/home-intro";
 import { HomeAiActivity } from "@/components/home-ai-activity";
 import { HomeSelectedProjects } from "@/components/home-selected-projects";
-import { HomeWritings } from "@/components/home-writings";
+import { HomeBlog } from "@/components/home-blog";
 import { composeHomeContentSections } from "@/lib/home";
 import { getSelectedProjects } from "@/lib/projects";
-import { getPublishedPosts } from "@/lib/writings";
+import { getPublishedPosts } from "@/lib/blog";
 
 /** Pick up nightly Blob publishes without a redeploy. */
 export const revalidate = 3600;
@@ -25,8 +25,8 @@ export default function HomePage() {
             return <HomeAiActivity key={section} />;
           case "selected-projects":
             return <HomeSelectedProjects key={section} />;
-          case "writings":
-            return <HomeWritings key={section} />;
+          case "blog":
+            return <HomeBlog key={section} />;
           default: {
             const _exhaustive: never = section;
             return _exhaustive;

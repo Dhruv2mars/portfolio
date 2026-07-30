@@ -1,4 +1,4 @@
-import type { PostRecord } from "./writings";
+import type { PostRecord } from "./blog";
 
 export type RssInput = {
   siteUrl: string;
@@ -36,8 +36,8 @@ export function buildRssXml({
     .map(
       (post) => `    <item>
       <title>${escapeXml(post.title)}</title>
-      <link>${escapeXml(`${siteUrl}/writings/${encodeURIComponent(post.slug)}`)}</link>
-      <guid>${escapeXml(`${siteUrl}/writings/${encodeURIComponent(post.slug)}`)}</guid>
+      <link>${escapeXml(`${siteUrl}/blog/${encodeURIComponent(post.slug)}`)}</link>
+      <guid>${escapeXml(`${siteUrl}/blog/${encodeURIComponent(post.slug)}`)}</guid>
       <description>${escapeXml(post.summary)}</description>
       <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
     </item>`,
@@ -62,17 +62,17 @@ export function buildSitemapEntries({
   posts: readonly PostRecord[];
 }): SitemapEntry[] {
   const today = new Date().toISOString().slice(0, 10);
-  const core = ["", "/writings", "/projects"].map((route) => ({
+  const core = ["", "/blog", "/projects"].map((route) => ({
     url: `${siteUrl}${route}`,
     lastModified: today,
   }));
 
-  const writingEntries = posts.map((post) => ({
-    url: `${siteUrl}/writings/${encodeURIComponent(post.slug)}`,
+  const postEntries = posts.map((post) => ({
+    url: `${siteUrl}/blog/${encodeURIComponent(post.slug)}`,
     lastModified: post.publishedAt,
   }));
 
-  return [...core, ...writingEntries];
+  return [...core, ...postEntries];
 }
 
 export function ogImagePath(title: string): string {

@@ -6,7 +6,7 @@ import {
   selectPublishedPosts,
   tryParsePostSource,
   type PostRecord,
-} from "./writings";
+} from "./blog";
 
 function post(partial: Partial<PostRecord> & Pick<PostRecord, "slug">): PostRecord {
   return {
@@ -21,7 +21,7 @@ function post(partial: Partial<PostRecord> & Pick<PostRecord, "slug">): PostReco
   };
 }
 
-describe("Writings read model", () => {
+describe("Blog read model", () => {
   test("excludes drafts from the published set", () => {
     const posts = [
       post({ slug: "shipped", draft: false, publishedAt: "2026-02-01" }),
@@ -32,7 +32,7 @@ describe("Writings read model", () => {
     expect(published.map((p) => p.slug)).toEqual(["shipped"]);
   });
 
-  test("empty published set yields no latest Writings", () => {
+  test("empty published set yields no latest Posts", () => {
     const posts = [post({ slug: "wip", draft: true })];
     expect(selectPublishedPosts(posts)).toEqual([]);
     expect(selectLatestPublished(posts, 3)).toEqual([]);

@@ -1,23 +1,23 @@
 import Link from "next/link";
 import { HOME_SECTION_COPY } from "@/lib/home";
-import { formatPostDate, getLatestPublishedPosts } from "@/lib/writings";
+import { formatPostDate, getLatestPublishedPosts } from "@/lib/blog";
 
-export function HomeWritings() {
+export function HomeBlog() {
   const posts = getLatestPublishedPosts(3);
 
   return (
-    <section aria-labelledby="home-writings-heading" className="section-home">
+    <section aria-labelledby="home-blog-heading" className="section-home">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 id="home-writings-heading" className="section-title">
-            {HOME_SECTION_COPY.writings}
+          <h2 id="home-blog-heading" className="section-title">
+            {HOME_SECTION_COPY.blog}
           </h2>
           <p className="mt-2 text-[15px] font-medium tracking-[-0.01em] text-foreground">
             Recent thinking
           </p>
         </div>
         <Link
-          href="/writings"
+          href="/blog"
           className="link-editorial-muted text-[13px] font-medium"
         >
           View all
@@ -25,12 +25,12 @@ export function HomeWritings() {
       </div>
       <ul
         className="mt-5 divide-y divide-border"
-        aria-labelledby="home-writings-heading"
+        aria-labelledby="home-blog-heading"
       >
         {posts.map((post) => (
           <li key={post.slug}>
             <Link
-              href={`/writings/${post.slug}`}
+              href={`/blog/${post.slug}`}
               className="row-interactive block no-underline"
             >
               <span className="text-[15px] font-medium tracking-[-0.01em] text-foreground">
