@@ -1,9 +1,11 @@
 {
   "cli_version": "0.8.42",
   "checkpoint_id": "18aa0d8a8f4e",
+  "session_id": "019fbde2-d1de-7bb3-9f85-933f42ee4b52",
   "strategy": "manual-commit",
+  "created_at": "2026-08-01T16:09:46.68201Z",
   "branch": "feat/gauntlet-frontend-redesign",
-  "checkpoints_count": 2,
+  "checkpoints_count": 1,
   "files_touched": [
     "app/globals.css",
     "components/ink-mark.tsx",
@@ -26,27 +28,22 @@
     "gauntlet/pieces/type-system/r6/home-mobile.png",
     "gauntlet/workbench.md"
   ],
-  "sessions": [
-    {
-      "metadata": "/18/aa0d8a8f4e/0/metadata.json",
-      "transcript": "/18/aa0d8a8f4e/0/full.jsonl",
-      "compact_transcript": "/18/aa0d8a8f4e/0/transcript.jsonl",
-      "content_hash": "/18/aa0d8a8f4e/0/content_hash.txt",
-      "prompt": "/18/aa0d8a8f4e/0/prompt.txt"
-    },
-    {
-      "metadata": "/18/aa0d8a8f4e/1/metadata.json",
-      "transcript": "/18/aa0d8a8f4e/1/full.jsonl",
-      "compact_transcript": "/18/aa0d8a8f4e/1/transcript.jsonl",
-      "content_hash": "/18/aa0d8a8f4e/1/content_hash.txt",
-      "prompt": ""
-    }
-  ],
-  "token_usage": {
-    "input_tokens": 107390,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 764928,
-    "output_tokens": 5329,
-    "api_call_count": 20
+  "agent": "Codex",
+  "model": "gpt-5.6-luna",
+  "turn_id": "cb83a1c93ecf",
+  "checkpoint_transcript_start": 123,
+  "transcript_lines_at_start": 123,
+  "compact_transcript_start": 21,
+  "initial_attribution": {
+    "calculated_at": "2026-08-01T16:09:46.637667Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 174,
+    "human_modified": 48,
+    "human_removed": 0,
+    "total_committed": 174,
+    "total_lines_changed": 222,
+    "agent_percentage": 0,
+    "metric_version": 2
   }
 }
