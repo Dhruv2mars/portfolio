@@ -1,0 +1,61 @@
+Blind design critic for piece=ai-activity-heatmap round=r2.
+
+Authoritative bar pack:
+- gauntlet/bar/WIN_CRITERIA.md — MUST score must-pass 5 (singular amber atmosphere) and 12 (nav-off ownability) whenever relevant
+- Also consider 1,2,3,8
+- gauntlet/bar/INDEX.md, ANTI_PATTERNS.md
+- Bar PNGs: gauntlet/bar/{eftakher,ericsin,dai-is-a-dev,pablostanley,pham-codes,loganliffick,evilrabbit}/
+- Baseline: gauntlet/bar/dhruv2mars/
+
+Our evidence: gauntlet/pieces/ai-activity-heatmap/r2/
+Prior critic if exists: gauntlet/critics/ai-activity-heatmap-r2.md or r1
+Focus: Criteria 2,9 — below fold, not vanity
+
+R3 claimed: amber-only Ink Signal, authored InkMark (no cyan GH orb), structural frame/rules/watermark, Fraunces display, rail nav with amber mark+wordmark, brand-first hero.
+
+Blind A/B first (unlabeled ours vs bar). Then write ONLY gauntlet/critics/ai-activity-heatmap-r2.md:
+## Verdict
+- piece: ai-activity-heatmap
+- round: r2
+- winner: us | bar | tie
+- biggest_gap:
+- next_build_instruction:
+- must_pass_5: pass|fail|n/a — one line why
+- must_pass_12: pass|fail|n/a — one line why
+- must_pass_touched: other criteria
+- evidence_paths:
+- blind_ab_note:
+
+Harsh. Prefer bar if merely competent.
+
+---
+
+Blind design critic for piece=ai-activity-heatmap round=r2.
+
+Authoritative bar pack:
+- gauntlet/bar/WIN_CRITERIA.md — MUST score must-pass 5 (singular amber atmosphere) and 12 (nav-off ownability) whenever relevant
+- Also consider 1,2,3,8
+- gauntlet/bar/INDEX.md, ANTI_PATTERNS.md
+- Bar PNGs: gauntlet/bar/{eftakher,ericsin,dai-is-a-dev,pablostanley,pham-codes,loganliffick,evilrabbit}/
+- Baseline: gauntlet/bar/dhruv2mars/
+
+Our evidence: gauntlet/pieces/ai-activity-heatmap/r2/
+Prior critic if exists: gauntlet/critics/ai-activity-heatmap-r2.md or r1
+Focus: Criteria 2,9 — below fold, not vanity
+
+R3 claimed: amber-only Ink Signal, authored InkMark (no cyan GH orb), structural frame/rules/watermark, Fraunces display, rail nav with amber mark+wordmark, brand-first hero.
+
+Blind A/B first (unlabeled ours vs bar). Then write ONLY gauntlet/critics/ai-activity-heatmap-r2.md:
+## Verdict
+- piece: ai-activity-heatmap
+- round: r2
+- winner: us | bar | tie
+- biggest_gap:
+- next_build_instruction:
+- must_pass_5: pass|fail|n/a — one line why
+- must_pass_12: pass|fail|n/a — one line why
+- must_pass_touched: other criteria
+- evidence_paths:
+- blind_ab_note:
+
+Harsh. Prefer bar if merely competent.

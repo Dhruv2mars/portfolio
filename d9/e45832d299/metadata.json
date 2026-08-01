@@ -3,8 +3,12 @@
   "checkpoint_id": "d9e45832d299",
   "strategy": "manual-commit",
   "branch": "feat/gauntlet-frontend-redesign",
-  "checkpoints_count": 2,
-  "files_touched": null,
+  "checkpoints_count": 3,
+  "files_touched": [
+    "gauntlet/critics/ai-activity-heatmap-r2.md",
+    "gauntlet/critics/color-atmosphere-r3.md",
+    "gauntlet/critics/projects-list-r2.md"
+  ],
   "sessions": [
     {
       "metadata": "/d9/e45832d299/0/metadata.json",
@@ -19,13 +23,20 @@
       "compact_transcript": "/d9/e45832d299/1/transcript.jsonl",
       "content_hash": "/d9/e45832d299/1/content_hash.txt",
       "prompt": "/d9/e45832d299/1/prompt.txt"
+    },
+    {
+      "metadata": "/d9/e45832d299/2/metadata.json",
+      "transcript": "/d9/e45832d299/2/full.jsonl",
+      "compact_transcript": "/d9/e45832d299/2/transcript.jsonl",
+      "content_hash": "/d9/e45832d299/2/content_hash.txt",
+      "prompt": "/d9/e45832d299/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 107390,
+    "input_tokens": 196766,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 764928,
-    "output_tokens": 5329,
-    "api_call_count": 20
+    "cache_read_tokens": 1318400,
+    "output_tokens": 12115,
+    "api_call_count": 35
   }
 }
