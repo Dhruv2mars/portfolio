@@ -3,7 +3,7 @@
   "checkpoint_id": "26ed33ca84cf",
   "strategy": "manual-commit",
   "branch": "feat/gauntlet-frontend-redesign",
-  "checkpoints_count": 2,
+  "checkpoints_count": 3,
   "files_touched": [
     "components/ink-mark.tsx",
     "gauntlet/critics/home-first-viewport-r8.md",
@@ -33,6 +33,13 @@
       "transcript": "/26/ed33ca84cf/1/full.jsonl",
       "compact_transcript": "/26/ed33ca84cf/1/transcript.jsonl",
       "content_hash": "/26/ed33ca84cf/1/content_hash.txt",
+      "prompt": ""
+    },
+    {
+      "metadata": "/26/ed33ca84cf/2/metadata.json",
+      "transcript": "/26/ed33ca84cf/2/full.jsonl",
+      "compact_transcript": "/26/ed33ca84cf/2/transcript.jsonl",
+      "content_hash": "/26/ed33ca84cf/2/content_hash.txt",
       "prompt": ""
     }
   ],
