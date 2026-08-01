@@ -1,0 +1,9 @@
+Blind design critic for piece=nav-chrome round=r2.
+
+Inspect:
+- Ours: gauntlet/pieces/nav-chrome/r2/ (header-desktop.png, header-mobile.png, theme-toggle-light.png, NOTES.md)
+- Bar nav-*.png; nav-chrome-r1.md
+R2 claimed rail geometry instead of pill + stronger theme toggle.
+
+Blind A/B. Write gauntlet/critics/nav-chrome-r2.md with winner us|bar|tie, biggest_gap, next_build_instruction, evidence_paths, blind_ab_note.
+Harsh.
