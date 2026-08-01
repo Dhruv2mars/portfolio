@@ -3,8 +3,11 @@
   "checkpoint_id": "e8bb2b7d76ad",
   "strategy": "manual-commit",
   "branch": "feat/gauntlet-frontend-redesign",
-  "checkpoints_count": 1,
-  "files_touched": null,
+  "checkpoints_count": 2,
+  "files_touched": [
+    "gauntlet/critics/home-first-viewport-r6.md",
+    "gauntlet/workbench.md"
+  ],
   "sessions": [
     {
       "metadata": "/e8/bb2b7d76ad/0/metadata.json",
@@ -12,6 +15,13 @@
       "compact_transcript": "/e8/bb2b7d76ad/0/transcript.jsonl",
       "content_hash": "/e8/bb2b7d76ad/0/content_hash.txt",
       "prompt": "/e8/bb2b7d76ad/0/prompt.txt"
+    },
+    {
+      "metadata": "/e8/bb2b7d76ad/1/metadata.json",
+      "transcript": "/e8/bb2b7d76ad/1/full.jsonl",
+      "compact_transcript": "/e8/bb2b7d76ad/1/transcript.jsonl",
+      "content_hash": "/e8/bb2b7d76ad/1/content_hash.txt",
+      "prompt": ""
     }
   ],
   "token_usage": {
