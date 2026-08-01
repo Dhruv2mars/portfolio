@@ -1,0 +1,59 @@
+Blind design critic for piece=home-first-viewport round=r4.
+
+PRIMARY GATE: must-pass **12** (nav-off ownability) from gauntlet/bar/WIN_CRITERIA.md.
+Also re-check must-pass **5** (singular amber atmosphere) for regression.
+
+Authoritative:
+- gauntlet/bar/WIN_CRITERIA.md criteria 5 and 12
+- gauntlet/bar/INDEX.md, ANTI_PATTERNS.md
+- Bar heroes for blind A/B: gauntlet/bar/{pablostanley,loganliffick,evilrabbit,eftakher}/home-desktop.png (+ mobile if useful)
+- Prior: gauntlet/critics/home-first-viewport-r3.md (12 failed — analytics bars mark)
+
+Our evidence: gauntlet/pieces/home-first-viewport/r4/ especially brand-test-no-nav-desktop.png and brand-test-no-nav-mobile.png
+R4 claimed: InkMark is now geometric bold "2" + Mars disc + orbit (NOT rising analytics bars); larger mark; lockup pulled up; amber-only + Fraunces + structural field kept.
+
+Blind A/B FIRST using nav-off brand-test screenshots vs bar heroes. Then write ONLY gauntlet/critics/home-first-viewport-r4.md:
+## Verdict
+- piece: home-first-viewport
+- round: r4
+- winner: us | bar | tie
+- biggest_gap:
+- next_build_instruction:
+- must_pass_5: pass|fail — why
+- must_pass_12: pass|fail — why (THIS IS THE GATE)
+- must_pass_touched:
+- evidence_paths:
+- blind_ab_note:
+
+Harsh. Prefer bar if mark still generic/template-adjacent.
+
+---
+
+Blind design critic for piece=home-first-viewport round=r4.
+
+PRIMARY GATE: must-pass **12** (nav-off ownability) from gauntlet/bar/WIN_CRITERIA.md.
+Also re-check must-pass **5** (singular amber atmosphere) for regression.
+
+Authoritative:
+- gauntlet/bar/WIN_CRITERIA.md criteria 5 and 12
+- gauntlet/bar/INDEX.md, ANTI_PATTERNS.md
+- Bar heroes for blind A/B: gauntlet/bar/{pablostanley,loganliffick,evilrabbit,eftakher}/home-desktop.png (+ mobile if useful)
+- Prior: gauntlet/critics/home-first-viewport-r3.md (12 failed — analytics bars mark)
+
+Our evidence: gauntlet/pieces/home-first-viewport/r4/ especially brand-test-no-nav-desktop.png and brand-test-no-nav-mobile.png
+R4 claimed: InkMark is now geometric bold "2" + Mars disc + orbit (NOT rising analytics bars); larger mark; lockup pulled up; amber-only + Fraunces + structural field kept.
+
+Blind A/B FIRST using nav-off brand-test screenshots vs bar heroes. Then write ONLY gauntlet/critics/home-first-viewport-r4.md:
+## Verdict
+- piece: home-first-viewport
+- round: r4
+- winner: us | bar | tie
+- biggest_gap:
+- next_build_instruction:
+- must_pass_5: pass|fail — why
+- must_pass_12: pass|fail — why (THIS IS THE GATE)
+- must_pass_touched:
+- evidence_paths:
+- blind_ab_note:
+
+Harsh. Prefer bar if mark still generic/template-adjacent.
