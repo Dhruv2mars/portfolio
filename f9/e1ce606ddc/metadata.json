@@ -3,7 +3,7 @@
   "checkpoint_id": "f9e1ce606ddc",
   "strategy": "manual-commit",
   "branch": "feat/gauntlet-frontend-redesign",
-  "checkpoints_count": 6,
+  "checkpoints_count": 7,
   "files_touched": [
     "gauntlet/critics/home-first-viewport-r5.md",
     "gauntlet/critics/type-system-r5.md",
@@ -51,13 +51,20 @@
       "compact_transcript": "/f9/e1ce606ddc/5/transcript.jsonl",
       "content_hash": "/f9/e1ce606ddc/5/content_hash.txt",
       "prompt": "/f9/e1ce606ddc/5/prompt.txt"
+    },
+    {
+      "metadata": "/f9/e1ce606ddc/6/metadata.json",
+      "transcript": "/f9/e1ce606ddc/6/full.jsonl",
+      "compact_transcript": "/f9/e1ce606ddc/6/transcript.jsonl",
+      "content_hash": "/f9/e1ce606ddc/6/content_hash.txt",
+      "prompt": "/f9/e1ce606ddc/6/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 402734,
+    "input_tokens": 491101,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 2523392,
-    "output_tokens": 23743,
-    "api_call_count": 72
+    "cache_read_tokens": 3092224,
+    "output_tokens": 28575,
+    "api_call_count": 87
   }
 }

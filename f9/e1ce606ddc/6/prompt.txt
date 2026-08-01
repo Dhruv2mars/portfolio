@@ -1,0 +1,21 @@
+Blind design critic for piece=home-first-viewport round=r2.
+
+Inspect:
+- Ours: gauntlet/pieces/home-first-viewport/r2/ (first-viewport-desktop.png, first-viewport-mobile.png, NOTES.md)
+- Bar first viewports; home-first-viewport-r1.md
+Criteria: brand name hero, one composition, no cards in hero, brand test without nav.
+
+Blind A/B. Write gauntlet/critics/home-first-viewport-r2.md with winner us|bar|tie, biggest_gap, next_build_instruction, evidence_paths, blind_ab_note.
+Harsh.
+
+---
+
+Blind design critic for piece=home-first-viewport round=r2.
+
+Inspect:
+- Ours: gauntlet/pieces/home-first-viewport/r2/ (first-viewport-desktop.png, first-viewport-mobile.png, NOTES.md)
+- Bar first viewports; home-first-viewport-r1.md
+Criteria: brand name hero, one composition, no cards in hero, brand test without nav.
+
+Blind A/B. Write gauntlet/critics/home-first-viewport-r2.md with winner us|bar|tie, biggest_gap, next_build_instruction, evidence_paths, blind_ab_note.
+Harsh.
