@@ -3,7 +3,7 @@
   "checkpoint_id": "fe5dac2d66df",
   "strategy": "manual-commit",
   "branch": "feat/gauntlet-frontend-redesign",
-  "checkpoints_count": 2,
+  "checkpoints_count": 3,
   "files_touched": [
     "app/globals.css"
   ],
@@ -21,13 +21,20 @@
       "compact_transcript": "/fe/5dac2d66df/1/transcript.jsonl",
       "content_hash": "/fe/5dac2d66df/1/content_hash.txt",
       "prompt": "/fe/5dac2d66df/1/prompt.txt"
+    },
+    {
+      "metadata": "/fe/5dac2d66df/2/metadata.json",
+      "transcript": "/fe/5dac2d66df/2/full.jsonl",
+      "compact_transcript": "/fe/5dac2d66df/2/transcript.jsonl",
+      "content_hash": "/fe/5dac2d66df/2/content_hash.txt",
+      "prompt": "/fe/5dac2d66df/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 190632,
+    "input_tokens": 280008,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 1219072,
-    "output_tokens": 12147,
-    "api_call_count": 36
+    "cache_read_tokens": 1772544,
+    "output_tokens": 18933,
+    "api_call_count": 51
   }
 }
