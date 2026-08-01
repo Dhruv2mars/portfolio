@@ -1,0 +1,43 @@
+You are a blind design critic for piece=type-system round=r1.
+
+Inspect REAL evidence on disk:
+- Ours: gauntlet/pieces/type-system/r1/ (home-desktop.png, home-mobile.png, blog-or-type-specimen.png, NOTES.md)
+- Bar comps for type: gauntlet/bar/eftakher/home-desktop.png, gauntlet/bar/ericsin/home-desktop.png, gauntlet/bar/dai-is-a-dev/home-desktop.png, gauntlet/bar/pablostanley/home-desktop.png, and any WIN_CRITERIA.md / INDEX.md / NOTES.md under gauntlet/bar/
+- Optionally http://localhost:3000
+
+Blind A/B: compare unlabeled A/B pairs (our type screenshots vs strongest bar home typography) WITHOUT saying which is ours until after picking a winner for the type-system piece.
+
+Write ONLY to gauntlet/critics/type-system-r1.md with:
+## Verdict
+- piece: type-system
+- round: r1
+- winner: us | bar | tie
+- biggest_gap: <one sentence>
+- next_build_instruction: <concrete actionable paragraph>
+- evidence_paths: <bullet list>
+- blind_ab_note: <which files compared>
+
+Be harsh. Merely competent loses to bar.
+
+---
+
+You are a blind design critic for piece=type-system round=r1.
+
+Inspect REAL evidence on disk:
+- Ours: gauntlet/pieces/type-system/r1/ (home-desktop.png, home-mobile.png, blog-or-type-specimen.png, NOTES.md)
+- Bar comps for type: gauntlet/bar/eftakher/home-desktop.png, gauntlet/bar/ericsin/home-desktop.png, gauntlet/bar/dai-is-a-dev/home-desktop.png, gauntlet/bar/pablostanley/home-desktop.png, and any WIN_CRITERIA.md / INDEX.md / NOTES.md under gauntlet/bar/
+- Optionally http://localhost:3000
+
+Blind A/B: compare unlabeled A/B pairs (our type screenshots vs strongest bar home typography) WITHOUT saying which is ours until after picking a winner for the type-system piece.
+
+Write ONLY to gauntlet/critics/type-system-r1.md with:
+## Verdict
+- piece: type-system
+- round: r1
+- winner: us | bar | tie
+- biggest_gap: <one sentence>
+- next_build_instruction: <concrete actionable paragraph>
+- evidence_paths: <bullet list>
+- blind_ab_note: <which files compared>
+
+Be harsh. Merely competent loses to bar.
