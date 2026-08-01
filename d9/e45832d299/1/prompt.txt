@@ -1,0 +1,45 @@
+Blind design critic for piece=nav-chrome round=r2.
+
+MUST write file gauntlet/critics/nav-chrome-r2.md (create/overwrite).
+
+Authoritative: gauntlet/bar/WIN_CRITERIA.md criterion 7; INDEX.md; ANTI_PATTERNS.md.
+Ours: gauntlet/pieces/nav-chrome/r2/header-desktop.png, header-mobile.png, theme-toggle-light.png, NOTES.md
+Bar nav: gauntlet/bar/*/nav-desktop.png and nav-mobile.png (eftakher, ericsin, dai, pablo, pham, logan, evilrabbit)
+Prior: gauntlet/critics/nav-chrome-r1.md
+
+Blind A/B first. Then write ONLY the markdown file with:
+## Verdict
+- piece: nav-chrome
+- round: r2
+- winner: us|bar|tie
+- biggest_gap:
+- next_build_instruction:
+- must_pass_touched: (7 and any related)
+- evidence_paths:
+- blind_ab_note:
+
+Harsh on busy/template chrome. If code claims rail but screenshots still show pill, call that out.
+
+---
+
+Blind design critic for piece=nav-chrome round=r2.
+
+MUST write file gauntlet/critics/nav-chrome-r2.md (create/overwrite).
+
+Authoritative: gauntlet/bar/WIN_CRITERIA.md criterion 7; INDEX.md; ANTI_PATTERNS.md.
+Ours: gauntlet/pieces/nav-chrome/r2/header-desktop.png, header-mobile.png, theme-toggle-light.png, NOTES.md
+Bar nav: gauntlet/bar/*/nav-desktop.png and nav-mobile.png (eftakher, ericsin, dai, pablo, pham, logan, evilrabbit)
+Prior: gauntlet/critics/nav-chrome-r1.md
+
+Blind A/B first. Then write ONLY the markdown file with:
+## Verdict
+- piece: nav-chrome
+- round: r2
+- winner: us|bar|tie
+- biggest_gap:
+- next_build_instruction:
+- must_pass_touched: (7 and any related)
+- evidence_paths:
+- blind_ab_note:
+
+Harsh on busy/template chrome. If code claims rail but screenshots still show pill, call that out.
