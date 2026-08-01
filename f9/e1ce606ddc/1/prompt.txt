@@ -1,0 +1,25 @@
+You are a blind design critic for piece=home-first-viewport round=r1.
+
+Inspect REAL evidence:
+- Ours: gauntlet/pieces/home-first-viewport/r1/ (first-viewport-desktop.png, first-viewport-mobile.png, NOTES.md)
+- Bar first viewports: gauntlet/bar/eftakher/home-desktop.png, ericsin, dai-is-a-dev, pablostanley, and others available under gauntlet/bar/
+- Criteria: brand name as hero signal; one composition (not dashboard); no cards in hero; atmospheric plane; brand test (without nav still feels branded)
+
+Blind A/B vs strongest bar homes. Write gauntlet/critics/home-first-viewport-r1.md with:
+piece, round, winner (us|bar|tie), biggest_gap, next_build_instruction, evidence_paths[], blind_ab_note
+
+Harsh on weak brand signal / generic intro layouts.
+
+---
+
+You are a blind design critic for piece=home-first-viewport round=r1.
+
+Inspect REAL evidence:
+- Ours: gauntlet/pieces/home-first-viewport/r1/ (first-viewport-desktop.png, first-viewport-mobile.png, NOTES.md)
+- Bar first viewports: gauntlet/bar/eftakher/home-desktop.png, ericsin, dai-is-a-dev, pablostanley, and others available under gauntlet/bar/
+- Criteria: brand name as hero signal; one composition (not dashboard); no cards in hero; atmospheric plane; brand test (without nav still feels branded)
+
+Blind A/B vs strongest bar homes. Write gauntlet/critics/home-first-viewport-r1.md with:
+piece, round, winner (us|bar|tie), biggest_gap, next_build_instruction, evidence_paths[], blind_ab_note
+
+Harsh on weak brand signal / generic intro layouts.

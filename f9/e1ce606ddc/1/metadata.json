@@ -1,0 +1,63 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "f9e1ce606ddc",
+  "session_id": "019fbde2-d1de-7bb3-9f85-933f42ee4b52",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-01T16:00:26.852382Z",
+  "branch": "feat/gauntlet-frontend-redesign",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "gauntlet/critics/home-first-viewport-r5.md",
+    "gauntlet/critics/type-system-r5.md",
+    "gauntlet/workbench.md"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-luna",
+  "turn_id": "cb83a1c93ecf",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 95638,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 744704,
+    "output_tokens": 6338,
+    "api_call_count": 19
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-01T16:00:26.811458Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 45,
+    "human_modified": 16,
+    "human_removed": 0,
+    "total_committed": 45,
+    "total_lines_changed": 61,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 1214,
+      "user_lines_removed": 11,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216,
+        "gauntlet/bar/loganliffick/snapshot-mobile.txt": 25,
+        "gauntlet/bar/pham-codes/snapshot-mobile.txt": 424
+      },
+      "user_removed_per_file": {
+        "gauntlet/bar/pham-codes/snapshot-mobile.txt": 11
+      }
+    }
+  ]
+}
