@@ -1,0 +1,27 @@
+start a Gauntlet Loop to redo the whole dhruv2mars.com frontend from scratch. 
+
+Bar: eftakher.me, ericsin.com, dai.is-a.dev, pablostanley.com, pham.codes, loganliffick.com, evilrabbit.com.
+
+Own approach. Split goal into smallest independently improvable, judgeable pieces. For each important piece, fan out fresh-context builder + separate critic. Critic must shell out to Codex using gpt-5.6-luna at high reasoning, inspect real output, compare directly against bar—blind A/B when possible—and return biggest remaining gap. Iterate until our output wins or I stop.
+
+Use as many subagents as possible + dynamic workflows. Verify final site end-to-end.
+
+---
+
+start a Gauntlet Loop to redo the whole dhruv2mars.com frontend from scratch. 
+
+Bar: eftakher.me, ericsin.com, dai.is-a.dev, pablostanley.com, pham.codes, loganliffick.com, evilrabbit.com.
+
+Own approach. Split goal into smallest independently improvable, judgeable pieces. For each important piece, fan out fresh-context builder + separate critic. Critic must shell out to Codex using gpt-5.6-luna at high reasoning, inspect real output, compare directly against bar—blind A/B when possible—and return biggest remaining gap. Iterate until our output wins or I stop.
+
+Use as many subagents as possible + dynamic workflows. Verify final site end-to-end.
+
+---
+
+start a Gauntlet Loop to redo the whole dhruv2mars.com frontend from scratch. 
+
+Bar: eftakher.me, ericsin.com, dai.is-a.dev, pablostanley.com, pham.codes, loganliffick.com, evilrabbit.com.
+
+Own approach. Split goal into smallest independently improvable, judgeable pieces. For each important piece, fan out fresh-context builder + separate critic. Critic must shell out to Codex using gpt-5.6-luna at high reasoning, inspect real output, compare directly against bar—blind A/B when possible—and return biggest remaining gap. Iterate until our output wins or I stop.
+
+Use as many subagents as possible + dynamic workflows. Verify final site end-to-end.
