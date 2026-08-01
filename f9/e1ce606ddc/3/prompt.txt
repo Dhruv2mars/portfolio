@@ -1,0 +1,25 @@
+Blind design critic for piece=type-system round=r2.
+
+Inspect REAL files:
+- Ours: gauntlet/pieces/type-system/r2/ (home-desktop.png, home-mobile.png, blog-or-type-specimen.png, NOTES.md)
+- Prior r1 for reference only
+- Bar: gauntlet/bar/*/home-desktop.png especially eftakher, ericsin, dai-is-a-dev, pablostanley, loganliffick, evilrabbit, pham-codes
+- Criteria: gauntlet/bar/WIN_CRITERIA.md and gauntlet/critics/type-system-r1.md (r1 lost)
+
+R2 claimed Fraunces display ~79px. Blind A/B vs strongest bar type. Write gauntlet/critics/type-system-r2.md with:
+piece, round, winner (us|bar|tie), biggest_gap, next_build_instruction, evidence_paths[], blind_ab_note
+Harsh. Prefer bar if display still generic.
+
+---
+
+Blind design critic for piece=type-system round=r2.
+
+Inspect REAL files:
+- Ours: gauntlet/pieces/type-system/r2/ (home-desktop.png, home-mobile.png, blog-or-type-specimen.png, NOTES.md)
+- Prior r1 for reference only
+- Bar: gauntlet/bar/*/home-desktop.png especially eftakher, ericsin, dai-is-a-dev, pablostanley, loganliffick, evilrabbit, pham-codes
+- Criteria: gauntlet/bar/WIN_CRITERIA.md and gauntlet/critics/type-system-r1.md (r1 lost)
+
+R2 claimed Fraunces display ~79px. Blind A/B vs strongest bar type. Write gauntlet/critics/type-system-r2.md with:
+piece, round, winner (us|bar|tie), biggest_gap, next_build_instruction, evidence_paths[], blind_ab_note
+Harsh. Prefer bar if display still generic.
