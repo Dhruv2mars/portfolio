@@ -1,0 +1,43 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "1ed58796ba0f",
+  "session_id": "019fbde2-dbaa-77f1-b306-551c7f69ce27",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-01T16:25:06.950707Z",
+  "branch": "feat/gauntlet-frontend-redesign",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/globals.css",
+    "gauntlet/critics/home-first-viewport-r7.md",
+    "gauntlet/pieces/capture-r7.mjs",
+    "gauntlet/pieces/home-first-viewport/r7/brand-test-no-nav-desktop.png",
+    "gauntlet/pieces/home-first-viewport/r7/brand-test-no-nav-mobile.png",
+    "gauntlet/pieces/home-first-viewport/r7/first-viewport-desktop.png",
+    "gauntlet/pieces/home-first-viewport/r7/first-viewport-mobile.png",
+    "gauntlet/pieces/home-first-viewport/r7/gate.json",
+    "gauntlet/pieces/nav-chrome/r7/header-desktop.png",
+    "gauntlet/pieces/nav-chrome/r7/header-mobile.png",
+    "gauntlet/pieces/type-system/r7/brand-test-no-nav-desktop.png",
+    "gauntlet/pieces/type-system/r7/brand-test-no-nav-mobile.png",
+    "gauntlet/pieces/type-system/r7/home-desktop.png",
+    "gauntlet/workbench.md"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-luna",
+  "turn_id": "106c5d715878",
+  "checkpoint_transcript_start": 90,
+  "transcript_lines_at_start": 90,
+  "compact_transcript_start": 16,
+  "initial_attribution": {
+    "calculated_at": "2026-08-01T16:25:06.901961Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 32,
+    "human_removed": 7,
+    "total_committed": 0,
+    "total_lines_changed": 39,
+    "agent_percentage": 0,
+    "metric_version": 2
+  }
+}
