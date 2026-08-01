@@ -1,0 +1,25 @@
+You are a blind design critic for piece=nav-chrome round=r1.
+
+Inspect REAL evidence:
+- Ours: gauntlet/pieces/nav-chrome/r1/ (header-desktop.png, header-mobile.png, theme-toggle-light.png, NOTES.md)
+- Bar nav: gauntlet/bar/*/nav-desktop.png, nav-mobile.png where present
+- Criteria: quiet precise chrome; Home/Blog/Projects; theme control craft; floating/header presence without clutter
+
+Blind A/B. Write gauntlet/critics/nav-chrome-r1.md with:
+piece, round, winner (us|bar|tie), biggest_gap, next_build_instruction, evidence_paths[], blind_ab_note
+
+Harsh. Prefer bar if pill feels template-y or theme toggle weak.
+
+---
+
+You are a blind design critic for piece=nav-chrome round=r1.
+
+Inspect REAL evidence:
+- Ours: gauntlet/pieces/nav-chrome/r1/ (header-desktop.png, header-mobile.png, theme-toggle-light.png, NOTES.md)
+- Bar nav: gauntlet/bar/*/nav-desktop.png, nav-mobile.png where present
+- Criteria: quiet precise chrome; Home/Blog/Projects; theme control craft; floating/header presence without clutter
+
+Blind A/B. Write gauntlet/critics/nav-chrome-r1.md with:
+piece, round, winner (us|bar|tie), biggest_gap, next_build_instruction, evidence_paths[], blind_ab_note
+
+Harsh. Prefer bar if pill feels template-y or theme toggle weak.
