@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "5beee526c08a",
+  "strategy": "manual-commit",
+  "branch": "feat/gauntlet-frontend-redesign",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/globals.css",
+    "bun.lock",
+    "gauntlet/pieces/home-first-viewport/r1/first-viewport-mobile.png",
+    "gauntlet/pieces/nav-chrome/r1/header-desktop.png",
+    "package.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/5b/eee526c08a/0/metadata.json",
+      "transcript": "/5b/eee526c08a/0/full.jsonl",
+      "compact_transcript": "/5b/eee526c08a/0/transcript.jsonl",
+      "content_hash": "/5b/eee526c08a/0/content_hash.txt",
+      "prompt": "/5b/eee526c08a/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 107390,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 764928,
+    "output_tokens": 5329,
+    "api_call_count": 20
+  }
+}
