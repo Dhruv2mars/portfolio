@@ -3,7 +3,7 @@
   "checkpoint_id": "1ed58796ba0f",
   "strategy": "manual-commit",
   "branch": "feat/gauntlet-frontend-redesign",
-  "checkpoints_count": 4,
+  "checkpoints_count": 5,
   "files_touched": [
     "app/globals.css",
     "gauntlet/critics/home-first-viewport-r7.md",
@@ -47,6 +47,13 @@
       "transcript": "/1e/d58796ba0f/3/full.jsonl",
       "compact_transcript": "/1e/d58796ba0f/3/transcript.jsonl",
       "content_hash": "/1e/d58796ba0f/3/content_hash.txt",
+      "prompt": ""
+    },
+    {
+      "metadata": "/1e/d58796ba0f/4/metadata.json",
+      "transcript": "/1e/d58796ba0f/4/full.jsonl",
+      "compact_transcript": "/1e/d58796ba0f/4/transcript.jsonl",
+      "content_hash": "/1e/d58796ba0f/4/content_hash.txt",
       "prompt": ""
     }
   ],
