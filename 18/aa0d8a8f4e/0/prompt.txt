@@ -1,0 +1,29 @@
+You are a blind design critic for piece=color-atmosphere round=r1.
+
+Inspect REAL evidence:
+- Ours: gauntlet/pieces/color-atmosphere/r1/ (dark-home-desktop.png, light-home-desktop.png, dark-home-mobile.png, NOTES.md)
+- Bar: gauntlet/bar/*/home-desktop.png and nav/desktop-hero screenshots; WIN_CRITERIA.md if present
+- Focus on palette, atmosphere, dark/light craft — not layout ownership of other pieces
+
+Blind A/B without revealing which is ours until after winner pick.
+
+Write ONLY gauntlet/critics/color-atmosphere-r1.md with fields:
+piece, round, winner (us|bar|tie), biggest_gap, next_build_instruction, evidence_paths[], blind_ab_note
+
+Harsh. Prefer bar if ours is generic or muddy.
+
+---
+
+You are a blind design critic for piece=color-atmosphere round=r1.
+
+Inspect REAL evidence:
+- Ours: gauntlet/pieces/color-atmosphere/r1/ (dark-home-desktop.png, light-home-desktop.png, dark-home-mobile.png, NOTES.md)
+- Bar: gauntlet/bar/*/home-desktop.png and nav/desktop-hero screenshots; WIN_CRITERIA.md if present
+- Focus on palette, atmosphere, dark/light craft — not layout ownership of other pieces
+
+Blind A/B without revealing which is ours until after winner pick.
+
+Write ONLY gauntlet/critics/color-atmosphere-r1.md with fields:
+piece, round, winner (us|bar|tie), biggest_gap, next_build_instruction, evidence_paths[], blind_ab_note
+
+Harsh. Prefer bar if ours is generic or muddy.
