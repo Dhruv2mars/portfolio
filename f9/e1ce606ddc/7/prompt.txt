@@ -1,0 +1,23 @@
+Blind design critic for piece=color-atmosphere round=r2.
+
+Inspect:
+- Ours: gauntlet/pieces/color-atmosphere/r2/ (dark-home-desktop.png, light-home-desktop.png, dark-home-mobile.png, NOTES.md)
+- Bar homes + WIN_CRITERIA.md + color-atmosphere-r1.md
+Focus palette, atmosphere depth, amber signal, dark/light craft.
+
+Blind A/B. Write gauntlet/critics/color-atmosphere-r2.md:
+piece, round, winner (us|bar|tie), biggest_gap, next_build_instruction, evidence_paths[], blind_ab_note
+Harsh.
+
+---
+
+Blind design critic for piece=color-atmosphere round=r2.
+
+Inspect:
+- Ours: gauntlet/pieces/color-atmosphere/r2/ (dark-home-desktop.png, light-home-desktop.png, dark-home-mobile.png, NOTES.md)
+- Bar homes + WIN_CRITERIA.md + color-atmosphere-r1.md
+Focus palette, atmosphere depth, amber signal, dark/light craft.
+
+Blind A/B. Write gauntlet/critics/color-atmosphere-r2.md:
+piece, round, winner (us|bar|tie), biggest_gap, next_build_instruction, evidence_paths[], blind_ab_note
+Harsh.
