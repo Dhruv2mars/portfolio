@@ -3,8 +3,14 @@
   "checkpoint_id": "3be8c901892f",
   "strategy": "manual-commit",
   "branch": "feat/gauntlet-frontend-redesign",
-  "checkpoints_count": 1,
-  "files_touched": null,
+  "checkpoints_count": 3,
+  "files_touched": [
+    "gauntlet/critics/blog-typography-r1.md",
+    "gauntlet/critics/motion-language-r1.md",
+    "gauntlet/critics/nav-chrome-r2.md",
+    "gauntlet/critics/projects-list-r1.md",
+    "gauntlet/workbench.md"
+  ],
   "sessions": [
     {
       "metadata": "/3b/e8c901892f/0/metadata.json",
@@ -12,13 +18,20 @@
       "compact_transcript": "/3b/e8c901892f/0/transcript.jsonl",
       "content_hash": "/3b/e8c901892f/0/content_hash.txt",
       "prompt": "/3b/e8c901892f/0/prompt.txt"
+    },
+    {
+      "metadata": "/3b/e8c901892f/1/metadata.json",
+      "transcript": "/3b/e8c901892f/1/full.jsonl",
+      "compact_transcript": "/3b/e8c901892f/1/transcript.jsonl",
+      "content_hash": "/3b/e8c901892f/1/content_hash.txt",
+      "prompt": "/3b/e8c901892f/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 107390,
+    "input_tokens": 143447,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 764928,
-    "output_tokens": 5329,
-    "api_call_count": 20
+    "cache_read_tokens": 1252608,
+    "output_tokens": 11167,
+    "api_call_count": 35
   }
 }
