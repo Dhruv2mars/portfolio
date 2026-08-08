@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "b8cbeb77d127",
+  "strategy": "manual-commit",
+  "branch": "feat/gauntlet-frontend-redesign",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "app/blog/[slug]/page.tsx",
+    "app/blog/page.tsx",
+    "app/projects/page.tsx",
+    "content/blog/shipping-with-agents.mdx",
+    "lib/projects.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/b8/cbeb77d127/0/metadata.json",
+      "transcript": "/b8/cbeb77d127/0/full.jsonl",
+      "compact_transcript": "/b8/cbeb77d127/0/transcript.jsonl",
+      "content_hash": "/b8/cbeb77d127/0/content_hash.txt",
+      "prompt": "/b8/cbeb77d127/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 27,
+    "cache_creation_tokens": 47627,
+    "cache_read_tokens": 505868,
+    "output_tokens": 4042,
+    "api_call_count": 14
+  }
+}
