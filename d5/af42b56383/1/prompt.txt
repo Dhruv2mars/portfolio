@@ -1,0 +1,37 @@
+https://dai.is-a.dev/
+
+this is my portfolio site dhruv2mars.com. i want to copy chan dai's exact site like the way he built, and make mine exactly like him. the best frontend design site ever. a complete redo of the whole repo from scratch. but before that, u might wanna do a /grill-with-docs with me to know what exactly to copy from chan dai site and what not to, or if u wanna know anything else.
+
+---
+
+the things is, chan has a lot of things to show, and therefore has lots of sections. idont have that. majorly i only have my projects, blogs, etc thats it. so i want the same strucutre of the page, but since i dont have much stuff to showcase, therefore its not gonna be too long. 
+
+1. i have multiple projects, you can check them out from my github (github.com/dhruv2mars)
+2. not needed for the site
+3. not needed for the site
+4. not needed for the site
+5. u have them in the site already. use them. 
+6. take care of it urself, i dont have that. a better way would be to keep a blank right now. 
+7. not needed for the site
+8. same as my projects, not needed for the site
+9. none yet, and that too was just a test blog. 
+10. agentic engineer. 
+
+any more ques?
+
+---
+
+the things is, chan has a lot of things to show, and therefore has lots of sections. idont have that. majorly i only have my projects, blogs, etc thats it. so i want the same strucutre of the page, but since i dont have much stuff to showcase, therefore its not gonna be too long. 
+
+1. i have multiple projects, you can check them out from my github (github.com/dhruv2mars)
+2. not needed for the site
+3. not needed for the site
+4. not needed for the site
+5. u have them in the site already. use them. 
+6. take care of it urself, i dont have that. a better way would be to keep a blank right now. 
+7. not needed for the site
+8. same as my projects, not needed for the site
+9. none yet, and that too was just a test blog. 
+10. agentic engineer. 
+
+any more ques?
