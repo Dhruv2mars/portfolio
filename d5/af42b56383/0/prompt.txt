@@ -1,0 +1,11 @@
+I want you to redo the whole portfolio from scratch and build the most beautiful personal site imaginable, at the level of eftakher.me, ericsin.com, dai.is-a.dev, pablostanley.com, pham.codes, loganliffick.com, and evilrabbit.com—the kind of site that wins Awwwards Site of the Day and Best UI/UX. It should be utterly perfect, visually stunning and unforgettable, with every single thing done at that level—from the first scroll to the last detail to anything you could think of.
+
+Break the site into the smallest pieces that can be improved and judged on their own—you decide what the pieces are, not me. Fan out sub-agents and have sub-agents tackle each one individually so that the site is utterly perfect. You should /loop on each piece and have a separate sub-agent with fresh context that will shell out to gpt-5.6-luna at xhigh reasoning to inspect the actual rendered site using browser-use or computer-use—never the builder's summary—and compare it against the reference sites. That separate sub-agent should be a really harsh critic, and if it doesn't look like an Awwwards winner, it should keep going.
+
+Don't stop until each critic is utterly wowed with the quality when compared with the actual reference sites. It should literally compare them side by side blind and say which one is better, and when ours loses, name the single biggest gap and send the builder back in. No fixed number of rounds. Between major waves, spawn one fresh agent to click through the whole site and smooth everything into one coherent thing.
+
+Keep a simple live progress page updated using /postplan skill and keep a dev server running as you work so I can watch it evolve. /loop until it's utterly perfect. Fan out sub-agents and dynamic workflows.
+
+---
+
+continue
