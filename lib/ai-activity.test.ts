@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import {
+  ACTIVITY_WINDOW_DAYS,
   buildAiActivity,
   dayFractionElapsed,
   fillSparseDailySeries,
@@ -11,7 +12,7 @@ import {
   withLiveToday,
   type DailyTokens,
 } from "./ai-activity";
-import type { AiActivityPayload } from "./ai-activity-payload";
+import { shiftYmd, type AiActivityPayload } from "./ai-activity-payload";
 
 const FIXTURE: readonly DailyTokens[] = [
   { date: "2026-01-01", tokens: 0 },
@@ -90,6 +91,58 @@ describe("AI Activity read model", () => {
     expect(today?.tokens).toBeLessThanOrEqual(40);
     // Lifetime stays published nightly total (excludes synthetic today).
     expect(activity.lifetimeTokens).toBe(490);
+  });
+
+  test("a stale payload is zero-filled up to today, never skipped", () => {
+    const payload: AiActivityPayload = {
+      version: 1,
+      generatedAt: "2026-07-17T00:20:00.000Z",
+      timezone: "Asia/Kolkata",
+      days: [
+        { date: "2026-07-15", tokens: 70 },
+        { date: "2026-07-16", tokens: 50 },
+      ],
+      lifetimeTokens: 120,
+    };
+    // A month after the last nightly sync.
+    const noon = new Date("2026-08-15T12:00:00+05:30");
+    const activity = withLiveToday(materializeHistory(payload), noon);
+
+    const dates = activity.days.map((d) => d.date);
+    expect(dates.at(-1)).toBe("2026-08-15");
+    expect(dates.at(0)).toBe(shiftYmd("2026-08-15", -(dates.length - 1)));
+    // Consecutive calendar days, no jump across the outage.
+    for (let i = 1; i < dates.length; i += 1) {
+      expect(shiftYmd(dates[i - 1]!, 1)).toBe(dates[i]!);
+    }
+    // The outage reads as silence, not as activity.
+    const outage = activity.days.filter(
+      (d) => d.date > "2026-07-16" && d.date < "2026-08-15",
+    );
+    expect(outage.length).toBe(29);
+    expect(outage.every((d) => d.tokens === 0 && d.intensity === 0)).toBe(true);
+    // A month-old feed cannot project today — that would invent activity.
+    expect(activity.days.some((d) => d.live)).toBe(false);
+    expect(activity.days.at(-1)?.tokens).toBe(0);
+  });
+
+  test("the display window never exceeds one year of cells", () => {
+    const payload: AiActivityPayload = {
+      version: 1,
+      generatedAt: "2026-07-17T00:20:00.000Z",
+      timezone: "Asia/Kolkata",
+      days: [
+        { date: "2024-01-01", tokens: 10 },
+        { date: "2026-07-16", tokens: 50 },
+      ],
+      lifetimeTokens: 60,
+    };
+    const activity = materializeAiActivity(
+      payload,
+      new Date("2026-08-15T12:00:00+05:30"),
+    );
+    expect(activity.days.length).toBeLessThanOrEqual(ACTIVITY_WINDOW_DAYS);
+    expect(activity.days.at(-1)?.date).toBe("2026-08-15");
   });
 
   test("materializeAiActivity can omit live today for SSR", () => {
