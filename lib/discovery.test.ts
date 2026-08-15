@@ -47,7 +47,7 @@ describe("discovery contracts", () => {
     expect(ampersandSlug).not.toContain("/blog/ai&design");
   });
 
-  test("sitemap lists Home, Blog, Projects, and published Posts", () => {
+  test("sitemap lists Home, Blog, and published Posts", () => {
     const entries = buildSitemapEntries({
       siteUrl: "https://dhruv2mars.com",
       posts: [samplePost],
@@ -55,8 +55,9 @@ describe("discovery contracts", () => {
     const urls = entries.map((e) => e.url);
     expect(urls).toContain("https://dhruv2mars.com");
     expect(urls).toContain("https://dhruv2mars.com/blog");
-    expect(urls).toContain("https://dhruv2mars.com/projects");
     expect(urls).toContain("https://dhruv2mars.com/blog/judgment");
+    // `/projects` only exists as a redirect to the Home section.
+    expect(urls).not.toContain("https://dhruv2mars.com/projects");
 
     const encoded = buildSitemapEntries({
       siteUrl: "https://dhruv2mars.com",
@@ -67,15 +68,11 @@ describe("discovery contracts", () => {
     );
   });
 
-  test("sitemap with zero Posts still lists core routes", () => {
+  test("sitemap omits Blog entirely until a Post is published", () => {
     const entries = buildSitemapEntries({
       siteUrl: "https://dhruv2mars.com",
       posts: [],
     });
-    expect(entries.map((e) => e.url)).toEqual([
-      "https://dhruv2mars.com",
-      "https://dhruv2mars.com/blog",
-      "https://dhruv2mars.com/projects",
-    ]);
+    expect(entries.map((e) => e.url)).toEqual(["https://dhruv2mars.com"]);
   });
 });
