@@ -1,55 +1,54 @@
 import Link from "next/link";
-import { ArrowRight } from "@/components/icons";
-import { Reveal } from "@/components/reveal";
-import { HOME_SECTION_COPY } from "@/lib/home";
-import { formatPostDate, getLatestPublishedPosts } from "@/lib/blog";
+import { Row, SectionHead } from "@/components/ledger";
+import { getLatestPublishedPosts } from "@/lib/blog";
 
+/**
+ * `YYYY-MM-DD` — the ledger's only date format. Dates are data, so they are
+ * mono, tabular, and machine-shaped; no "August 8, 2026" anywhere.
+ */
+export function isoDay(publishedAt: string): string {
+  const match = /^\d{4}-\d{2}-\d{2}/.exec(publishedAt);
+  if (match) return match[0];
+  const parsed = new Date(publishedAt);
+  return Number.isNaN(parsed.getTime())
+    ? publishedAt
+    : parsed.toISOString().slice(0, 10);
+}
+
+/**
+ * Home → LATEST (DESIGN.md §4, §8). Up to three Posts in the row grammar,
+ * no index numeral, the date in the tail. The whole section is omitted by
+ * `app/page.tsx` when zero Posts are published — an empty teaser is a CONTEXT
+ * anti-pattern, so this component never renders a placeholder.
+ */
 export function HomeBlog() {
   const posts = getLatestPublishedPosts(3);
+  if (posts.length === 0) return null;
 
   return (
-    <section aria-labelledby="home-blog-heading" className="section-home">
-      <Reveal>
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 id="home-blog-heading" className="eyebrow">
-              {HOME_SECTION_COPY.blog}
-            </h2>
-            <p className="mt-2.5 text-[15px] font-medium tracking-[-0.01em] text-foreground">
-              Recent thinking
-            </p>
-          </div>
+    <>
+      <SectionHead
+        label="LATEST"
+        value="Product thinking, written down as it happens."
+        action={
           <Link href="/blog" className="section-head-link">
-            All posts
-            <ArrowRight size={11} weight="bold" aria-hidden />
+            all posts ↗
           </Link>
-        </div>
-        <ul
-          className="mt-5 divide-y divide-border/70"
-          aria-labelledby="home-blog-heading"
-        >
-          {posts.map((post) => (
-            <li key={post.slug}>
-              <Link
-                href={`/blog/${post.slug}`}
-                className="row-interactive block no-underline"
-              >
-                <span className="text-[15px] font-medium tracking-[-0.01em] text-foreground">
-                  {post.title}
-                </span>
-                <p className="meta-copy mt-1.5">
-                  {formatPostDate(post.publishedAt)}
-                  <span aria-hidden> · </span>
-                  {post.readingTimeMinutes} min
-                </p>
-                <p className="mt-1.5 max-w-[36rem] text-[13px] leading-5 text-muted text-pretty">
-                  {post.summary}
-                </p>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Reveal>
-    </section>
+        }
+      />
+
+      {/* 20px to the first row; the row's own 20px padding completes the block */}
+      <div data-reveal-text="" style={{ marginTop: 20 }}>
+        {posts.map((post) => (
+          <Row
+            key={post.slug}
+            name={post.title}
+            tail={isoDay(post.publishedAt)}
+            description={post.summary}
+            href={`/blog/${post.slug}`}
+          />
+        ))}
+      </div>
+    </>
   );
 }
