@@ -157,33 +157,52 @@ export function materializeHistory(payload: AiActivityPayload): AiActivity {
   });
 }
 
+/** Window kept for display: one year of consecutive days ending today. */
+export const ACTIVITY_WINDOW_DAYS = 365;
+
 /**
- * Append the live today cell. Projection is ≤ recent positive days, so
- * existing intensities stay valid without a full rebuild.
+ * Extend the history to today. Two rules keep the grid honest:
+ *
+ * 1. Days between the last published day and today are zero-filled, never
+ *    skipped — the series must stay consecutive or every cell lands on the
+ *    wrong weekday.
+ * 2. Today is projected only when the payload is fresh (published through
+ *    yesterday). A stale feed means no data, and no data is drawn as zero,
+ *    not as a guess from month-old numbers.
+ *
  * Lifetime stays the published nightly total (excludes synthetic today).
  */
 export function withLiveToday(history: AiActivity, now = new Date()): AiActivity {
-  const projection = projectTodayTokens(
-    history.days,
-    now,
-    history.timezone,
-  );
+  const timeZone = history.timezone;
+  const today = calendarDateInTimeZone(now, timeZone);
+  const lastPublished = history.days.at(-1)?.date ?? "";
   // Avoid duplicating the last published day if clocks briefly disagree.
-  if (projection.date <= (history.days.at(-1)?.date ?? "")) {
-    return history;
-  }
+  if (!lastPublished || today <= lastPublished) return history;
+
+  const fresh = shiftYmd(today, -1) <= lastPublished;
   const max = Math.max(0, ...history.days.map((d) => d.tokens));
 
-  return {
-    days: [
-      ...history.days,
-      {
-        date: projection.date,
+  const appended: ActivityDay[] = [];
+  for (
+    let cursor = shiftYmd(lastPublished, 1);
+    cursor <= today;
+    cursor = shiftYmd(cursor, 1)
+  ) {
+    if (cursor === today && fresh) {
+      const projection = projectTodayTokens(history.days, now, timeZone);
+      appended.push({
+        date: today,
         tokens: projection.tokens,
         intensity: intensityFromTokens(projection.tokens, max),
         live: true,
-      },
-    ],
+      });
+    } else {
+      appended.push({ date: cursor, tokens: 0, intensity: 0 });
+    }
+  }
+
+  return {
+    days: [...history.days, ...appended].slice(-ACTIVITY_WINDOW_DAYS),
     lifetimeTokens: history.lifetimeTokens,
     generatedAt: history.generatedAt,
     timezone: history.timezone,
