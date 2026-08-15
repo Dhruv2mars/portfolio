@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "9fbc2b64b73a",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "components/masthead.tsx",
+    "components/projects-section.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/9f/bc2b64b73a/0/metadata.json",
+      "transcript": "/9f/bc2b64b73a/0/full.jsonl",
+      "compact_transcript": "/9f/bc2b64b73a/0/transcript.jsonl",
+      "content_hash": "/9f/bc2b64b73a/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 368,
+    "cache_creation_tokens": 406061,
+    "cache_read_tokens": 14708371,
+    "output_tokens": 117490,
+    "api_call_count": 159
+  }
+}
