@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "8eaefc3e8a61",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "components/command-palette.tsx",
+    "lib/palette.test.ts",
+    "lib/palette.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/8e/aefc3e8a61/0/metadata.json",
+      "transcript": "/8e/aefc3e8a61/0/full.jsonl",
+      "compact_transcript": "/8e/aefc3e8a61/0/transcript.jsonl",
+      "content_hash": "/8e/aefc3e8a61/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 368,
+    "cache_creation_tokens": 406061,
+    "cache_read_tokens": 14708371,
+    "output_tokens": 117490,
+    "api_call_count": 159
+  }
+}
