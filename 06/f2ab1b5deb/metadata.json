@@ -3,15 +3,23 @@
   "checkpoint_id": "06f2ab1b5deb",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 4,
+  "checkpoints_count": 8,
   "files_touched": [
     ".gitignore",
+    "app/blog/page.tsx",
     "app/globals.css",
     "app/layout.tsx",
     "app/page.tsx",
+    "app/projects/page.tsx",
     "components/activity-strip.tsx",
+    "components/home-blog.tsx",
+    "components/home-intro.tsx",
+    "components/home-selected-projects.tsx",
     "components/ledger.tsx",
+    "components/project-list.tsx",
     "components/reveal.tsx",
+    "components/site-header.tsx",
+    "components/theme-toggle.tsx",
     "lib/ledger.test.ts",
     "lib/ledger.ts"
   ],
@@ -29,13 +37,20 @@
       "compact_transcript": "/06/f2ab1b5deb/1/transcript.jsonl",
       "content_hash": "/06/f2ab1b5deb/1/content_hash.txt",
       "prompt": "/06/f2ab1b5deb/1/prompt.txt"
+    },
+    {
+      "metadata": "/06/f2ab1b5deb/2/metadata.json",
+      "transcript": "/06/f2ab1b5deb/2/full.jsonl",
+      "compact_transcript": "/06/f2ab1b5deb/2/transcript.jsonl",
+      "content_hash": "/06/f2ab1b5deb/2/content_hash.txt",
+      "prompt": "/06/f2ab1b5deb/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 22701,
-    "cache_creation_tokens": 350759,
-    "cache_read_tokens": 6247865,
-    "output_tokens": 83224,
-    "api_call_count": 87
+    "input_tokens": 22787,
+    "cache_creation_tokens": 456063,
+    "cache_read_tokens": 7794037,
+    "output_tokens": 114547,
+    "api_call_count": 111
   }
 }
