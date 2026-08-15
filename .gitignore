@@ -23,3 +23,6 @@ bun.lockb
 *.tsbuildinfo
 
 .vercel
+
+# critique artifacts (screenshots, progress page)
+.critique/

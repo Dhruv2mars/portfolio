@@ -1,26 +1,63 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
-/** One quiet rise-and-fade as the section enters view. */
+/**
+ * A revealed block. Its 1px rule draws itself left→right; its text follows 80ms
+ * later. Pure CSS animation — this component only flips `data-revealed`.
+ *
+ * The old implementation left sections permanently blank when they were already
+ * in view on mount, so the first paint check is deliberate and non-negotiable.
+ */
 export function Reveal({
   children,
   className,
+  delay = 0,
+  as: Tag = "div",
 }: {
   children: React.ReactNode;
   className?: string;
+  /** ms, capped at 6 stagger steps upstream */
+  delay?: number;
+  as?: "div" | "section" | "header" | "footer";
 }) {
-  const reduce = useReducedMotion();
+  const ref = useRef<HTMLElement>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || revealed) return;
+
+    // already in view at mount → reveal immediately, do not wait for a scroll
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setRevealed(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRevealed(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [revealed]);
 
   return (
-    <motion.div
+    <Tag
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ref={ref as any}
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      data-reveal=""
+      data-revealed={revealed || undefined}
+      style={delay ? ({ "--reveal-delay": `${delay}ms` } as React.CSSProperties) : undefined}
     >
       {children}
-    </motion.div>
+    </Tag>
   );
 }

@@ -1,58 +1,47 @@
-import { ArrowUpRight } from "@/components/icons";
+import { Row } from "@/components/ledger";
 import type { Project } from "@/lib/projects";
 
-type ProjectListProps = {
-  projects: readonly Project[];
-  headingId?: string;
-  compact?: boolean;
-};
+/**
+ * Projects in the row grammar (DESIGN.md §4). One row style sitewide — this
+ * only supplies the data. No thumbnails, no cards, no tag chips, no detail
+ * pages, no fake activity strips: CONTEXT forbids them and the list is
+ * stronger without them.
+ */
+
+/** What the tail crossfades to on hover — the real destination, not a label. */
+function destination(url: string): string {
+  try {
+    return `${new URL(url).hostname.replace(/^www\./, "")} ↗`;
+  } catch {
+    return "open ↗";
+  }
+}
 
 export function ProjectList({
   projects,
-  headingId,
-  compact = false,
-}: ProjectListProps) {
+  numbered = false,
+  label,
+}: {
+  projects: readonly Project[];
+  /** `01`–`08` index numerals — the Projects index only (§GRAFT-2). Home omits them. */
+  numbered?: boolean;
+  /** accessible name for the list */
+  label?: string;
+}) {
   return (
-    <ul
-      className={
-        compact ? "mt-5 divide-y divide-border/70" : "mt-8 divide-y divide-border/70"
-      }
-      {...(headingId ? { "aria-labelledby": headingId } : {})}
-    >
-      {projects.map((project) => (
+    <ul {...(label ? { "aria-label": label } : {})}>
+      {projects.map((project, i) => (
         <li key={project.name}>
-          <a
+          <Row
+            index={numbered ? String(i + 1).padStart(2, "0") : undefined}
+            name={project.name}
+            /* tabular either way, so the crossfade never reflows */
+            tail={project.year !== undefined ? String(project.year) : "—"}
+            tailHover={destination(project.url)}
+            description={project.description}
             href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="row-interactive group flex items-start justify-between gap-4 no-underline"
-          >
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
-                <span className="text-[15px] font-medium tracking-[-0.01em] text-foreground">
-                  {project.name}
-                </span>
-                {project.year !== undefined ? (
-                  <span className="meta-copy">{project.year}</span>
-                ) : null}
-              </div>
-              <p
-                className={
-                  compact
-                    ? "mt-1 max-w-[36rem] text-[13px] leading-5 text-muted text-pretty"
-                    : "mt-1.5 max-w-[36rem] text-[14px] leading-6 text-muted text-pretty"
-                }
-              >
-                {project.description}
-              </p>
-            </div>
-            <ArrowUpRight
-              size={14}
-              weight="bold"
-              aria-hidden
-              className="row-arrow mt-1 shrink-0"
-            />
-          </a>
+            external
+          />
         </li>
       ))}
     </ul>
