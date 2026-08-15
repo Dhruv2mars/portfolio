@@ -1,0 +1,120 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "76cadc07bfda",
+  "session_id": "c16f2c3e-a3f3-41a5-a454-f504dcaba651",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-15T10:40:57.391058Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "lib/site.ts",
+    "lib/projects.ts",
+    "lib/nav.ts",
+    "app/globals.css",
+    "components/icons.tsx",
+    "components/theme-provider.tsx",
+    "components/theme-toggle.tsx",
+    "components/site-header.tsx",
+    "components/site-footer.tsx",
+    "app/page.tsx",
+    "app/blog/page.tsx",
+    "app/blog/[slug]/page.tsx",
+    "app/not-found.tsx",
+    "lib/projects.test.ts",
+    "lib/nav.test.ts",
+    "lib/site.test.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5",
+  "turn_id": "42b1c61bf81d",
+  "checkpoint_transcript_start": 129,
+  "transcript_lines_at_start": 129,
+  "compact_transcript_start": 35,
+  "token_usage": {
+    "input_tokens": 282,
+    "cache_creation_tokens": 300757,
+    "cache_read_tokens": 13162199,
+    "output_tokens": 86167,
+    "api_call_count": 135
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01UeHMfswvxGk2ffTumUj5QP",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "caveman"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "42b1c61bf81d",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 13,
+        "end": 14,
+        "entry_ids": [
+          "a3293afd-c313-4abf-8fcc-b56c044a01f5"
+        ],
+        "tool_use_id": "toolu_01UeHMfswvxGk2ffTumUj5QP"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01UeHMfswvxGk2ffTumUj5QP"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: caveman",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01XMmS1zPkbxkJPeNs6PZARu",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "grill-with-docs"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "42b1c61bf81d",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 24,
+        "end": 25,
+        "entry_ids": [
+          "dbcc8b75-76e8-40ca-a903-834682dd2bef"
+        ],
+        "tool_use_id": "toolu_01XMmS1zPkbxkJPeNs6PZARu"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01XMmS1zPkbxkJPeNs6PZARu"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: grill-with-docs",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 4
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-15T10:40:57.137472Z",
+    "agent_lines": 0,
+    "agent_removed": 1693,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 0,
+    "total_lines_changed": 2707,
+    "agent_percentage": 62.54155892131511,
+    "metric_version": 2
+  }
+}
