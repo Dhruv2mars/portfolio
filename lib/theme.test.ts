@@ -1,14 +1,18 @@
-import { describe, expect, test } from "bun:test";
-import { resolveTheme } from "./theme";
+import { expect, test } from "bun:test";
+import { DEFAULT_THEME, nextTheme, resolveTheme } from "@/lib/theme";
 
-describe("resolveTheme", () => {
-  test("follows system preference when there is no override", () => {
-    expect(resolveTheme("light", null)).toBe("light");
-    expect(resolveTheme("dark", null)).toBe("dark");
-  });
+test("dark is the default when no override is stored", () => {
+  expect(resolveTheme(null)).toBe("dark");
+  expect(DEFAULT_THEME).toBe("dark");
+});
 
-  test("persisted override wins over system preference", () => {
-    expect(resolveTheme("dark", "light")).toBe("light");
-    expect(resolveTheme("light", "dark")).toBe("dark");
-  });
+test("a manual override always wins", () => {
+  expect(resolveTheme("light")).toBe("light");
+  expect(resolveTheme("dark")).toBe("dark");
+});
+
+test("toggling alternates between exactly two schemes", () => {
+  expect(nextTheme("dark")).toBe("light");
+  expect(nextTheme("light")).toBe("dark");
+  expect(nextTheme(nextTheme("dark"))).toBe("dark");
 });
