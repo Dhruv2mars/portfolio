@@ -115,10 +115,13 @@ menu. No perpetual animation. No page-level fade on route change. No dashboard g
 1. `curl` of `/` contains the real lifetime token total; console shows no hydration mismatch.
 2. At 1440×900 the masthead and the complete year grid are visible without scrolling.
 3. Zero horizontal scroll at 390, 768, 1024, 1280, 1440, 2560.
-4. Every interactive target ≥24×24 at 390.
+4. Every interactive target ≥24×24 at 390. Heatmap cells are the one
+   exception WCAG 2.5.8 allows — a calendar grid's cell size is essential to
+   its presentation, and the grid is reachable as a single tab stop.
 5. Full keyboard traversal of the heatmap, with the readout announced.
 6. Both themes pass their stated contrast ratios.
 7. Two screenshots taken 5s apart are pixel-identical (no perpetual motion).
 8. No section renders with zero real items — including Blog, which stays hidden at zero Posts.
 9. Lighthouse: performance ≥95, accessibility 100, best practices 100, SEO 100. CLS = 0.
-10. `/writings` still 301s to `/blog`; `/feed.xml` still validates.
+10. `/writings` still permanent-redirects to `/blog` (Next emits 308, which
+    preserves the method); `/feed.xml` still validates.
