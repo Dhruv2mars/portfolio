@@ -1,33 +1,22 @@
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Newsreader } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { ActivityPulse, ActivityTrace } from "@/components/activity-strip";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
+import { getPublishedPosts } from "@/lib/blog";
 import { ogImagePath } from "@/lib/discovery";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { site } from "@/lib/site";
+import { profileUrls, site } from "@/lib/site";
 import "./globals.css";
-
-/* Display + long-form voice. The one letterform no mono-dark reference site uses. */
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
-  display: "swap",
-  variable: "--font-newsreader",
-  adjustFontFallback: true,
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: site.name,
+    default: `${site.name} — ${site.tagline}`,
     template: `%s · ${site.name}`,
   },
   description: site.positioning,
@@ -54,8 +43,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0b0b0d" },
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf9" },
+    { media: "(prefers-color-scheme: dark)", color: "#141416" },
+    { media: "(prefers-color-scheme: light)", color: "#fbfbfa" },
   ],
 };
 
@@ -73,9 +62,8 @@ const jsonLd = {
       "@type": "Person",
       name: site.name,
       url: site.url,
-      sameAs: site.socials
-        .filter((s) => !s.href.startsWith("mailto:"))
-        .map((s) => s.href),
+      jobTitle: site.tagline,
+      sameAs: profileUrls(),
     },
   ],
 };
@@ -85,22 +73,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const hasPosts = getPublishedPosts().length > 0;
+
   return (
     <html
       lang="en"
-      className={`preload ${GeistSans.variable} ${GeistMono.variable} ${newsreader.variable}`}
+      className={`preload ${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="relative flex min-h-[100dvh] flex-col">
-        {/* drop `.preload` after first paint so the theme never flashes a transition */}
+      <body className="flex min-h-[100dvh] flex-col">
+        {/* Drop `.preload` after first paint so the stored theme never
+            animates in from the wrong colour. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
               "requestAnimationFrame(function(){requestAnimationFrame(function(){document.documentElement.classList.remove('preload')})})",
           }}
         />
-        {/* the frame: two hairlines at the edges of the field, never re-animated */}
-        <div className="ledger-rules" aria-hidden="true" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
@@ -109,16 +98,15 @@ export default function RootLayout({
           <a href={FOCUSABLE_CHROME.skipToContentHref} className="skip-link">
             {FOCUSABLE_CHROME.skipToContentLabel}
           </a>
-          {/* motif recurrence: the year grid's DNA on every page (DESIGN §6) */}
-          <SiteHeader pulse={<ActivityPulse />} />
+          <SiteHeader hasPosts={hasPosts} />
           <main
             id={FOCUSABLE_CHROME.mainContentId}
             tabIndex={-1}
-            className="relative flex-1 outline-none"
+            className="mx-auto w-full max-w-2xl flex-1 px-5 outline-none sm:px-6"
           >
             {children}
           </main>
-          <SiteFooter trace={<ActivityTrace />} />
+          <SiteFooter />
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
