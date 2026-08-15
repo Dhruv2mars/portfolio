@@ -11,6 +11,8 @@ const nextConfig = {
     return [
       { source: "/writings", destination: "/blog", permanent: true },
       { source: "/writings/:slug", destination: "/blog/:slug", permanent: true },
+      // Projects moved from a route to a Home section.
+      { source: "/projects", destination: "/#work", permanent: true },
     ];
   },
 };

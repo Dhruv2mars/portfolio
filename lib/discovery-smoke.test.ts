@@ -31,12 +31,15 @@ describe("discovery route smoke", () => {
     }
   });
 
-  test("sitemap and robots cover core IA routes", () => {
+  test("sitemap and robots cover the routes that actually exist", () => {
     const entries = sitemap();
     const urls = entries.map((e) => e.url);
     expect(urls).toContain("https://dhruv2mars.com");
-    expect(urls).toContain("https://dhruv2mars.com/blog");
-    expect(urls).toContain("https://dhruv2mars.com/projects");
+    // Blog is a route only once a Post is published; /projects is a redirect.
+    expect(urls.includes("https://dhruv2mars.com/blog")).toBe(
+      getPublishedPosts().length > 0,
+    );
+    expect(urls).not.toContain("https://dhruv2mars.com/projects");
 
     const robotsFile = robots();
     expect(robotsFile.sitemap).toBe("https://dhruv2mars.com/sitemap.xml");

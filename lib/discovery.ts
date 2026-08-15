@@ -62,7 +62,10 @@ export function buildSitemapEntries({
   posts: readonly PostRecord[];
 }): SitemapEntry[] {
   const today = new Date().toISOString().slice(0, 10);
-  const core = ["", "/blog", "/projects"].map((route) => ({
+  // `/blog` 404s until a Post is published, and `/projects` is a redirect to
+  // the Home section — neither belongs in a sitemap while that holds.
+  const routes = posts.length > 0 ? ["", "/blog"] : [""];
+  const core = routes.map((route) => ({
     url: `${siteUrl}${route}`,
     lastModified: today,
   }));
