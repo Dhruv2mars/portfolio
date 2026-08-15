@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "8d9bd48f8a88",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "content/blog/shipping-with-agents.mdx",
+    "lib/discovery-smoke.test.ts",
+    "lib/discovery.test.ts",
+    "lib/discovery.ts",
+    "next.config.mjs"
+  ],
+  "sessions": [
+    {
+      "metadata": "/8d/9bd48f8a88/0/metadata.json",
+      "transcript": "/8d/9bd48f8a88/0/full.jsonl",
+      "compact_transcript": "/8d/9bd48f8a88/0/transcript.jsonl",
+      "content_hash": "/8d/9bd48f8a88/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 368,
+    "cache_creation_tokens": 406061,
+    "cache_read_tokens": 14708371,
+    "output_tokens": 117490,
+    "api_call_count": 159
+  }
+}
