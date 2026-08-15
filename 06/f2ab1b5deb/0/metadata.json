@@ -1,0 +1,61 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "06f2ab1b5deb",
+  "session_id": "019fe470-db4c-7070-a5ae-ca9502d1ad46",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-15T10:13:18.257813Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 2,
+  "save_step_count": 1,
+  "files_touched": [
+    ".gitignore"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-luna",
+  "turn_id": "858b2a3cff21",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 22541,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 32512,
+    "output_tokens": 728,
+    "api_call_count": 2
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-15T10:13:18.245862Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 1457,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1457,
+    "total_lines_changed": 2116,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 768,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".gitignore": 3,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}
