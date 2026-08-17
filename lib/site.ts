@@ -13,9 +13,9 @@ export const site = {
     "I build tooling for coding agents — repro harnesses, queues, local-first inference — and ship with them every day.",
   url: "https://dhruv2mars.com",
   /**
-   * No portrait exists yet. The masthead reserves this slot and renders a
-   * live placeholder; setting this to an image path is the only change
-   * needed to fill it, with no layout shift. See DESIGN.md §3.
+   * No portrait exists yet. The profile header reserves this slot and renders
+   * a monogram at the same size; setting this to an image path is the only
+   * change needed to fill it, with no layout shift.
    */
   avatar: null as string | null,
   socials: [

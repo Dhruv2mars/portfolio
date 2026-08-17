@@ -1,65 +1,107 @@
-import { ArrowUpRight } from "@/components/icons";
-import { SectionHeading } from "@/components/section-heading";
-import { destinationHost, getProjects } from "@/lib/projects";
+import { CopyLink } from "@/components/copy-link";
+import { BoxIcon, LinkIcon } from "@/components/icons";
+import { IconTile } from "@/components/icon-tile";
+import {
+  Panel,
+  PanelDescription,
+  PanelHeader,
+  PanelTitle,
+  PanelTitleSup,
+} from "@/components/panel";
+import { Tag } from "@/components/tag";
+import { destinationHost, getProjects, type Project } from "@/lib/projects";
 import { site } from "@/lib/site";
+
+/**
+ * Rows share a 24px gutter tile so every title starts on the same optical
+ * origin, and the dashed rule separates the marker from the record the way a
+ * plate number separates from a plate.
+ */
+function ProjectItem({ project }: { project: Project }) {
+  return (
+    <li className="group/project flex items-center border-b border-line transition-colors last:border-b-0 hover:bg-accent-muted">
+      <IconTile className="mx-4">
+        <BoxIcon />
+      </IconTile>
+
+      <div className="min-w-0 flex-1 border-l border-dashed border-line">
+        <a
+          href={project.live ?? project.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex w-full items-center gap-2 p-4 pr-2 text-left"
+        >
+          <div className="min-w-0 flex-1">
+            <h3 className="mb-1 leading-snug font-medium text-balance">
+              {project.name}
+            </h3>
+            <p className="typeset typeset-description text-muted-foreground">
+              {project.description}
+            </p>
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              <li className="flex">
+                <Tag>{project.language}</Tag>
+              </li>
+              <li className="flex">
+                <Tag className="tabular-nums">{project.year}</Tag>
+              </li>
+              {project.note ? (
+                <li className="flex">
+                  <Tag>{project.note}</Tag>
+                </li>
+              ) : null}
+              <li className="flex">
+                <Tag>{destinationHost(project)}</Tag>
+              </li>
+            </ul>
+          </div>
+
+          <span
+            aria-hidden
+            className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground transition-colors group-hover/project:text-foreground"
+          >
+            <LinkIcon className="pointer-events-none size-4" />
+          </span>
+        </a>
+      </div>
+    </li>
+  );
+}
 
 export function ProjectsSection() {
   const projects = getProjects();
 
   return (
-    <section id="work" className="mt-24 scroll-mt-24">
-      <SectionHeading label="work" aside={`${projects.length} selected`} />
+    <Panel id="work">
+      <PanelHeader>
+        <PanelTitle>
+          Projects
+          <PanelTitleSup className="tabular-nums">
+            {projects.length}
+          </PanelTitleSup>
+          <CopyLink id="work" label="Projects" />
+        </PanelTitle>
+        <PanelDescription>
+          Curated, not enumerated — the ones I would defend in a code review.
+        </PanelDescription>
+      </PanelHeader>
 
-      <ul className="mt-2">
+      <ul>
         {projects.map((project) => (
-          <li key={project.name} className="border-b border-border last:border-0">
-            <a
-              href={project.live ?? project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="row-item flex items-baseline gap-4"
-            >
-              <span className="min-w-0 flex-1">
-                <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                  <span className="text-base font-medium tracking-tight text-foreground">
-                    {project.name}
-                  </span>
-                  <span className="font-mono text-2xs text-dim">
-                    {project.language}
-                  </span>
-                  {project.note ? (
-                    <span className="rounded-full border border-border px-2 py-0.5 font-mono text-2xs text-dim">
-                      {project.note}
-                    </span>
-                  ) : null}
-                </span>
-                <span className="mt-1.5 block max-w-[52ch] text-sm text-muted">
-                  {project.description}
-                </span>
-              </span>
-
-              <span className="relative shrink-0 font-mono text-2xs text-dim">
-                <span className="row-year block tabular-nums">{project.year}</span>
-                <span className="row-dest absolute right-0 top-0 flex items-center gap-1 whitespace-nowrap">
-                  {destinationHost(project)}
-                  <ArrowUpRight className="size-3" />
-                </span>
-              </span>
-            </a>
-          </li>
+          <ProjectItem key={project.name} project={project} />
         ))}
       </ul>
 
-      <p className="mt-6 font-mono text-2xs text-dim">
+      <div className="border-t border-line px-4 py-3 text-sm">
         <a
           href={`https://github.com/${site.handle}?tab=repositories`}
           target="_blank"
           rel="noopener noreferrer"
-          className="link-quiet inline-flex min-h-6 items-center"
+          className="link-underline extend-touch-target inline-flex items-center text-muted-foreground transition-colors hover:text-foreground"
         >
-          everything else on GitHub
+          Everything else on GitHub
         </a>
-      </p>
-    </section>
+      </div>
+    </Panel>
   );
 }
