@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "ee5a52378665",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 6,
+  "files_touched": [
+    "app/page.tsx",
+    "components/activity-grid.tsx",
+    "components/activity-section.tsx",
+    "components/projects-section.tsx",
+    "lib/activity-grid.ts",
+    "lib/site.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ee/5a52378665/0/metadata.json",
+      "transcript": "/ee/5a52378665/0/full.jsonl",
+      "compact_transcript": "/ee/5a52378665/0/transcript.jsonl",
+      "content_hash": "/ee/5a52378665/0/content_hash.txt",
+      "prompt": "/ee/5a52378665/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 614,
+    "cache_creation_tokens": 935204,
+    "cache_read_tokens": 24539043,
+    "output_tokens": 216570,
+    "api_call_count": 286
+  }
+}

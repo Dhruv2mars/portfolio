@@ -1,0 +1,109 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "ee5a52378665",
+  "session_id": "c16f2c3e-a3f3-41a5-a454-f504dcaba651",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-17T15:33:30.954095Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 6,
+  "save_step_count": 1,
+  "files_touched": [
+    "app/page.tsx",
+    "components/activity-grid.tsx",
+    "components/activity-section.tsx",
+    "components/projects-section.tsx",
+    "lib/activity-grid.ts",
+    "lib/site.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5",
+  "turn_id": "5ccc5ce34be5",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 614,
+    "cache_creation_tokens": 935204,
+    "cache_read_tokens": 24539043,
+    "output_tokens": 216570,
+    "api_call_count": 286
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01UeHMfswvxGk2ffTumUj5QP",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "caveman"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "5ccc5ce34be5",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 13,
+        "end": 14,
+        "entry_ids": [
+          "a3293afd-c313-4abf-8fcc-b56c044a01f5"
+        ],
+        "tool_use_id": "toolu_01UeHMfswvxGk2ffTumUj5QP"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01UeHMfswvxGk2ffTumUj5QP"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: caveman",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01XMmS1zPkbxkJPeNs6PZARu",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "grill-with-docs"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "5ccc5ce34be5",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 24,
+        "end": 25,
+        "entry_ids": [
+          "dbcc8b75-76e8-40ca-a903-834682dd2bef"
+        ],
+        "tool_use_id": "toolu_01XMmS1zPkbxkJPeNs6PZARu"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01XMmS1zPkbxkJPeNs6PZARu"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: grill-with-docs",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 6
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-17T15:33:30.61879Z",
+    "agent_lines": 192,
+    "agent_removed": 95,
+    "human_added": 165,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 357,
+    "total_lines_changed": 563,
+    "agent_percentage": 50.97690941385436,
+    "metric_version": 2
+  }
+}
