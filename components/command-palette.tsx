@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { ArrowUpRight } from "@/components/icons";
+import { ArrowUpRight, SearchIcon } from "@/components/icons";
 import { nextTheme, type ColorScheme } from "@/lib/theme";
 
 export type CommandItem = {
@@ -138,7 +138,7 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
           role="dialog"
           aria-modal="true"
           aria-label="Command palette"
-          className="palette-panel w-full max-w-lg overflow-hidden rounded-xl border border-border-strong bg-background shadow-none"
+          className="palette-panel w-full max-w-lg overflow-hidden rounded-xl border border-border bg-popover"
           onKeyDown={(event) => {
             if (event.key === "Escape") {
               event.preventDefault();
@@ -160,10 +160,8 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
             }
           }}
         >
-          <div className="flex items-center gap-2 border-b border-border px-3.5">
-            <span aria-hidden className="font-mono text-xs text-dim">
-              /
-            </span>
+          <div className="flex items-center gap-2.5 border-b border-line px-3.5">
+            <SearchIcon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
             <input
               ref={inputRef}
               value={query}
@@ -179,9 +177,9 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
               aria-activedescendant={
                 results[active] ? `${listId}-${results[active].id}` : undefined
               }
-              className="h-11 w-full bg-transparent text-sm text-foreground outline-none placeholder:text-dim"
+              className="h-12 w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
-            <kbd className="rounded border border-border px-1.5 py-0.5 font-mono text-2xs text-dim">
+            <kbd className="rounded-sm border border-line bg-muted px-1.5 py-0.5 font-mono text-[0.625rem] text-muted-foreground">
               esc
             </kbd>
           </div>
@@ -194,13 +192,13 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
             className="max-h-[52vh] overflow-y-auto p-1.5"
           >
             {results.length === 0 ? (
-              <p className="px-2.5 py-6 text-center text-sm text-dim">
+              <p className="px-2.5 py-6 text-center text-sm text-muted-foreground">
                 Nothing matches “{query}”.
               </p>
             ) : (
               Object.entries(grouped).map(([group, groupItems]) => (
                 <div key={group} className="mb-1 last:mb-0">
-                  <p className="section-label px-2.5 pb-1 pt-2 text-2xs">
+                  <p className="px-2.5 pt-2 pb-1 font-mono text-[0.625rem] tracking-wider text-muted-foreground uppercase">
                     {group}
                   </p>
                   {groupItems.map((item) => {
@@ -218,18 +216,18 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
                         onClick={() => run(item)}
                         className={`flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-sm ${
                           isActive
-                            ? "bg-surface text-foreground"
-                            : "text-muted"
+                            ? "bg-accent text-accent-foreground"
+                            : "text-muted-foreground"
                         }`}
                       >
                         <span className="truncate">{item.label}</span>
                         {item.hint ? (
-                          <span className="truncate font-mono text-2xs text-dim">
+                          <span className="truncate font-mono text-[0.625rem] text-muted-foreground">
                             {item.hint}
                           </span>
                         ) : null}
                         {item.external ? (
-                          <ArrowUpRight className="ml-auto size-3.5 shrink-0 text-dim" />
+                          <ArrowUpRight className="ml-auto size-3.5 shrink-0 text-muted-foreground" />
                         ) : null}
                       </div>
                     );
@@ -255,10 +253,11 @@ function PaletteTrigger({
       onClick={(event) => onOpen(event.currentTarget)}
       aria-label="Open command palette"
       aria-keyshortcuts="Meta+K Control+K"
-      className="hidden h-7 items-center gap-1.5 rounded-full border border-border px-2.5 font-mono text-2xs text-dim transition-colors duration-150 hover:border-border-strong hover:text-foreground sm:flex"
+      title="Search (⌘K)"
+      data-slot="command-menu-trigger"
+      className="flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
     >
-      <span aria-hidden>⌘</span>
-      <span aria-hidden>K</span>
+      <SearchIcon className="size-4.5" />
     </button>
   );
 }

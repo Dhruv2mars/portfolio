@@ -1,43 +1,66 @@
 import Link from "next/link";
 import { CommandPalette } from "@/components/command-palette";
+import { GithubIcon } from "@/components/icons";
+import { Separator } from "@/components/separator";
+import { SiteMark } from "@/components/site-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { paletteItems } from "@/lib/palette";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { navItems } from "@/lib/nav";
 import { site } from "@/lib/site";
 
+const GITHUB = `https://github.com/${site.handle}`;
+
 export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
   const items = navItems(hasPosts);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/72 backdrop-blur-md">
-      <div className="mx-auto flex h-14 w-full max-w-2xl items-center gap-4 px-5 sm:px-6">
+    <header className="sticky top-0 z-50 max-w-screen overflow-x-clip bg-background px-2">
+      {/* `after:z-1 after:bg-border` lifts the bottom hairline above the
+          content scrolling beneath it and darkens it to a real edge. */}
+      <div className="screen-line-top screen-line-bottom mx-auto flex h-(--header-height) items-center gap-2 border-r border-line pr-2 after:z-1 after:bg-border sm:gap-4 md:max-w-3xl">
         <Link
           href="/"
-          className="py-2 font-mono text-xs tracking-tight text-foreground"
+          aria-label="Home"
+          className="flex items-center gap-2 pl-1 text-foreground"
         >
-          {site.handle.toLowerCase()}
-          <span className="text-dim">.com</span>
+          <SiteMark className="h-8 shrink-0" />
+          <span className="font-heading text-base font-medium tracking-tight">
+            {site.handle.toLowerCase()}
+          </span>
         </Link>
+
+        <div className="flex-1" />
 
         <nav
           aria-label={FOCUSABLE_CHROME.primaryNavLabel}
-          className="flex items-center gap-4"
+          className="flex items-center"
         >
           {items.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              // py-2 lifts the tap target past 24px inside the fixed h-14 row.
-              className="py-2 font-mono text-xs text-dim transition-colors duration-150 hover:text-foreground"
+              className="flex h-8 items-center px-2 text-sm font-medium tracking-wide text-muted-foreground transition-colors hover:text-foreground"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-1.5">
+        <div className="flex items-center">
+          <Separator orientation="vertical" className="mr-2 h-5 max-sm:hidden" />
           <CommandPalette items={paletteItems(hasPosts)} />
+          <Separator orientation="vertical" className="mx-2 h-5 max-sm:hidden" />
+          <a
+            href={GITHUB}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            className="flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            <GithubIcon className="size-4.5" />
+          </a>
+          <Separator orientation="vertical" className="mx-2 h-5" />
           <ThemeToggle />
         </div>
       </div>

@@ -1,15 +1,23 @@
 export type ColorScheme = "light" | "dark";
-export type ThemeOverride = ColorScheme | null;
+/** What the Visitor has asked for — including "ask my OS". */
+export type ThemePreference = ColorScheme | "system";
 
 /**
- * Dark is the default and the primary design; light is a real alternative,
- * not an inversion (DESIGN.md §6). A manual choice always wins and is
- * persisted. Runtime applies this via `next-themes`; this is the contract.
+ * The site follows the operating system until the Visitor says otherwise. A
+ * manual choice always wins and is persisted. Runtime applies this via
+ * `next-themes`; this module is the contract.
  */
-export const DEFAULT_THEME: ColorScheme = "dark";
+export const DEFAULT_THEME: ThemePreference = "system";
 
-export function resolveTheme(override: ThemeOverride): ColorScheme {
-  return override ?? DEFAULT_THEME;
+/** Used only where the OS expresses no preference at all. */
+export const FALLBACK_SCHEME: ColorScheme = "dark";
+
+export function resolveTheme(
+  preference: ThemePreference | null,
+  systemScheme: ColorScheme | null = null,
+): ColorScheme {
+  if (preference === "light" || preference === "dark") return preference;
+  return systemScheme ?? FALLBACK_SCHEME;
 }
 
 export function nextTheme(current: ColorScheme): ColorScheme {
