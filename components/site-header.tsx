@@ -32,22 +32,27 @@ export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
 
         <div className="flex-1" />
 
+        {/* Below `sm` the bar collapses to mark plus controls. The nav targets
+            are in-page anchors on a single scroll, so losing them costs
+            nothing, and keeping them cost the theme toggle its right gutter. */}
         <nav
           aria-label={FOCUSABLE_CHROME.primaryNavLabel}
-          className="flex items-center"
+          className="flex items-center max-sm:hidden"
         >
           {items.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="flex h-8 items-center px-2 text-sm font-medium tracking-wide text-muted-foreground transition-colors hover:text-foreground"
+              className="flex h-8 items-center px-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center">
+        {/* The palette trigger is a keyboard affordance; a touch viewport has
+            no ⌘K, so it goes with the nav. */}
+        <div className="flex items-center max-sm:*:data-[slot=command-menu-trigger]:hidden">
           <Separator orientation="vertical" className="mr-2 h-5 max-sm:hidden" />
           <CommandPalette items={paletteItems(hasPosts)} />
           <Separator orientation="vertical" className="mx-2 h-5 max-sm:hidden" />

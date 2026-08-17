@@ -136,6 +136,89 @@ export function CheckIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Project kinds                                                               */
+/*                                                                             */
+/* One glyph per kind of thing a project is, so the gutter tile carries a fact  */
+/* about the row rather than repeating the brand mark eight times.             */
+/* -------------------------------------------------------------------------- */
+
+export function TerminalIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <rect x="1.9" y="2.9" width="12.2" height="10.2" rx="1.6" />
+      <path d="m5 6.5 2 1.75L5 10" />
+      <path d="M8.75 10.25h2.5" />
+    </Icon>
+  );
+}
+
+export function QueueIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="M8 1.9 14.1 5 8 8.1 1.9 5Z" />
+      <path d="m1.9 8 6.1 3.1L14.1 8" />
+      <path d="m1.9 11 6.1 3.1L14.1 11" />
+    </Icon>
+  );
+}
+
+export function DeviceIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <rect x="4.4" y="1.9" width="7.2" height="12.2" rx="1.6" />
+      <path d="M7 12.4h2" />
+    </Icon>
+  );
+}
+
+export function ServerIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <rect x="1.9" y="2.4" width="12.2" height="4.6" rx="1.4" />
+      <rect x="1.9" y="9" width="12.2" height="4.6" rx="1.4" />
+      <path d="M4.4 4.7h.01M4.4 11.3h.01" />
+    </Icon>
+  );
+}
+
+export function DocumentIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="M9 1.9H4.5a1.6 1.6 0 0 0-1.6 1.6v9a1.6 1.6 0 0 0 1.6 1.6h7a1.6 1.6 0 0 0 1.6-1.6V6Z" />
+      <path d="M9 1.9V6h4.1" />
+      <path d="M5.75 9.25h4.5M5.75 11.5h3" />
+    </Icon>
+  );
+}
+
+export function GridIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <rect x="2.4" y="2.4" width="11.2" height="11.2" rx="1.4" />
+      <path d="M8 2.4v11.2M2.4 8h11.2" />
+    </Icon>
+  );
+}
+
+export function ChatIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="M13.6 9.4a1.6 1.6 0 0 1-1.6 1.6H5.6L2.4 14.1V4a1.6 1.6 0 0 1 1.6-1.6h8a1.6 1.6 0 0 1 1.6 1.6Z" />
+    </Icon>
+  );
+}
+
+export function WindowIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <rect x="1.9" y="2.9" width="12.2" height="10.2" rx="1.6" />
+      <path d="M1.9 6.2h12.2" />
+      <path d="M4.3 4.55h.01M6.3 4.55h.01" />
+    </Icon>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /* Brands                                                                      */
 /* -------------------------------------------------------------------------- */
 

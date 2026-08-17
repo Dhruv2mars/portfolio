@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+/* Margin notes are for readers with a cursor; a touch device has no room for
+   them and no pointer to aim. */
+@custom-variant pointer-fine (@media (pointer: fine));
 
 /* ---------------------------------------------------------------------------
    Tokens. A neutral zinc system — no chromatic accent. Colour appears only
@@ -292,6 +295,16 @@
   [id] {
     @apply scroll-mt-18;
   }
+
+  /* One focus ring for the whole site. Every keyboard affordance — header
+     buttons, palette rows, inline links, the mosaic — draws the same 2px
+     outline at the same offset, so focus never changes shape as it moves.
+     Components that need a different shape opt out with their own `outline`,
+     not with their own ring colour. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -377,7 +390,12 @@
   width: max-content;
   max-width: 100%;
   margin-inline: auto;
+  /* The grid is one tab stop, but the thing that moves is the active cell, so
+     the ring is drawn there instead of around all 365 of them. */
   outline: none;
+  /* Room for that ring and for the live cell's 2px halo, so neither can cross
+     the panel's vertical rail. */
+  padding-inline: 3px;
 }
 
 .activity-col {
@@ -417,8 +435,15 @@
   outline-offset: 1px;
 }
 
+/* Pointer: a hairline marker. Keyboard: the site's own focus ring, moved onto
+   the active descendant so focus keeps the same shape it has everywhere else. */
 .activity-cell[data-active="true"] {
   outline-color: var(--foreground);
+}
+
+.activity-grid:focus-visible .activity-cell[data-active="true"] {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
 }
 
 /* Today is a ring, never a fill — a projection must not read as a record. */
@@ -432,7 +457,7 @@
 /* Half a year at full cell size beats a full year of dust. */
 @media (max-width: 40rem) {
   .activity-grid {
-    grid-template-columns: repeat(var(--weeks-sm, 27), var(--cell-size));
+    grid-template-columns: repeat(var(--weeks-sm, 26), var(--cell-size));
   }
   .activity-col[data-narrow-hidden="true"] {
     display: none;
