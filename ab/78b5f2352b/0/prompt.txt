@@ -29,3 +29,11 @@ If the result above is empty or unexpected, Read this file BEFORE diagnosing —
 To re-run with edited post-processing: Workflow({scriptPath: '/Users/dhruv2mars/.claude/projects/-Users-dhruv2mars-dev-github-portfolio/c16f2c3e-a3f3-41a5-a454-f504dcaba651/workflows/scripts/dai-fidelity-critic-wf_009e1aeb-41a.js', resumeFromRunId: 'wf_009e1aeb-41a'}) — agents whose (prompt, opts) are unchanged replay from cache.</diagnostics>
 <usage><agent_count>1</agent_count><agents_done>1</agents_done><agents_error>0</agents_error><agents_skipped>0</agents_skipped><agents_empty_result>0</agents_empty_result><subagent_tokens>30876</subagent_tokens><tool_uses>3</tool_uses><duration_ms>548351</duration_ms></usage>
 </task-notification>
+
+---
+
+Do all of them, complete each and every part, including the polish and optional ones. Make sure that the entire website is fully done and done with other details. Once you are done, then use the same subagent workflow critic to do the review again. by comparing our version (draft pr preview in browser) and chan dai's site in browser, using computer use.
+
+---
+
+continue....keep going
