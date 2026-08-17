@@ -3,84 +3,237 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------------------
-   Tokens. Dark is the default and the primary design; light is its own
-   design, not an inversion. Near-black over pure black, paper over pure
-   white. See DESIGN.md §6.
+   Tokens. A neutral zinc system — no chromatic accent. Colour appears only
+   where it carries meaning (links, status). `--line` is the hairline the
+   whole frame is drawn with: the border colour, softened toward the
+   background so a full-bleed rule reads as structure rather than a box.
 --------------------------------------------------------------------------- */
 
 :root {
   color-scheme: light;
 
-  --background: oklch(0.9895 0.0015 265);
-  --surface: oklch(0.972 0.0025 265);
-  --foreground: oklch(0.205 0.005 265);
-  --muted: oklch(0.472 0.006 265);
-  --dim: oklch(0.548 0.006 265);
-  --border: oklch(0.205 0.005 265 / 0.13);
-  --border-strong: oklch(0.205 0.005 265 / 0.26);
-  --accent: oklch(0.53 0.155 248);
-  --accent-quiet: oklch(0.53 0.155 248 / 0.14);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823); /* zinc-950 */
 
-  /* Heatmap ramp — intensity darkens the paper. */
-  --l0: oklch(0.205 0.005 265 / 0.055);
-  --l1: oklch(0.62 0.07 248);
-  --l2: oklch(0.56 0.11 248);
-  --l3: oklch(0.49 0.14 248);
-  --l4: oklch(0.41 0.16 250);
+  --primary: oklch(0.141 0.005 285.823);
+  --primary-foreground: oklch(0.985 0 0);
+
+  --secondary: oklch(0.967 0.001 286.375); /* zinc-100 */
+  --secondary-foreground: oklch(0.141 0.005 285.823);
+
+  --muted: oklch(0.967 0.001 286.375); /* zinc-100 — a surface */
+  --muted-foreground: oklch(0.552 0.016 285.938); /* zinc-500 */
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+
+  --accent: oklch(0.967 0.001 286.375); /* zinc-100 */
+  --accent-muted: color-mix(in oklab, var(--accent) 50%, transparent);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+
+  --border: oklch(0.92 0.004 286.32); /* zinc-200 */
+  --line: color-mix(in oklab, var(--border) 64%, var(--background));
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.705 0.015 286.067); /* zinc-400 */
+
+  --info: oklch(0.67 0.17 244.98);
+  --success: oklch(0.723 0.219 149.579);
+  --destructive: oklch(0.577 0.245 27.325);
+  --link: oklch(0.488 0.243 264.376); /* blue-700 */
+
+  --surface: oklch(0.985 0 0);
+  --surface-foreground: oklch(0.141 0.005 285.823);
+
+  --code: var(--background);
+  --code-foreground: var(--foreground);
+  --code-number: oklch(0.24 0.01 0 / 0.3);
+  --code-highlight: oklch(0.49 0.18 257.61 / 0.06);
+
+  --selection: oklch(0.141 0.005 285.823);
+  --selection-foreground: oklch(0.985 0 0);
+
+  --header-height: --spacing(14);
 }
 
 .dark {
   color-scheme: dark;
 
-  --background: oklch(0.1615 0.004 265);
-  --surface: oklch(0.202 0.005 265);
-  --foreground: oklch(0.968 0.001 265);
-  --muted: oklch(0.712 0.006 265);
-  --dim: oklch(0.582 0.007 265);
-  --border: oklch(1 0 0 / 0.1);
-  --border-strong: oklch(1 0 0 / 0.2);
-  --accent: oklch(0.735 0.135 244);
-  --accent-quiet: oklch(0.735 0.135 244 / 0.18);
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
 
-  --l0: oklch(1 0 0 / 0.055);
-  --l1: oklch(0.36 0.055 248);
-  --l2: oklch(0.5 0.09 246);
-  --l3: oklch(0.62 0.12 245);
-  --l4: oklch(0.755 0.14 244);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.141 0.005 285.823);
+
+  --secondary: oklch(0.274 0.006 286.033); /* zinc-800 */
+  --secondary-foreground: oklch(0.985 0 0);
+
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067); /* zinc-400 */
+
+  --card: oklch(0.21 0.006 285.885); /* zinc-900 */
+  --card-foreground: oklch(0.985 0 0);
+
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-muted: color-mix(in oklab, var(--accent) 20%, transparent);
+  --accent-foreground: oklch(0.985 0 0);
+
+  --border: oklch(0.274 0.006 286.033);
+  --input: lab(100% 0 0 / 0.15);
+  --ring: oklch(0.552 0.016 285.938);
+
+  --success: oklch(0.723 0.219 149.579);
+  --destructive: oklch(0.505 0.213 27.518);
+  --link: oklch(0.623 0.214 259.815); /* blue-500 */
+
+  --surface: oklch(0.21 0.006 285.885);
+  --surface-foreground: oklch(0.985 0 0);
+
+  --code-number: oklch(0.43 0 0);
+  --code-highlight: oklch(0.71 0.24 42.36 / 0.06);
+
+  --selection: oklch(0.985 0 0);
+  --selection-foreground: oklch(0.141 0.005 285.823);
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
   --color-muted: var(--muted);
-  --color-dim: var(--dim);
-  --color-border: var(--border);
-  --color-border-strong: var(--border-strong);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
   --color-accent: var(--accent);
-  --color-accent-quiet: var(--accent-quiet);
+  --color-accent-muted: var(--accent-muted);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-border: var(--border);
+  --color-line: var(--line);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-info: var(--info);
+  --color-success: var(--success);
+  --color-destructive: var(--destructive);
+  --color-link: var(--link);
+
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+
+  --color-code: var(--code);
+  --color-code-foreground: var(--code-foreground);
+  --color-code-number: var(--code-number);
+  --color-code-highlight: var(--code-highlight);
+
+  --color-selection: var(--selection);
+  --color-selection-foreground: var(--selection-foreground);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-heading: var(--font-sans);
+  --font-serif: var(--font-plex-serif), ui-serif, Georgia, serif;
+  --font-handwriting: var(--font-caveat), var(--font-sans);
+
+  --default-mono-font-feature-settings: "ss11" 1, "zero" 1, "tnum" 1;
 
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-/* Six sizes. There is no seventh. */
-@theme {
-  --text-2xs: 0.6875rem; /* 11 — legend, month labels */
-  --text-2xs--line-height: 1.4;
-  --text-xs: 0.75rem; /* 12 — labels, metadata, nav */
-  --text-xs--line-height: 1.45;
-  --text-sm: 0.8125rem; /* 13 — descriptions, code */
-  --text-sm--line-height: 1.6;
-  --text-base: 0.9375rem; /* 15 — body, prose */
-  --text-base--line-height: 1.72;
-  --text-lg: 1.0625rem; /* 17 — names, row titles */
-  --text-lg--line-height: 1.4;
-  --text-2xl: 1.5rem; /* 24 — page + post titles */
-  --text-2xl--line-height: 1.25;
+/* ---------------------------------------------------------------------------
+   Utilities. The frame system: hairlines that span the viewport rather than
+   stopping at the content rail, and diagonal hatching for the gaps between
+   panels.
+--------------------------------------------------------------------------- */
+
+@utility link {
+  @apply decoration-1 underline-offset-3 hover:underline;
+}
+
+@utility link-underline {
+  @apply underline decoration-current/30 decoration-1 underline-offset-3 transition-colors hover:decoration-current;
+}
+
+@utility screen-line-top {
+  @apply relative;
+
+  &:before {
+    content: "";
+    @apply absolute top-0 left-[-100vw] -z-1 h-px w-[200vw] bg-line;
+  }
+}
+
+@utility screen-line-bottom {
+  @apply relative;
+
+  &:after {
+    content: "";
+    @apply absolute bottom-0 left-[-100vw] -z-1 h-px w-[200vw] bg-line;
+  }
+}
+
+@utility screen-dashed-line-top {
+  @apply screen-line-top;
+
+  &:before {
+    content: "";
+    @apply bg-inherit bg-[linear-gradient(to_right,var(--line)_4px,transparent_2px)] bg-size-[6px_1px] bg-repeat-x;
+  }
+}
+
+@utility screen-dashed-line-bottom {
+  @apply screen-line-bottom;
+
+  &:after {
+    content: "";
+    @apply bg-inherit bg-[linear-gradient(to_right,var(--line)_4px,transparent_2px)] bg-size-[6px_1px] bg-repeat-x;
+  }
+}
+
+@utility screen-line-top-none {
+  @apply before:content-none;
+}
+
+@utility screen-line-bottom-none {
+  @apply after:content-none;
+}
+
+@utility diagonal-stripes {
+  @apply [--pattern-foreground:var(--color-line)]/56;
+  @apply bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px];
+}
+
+@utility stripe-divider {
+  @apply relative h-8;
+
+  &:before {
+    content: "";
+    @apply absolute left-[-100vw] -z-1 h-full w-[200vw] diagonal-stripes;
+  }
+}
+
+/* Pointer-coarse devices get a 24px-minimum hit area without a 24px box. */
+@utility extend-touch-target {
+  @media (pointer: coarse) {
+    @apply relative touch-manipulation after:absolute after:-inset-2;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -88,27 +241,27 @@
 --------------------------------------------------------------------------- */
 
 @layer base {
-  * {
-    border-color: var(--border);
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    @apply border-border outline-ring/50;
   }
 
   html {
     -webkit-text-size-adjust: 100%;
-    font-variant-numeric: tabular-nums;
     scroll-behavior: smooth;
-    scroll-padding-top: 6rem;
   }
 
   body {
-    background-color: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-sans);
-    font-size: var(--text-base);
-    -webkit-font-smoothing: antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
-    transition:
-      background-color 250ms var(--ease-io),
-      color 250ms var(--ease-io);
+  }
+
+  ::selection {
+    @apply bg-selection text-selection-foreground;
   }
 
   /* Suppress every transition until after first paint so the stored theme
@@ -120,31 +273,24 @@
     animation: none !important;
   }
 
-  ::selection {
-    background: var(--accent-quiet);
-    color: var(--foreground);
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-    border-radius: 2px;
-  }
-
   ::-webkit-scrollbar {
-    width: 11px;
-    height: 11px;
+    width: 5px;
+    height: 5px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--border-strong);
-    border: 3px solid var(--background);
-    border-radius: 999px;
+    background: var(--border);
+    border-radius: 5px;
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--dim);
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  [id] {
+    @apply scroll-mt-18;
   }
 }
 
@@ -159,66 +305,55 @@
   z-index: 90;
   translate: -50% -300%;
   padding: 0.5rem 0.875rem;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: var(--surface);
+  background: var(--background);
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: 0.75rem;
   transition: translate 200ms var(--ease-out-quint);
 }
 .skip-link:focus-visible {
   translate: -50% 0;
 }
 
-.section-label {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--dim);
+/* ---------------------------------------------------------------------------
+   Typeset — the two long-form measures. `--typeset-flow` is the vertical
+   rhythm between blocks, expressed in the block's own em so it scales with
+   the measure rather than the root.
+--------------------------------------------------------------------------- */
+
+.typeset {
+  --typeset-size: 1rem;
+  --typeset-leading: 1.65;
+  --typeset-flow: 1.25em;
+
+  font-size: var(--typeset-size);
+  line-height: var(--typeset-leading);
+  text-wrap: pretty;
 }
 
-/* Link with a hairline that thickens rather than appearing. Zero layout
-   shift, which underline-on-hover cannot promise. */
-.link-quiet {
-  text-decoration: underline;
-  text-decoration-color: var(--border-strong);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  transition:
-    color 150ms var(--ease-out-quint),
-    text-decoration-color 150ms var(--ease-out-quint);
+.typeset > * + * {
+  margin-top: var(--typeset-flow);
 }
-.link-quiet:hover {
-  color: var(--foreground);
-  text-decoration-color: var(--accent);
+
+.typeset-description {
+  --typeset-size: 15px;
+  --typeset-leading: 1.6;
+  --typeset-flow: 1em;
+}
+
+.typeset-timescale {
+  --typeset-size: 0.875rem;
+  --typeset-leading: 1.5;
+  --typeset-flow: 1em;
 }
 
 /* ---------------------------------------------------------------------------
-   Entrance. Rules draw, text settles. Nothing bounces, nothing loops.
+   Entrance. The frame is drawn instantly; only the mosaic and the palette
+   fade, and neither loops.
 --------------------------------------------------------------------------- */
 
-@keyframes rule-draw {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes settle {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes cell-in {
+@keyframes fade-in {
   from {
     opacity: 0;
   }
@@ -227,82 +362,28 @@
   }
 }
 
-.reveal > * {
-  animation: settle 380ms var(--ease-out-quint) both;
-  animation-delay: calc(var(--i, 0) * 55ms + var(--base-delay, 0ms));
-}
-
-.rule {
-  height: 1px;
-  background: var(--border);
-  transform-origin: left;
-  animation: rule-draw 420ms var(--ease-out-quint) both;
-  animation-delay: var(--base-delay, 0ms);
-}
-
 /* ---------------------------------------------------------------------------
-   Masthead avatar slot — a designed absence (DESIGN.md §3). The footprint,
-   the border, and the cursor-tracking light are all real; only the portrait
-   is missing. Setting site.avatar swaps it in with no layout shift.
+   Activity mosaic. Fixed 12px blocks on a 2px gutter, square corners — the
+   grid is a measuring instrument, so its cells are not decorated. Intensity
+   is carried by the neutral foreground at five opacities.
 --------------------------------------------------------------------------- */
 
-.avatar-slot {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  border-radius: 999px;
-  border: 1px solid var(--border-strong);
-  background: var(--surface);
-}
-
-.avatar-slot::before {
-  content: "";
-  position: absolute;
-  inset: -40%;
-  z-index: 1;
-  background: radial-gradient(
-    42% 42% at var(--lx, 50%) var(--ly, 50%),
-    var(--accent-quiet),
-    transparent 70%
-  );
-  opacity: var(--lit, 0);
-  transition: opacity 320ms var(--ease-out-quint);
-}
-
-/* The grid of dots reads as "an image belongs here", not "an image failed". */
-.avatar-slot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background-image: radial-gradient(
-    currentColor 0.5px,
-    transparent 0.5px
-  );
-  background-size: 4px 4px;
-  color: var(--dim);
-  opacity: 0.42;
-}
-
-/* ---------------------------------------------------------------------------
-   Activity grid
---------------------------------------------------------------------------- */
-
-/* One column per week. Columns are the unit of layout, so narrow screens
-   simply drop the oldest ones instead of shrinking every cell to a speck. */
 .activity-grid {
-  --cell-gap: 3px;
+  --cell-size: 12px;
+  --cell-gap: 2px;
   display: grid;
-  grid-template-columns: repeat(var(--weeks, 53), minmax(0, 1fr));
+  grid-template-columns: repeat(var(--weeks, 53), var(--cell-size));
   gap: var(--cell-gap);
-  width: 100%;
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
   outline: none;
 }
 
 .activity-col {
   position: relative;
   display: grid;
-  grid-template-rows: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(7, var(--cell-size));
   gap: var(--cell-gap);
   padding-top: 1.05rem;
 }
@@ -313,25 +394,27 @@
   top: 0;
   left: 0;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: 0.6875rem;
   line-height: 1;
-  color: var(--dim);
+  color: var(--muted-foreground);
   white-space: nowrap;
   pointer-events: none;
 }
 
 .activity-cell {
-  aspect-ratio: 1;
-  border-radius: 2px;
-  background: var(--level, var(--l0));
+  background: color-mix(
+    in oklab,
+    var(--muted-foreground) var(--level, 10%),
+    transparent
+  );
   position: relative;
-  animation: cell-in 260ms var(--ease-out-quint) both;
+  animation: fade-in 260ms var(--ease-out-quint) both;
   animation-delay: calc(var(--col, 0) * 5ms + 320ms);
   transition:
     outline-color 120ms var(--ease-out-quint),
     background-color 150ms var(--ease-out-quint);
   outline: 1px solid transparent;
-  outline-offset: 1.5px;
+  outline-offset: 1px;
 }
 
 .activity-cell[data-active="true"] {
@@ -343,14 +426,13 @@
   content: "";
   position: absolute;
   inset: -2px;
-  border-radius: 3px;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--muted-foreground);
 }
 
-/* Half a year at a comfortable cell size beats a full year of dust. */
+/* Half a year at full cell size beats a full year of dust. */
 @media (max-width: 40rem) {
   .activity-grid {
-    grid-template-columns: repeat(var(--weeks-sm, 27), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--weeks-sm, 27), var(--cell-size));
   }
   .activity-col[data-narrow-hidden="true"] {
     display: none;
@@ -358,80 +440,47 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Rows
---------------------------------------------------------------------------- */
-
-.row-item {
-  position: relative;
-  display: block;
-  padding: 1.125rem 0.75rem;
-  margin-inline: -0.75rem;
-  border-radius: 6px;
-  transition: background-color 160ms var(--ease-out-quint);
-}
-.row-item:hover {
-  background: color-mix(in oklab, var(--surface) 72%, transparent);
-}
-
-.row-dest {
-  opacity: 0;
-  transform: translateY(2px);
-  transition:
-    opacity 160ms var(--ease-out-quint),
-    transform 160ms var(--ease-out-quint);
-}
-.row-item:hover .row-dest,
-.row-item:focus-visible .row-dest {
-  opacity: 1;
-  transform: none;
-}
-.row-item:hover .row-year,
-.row-item:focus-visible .row-year {
-  opacity: 0;
-}
-.row-year {
-  transition: opacity 160ms var(--ease-out-quint);
-}
-
-/* ---------------------------------------------------------------------------
-   Prose (MDX)
+   Prose (MDX) — long-form runs on the serif; structure stays sans.
 --------------------------------------------------------------------------- */
 
 .prose {
+  font-family: var(--font-serif);
   color: var(--foreground);
-  font-size: var(--text-base);
-}
-.prose > * + * {
-  margin-top: 1.35em;
 }
 .prose h2,
 .prose h3 {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-family: var(--font-heading);
   font-weight: 500;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--dim);
-  margin-top: 3rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
+  letter-spacing: -0.01em;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+.prose h2 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  margin-top: 2.5em;
+}
+.prose h3 {
+  font-size: 1.25rem;
+  line-height: 1.35;
+  margin-top: 2em;
 }
 .prose h2 + *,
 .prose h3 + * {
-  margin-top: 1rem;
+  margin-top: 0.75em;
 }
 .prose a {
-  color: var(--foreground);
+  color: var(--link);
   text-decoration: underline;
-  text-decoration-color: var(--border-strong);
+  text-decoration-color: color-mix(in oklab, currentColor 30%, transparent);
+  text-decoration-thickness: 1px;
   text-underline-offset: 3px;
   transition: text-decoration-color 150ms var(--ease-out-quint);
 }
 .prose a:hover {
-  text-decoration-color: var(--accent);
+  text-decoration-color: currentColor;
 }
 .prose strong {
-  font-weight: 550;
+  font-weight: 600;
 }
 .prose ul,
 .prose ol {
@@ -444,38 +493,40 @@
   list-style: decimal;
 }
 .prose li::marker {
-  color: var(--dim);
+  color: var(--muted-foreground);
 }
 .prose li + li {
   margin-top: 0.5rem;
 }
 .prose blockquote {
   padding-left: 1.125rem;
-  border-left: 1px solid var(--accent);
-  color: var(--muted);
+  border-left: 2px solid var(--border);
+  color: var(--muted-foreground);
+  font-style: italic;
 }
 .prose hr {
   border: 0;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--line);
 }
 .prose img {
-  border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--line);
 }
 .prose :not(pre) > code {
   font-family: var(--font-mono);
-  font-size: 0.9em;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  font-size: 0.85em;
+  background: var(--muted);
+  border: 1px solid var(--line);
   border-radius: 4px;
   padding: 0.1em 0.35em;
 }
 .prose pre {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  background: var(--code);
+  color: var(--code-foreground);
+  border: 1px solid var(--line);
+  border-radius: 6px;
   padding: 1rem 1.125rem;
   overflow-x: auto;
 }
@@ -491,14 +542,14 @@
 /* sugar-high — four roles, no rainbow */
 .prose pre .sh__token--keyword,
 .prose pre .sh__token--sign {
-  color: var(--accent);
+  color: var(--link);
 }
 .prose pre .sh__token--string,
 .prose pre .sh__token--property {
-  color: var(--muted);
+  color: var(--muted-foreground);
 }
 .prose pre .sh__token--comment {
-  color: var(--dim);
+  color: var(--code-number);
 }
 .prose pre .sh__token--identifier,
 .prose pre .sh__token--entity {
@@ -525,7 +576,7 @@
 }
 
 .palette-backdrop {
-  animation: cell-in 160ms linear both;
+  animation: fade-in 160ms linear both;
   background: color-mix(in oklab, var(--background) 62%, transparent);
   backdrop-filter: blur(6px);
 }
@@ -545,15 +596,10 @@
     animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
   }
-  .reveal > *,
-  .rule,
   .activity-cell,
   .palette-panel {
     animation: none !important;
     opacity: 1;
     transform: none;
-  }
-  .row-dest {
-    transition: opacity 120ms linear;
   }
 }
