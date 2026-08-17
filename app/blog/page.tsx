@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { SectionHeading } from "@/components/section-heading";
+import { ArrowUpRight } from "@/components/icons";
+import { IconTile } from "@/components/icon-tile";
+import {
+  Panel,
+  PanelDescription,
+  PanelHeader,
+  PanelTitle,
+  PanelTitleSup,
+} from "@/components/panel";
+import { Tag } from "@/components/tag";
 import { formatPostDate, getPublishedPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
@@ -15,35 +24,68 @@ export default function BlogPage() {
   if (posts.length === 0) notFound();
 
   return (
-    <div className="pt-14 sm:pt-20">
-      <SectionHeading label="blog" aside={`${posts.length}`} />
+    <div className="[--separator-height:--spacing(8)]">
+      <Panel>
+        <PanelHeader>
+          <PanelTitle>
+            Blog
+            <PanelTitleSup className="tabular-nums">
+              {posts.length}
+            </PanelTitleSup>
+          </PanelTitle>
+          <PanelDescription>
+            Notes on building tooling for coding agents.
+          </PanelDescription>
+        </PanelHeader>
 
-      <ul className="reveal mt-2">
-        {posts.map((post, index) => (
-          <li
-            key={post.slug}
-            className="border-b border-border last:border-0"
-            style={{ "--i": index } as React.CSSProperties}
-          >
-            <Link
-              href={`/blog/${post.slug}`}
-              className="row-item flex items-baseline gap-4"
+        <ul>
+          {posts.map((post) => (
+            <li
+              key={post.slug}
+              className="group/post flex items-center border-b border-line transition-colors last:border-b-0 hover:bg-accent-muted"
             >
-              <span className="min-w-0 flex-1">
-                <span className="block text-base font-medium tracking-tight text-foreground">
-                  {post.title}
-                </span>
-                <span className="mt-1.5 block max-w-[52ch] text-sm text-muted">
-                  {post.summary}
-                </span>
-              </span>
-              <span className="shrink-0 font-mono text-2xs tabular-nums text-dim">
-                {formatPostDate(post.publishedAt)}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+              <IconTile className="mx-4">
+                <ArrowUpRight />
+              </IconTile>
+
+              <div className="min-w-0 flex-1 border-l border-dashed border-line">
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="flex w-full items-center gap-2 p-4 pr-2 text-left"
+                >
+                  <div className="min-w-0 flex-1">
+                    <h2 className="mb-1 leading-snug font-medium text-balance">
+                      {post.title}
+                    </h2>
+                    <p className="typeset typeset-description text-muted-foreground">
+                      {post.summary}
+                    </p>
+                    <ul className="mt-2 flex flex-wrap gap-1.5">
+                      <li className="flex">
+                        <Tag className="tabular-nums">
+                          <time dateTime={post.publishedAt}>
+                            {formatPostDate(post.publishedAt)}
+                          </time>
+                        </Tag>
+                      </li>
+                      <li className="flex">
+                        <Tag className="tabular-nums">
+                          {post.readingTimeMinutes} min read
+                        </Tag>
+                      </li>
+                    </ul>
+                  </div>
+                </Link>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Panel>
+
+      <div
+        aria-hidden
+        className="stripe-divider screen-line-bottom h-(--separator-height) w-full border-x border-line"
+      />
     </div>
   );
 }
