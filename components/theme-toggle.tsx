@@ -37,11 +37,11 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={mounted ? `Switch to ${target} theme` : "Switch theme"}
-      className="grid size-7 place-items-center rounded-full text-dim transition-colors duration-150 hover:bg-surface hover:text-foreground"
+      className="flex size-8 touch-manipulation items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
     >
       {/* Both render until mounted so the control never shifts or flashes. */}
-      <Sun className={`size-4 ${mounted && current === "dark" ? "block" : "hidden"}`} />
-      <Moon className={`size-4 ${mounted && current === "dark" ? "hidden" : "block"}`} />
+      <Sun className={`size-4.5 ${mounted && current === "dark" ? "block" : "hidden"}`} />
+      <Moon className={`size-4.5 ${mounted && current === "dark" ? "hidden" : "block"}`} />
     </button>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { Caveat, IBM_Plex_Serif } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -12,6 +13,23 @@ import { ogImagePath } from "@/lib/discovery";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { profileUrls, site } from "@/lib/site";
 import "./globals.css";
+
+/** Long-form prose only. Structure and UI stay on the sans. */
+const plexSerif = IBM_Plex_Serif({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-plex-serif",
+});
+
+/** Marginalia — annotations that read as a hand, never as body copy. */
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  display: "swap",
+  variable: "--font-caveat",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -43,8 +61,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#141416" },
-    { media: "(prefers-color-scheme: light)", color: "#fbfbfa" },
+    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
   ],
 };
 
@@ -78,10 +96,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`preload ${GeistSans.variable} ${GeistMono.variable}`}
+      className={`preload ${GeistSans.variable} ${GeistMono.variable} ${plexSerif.variable} ${caveat.variable}`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-[100dvh] flex-col">
+      <body>
         {/* Drop `.preload` after first paint so the stored theme never
             animates in from the wrong colour. */}
         <script
@@ -95,18 +113,22 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
         <ThemeProvider>
-          <a href={FOCUSABLE_CHROME.skipToContentHref} className="skip-link">
-            {FOCUSABLE_CHROME.skipToContentLabel}
-          </a>
-          <SiteHeader hasPosts={hasPosts} />
-          <main
-            id={FOCUSABLE_CHROME.mainContentId}
-            tabIndex={-1}
-            className="mx-auto w-full max-w-2xl flex-1 px-5 outline-none sm:px-6"
-          >
-            {children}
-          </main>
-          <SiteFooter />
+          {/* `isolate` keeps the full-bleed hairlines (which paint at -z-1)
+              above the page background instead of under it. */}
+          <div className="group/layout relative isolate flex min-h-[100dvh] flex-col">
+            <a href={FOCUSABLE_CHROME.skipToContentHref} className="skip-link">
+              {FOCUSABLE_CHROME.skipToContentLabel}
+            </a>
+            <SiteHeader hasPosts={hasPosts} />
+            <main
+              id={FOCUSABLE_CHROME.mainContentId}
+              tabIndex={-1}
+              className="max-w-screen flex-1 overflow-x-clip px-2 outline-none"
+            >
+              <div className="mx-auto md:max-w-3xl">{children}</div>
+            </main>
+            <SiteFooter />
+          </div>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
