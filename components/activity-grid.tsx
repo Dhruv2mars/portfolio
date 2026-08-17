@@ -4,7 +4,11 @@ import { useId, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { formatTokenCount } from "@/lib/ai-activity";
 import type { ActivityDay } from "@/lib/ai-activity";
-import { formatActivityDate, type ActivityWeek } from "@/lib/activity-grid";
+import {
+  formatActivityDate,
+  LEVEL_ALPHA,
+  type ActivityWeek,
+} from "@/lib/activity-grid";
 
 const MOBILE_WEEKS = 27;
 
@@ -40,10 +44,10 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
   const activeDay = active === null ? null : slots[active];
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       <p
         aria-hidden
-        className="mb-2.5 h-4 font-mono text-2xs text-dim tabular-nums"
+        className="mb-2.5 h-4 px-4 font-mono text-xs text-muted-foreground tabular-nums"
       >
         {activeDay ? (
           <>
@@ -107,7 +111,7 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
             {week.cells.map((day, dayIndex) => {
               const index = weekIndex * 7 + dayIndex;
               if (!day) {
-                return <div key={index} aria-hidden className="aspect-square" />;
+                return <div key={index} aria-hidden />;
               }
               return (
                 <div
@@ -122,7 +126,7 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
                   className="activity-cell"
                   style={
                     {
-                      "--level": `var(--l${day.intensity})`,
+                      "--level": LEVEL_ALPHA[day.intensity] ?? LEVEL_ALPHA[0],
                       "--col": weekIndex,
                     } as CSSProperties
                   }

@@ -1,6 +1,14 @@
 import { ActivityGrid } from "@/components/activity-grid";
-import { SectionHeading } from "@/components/section-heading";
-import { buildActivityWeeks } from "@/lib/activity-grid";
+import { CopyLink } from "@/components/copy-link";
+import {
+  Panel,
+  PanelDescription,
+  PanelHeader,
+  PanelTitle,
+  PanelTitleSup,
+} from "@/components/panel";
+import { Tag } from "@/components/tag";
+import { buildActivityWeeks, LEVEL_ALPHA } from "@/lib/activity-grid";
 import { formatTokenCount, materializeAiActivity } from "@/lib/ai-activity";
 import { getAiActivityPayload } from "@/lib/ai-activity-store";
 
@@ -33,42 +41,51 @@ export async function ActivitySection() {
           : `feed stalled — last updated ${updated}`;
 
   return (
-    <section id="activity" className="mt-24 scroll-mt-24">
-      <SectionHeading
-        label="AI activity"
-        aside={source === "fallback" ? "fixture" : undefined}
-      />
+    <Panel id="activity">
+      <PanelHeader>
+        <PanelTitle>
+          AI activity
+          <PanelTitleSup>{formatTokenCount(activity.lifetimeTokens)}</PanelTitleSup>
+          <CopyLink id="activity" label="AI activity" />
+        </PanelTitle>
+        <PanelDescription>
+          Tokens through coding agents since I started measuring — one cell per
+          day
+          {projecting
+            ? ", today ringed rather than filled because it is still a projection."
+            : "."}
+        </PanelDescription>
+      </PanelHeader>
 
-      <p className="mt-7 font-mono text-2xl tracking-tight text-foreground">
-        {formatTokenCount(activity.lifetimeTokens)}
-      </p>
-      <p className="mt-1.5 max-w-[52ch] text-sm text-muted">
-        tokens through coding agents since I started measuring — one cell per
-        day
-        {projecting
-          ? ", today ringed rather than filled because it is still a projection."
-          : "."}
-      </p>
+      <figure>
+        <div className="py-4">
+          <ActivityGrid weeks={weeks} />
+        </div>
 
-      <div className="mt-8">
-        <ActivityGrid weeks={weeks} />
-      </div>
-
-      <div className="mt-3 flex items-center justify-between gap-4 font-mono text-2xs text-dim">
-        <span>{provenance}</span>
-        <span className="flex items-center gap-1">
-          less
-          {[0, 1, 2, 3, 4].map((level) => (
-            <span
-              key={level}
-              aria-hidden
-              className="size-2 rounded-[2px]"
-              style={{ background: `var(--l${level})` }}
-            />
-          ))}
-          more
-        </span>
-      </div>
-    </section>
+        <figcaption className="flex items-center justify-between gap-4 border-t border-line px-4 py-3 text-sm text-muted-foreground">
+          <span className="flex items-center gap-2">
+            <span className="tracking-wide text-muted-foreground/80">
+              Fig. 2.
+            </span>
+            {source === "fallback" ? <Tag>fixture</Tag> : null}
+            <span>{provenance}</span>
+          </span>
+          <span className="flex shrink-0 items-center gap-1 font-mono text-xs">
+            less
+            {LEVEL_ALPHA.map((alpha) => (
+              <span
+                key={alpha}
+                aria-hidden
+                className="size-2.5"
+                style={{
+                  background: `color-mix(in oklab, var(--muted-foreground) ${alpha}, transparent)`,
+                }}
+              />
+            ))}
+            more
+          </span>
+        </figcaption>
+      </figure>
+    </Panel>
   );
 }

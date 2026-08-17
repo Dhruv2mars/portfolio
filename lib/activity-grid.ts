@@ -1,5 +1,13 @@
 import type { ActivityDay } from "@/lib/ai-activity";
 
+/**
+ * Five steps of the neutral foreground. Intensity is opacity, never hue.
+ * Lives here rather than in the grid component because the server-rendered
+ * legend reads it too, and a `"use client"` module's exports are client
+ * references on the server, not values.
+ */
+export const LEVEL_ALPHA = ["10%", "20%", "40%", "60%", "80%"] as const;
+
 export type ActivityWeek = {
   /** ISO date of the week's Sunday-aligned first slot. */
   key: string;
