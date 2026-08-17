@@ -1,0 +1,29 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "6c8ad05bda39",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "lib/nav.test.ts",
+    "lib/nav.ts",
+    "lib/palette.ts",
+    "lib/projects.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/6c/8ad05bda39/0/metadata.json",
+      "transcript": "/6c/8ad05bda39/0/full.jsonl",
+      "compact_transcript": "/6c/8ad05bda39/0/transcript.jsonl",
+      "content_hash": "/6c/8ad05bda39/0/content_hash.txt",
+      "prompt": "/6c/8ad05bda39/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 990,
+    "cache_creation_tokens": 1273310,
+    "cache_read_tokens": 40496402,
+    "output_tokens": 299607,
+    "api_call_count": 478
+  }
+}
