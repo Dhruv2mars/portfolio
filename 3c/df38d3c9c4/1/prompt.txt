@@ -1,0 +1,227 @@
+# Task: side-by-side visual fidelity audit, in a real browser
+
+You are auditing how closely a rebuilt personal portfolio matches the **design
+idiom** of Chan Dai's site. You must do this with **computer use** — open both
+sites in a real browser, look at them, scroll them, screenshot them, and
+compare what you actually see. Do not audit from source code alone.
+
+## The two sites
+
+- **REFERENCE (the target idiom):** https://dai.is-a.dev/
+- **OURS (the draft PR build):** try these in order, use the first that renders
+  the page (not a login wall):
+  1. https://dhruv2mars-git-feat-dai-idiom-rebuild-dhruv2mars.vercel.app/
+     — this is the draft PR preview. It sits behind Vercel SSO. If the user's
+     browser profile is already signed in to vercel.com it will load; if you
+     land on a Vercel login screen, do NOT try to log in — fall back.
+  2. http://localhost:3001/ — the identical production build of the same
+     commit, served locally. Equivalent output; use it if (1) is gated.
+
+State clearly in your report which of the two you actually used.
+
+## Important framing — read this before judging
+
+This is **not** a pixel-clone exercise, and marking it down for having
+different content is wrong. Ours deliberately has:
+
+- Its own information architecture. The owner has projects, an AI-token
+  activity heatmap, and a blog that is intentionally hidden while it has zero
+  posts. There is no components registry, no tech-stack grid, no experience
+  timeline, no awards, no certifications — those sections do not exist because
+  the proof behind them does not exist.
+- No portrait photograph. The avatar slot renders a monogram plus a
+  handwritten "portrait pending" margin note. That is a deliberate, honest
+  placeholder, not an oversight.
+- A stalled data feed on the heatmap, which the caption states honestly.
+
+Judge **the idiom**: the frame system, density, rhythm, type, alignment,
+restraint, and craft. Ask "would Chan Dai have built it this way?", not "does
+it have the same sections?".
+
+## What to compare, concretely
+
+Go through these, on **both** sites, at **desktop width and mobile width**, and
+in **both light and dark mode** (toggle the theme control in each site's
+header):
+
+1. **The frame.** Ruled hairlines that run edge to edge across the viewport;
+   the vertical rails that bound the content column; where lines start and
+   stop; whether anything floats free of the grid.
+2. **Panels/sections.** Header composition (title, superscript count,
+   description), inner padding, how a section separates from the next one
+   (the diagonal-stripe bands).
+3. **List rows.** Icon tile on the left, dashed inner rule, title/description
+   stack, chip row, trailing affordance, hover treatment, row separators.
+4. **Type.** Family pairing, sizes, weights, line-height, tracking, how
+   monospace and tabular numerals are used, the small-caps/uppercase labels.
+5. **Colour.** Neutral discipline. Background/foreground/muted relationships in
+   both themes. Whether any accent hue leaks in where the reference is neutral.
+6. **Spacing and density.** Vertical rhythm, whether ours feels emptier or
+   looser than the reference, whether anything is orphaned in whitespace.
+7. **Header and footer.** Sticky behaviour, control sizing and separators,
+   footer composition.
+8. **Interaction.** Hover states, focus rings (tab through), the command
+   palette (press Cmd+K / Ctrl+K on ours), theme toggle, keyboard traversal of
+   the heatmap (focus it, then arrow keys).
+9. **Motion.** Whether anything loops or distracts. Reference and ours should
+   both be calm.
+10. **Craft slips.** Misaligned rules, double borders, off-by-one gaps,
+    inconsistent radii, clipped text, layout shift, broken wrapping at
+    narrow widths, contrast failures.
+
+## Screenshots
+
+Save every screenshot under `/tmp/critique/round2/` with descriptive names,
+e.g. `ours-home-desktop-dark.png`, `dai-home-desktop-dark.png`. Capture at
+minimum: home top, home mid-scroll, home bottom, and one mobile-width shot,
+for each site, in each theme.
+
+## Do not
+
+- Do not edit any source files.
+- Do not log in to anything.
+- Do not fabricate observations you did not see on screen. If you could not
+  check something (e.g. mobile width, or a theme), say so explicitly rather
+  than guessing.
+
+## Report format (write this to the output file)
+
+```
+VERDICT: <0-100> — how close ours is to Chan Dai's idiom
+WHICH URL I USED: <preview | localhost:3001>, and why
+WHAT I COULD NOT CHECK: <list, or "nothing">
+
+## Side-by-side observations
+<for each of the 10 areas above: what the reference does, what ours does,
+ and whether ours matches. Be specific — cite what you saw on screen.>
+
+## Must-fix
+<numbered. Each: what is wrong, where on the page, what it should be instead.
+ Only things you actually observed.>
+
+## Polish
+<numbered, same format, lower severity.>
+
+## What ours already gets right
+<numbered. Be honest here too — do not pad.>
+
+## Screenshots
+<paths>
+```
+
+Be exacting and unsentimental. A high score must be earned.
+
+---
+
+# Task: side-by-side visual fidelity audit, in a real browser
+
+You are auditing how closely a rebuilt personal portfolio matches the **design
+idiom** of Chan Dai's site. You must do this with **computer use** — open both
+sites in a real browser, look at them, scroll them, screenshot them, and
+compare what you actually see. Do not audit from source code alone.
+
+## The two sites
+
+- **REFERENCE (the target idiom):** https://dai.is-a.dev/
+- **OURS (the draft PR build):** try these in order, use the first that renders
+  the page (not a login wall):
+  1. https://dhruv2mars-git-feat-dai-idiom-rebuild-dhruv2mars.vercel.app/
+     — this is the draft PR preview. It sits behind Vercel SSO. If the user's
+     browser profile is already signed in to vercel.com it will load; if you
+     land on a Vercel login screen, do NOT try to log in — fall back.
+  2. http://localhost:3001/ — the identical production build of the same
+     commit, served locally. Equivalent output; use it if (1) is gated.
+
+State clearly in your report which of the two you actually used.
+
+## Important framing — read this before judging
+
+This is **not** a pixel-clone exercise, and marking it down for having
+different content is wrong. Ours deliberately has:
+
+- Its own information architecture. The owner has projects, an AI-token
+  activity heatmap, and a blog that is intentionally hidden while it has zero
+  posts. There is no components registry, no tech-stack grid, no experience
+  timeline, no awards, no certifications — those sections do not exist because
+  the proof behind them does not exist.
+- No portrait photograph. The avatar slot renders a monogram plus a
+  handwritten "portrait pending" margin note. That is a deliberate, honest
+  placeholder, not an oversight.
+- A stalled data feed on the heatmap, which the caption states honestly.
+
+Judge **the idiom**: the frame system, density, rhythm, type, alignment,
+restraint, and craft. Ask "would Chan Dai have built it this way?", not "does
+it have the same sections?".
+
+## What to compare, concretely
+
+Go through these, on **both** sites, at **desktop width and mobile width**, and
+in **both light and dark mode** (toggle the theme control in each site's
+header):
+
+1. **The frame.** Ruled hairlines that run edge to edge across the viewport;
+   the vertical rails that bound the content column; where lines start and
+   stop; whether anything floats free of the grid.
+2. **Panels/sections.** Header composition (title, superscript count,
+   description), inner padding, how a section separates from the next one
+   (the diagonal-stripe bands).
+3. **List rows.** Icon tile on the left, dashed inner rule, title/description
+   stack, chip row, trailing affordance, hover treatment, row separators.
+4. **Type.** Family pairing, sizes, weights, line-height, tracking, how
+   monospace and tabular numerals are used, the small-caps/uppercase labels.
+5. **Colour.** Neutral discipline. Background/foreground/muted relationships in
+   both themes. Whether any accent hue leaks in where the reference is neutral.
+6. **Spacing and density.** Vertical rhythm, whether ours feels emptier or
+   looser than the reference, whether anything is orphaned in whitespace.
+7. **Header and footer.** Sticky behaviour, control sizing and separators,
+   footer composition.
+8. **Interaction.** Hover states, focus rings (tab through), the command
+   palette (press Cmd+K / Ctrl+K on ours), theme toggle, keyboard traversal of
+   the heatmap (focus it, then arrow keys).
+9. **Motion.** Whether anything loops or distracts. Reference and ours should
+   both be calm.
+10. **Craft slips.** Misaligned rules, double borders, off-by-one gaps,
+    inconsistent radii, clipped text, layout shift, broken wrapping at
+    narrow widths, contrast failures.
+
+## Screenshots
+
+Save every screenshot under `/tmp/critique/round2/` with descriptive names,
+e.g. `ours-home-desktop-dark.png`, `dai-home-desktop-dark.png`. Capture at
+minimum: home top, home mid-scroll, home bottom, and one mobile-width shot,
+for each site, in each theme.
+
+## Do not
+
+- Do not edit any source files.
+- Do not log in to anything.
+- Do not fabricate observations you did not see on screen. If you could not
+  check something (e.g. mobile width, or a theme), say so explicitly rather
+  than guessing.
+
+## Report format (write this to the output file)
+
+```
+VERDICT: <0-100> — how close ours is to Chan Dai's idiom
+WHICH URL I USED: <preview | localhost:3001>, and why
+WHAT I COULD NOT CHECK: <list, or "nothing">
+
+## Side-by-side observations
+<for each of the 10 areas above: what the reference does, what ours does,
+ and whether ours matches. Be specific — cite what you saw on screen.>
+
+## Must-fix
+<numbered. Each: what is wrong, where on the page, what it should be instead.
+ Only things you actually observed.>
+
+## Polish
+<numbered, same format, lower severity.>
+
+## What ours already gets right
+<numbered. Be honest here too — do not pad.>
+
+## Screenshots
+<paths>
+```
+
+Be exacting and unsentimental. A high score must be earned.
