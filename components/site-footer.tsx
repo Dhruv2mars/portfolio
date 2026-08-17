@@ -3,22 +3,61 @@ import { Rss, SOCIAL_ICONS } from "@/components/icons";
 import { Separator } from "@/components/separator";
 import { site } from "@/lib/site";
 
-/** A colophon, not a sitemap: only facts about the artefact itself. */
-const COLOPHON: ReadonlyArray<readonly [string, React.ReactNode]> = [
-  ["site", new URL(site.url).host],
-  ["stack", "Next.js · Tailwind CSS · Vercel"],
-  [
-    "source",
+function FooterLink({ href, children }: { href: string; children: string }) {
+  return (
     <a
-      key="source"
-      href={`https://github.com/${site.handle}/portfolio`}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       className="link-underline"
     >
-      github.com/{site.handle}/portfolio
-    </a>,
+      {children}
+    </a>
+  );
+}
+
+/**
+ * A colophon, not a sitemap: only facts about the artefact itself. Rows are
+ * two equal columns with the label right-aligned against the gutter, so the
+ * labels and the values each read as a column of their own.
+ */
+const COLOPHON: ReadonlyArray<readonly [string, React.ReactNode]> = [
+  [
+    "Crafted by",
+    <FooterLink key="by" href={`https://github.com/${site.handle}`}>
+      {site.name}
+    </FooterLink>,
   ],
+  [
+    "Inspired by",
+    <FooterLink key="inspo" href="https://dai.is-a.dev">
+      chanhdai.com
+    </FooterLink>,
+  ],
+  [
+    "Built with",
+    <ul key="stack">
+      <li>Next.js</li>
+      <li>Tailwind CSS</li>
+      <li>TypeScript</li>
+    </ul>,
+  ],
+  [
+    "Deployed on",
+    <FooterLink key="host" href="https://vercel.com">
+      Vercel
+    </FooterLink>,
+  ],
+  [
+    "Source code",
+    <FooterLink
+      key="source"
+      href={`https://github.com/${site.handle}/portfolio`}
+    >
+      GitHub
+    </FooterLink>,
+  ],
+  ["Live at", new URL(site.url).host],
 ];
 
 export function SiteFooter() {
@@ -29,21 +68,19 @@ export function SiteFooter() {
           <div className="stripe-divider h-12" />
         </div>
 
-        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 px-4 py-3 font-mono">
+        <dl className="flex flex-col gap-4 py-8 font-mono [&_dd]:text-sm [&_dt]:text-right [&_dt]:text-sm [&_dt]:text-muted-foreground [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-2">
           {COLOPHON.map(([label, value]) => (
-            <Fragment key={label}>
-              <dt className="text-right text-[0.625rem]/5 tracking-wider text-muted-foreground uppercase">
-                {label}
-              </dt>
-              <dd className="text-sm/5 text-foreground">{value}</dd>
-            </Fragment>
+            <div key={label} className="grid grid-cols-2 gap-4">
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </div>
           ))}
-          <dt className="text-right text-[0.625rem]/5 tracking-wider text-muted-foreground uppercase">
-            ©
-          </dt>
-          <dd className="text-sm/5 text-muted-foreground">
-            {new Date().getFullYear()} {site.name}
-          </dd>
+          <div className="grid grid-cols-2 gap-4">
+            <dt>©</dt>
+            <dd className="text-muted-foreground">
+              {new Date().getFullYear()} {site.name}
+            </dd>
+          </div>
         </dl>
 
         {/* `before:z-1 after:z-1` lifts the hairlines above the background of
@@ -51,29 +88,32 @@ export function SiteFooter() {
         <div className="screen-line-top screen-line-bottom flex w-full before:z-1 after:z-1">
           <nav
             aria-label="Elsewhere"
-            className="mx-auto flex items-center justify-center gap-3 border-x border-line bg-background px-4"
+            className="mx-auto flex items-center justify-center border-x border-line bg-background"
           >
             {site.socials.map((social) => {
               const Glyph = SOCIAL_ICONS[social.label];
               const isMail = social.href.startsWith("mailto:");
               return (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target={isMail ? undefined : "_blank"}
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                  className="flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-                >
-                  <Glyph className="size-4" />
-                </a>
+                <Fragment key={social.label}>
+                  <a
+                    href={social.href}
+                    target={isMail ? undefined : "_blank"}
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="flex size-12 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                  >
+                    <Glyph className="size-4" />
+                  </a>
+                  {/* A rule between every glyph, not only before the last, so
+                      the band reads as ruled cells rather than a huddle. */}
+                  <Separator orientation="vertical" className="h-11 bg-line" />
+                </Fragment>
               );
             })}
-            <Separator orientation="vertical" className="h-11 bg-line" />
             <a
               href={site.rssPath}
               aria-label="RSS feed"
-              className="flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="flex size-12 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               <Rss className="size-4" />
             </a>

@@ -11,20 +11,25 @@ function initials(name: string): string {
     .join("");
 }
 
+/**
+ * 128px on a phone, 160px on desktop — the portrait is one of the two things
+ * the hero is for, so it is sized to hold the row rather than to sit politely
+ * beside the name.
+ */
 function Avatar() {
   return (
-    <div className="relative m-0.5 size-16 overflow-hidden rounded-lg border border-line bg-muted ring-1 ring-border/50 select-none">
+    <div className="relative m-0.5 size-32 overflow-hidden rounded-xl border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
       {site.avatar ? (
         <Image
           src={site.avatar}
           alt={site.name}
           fill
-          sizes="64px"
+          sizes="(min-width: 640px) 160px, 128px"
           priority
           className="object-cover"
         />
       ) : (
-        <span className="absolute inset-0 flex items-center justify-center font-heading text-xl font-medium tracking-tight text-foreground">
+        <span className="absolute inset-0 flex items-center justify-center font-heading text-5xl font-medium tracking-tight text-foreground sm:text-6xl">
           {initials(site.name)}
         </span>
       )}
@@ -42,7 +47,10 @@ export function ProfileHeader() {
   return (
     <div className="screen-line-bottom grid grid-cols-[auto_1fr] grid-rows-[1fr_auto] overflow-y-clip border-x border-line">
       <figure className="relative col-span-2 p-2 sm:col-span-1 sm:col-start-2 sm:p-4">
-        <SiteMarkIsometric className="mx-auto h-28 sm:h-32" />
+        {/* Fills the plate rather than sitting inside it: the drawing is
+            scaled to cover and cut at the edges, which is what makes the
+            lattice read as continuing past the frame. */}
+        <SiteMarkIsometric className="h-56 w-full sm:h-90" />
         <figcaption className="pointer-events-none absolute right-2 bottom-2 text-sm leading-none tracking-wide text-[color-mix(in_oklab,var(--muted-foreground)_60%,var(--background))] tabular-nums select-none sm:right-4 sm:bottom-4">
           Fig. 1.
         </figcaption>

@@ -8,9 +8,14 @@ export type NavItem = {
 export const HOME_SECTIONS = ["activity", "work"] as const;
 export type HomeSectionId = (typeof HOME_SECTIONS)[number];
 
+/**
+ * Labels are title-case: they are proper names for places on the page, and at
+ * the header's small size lowercase reads as a stylistic tic rather than as
+ * navigation. `section` stays lowercase — it is a DOM id, not prose.
+ */
 const BASE_NAV: readonly NavItem[] = [
-  { label: "activity", href: "/#activity", section: "activity" },
-  { label: "work", href: "/#work", section: "work" },
+  { label: "Activity", href: "/#activity", section: "activity" },
+  { label: "Work", href: "/#work", section: "work" },
 ];
 
 /**
@@ -19,6 +24,6 @@ const BASE_NAV: readonly NavItem[] = [
  */
 export function navItems(hasPublishedPosts: boolean): readonly NavItem[] {
   return hasPublishedPosts
-    ? [...BASE_NAV, { label: "blog", href: "/blog" }]
+    ? [...BASE_NAV, { label: "Blog", href: "/blog" }]
     : BASE_NAV;
 }

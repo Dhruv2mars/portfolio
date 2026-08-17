@@ -3,13 +3,13 @@ import { HOME_SECTIONS, navItems } from "@/lib/nav";
 
 describe("navigation shows only what exists", () => {
   test("Blog is absent until a Post is published", () => {
-    const labels = navItems(false).map((item) => item.label);
-    expect(labels).not.toContain("blog");
-    expect(labels).toEqual([...HOME_SECTIONS]);
+    const items = navItems(false);
+    expect(items.map((item) => item.label)).not.toContain("Blog");
+    expect(items.map((item) => item.section)).toEqual([...HOME_SECTIONS]);
   });
 
   test("Blog appears the moment a Post exists", () => {
-    expect(navItems(true).map((item) => item.label)).toContain("blog");
+    expect(navItems(true).map((item) => item.label)).toContain("Blog");
   });
 
   test("Home sections are in-page anchors, routes are not", () => {

@@ -10,7 +10,11 @@ import {
   type ActivityWeek,
 } from "@/lib/activity-grid";
 
-const MOBILE_WEEKS = 27;
+/**
+ * 26 columns is what fits a 390px viewport without a scrollbar:
+ * 26×12px + 25×2px + the grid's 3px inline padding = 368px inside a 372px rail.
+ */
+const MOBILE_WEEKS = 26;
 
 function cellLabel(day: ActivityDay): string {
   const tokens = `${formatTokenCount(day.tokens)} tokens`;

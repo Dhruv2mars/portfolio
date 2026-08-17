@@ -35,8 +35,8 @@ export default function Home() {
 
       <PanelDivider />
       <ProjectsSection />
-
-      <PanelDivider className="screen-line-bottom" />
+      {/* No trailing divider. Bands go *between* panels; the footer opens with
+          its own, and two adjacent bands read as a double border. */}
     </div>
   );
 }

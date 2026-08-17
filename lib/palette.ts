@@ -11,9 +11,9 @@ export function paletteItems(hasPosts: boolean): CommandItem[] {
   const go: CommandItem[] = [
     { id: "home", group: "go", label: "Home", href: "/" },
     ...navItems(hasPosts).map((item) => ({
-      id: `nav-${item.label}`,
+      id: `nav-${item.label.toLowerCase()}`,
       group: "go",
-      label: item.label.replace(/^./, (c) => c.toUpperCase()),
+      label: item.label,
       href: item.href,
     })),
   ];

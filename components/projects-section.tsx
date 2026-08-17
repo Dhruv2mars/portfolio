@@ -1,5 +1,16 @@
 import { CopyLink } from "@/components/copy-link";
-import { BoxIcon, LinkIcon } from "@/components/icons";
+import {
+  BoxIcon,
+  ChatIcon,
+  DeviceIcon,
+  DocumentIcon,
+  GridIcon,
+  LinkIcon,
+  QueueIcon,
+  ServerIcon,
+  TerminalIcon,
+  WindowIcon,
+} from "@/components/icons";
 import { IconTile } from "@/components/icon-tile";
 import {
   Panel,
@@ -9,8 +20,29 @@ import {
   PanelTitleSup,
 } from "@/components/panel";
 import { Tag } from "@/components/tag";
-import { destinationHost, getProjects, type Project } from "@/lib/projects";
+import {
+  destinationHost,
+  getProjects,
+  type Project,
+  type ProjectKind,
+} from "@/lib/projects";
 import { site } from "@/lib/site";
+
+/**
+ * The tile says what the thing is, not who made it — a terminal for a CLI, a
+ * pane for a VM host. `BoxIcon` is the fallback so an un-typed row still fills
+ * its gutter rather than leaving a hole.
+ */
+const KIND_ICONS: Record<ProjectKind, typeof BoxIcon> = {
+  cli: TerminalIcon,
+  queue: QueueIcon,
+  app: DeviceIcon,
+  server: ServerIcon,
+  editor: DocumentIcon,
+  canvas: GridIcon,
+  chat: ChatIcon,
+  vm: WindowIcon,
+};
 
 /**
  * Rows share a 24px gutter tile so every title starts on the same optical
@@ -18,10 +50,12 @@ import { site } from "@/lib/site";
  * plate number separates from a plate.
  */
 function ProjectItem({ project }: { project: Project }) {
+  const KindIcon = KIND_ICONS[project.kind] ?? BoxIcon;
+
   return (
     <li className="group/project flex items-center border-b border-line transition-colors last:border-b-0 hover:bg-accent-muted">
       <IconTile className="mx-4">
-        <BoxIcon />
+        <KindIcon />
       </IconTile>
 
       <div className="min-w-0 flex-1 border-l border-dashed border-line">

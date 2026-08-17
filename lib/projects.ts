@@ -1,3 +1,18 @@
+/**
+ * What kind of thing the project *is*, which is what its gutter glyph draws.
+ * Kept here as a plain string union so this module stays free of React —
+ * `components/projects-section.tsx` owns the kind→glyph map.
+ */
+export type ProjectKind =
+  | "cli"
+  | "queue"
+  | "app"
+  | "server"
+  | "editor"
+  | "canvas"
+  | "chat"
+  | "vm";
+
 export type Project = {
   name: string;
   description: string;
@@ -6,6 +21,7 @@ export type Project = {
   live?: string;
   language: string;
   year: number;
+  kind: ProjectKind;
   /** Short third-party signal. Only ever a fact, never a vanity metric. */
   note?: string;
 };
@@ -24,6 +40,7 @@ const PROJECTS: readonly Project[] = [
     live: "https://relunar.com",
     language: "TypeScript",
     year: 2026,
+    kind: "cli",
     note: "published on npm",
   },
   {
@@ -34,6 +51,7 @@ const PROJECTS: readonly Project[] = [
     live: "https://www.npmjs.com/package/@dhruv2mars/pi-queue",
     language: "TypeScript",
     year: 2026,
+    kind: "queue",
     note: "published on npm",
   },
   {
@@ -43,6 +61,7 @@ const PROJECTS: readonly Project[] = [
     url: "https://github.com/Dhruv2mars/offdex",
     language: "TypeScript",
     year: 2026,
+    kind: "app",
   },
   {
     name: "gunmetal",
@@ -52,6 +71,7 @@ const PROJECTS: readonly Project[] = [
     live: "https://gunmetalapp.vercel.app",
     language: "Rust",
     year: 2026,
+    kind: "server",
   },
   {
     name: "mdv-ts",
@@ -60,6 +80,7 @@ const PROJECTS: readonly Project[] = [
     url: "https://github.com/Dhruv2mars/mdv-ts",
     language: "TypeScript",
     year: 2026,
+    kind: "editor",
   },
   {
     name: "block",
@@ -69,6 +90,7 @@ const PROJECTS: readonly Project[] = [
     live: "https://block-five-zeta.vercel.app",
     language: "TypeScript",
     year: 2026,
+    kind: "canvas",
   },
   {
     name: "codexchat",
@@ -77,6 +99,7 @@ const PROJECTS: readonly Project[] = [
     url: "https://github.com/Dhruv2mars/codexchat",
     language: "Rust",
     year: 2026,
+    kind: "chat",
   },
   {
     name: "openutm-v0",
@@ -85,6 +108,7 @@ const PROJECTS: readonly Project[] = [
     url: "https://github.com/Dhruv2mars/openutm-v0",
     language: "TypeScript",
     year: 2026,
+    kind: "vm",
   },
 ];
 
