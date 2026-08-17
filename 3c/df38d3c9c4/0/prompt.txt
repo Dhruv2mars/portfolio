@@ -1,0 +1,35 @@
+You are a ruthless senior design engineer doing a fidelity audit. Reference: Chan Dai's portfolio https://dai.is-a.dev/ (source: github.com/ncdai/chanhdai.com). Subject: the site in the current working directory, served live at http://localhost:3000.
+
+The subject was SUPPOSED to be rebuilt in Chan Dai's design idiom with different content. The owner says it instead looks like a cheap imitation — imagined rather than observed. Your job is to find out exactly why, concretely, at the level of individual CSS values and components.
+
+You have full network and shell access. USE THEM AGGRESSIVELY:
+- curl the live reference site and its CSS bundles. /tmp/critique/ already has dai.html, ours.html and dai's CSS if the fetch worked — read those first.
+- curl raw files from https://raw.githubusercontent.com/ncdai/chanhdai.com/main/... to read his actual source (app/globals.css, his layout, his section components, his tailwind theme). Use the GitHub API to list the tree if you need paths: https://api.github.com/repos/ncdai/chanhdai.com/git/trees/main?recursive=1
+- Read our source in the working directory: app/globals.css, app/page.tsx, app/layout.tsx, components/*.tsx, lib/site.ts.
+- curl http://localhost:3000/ and http://localhost:3000/blog to see our rendered HTML.
+
+Compare on these axes, and for EACH give the reference's actual value vs ours, plus the fix:
+1. Layout container & grid — max-width, page gutters, the vertical "rail" lines. Dai's signature is a bounded content column with visible full-height vertical border rails and a repeating diagonal-hatch / dotted pattern in the margins. Do we have anything equivalent? If not, say so — it is probably the single biggest reason ours reads as generic.
+2. Section framing — how each section is delimited: heading treatment, border-top/bottom hairlines, the little corner markers / plus-signs / dashed dividers, section label typography (size, weight, letter-spacing, case, color).
+3. Typography — exact font families (he uses specific ones; identify them by name from his CSS), the full type scale, line-heights, letter-spacing, font-weights, and where mono vs sans is used. Ours vs his, value by value.
+4. Color tokens — his full oklch/hsl token set for both themes vs ours. Background, foreground, muted, border, accent, and any surface/elevated layers we are missing.
+5. Density & spacing rhythm — his vertical spacing scale between sections and within them, padding inside cards/rows. Is ours too airy, too tight, or arrhythmic?
+6. Component-level craft — how he renders a list row, a link, a badge/tag, an icon, a card, the header, the footer, the theme toggle. What micro-details does he have that we lack (hover states, focus rings, dividers, hairline insets, icon sizing, number formatting)?
+7. What we have that he would never ship — anything that reads as amateur: inconsistent spacing, mismatched font sizes, orphaned elements, sections that do not align to the same rail, decorative choices that clash.
+
+Then produce a report in this exact structure:
+
+## VERDICT
+A fidelity score out of 100 and two sentences of blunt assessment.
+
+## THE 5 THINGS THAT MOST MAKE OURS LOOK FAKE
+Ranked. For each: what he does (with the real CSS value or component name), what we do, the visual consequence, and the concrete fix (file + what to change).
+
+## FULL GAP TABLE
+| Axis | Chan Dai (actual value) | Ours (actual value) | Severity | Fix |
+Cover every axis above. Be exhaustive — dozens of rows is correct, not too many.
+
+## PRIORITIZED FIX PLAN
+Ordered list of changes, each scoped to a specific file in our repo, each with the exact value to use. Group into "must fix to stop looking fake" / "polish" / "optional".
+
+Rules: cite REAL values you actually read — never invent a CSS value you did not observe. If you could not fetch something, say "could not verify" rather than guessing. Be specific enough that an engineer can implement every fix without re-researching.
