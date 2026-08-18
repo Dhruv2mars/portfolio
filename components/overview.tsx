@@ -6,6 +6,11 @@ import { site } from "@/lib/site";
 export function Overview() {
   return (
     <Panel>
+      {/* Every panel on the page is a landmark, so every panel gets a name.
+          The two that carry no visible title carry it for the screen reader
+          instead — otherwise a reader jumping by region lands in an unnamed
+          section and has to read it to find out what it is. */}
+      <h2 className="sr-only">Overview</h2>
       <PanelContent>
         <p className="typeset typeset-description text-muted-foreground">
           {site.positioning}
@@ -18,6 +23,7 @@ export function Overview() {
 export function SocialLinks() {
   return (
     <Panel>
+      <h2 className="sr-only">Social links</h2>
       <PanelContent className="flex flex-wrap gap-2">
         {site.socials.map((social) => {
           const Glyph = SOCIAL_ICONS[social.label];
@@ -30,7 +36,7 @@ export function SocialLinks() {
               rel="noopener noreferrer"
               aria-label={social.label}
               title={social.label}
-              className="flex size-8 items-center justify-center rounded-md border border-line text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="flex size-8 items-center justify-center rounded-lg border border-line bg-foreground/[0.045] text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               <Glyph className="size-4.5" />
             </a>

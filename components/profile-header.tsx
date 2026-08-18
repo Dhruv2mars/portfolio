@@ -104,8 +104,11 @@ export function ProfileHeader() {
           <h1 className="-translate-y-px pl-4 text-[2rem]/none font-medium tracking-tight">
             {site.name}
           </h1>
-          <p className="flex h-12.5 items-center border-t border-line py-1 pl-4 text-muted-foreground sm:h-9">
-            {site.tagline}
+          {/* The one line that reads as a caption rather than as prose, so it
+              is set in mono at the small size — and swept once on load, which
+              is the reference's own way of pointing at it without shouting. */}
+          <p className="flex h-12.5 items-center border-t border-line py-1 pl-4 font-mono text-sm text-balance text-muted-foreground sm:h-9">
+            <span className="shimmer inline-block">{site.tagline}</span>
           </p>
         </div>
       </div>

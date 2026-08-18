@@ -496,6 +496,54 @@
 }
 
 /* ---------------------------------------------------------------------------
+   A single sweep of light across a line of text, once, on load. The gradient
+   is painted into the glyphs themselves and slid from right to left, so the
+   highlight travels the line rather than the line changing colour. Spread is
+   in `ch` so it scales with the type, and the background is twice the element
+   plus two spreads wide so the sweep starts and ends fully off the text.
+--------------------------------------------------------------------------- */
+@keyframes shimmer-sweep {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.shimmer {
+  --shimmer-spread: calc(3ch + 40px);
+  --shimmer-angle: 20deg;
+  background-image: linear-gradient(
+    calc(90deg + var(--shimmer-angle)),
+    currentColor calc(50% - var(--shimmer-spread)),
+    color-mix(in oklch, var(--foreground), currentColor 50%)
+      calc(50% - var(--shimmer-spread) * 0.5),
+    var(--foreground) 50%,
+    color-mix(in oklch, var(--foreground), currentColor 50%)
+      calc(50% + var(--shimmer-spread) * 0.5),
+    currentColor calc(50% + var(--shimmer-spread))
+  );
+  background-repeat: no-repeat;
+  background-size: calc(200% + var(--shimmer-spread) * 2) 100%;
+  background-position: 0 0;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-sweep 1.5s linear 1;
+}
+
+/* Motion is the whole effect, so with it turned off there is nothing left to
+   show — paint the text normally rather than leaving it in a frozen gradient. */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    background-image: none;
+    animation: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    The bottom edge of the sheet. Fixed, so it is the last thing every scroll
    runs into: the page dissolves into the background over six rems, and the
    gradient is itself masked from the top so the fade has no visible start.
