@@ -194,7 +194,10 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
               aria-activedescendant={
                 results[active] ? `${listId}-${results[active].id}` : undefined
               }
-              className="h-10 w-full rounded-lg bg-transparent py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground"
+              /* 16px on a phone, 14px from sm up — the reference's own split.
+                 Anything under 16px makes iOS Safari zoom the page the moment
+                 the field takes focus, which throws the dialog off centre. */
+              className="h-10 w-full rounded-lg bg-transparent py-2 text-base text-foreground outline-none placeholder:text-muted-foreground sm:text-sm"
             />
           </div>
 
@@ -228,12 +231,14 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
                         data-active={isActive}
                         onMouseMove={() => setActive(index)}
                         onClick={() => run(item)}
-                        /* The active descendant carries the site ring here
-                           exactly as it does in the activity grid, so "where
-                           am I" looks the same in both widgets. */
+                        /* The active descendant is marked by its fill alone,
+                           as the reference marks it. Real focus never leaves
+                           the input, so a ring drawn down here would be a
+                           second focus indicator claiming a place the caret
+                           is not. */
                         className={`flex cursor-pointer items-center gap-2 rounded-lg p-2 text-sm ${
                           isActive
-                            ? "bg-accent text-accent-foreground outline-2 -outline-offset-2 outline-ring"
+                            ? "bg-accent text-accent-foreground"
                             : "text-muted-foreground"
                         }`}
                       >
