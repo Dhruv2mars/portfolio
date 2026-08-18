@@ -3,7 +3,7 @@
   "checkpoint_id": "c2ce0b4a3793",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 1,
+  "checkpoints_count": 5,
   "files_touched": [
     "app/apple-icon.tsx",
     "app/icon.svg",
@@ -26,13 +26,20 @@
       "compact_transcript": "/c2/ce0b4a3793/0/transcript.jsonl",
       "content_hash": "/c2/ce0b4a3793/0/content_hash.txt",
       "prompt": "/c2/ce0b4a3793/0/prompt.txt"
+    },
+    {
+      "metadata": "/c2/ce0b4a3793/1/metadata.json",
+      "transcript": "/c2/ce0b4a3793/1/full.jsonl",
+      "compact_transcript": "/c2/ce0b4a3793/1/transcript.jsonl",
+      "content_hash": "/c2/ce0b4a3793/1/content_hash.txt",
+      "prompt": "/c2/ce0b4a3793/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 247326,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 5226624,
-    "output_tokens": 23877,
-    "api_call_count": 65
+    "input_tokens": 249816,
+    "cache_creation_tokens": 2773380,
+    "cache_read_tokens": 108977163,
+    "output_tokens": 726883,
+    "api_call_count": 1304
   }
 }
