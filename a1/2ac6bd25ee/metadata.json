@@ -1,0 +1,20 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "a12ac6bd25ee",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "lib/ai-activity.test.ts",
+    "lib/ai-activity.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a1/2ac6bd25ee/0/metadata.json",
+      "transcript": "/a1/2ac6bd25ee/0/full.jsonl",
+      "compact_transcript": "/a1/2ac6bd25ee/0/transcript.jsonl",
+      "content_hash": "/a1/2ac6bd25ee/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
