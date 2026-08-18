@@ -214,9 +214,12 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
                         data-active={isActive}
                         onMouseMove={() => setActive(index)}
                         onClick={() => run(item)}
+                        /* The active descendant carries the site ring here
+                           exactly as it does in the activity grid, so "where
+                           am I" looks the same in both widgets. */
                         className={`flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-sm ${
                           isActive
-                            ? "bg-accent text-accent-foreground"
+                            ? "bg-accent text-accent-foreground outline-2 -outline-offset-2 outline-ring"
                             : "text-muted-foreground"
                         }`}
                       >

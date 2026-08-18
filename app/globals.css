@@ -34,7 +34,7 @@
   --popover-foreground: oklch(0.141 0.005 285.823);
 
   --accent: oklch(0.967 0.001 286.375); /* zinc-100 */
-  --accent-muted: color-mix(in oklab, var(--accent) 50%, transparent);
+  --accent-muted: color-mix(in oklab, var(--accent) 75%, transparent);
   --accent-foreground: oklch(0.21 0.006 285.885);
 
   --border: oklch(0.92 0.004 286.32); /* zinc-200 */
@@ -83,7 +83,7 @@
   --popover-foreground: oklch(0.985 0 0);
 
   --accent: oklch(0.274 0.006 286.033);
-  --accent-muted: color-mix(in oklab, var(--accent) 20%, transparent);
+  --accent-muted: color-mix(in oklab, var(--accent) 55%, transparent);
   --accent-foreground: oklch(0.985 0 0);
 
   --border: oklch(0.274 0.006 286.033);
@@ -218,6 +218,26 @@
   @apply after:content-none;
 }
 
+/*
+ * The hero's floor lattice, continued past the content rail as a whisper. Same
+ * 30 degree axes as `FloorLattice`, at the pitch the plate renders it at, so
+ * the outer field reads as the same drawing running on rather than as a second
+ * texture laid beside it.
+ */
+@utility hero-lattice {
+  @apply [--pattern-foreground:var(--color-line)]/28;
+  background-image:
+    repeating-linear-gradient(
+      30deg,
+      var(--pattern-foreground) 0 1px,
+      transparent 1px 27px
+    ),
+    repeating-linear-gradient(
+      150deg,
+      var(--pattern-foreground) 0 1px,
+      transparent 1px 27px
+    );
+}
 @utility diagonal-stripes {
   @apply [--pattern-foreground:var(--color-line)]/56;
   @apply bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px];

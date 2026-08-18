@@ -11,7 +11,7 @@ import {
 
 export default function NotFound() {
   return (
-    <div className="[--separator-height:--spacing(8)]">
+    <div className="flex flex-1 flex-col">
       <Panel>
         <PanelHeader>
           <PanelTitle>
@@ -34,10 +34,11 @@ export default function NotFound() {
         </PanelContent>
       </Panel>
 
-      <div
-        aria-hidden
-        className="stripe-divider screen-line-bottom h-(--separator-height) w-full border-x border-line"
-      />
+      {/* The page is shorter than the viewport, so the rail carries on down to
+          the footer rather than stopping and leaving the frame in mid-air. No
+          band here: the footer opens with its own, and two adjacent bands read
+          as a double border. */}
+      <div aria-hidden className="flex-1 border-x border-line" />
     </div>
   );
 }

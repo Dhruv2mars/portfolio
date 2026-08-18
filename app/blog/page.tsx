@@ -13,10 +13,17 @@ import {
 import { Tag } from "@/components/tag";
 import { formatPostDate, getPublishedPosts } from "@/lib/blog";
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description: "Notes on building tooling for coding agents.",
-};
+/**
+ * With nothing published the route 404s, so it must not advertise itself as a
+ * Blog — naming a page the Visitor cannot reach is a lie told by the tab.
+ */
+export function generateMetadata(): Metadata {
+  if (getPublishedPosts().length === 0) return { title: "Nothing lives here" };
+  return {
+    title: "Blog",
+    description: "Notes on building tooling for coding agents.",
+  };
+}
 
 export default function BlogPage() {
   const posts = getPublishedPosts();
@@ -81,11 +88,6 @@ export default function BlogPage() {
           ))}
         </ul>
       </Panel>
-
-      <div
-        aria-hidden
-        className="stripe-divider screen-line-bottom h-(--separator-height) w-full border-x border-line"
-      />
     </div>
   );
 }
