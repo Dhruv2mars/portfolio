@@ -336,7 +336,7 @@ function PaletteTrigger({
         "flex h-8 shrink-0 items-center rounded-lg text-sm font-medium text-muted-foreground transition-colors",
         dock
           ? "min-w-20 gap-2"
-          : "gap-1.5 px-1.5 hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+          : "gap-1.5 px-1.5 hover:bg-accent hover:text-foreground dark:hover:bg-accent/50",
       )}
     >
       <SearchIcon aria-hidden className="size-4 shrink-0" />

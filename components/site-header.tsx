@@ -62,7 +62,7 @@ export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50"
+            className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground dark:hover:bg-accent/50"
           >
             <GithubIcon className="size-4.5" />
           </a>
