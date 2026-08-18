@@ -154,6 +154,13 @@ export function SiteFooter() {
           </nav>
         </div>
 
+        {/* Run-out. The fixed bottom fade is the last thing every scroll meets,
+            so the sheet has to keep going for at least its height past the last
+            row — otherwise the colophon ends up reading through the fade. The
+            reference spends this space on a drawing; we spend it on rail —
+            the wrapper's own, which already runs the height of the footer. */}
+        <div aria-hidden className="h-(--fade-bottom-height)" />
+
         <div className="pb-[env(safe-area-inset-bottom,0)]" />
       </div>
     </footer>

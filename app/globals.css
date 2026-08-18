@@ -34,7 +34,7 @@
   --popover-foreground: oklch(0.141 0.005 285.823);
 
   --accent: oklch(0.967 0.001 286.375); /* zinc-100 */
-  --accent-muted: color-mix(in oklab, var(--accent) 75%, transparent);
+  --accent-muted: color-mix(in oklab, var(--accent) 50%, transparent);
   --accent-foreground: oklch(0.21 0.006 285.885);
 
   --border: oklch(0.92 0.004 286.32); /* zinc-200 */
@@ -59,6 +59,7 @@
   --selection-foreground: oklch(0.985 0 0);
 
   --header-height: --spacing(14);
+  --fade-bottom-height: --spacing(24);
 }
 
 .dark {
@@ -83,7 +84,7 @@
   --popover-foreground: oklch(0.985 0 0);
 
   --accent: oklch(0.274 0.006 286.033);
-  --accent-muted: color-mix(in oklab, var(--accent) 55%, transparent);
+  --accent-muted: color-mix(in oklab, var(--accent) 20%, transparent);
   --accent-foreground: oklch(0.985 0 0);
 
   --border: oklch(0.274 0.006 286.033);
@@ -492,6 +493,33 @@
   position: absolute;
   inset: -2px;
   border: 1px solid var(--muted-foreground);
+}
+
+/* ---------------------------------------------------------------------------
+   The bottom edge of the sheet. Fixed, so it is the last thing every scroll
+   runs into: the page dissolves into the background over six rems, and the
+   gradient is itself masked from the top so the fade has no visible start.
+   The strip below it is opaque background padded by the home indicator, which
+   is what the floating palette dock rests on.
+--------------------------------------------------------------------------- */
+.fade-bottom {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.fade-bottom-gradient {
+  height: var(--fade-bottom-height);
+  background: linear-gradient(to bottom, transparent, var(--background));
+  mask-image: linear-gradient(to top, var(--background) 25%, transparent);
+  backdrop-filter: blur(1px);
+}
+
+.fade-bottom-rest {
+  background: var(--background);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ---------------------------------------------------------------------------

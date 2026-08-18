@@ -52,6 +52,15 @@ export function ArrowLeft(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function ArrowUp(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="M8 12V4" />
+      <path d="M5 7l3-3 3 3" />
+    </Icon>
+  );
+}
+
 export function Sun(props: SVGProps<SVGSVGElement>) {
   return (
     <Icon {...props}>

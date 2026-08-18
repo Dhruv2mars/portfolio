@@ -53,7 +53,7 @@ function ProjectItem({ project }: { project: Project }) {
   const KindIcon = KIND_ICONS[project.kind] ?? BoxIcon;
 
   return (
-    <li className="group/project flex items-center border-b border-line transition-colors last:border-b-0 hover:bg-accent-muted">
+    <li className="group/project flex items-center border-b border-line last:border-b-0 hover:bg-accent-muted">
       <IconTile className="mx-4">
         <KindIcon />
       </IconTile>

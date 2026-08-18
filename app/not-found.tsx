@@ -73,9 +73,12 @@ export default function NotFound() {
               </span>
               <span>no route answered for this address</span>
             </span>
+            {/* The one control on a page whose whole job is to send you
+                somewhere else, so it is a button rather than a footnote —
+                the reference's own 36px pill at its own measurements. */}
             <Link
               href="/"
-              className="link-underline extend-touch-target inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
+              className="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-line bg-foreground/[0.045] px-3 text-sm font-medium whitespace-nowrap text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               <ArrowLeft className="size-3.5" />
               Back home
