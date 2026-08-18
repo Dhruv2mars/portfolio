@@ -420,8 +420,6 @@
   grid-template-columns: repeat(var(--weeks, 53), var(--cell-size));
   gap: var(--cell-gap);
   width: max-content;
-  max-width: 100%;
-  margin-inline: auto;
   /* The grid is one tab stop, but the thing that moves is the active cell, so
      the ring is drawn there instead of around all 365 of them. */
   outline: none;
@@ -449,6 +447,73 @@
   color: var(--muted-foreground);
   white-space: nowrap;
   pointer-events: none;
+}
+
+/* The strip is 742px of year on a 372px phone, so it is dragged rather than
+   trimmed. The edge fades are driven by the scroll position itself: each side
+   is masked only while there is more grid past it, so a strip that fits shows
+   no fade at all and a strip scrolled to its end stops advertising an end. */
+@property --activity-fade-s {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --activity-fade-e {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes activity-fade-s {
+  from {
+    --activity-fade-s: 0px;
+  }
+  to {
+    --activity-fade-s: var(--activity-fade);
+  }
+}
+@keyframes activity-fade-e {
+  from {
+    --activity-fade-e: var(--activity-fade);
+  }
+  to {
+    --activity-fade-e: 0px;
+  }
+}
+
+.activity-scroll {
+  --activity-fade: 2.5rem;
+  display: flex;
+  /* The same gutter every other row in the panel keeps, so the first and last
+     week line up with the caption above them rather than with the rail. */
+  padding-inline: 1rem;
+  /* Centred while the year fits the rail, flush-left once it does not —
+     `safe` is what keeps the first week reachable instead of centring it off
+     the scrollable edge. */
+  justify-content: safe center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* The grid is a drawing; a scrollbar drawn under it would read as part of
+     the figure. The strip still scrolls by drag, wheel and keyboard. */
+  scrollbar-width: none;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--activity-fade-s),
+    #000 calc(100% - var(--activity-fade-e)),
+    transparent 100%
+  );
+  animation:
+    activity-fade-s 1ms linear both,
+    activity-fade-e 1ms linear both;
+  animation-timeline: scroll(self inline), scroll(self inline);
+  animation-range:
+    0 var(--activity-fade),
+    calc(100% - var(--activity-fade)) 100%;
+}
+
+.activity-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 .activity-cell {
@@ -587,16 +652,6 @@
   aspect-ratio: 1;
 }
 
-/* Half a year at full cell size beats a full year of dust. */
-@media (max-width: 40rem) {
-  .activity-grid {
-    grid-template-columns: repeat(var(--weeks-sm, 26), var(--cell-size));
-  }
-  .activity-col[data-narrow-hidden="true"] {
-    display: none;
-  }
-}
-
 /* ---------------------------------------------------------------------------
    Prose (MDX) — long-form runs on the serif; structure stays sans.
 --------------------------------------------------------------------------- */
@@ -721,7 +776,7 @@
 @keyframes palette-in {
   from {
     opacity: 0;
-    transform: translateY(8px) scale(0.985);
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
@@ -729,8 +784,11 @@
   }
 }
 
+/* The reference opens its dialog in a tenth of a second, from 95% and
+   centred — no rise. A dialog that is already under the cursor's attention
+   does not need to travel to earn it. */
 .palette-panel {
-  animation: palette-in 200ms var(--ease-out-quint) both;
+  animation: palette-in 100ms var(--ease-out-quint) both;
 }
 
 .palette-backdrop {

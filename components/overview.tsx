@@ -36,7 +36,7 @@ export function SocialLinks() {
               rel="noopener noreferrer"
               aria-label={social.label}
               title={social.label}
-              className="flex size-8 items-center justify-center rounded-lg border border-line bg-foreground/[0.045] text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="flex size-8 items-center justify-center rounded-lg border border-line bg-foreground/[0.045] text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50"
             >
               <Glyph className="size-4.5" />
             </a>

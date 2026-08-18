@@ -6,7 +6,7 @@ import type { ActivityDay } from "@/lib/ai-activity";
  * legend reads it too, and a `"use client"` module's exports are client
  * references on the server, not values.
  */
-export const LEVEL_ALPHA = ["10%", "20%", "40%", "60%", "80%"] as const;
+export const LEVEL_ALPHA = ["5%", "20%", "40%", "60%", "80%"] as const;
 
 export type ActivityWeek = {
   /** ISO date of the week's Sunday-aligned first slot. */

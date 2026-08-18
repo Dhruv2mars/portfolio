@@ -9,10 +9,10 @@ import { site } from "@/lib/site";
  */
 export function paletteItems(hasPosts: boolean): CommandItem[] {
   const go: CommandItem[] = [
-    { id: "home", group: "go", label: "Home", href: "/" },
+    { id: "home", group: "Go", label: "Home", href: "/" },
     ...navItems(hasPosts).map((item) => ({
       id: `nav-${item.label.toLowerCase()}`,
-      group: "go",
+      group: "Go",
       label: item.label,
       href: item.href,
     })),
@@ -20,7 +20,7 @@ export function paletteItems(hasPosts: boolean): CommandItem[] {
 
   const projects: CommandItem[] = getProjects().map((project) => ({
     id: `project-${project.name}`,
-    group: "projects",
+    group: "Projects",
     label: project.name,
     hint: destinationHost(project),
     href: project.live ?? project.url,
@@ -29,7 +29,7 @@ export function paletteItems(hasPosts: boolean): CommandItem[] {
 
   const elsewhere: CommandItem[] = site.socials.map((social) => ({
     id: `social-${social.label}`,
-    group: "elsewhere",
+    group: "Elsewhere",
     label: social.label,
     href: social.href,
     external: true,
@@ -39,7 +39,18 @@ export function paletteItems(hasPosts: boolean): CommandItem[] {
     ...go,
     ...projects,
     ...elsewhere,
-    { id: "rss", group: "elsewhere", label: "RSS", href: site.rssPath, external: true },
-    { id: "theme", group: "settings", label: "Toggle theme", action: "toggle-theme" },
+    {
+      id: "rss",
+      group: "Elsewhere",
+      label: "RSS",
+      href: site.rssPath,
+      external: true,
+    },
+    {
+      id: "theme",
+      group: "Settings",
+      label: "Toggle theme",
+      action: "toggle-theme",
+    },
   ];
 }
