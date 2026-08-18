@@ -100,11 +100,14 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
-        {/* Drop `.preload` after first paint so the stored theme never
-            animates in from the wrong colour. */}
+        {/* Two things that must be settled before the first paint: drop
+            `.preload` so the stored theme never animates in from the wrong
+            colour, and flag the platform so the shortcut caps render ⌘ or
+            Ctrl once rather than rendering one and correcting to the other. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
+              "if(/Mac|iPhone|iPad|iPod/.test(navigator.platform||navigator.userAgent))document.documentElement.classList.add('os-macos');" +
               "requestAnimationFrame(function(){requestAnimationFrame(function(){document.documentElement.classList.remove('preload')})})",
           }}
         />

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { ArrowUpRight, SearchIcon } from "@/components/icons";
 import { nextTheme, type ColorScheme } from "@/lib/theme";
+import { cn } from "@/lib/utils";
 
 export type CommandItem = {
   id: string;
@@ -45,6 +46,11 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
     () => items.filter((item) => matches(item, query)),
     [items, query],
   );
+
+  const openFrom = useCallback((from: HTMLElement | null) => {
+    restoreTo.current = from;
+    setOpen(true);
+  }, []);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -110,10 +116,7 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
   }, [active, open]);
 
   if (!open) {
-    return <PaletteTrigger onOpen={(from) => {
-      restoreTo.current = from;
-      setOpen(true);
-    }} />;
+    return <PaletteTriggers onOpen={openFrom} />;
   }
 
   const grouped = results.reduce<Record<string, CommandItem[]>>((acc, item) => {
@@ -124,10 +127,7 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
 
   return (
     <>
-      <PaletteTrigger onOpen={(from) => {
-        restoreTo.current = from;
-        setOpen(true);
-      }} />
+      <PaletteTriggers onOpen={openFrom} />
       <div
         className="palette-backdrop fixed inset-0 z-50 flex items-start justify-center px-4 pt-[12vh]"
         onMouseDown={(event) => {
@@ -245,10 +245,45 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
   );
 }
 
+/**
+ * One key cap. The recipe is the palette's own `esc` chip at header scale:
+ * a hairline inset shadow rather than a border, so the cap reads as pressed
+ * into the bar instead of stuck onto it.
+ */
+function Key({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <kbd
+      className={cn(
+        "pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-sm bg-black/5 px-1 font-sans text-sm/none font-normal tracking-tight text-muted-foreground shadow-[inset_0_0_1px] shadow-black/10 select-none dark:bg-white/10 dark:shadow-white/20",
+        className,
+      )}
+    >
+      {children}
+    </kbd>
+  );
+}
+
+/**
+ * The same door, drawn twice. In the header it names its shortcut, because a
+ * viewport with room for a nav bar has a keyboard behind it; in the dock it
+ * names itself, because a thumb has no ⌘K. Never both at once.
+ *
+ * The modifier is chosen in CSS off an `os-macos` class the layout sets before
+ * first paint — a state read during render would have to lie on the server
+ * first and correct itself after hydration.
+ */
 function PaletteTrigger({
   onOpen,
+  dock,
 }: {
   onOpen: (from: HTMLElement | null) => void;
+  dock?: boolean;
 }) {
   return (
     <button
@@ -256,11 +291,37 @@ function PaletteTrigger({
       onClick={(event) => onOpen(event.currentTarget)}
       aria-label="Open command palette"
       aria-keyshortcuts="Meta+K Control+K"
-      title="Search (⌘K)"
       data-slot="command-menu-trigger"
-      className="flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+      className={cn(
+        "flex h-8 shrink-0 items-center rounded-md text-sm font-medium text-muted-foreground transition-colors",
+        dock
+          ? "min-w-20 gap-2"
+          : "gap-1.5 px-1.5 hover:bg-accent hover:text-accent-foreground",
+      )}
     >
-      <SearchIcon className="size-4.5" />
+      <SearchIcon aria-hidden className="size-4 shrink-0" />
+      <span className="sm:hidden">Search…</span>
+      <span aria-hidden className="hidden items-center gap-0.75 sm:flex">
+        <Key className="[.os-macos_&]:hidden">Ctrl</Key>
+        <Key className="hidden [.os-macos_&]:inline-flex">⌘</Key>
+        <Key>K</Key>
+      </span>
     </button>
+  );
+}
+
+/**
+ * Header trigger plus the touch dock, which is the only way in on a phone —
+ * the header trigger is hidden below `sm` by its container, and there is no
+ * shortcut to replace it.
+ */
+function PaletteTriggers({ onOpen }: { onOpen: (from: HTMLElement | null) => void }) {
+  return (
+    <>
+      <PaletteTrigger onOpen={onOpen} />
+      <div className="fixed bottom-[calc(0.5rem+env(safe-area-inset-bottom,0px))] left-1/2 z-50 flex w-fit -translate-x-1/2 items-center rounded-xl bg-popover py-1 pr-1 pl-2.5 shadow-md ring ring-foreground/10 sm:hidden dark:ring-foreground/20">
+        <PaletteTrigger dock onOpen={onOpen} />
+      </div>
+    </>
   );
 }

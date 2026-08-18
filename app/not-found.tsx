@@ -1,13 +1,26 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "@/components/icons";
 import {
   Panel,
-  PanelContent,
   PanelDescription,
   PanelHeader,
   PanelTitle,
   PanelTitleSup,
 } from "@/components/panel";
+import { LEVEL_ALPHA } from "@/lib/activity-grid";
+import { glyphField } from "@/lib/glyph-404";
+
+const FIELD = glyphField("404");
+
+/**
+ * The 404 boundary owns its own title; without this an unmatched URL wears the
+ * home page's, in the tab and in every share card.
+ */
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: false },
+};
 
 export default function NotFound() {
   return (
@@ -19,19 +32,56 @@ export default function NotFound() {
             <PanelTitleSup className="font-mono tabular-nums">404</PanelTitleSup>
           </PanelTitle>
           <PanelDescription>
-            The page you asked for either moved or never existed.
+            The page you asked for either moved or was never written.
           </PanelDescription>
         </PanelHeader>
 
-        <PanelContent>
-          <Link
-            href="/"
-            className="link-underline extend-touch-target inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowLeft className="size-3.5" />
-            Back home
-          </Link>
-        </PanelContent>
+        <figure className="relative">
+          {/* The number is set in the grid's own cells: lit where the site has
+              something, an empty hairline frame everywhere else — which is
+              exactly what the activity grid draws a day it never reached.
+              The column-indexed delay is inherited too, so the plate wipes in
+              left to right rather than appearing all at once. */}
+          <div className="p-4">
+            <div
+              role="img"
+              aria-label="404, drawn as a grid of cells"
+              className="glyph-grid"
+              style={{ "--cols": FIELD.cols } as React.CSSProperties}
+            >
+              {FIELD.cells.map((lit, index) => (
+                <div
+                  key={index}
+                  aria-hidden
+                  className="activity-cell"
+                  data-recorded={lit ? undefined : "false"}
+                  style={
+                    {
+                      "--level": LEVEL_ALPHA[4],
+                      "--col": index % FIELD.cols,
+                    } as React.CSSProperties
+                  }
+                />
+              ))}
+            </div>
+          </div>
+
+          <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-line px-4 py-3 text-sm text-muted-foreground">
+            <span className="flex items-center gap-2">
+              <span className="tracking-wide text-muted-foreground/80">
+                Fig. 404.
+              </span>
+              <span>no route answered for this address</span>
+            </span>
+            <Link
+              href="/"
+              className="link-underline extend-touch-target inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
+            >
+              <ArrowLeft className="size-3.5" />
+              Back home
+            </Link>
+          </figcaption>
+        </figure>
       </Panel>
 
       {/* The page is shorter than the viewport, so the rail carries on down to
