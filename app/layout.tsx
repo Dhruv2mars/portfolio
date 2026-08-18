@@ -4,12 +4,16 @@ import { GeistMono } from "geist/font/mono";
 import { Caveat, IBM_Plex_Serif } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { CommandPaletteProvider } from "@/components/command-palette";
+import { MobileDock } from "@/components/mobile-dock";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { getPublishedPosts } from "@/lib/blog";
+import { navItems } from "@/lib/nav";
+import { paletteItems } from "@/lib/palette";
 import { ogImagePath } from "@/lib/discovery";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { profileUrls, site } from "@/lib/site";
@@ -117,41 +121,57 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
         <ThemeProvider>
-          {/* `isolate` keeps the full-bleed hairlines (which paint at -z-1)
+          {/* One palette for the whole shell: the header's trigger and the
+              dock's are two doors onto the same dialog, so the state sits
+              above both rather than inside either. */}
+          <CommandPaletteProvider items={paletteItems(hasPosts)}>
+            {/* `isolate` keeps the full-bleed hairlines (which paint at -z-1)
               above the page background instead of under it. */}
-          <div className="group/layout relative isolate flex min-h-[100dvh] flex-col">
-            <a href={FOCUSABLE_CHROME.skipToContentHref} className="skip-link">
-              {FOCUSABLE_CHROME.skipToContentLabel}
-            </a>
-            <SiteHeader hasPosts={hasPosts} />
-            <main
-              id={FOCUSABLE_CHROME.mainContentId}
-              tabIndex={-1}
-              className="flex max-w-screen flex-1 flex-col overflow-x-clip px-2 outline-none"
-            >
-              {/* A flex column so a short route (404, an empty state) can grow a
+            <div className="group/layout relative isolate flex min-h-[100dvh] flex-col">
+              <a
+                href={FOCUSABLE_CHROME.skipToContentHref}
+                className="skip-link"
+              >
+                {FOCUSABLE_CHROME.skipToContentLabel}
+              </a>
+              <SiteHeader hasPosts={hasPosts} />
+              <main
+                id={FOCUSABLE_CHROME.mainContentId}
+                tabIndex={-1}
+                className="flex max-w-screen flex-1 flex-col overflow-x-clip px-2 outline-none"
+              >
+                {/* A flex column so a short route (404, an empty state) can grow a
                   railed spacer down to the footer instead of leaving the frame
                   hanging in a void. */}
-              <div className="mx-auto flex w-full flex-1 flex-col md:max-w-3xl">
-                {children}
-              </div>
-            </main>
-            <SiteFooter />
+                <div className="mx-auto flex w-full flex-1 flex-col md:max-w-3xl">
+                  {children}
+                </div>
+              </main>
 
-            {/* The bottom edge of the sheet. Ninety-six pixels of the page
+              {/* Below `sm` this is the nav and the way into the palette. It
+                  is mounted here, after the content it floats over, so the tab
+                  order reaches it where the eye does. */}
+              <MobileDock
+                items={[{ label: "Home", href: "/" }, ...navItems(hasPosts)]}
+              />
+
+              <SiteFooter />
+
+              {/* The bottom edge of the sheet. Ninety-six pixels of the page
                 dissolving into the background, masked so the fade itself
                 fades out rather than ending on a line, plus a solid strip
                 under the home indicator. It is what keeps the last row of
                 content from butting into the edge of the glass — and on a
                 phone it is what the floating palette dock sits on. */}
-            <div aria-hidden className="fade-bottom">
-              <div className="fade-bottom-gradient" />
-              <div className="fade-bottom-rest" />
-            </div>
+              <div aria-hidden className="fade-bottom">
+                <div className="fade-bottom-gradient" />
+                <div className="fade-bottom-rest" />
+              </div>
 
-            {/* The way back up, riding on top of that fade. */}
-            <ScrollToTop />
-          </div>
+              {/* The way back up, riding on top of that fade. */}
+              <ScrollToTop />
+            </div>
+          </CommandPaletteProvider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

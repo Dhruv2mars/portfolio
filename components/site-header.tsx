@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { CommandPalette } from "@/components/command-palette";
+import { PaletteTrigger } from "@/components/command-palette";
 import { GithubIcon } from "@/components/icons";
 import { Separator } from "@/components/separator";
 import { SiteMark } from "@/components/site-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { paletteItems } from "@/lib/palette";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { navItems } from "@/lib/nav";
 import { site } from "@/lib/site";
@@ -52,17 +51,17 @@ export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
 
         {/* The header trigger names a shortcut, so it goes where the nav
             goes. Below `sm` the palette puts up a thumb-reachable dock
-            instead — see `CommandPalette`. */}
+            instead — see `MobileDock`. */}
         <div className="flex items-center max-sm:*:data-[slot=command-menu-trigger]:hidden">
           <Separator orientation="vertical" className="mr-2 h-5 max-sm:hidden" />
-          <CommandPalette items={paletteItems(hasPosts)} />
+          <PaletteTrigger />
           <Separator orientation="vertical" className="mx-2 h-5 max-sm:hidden" />
           <a
             href={GITHUB}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground dark:hover:bg-accent/50"
+            className="flex size-8 touch-manipulation items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
           >
             <GithubIcon className="size-4.5" />
           </a>
