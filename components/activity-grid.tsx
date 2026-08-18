@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { formatTokenCount } from "@/lib/ai-activity";
 import type { ActivityDay } from "@/lib/ai-activity";
@@ -9,12 +9,6 @@ import {
   LEVEL_ALPHA,
   type ActivityWeek,
 } from "@/lib/activity-grid";
-
-/**
- * 26 columns is what fits a 390px viewport without a scrollbar:
- * 26×12px + 25×2px + the grid's 3px inline padding = 368px inside a 372px rail.
- */
-const MOBILE_WEEKS = 26;
 
 function cellLabel(day: ActivityDay): string {
   const date = formatActivityDate(day.date);
@@ -38,6 +32,18 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
     [slots],
   );
   const [active, setActive] = useState<number | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // When the year is genuinely wider than the rail, the end of it is the part
+  // worth opening on: the caption talks about today, and today is the last
+  // column. A rail that is short by only a few pixels is left where it is —
+  // scrolling it would push the first week under the edge fade for nothing.
+  useEffect(() => {
+    const strip = scrollRef.current;
+    if (!strip) return;
+    const overflow = strip.scrollWidth - strip.clientWidth;
+    if (overflow > 64) strip.scrollLeft = strip.scrollWidth;
+  }, [weeks]);
 
   function move(delta: number) {
     setActive((current) => {
@@ -50,7 +56,7 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
   const activeDay = active === null ? null : slots[active];
 
   return (
-    <div className="overflow-x-auto">
+    <div>
       <p
         aria-hidden
         className="mb-2.5 h-4 px-4 font-mono text-xs text-muted-foreground tabular-nums"
@@ -75,80 +81,73 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
         )}
       </p>
 
-      <div
-        role="listbox"
-        tabIndex={0}
-        aria-label="Daily AI token usage, last 12 months"
-        aria-activedescendant={
-          active !== null && slots[active] ? `${gridId}-${active}` : undefined
-        }
-        className="activity-grid"
-        style={
-          {
-            "--weeks": weeks.length,
-            "--weeks-sm": MOBILE_WEEKS,
-          } as CSSProperties
-        }
-        onFocus={() => setActive((current) => current ?? lastFilled)}
-        onBlur={() => setActive(null)}
-        onMouseLeave={() => setActive(null)}
-        onKeyDown={(event) => {
-          const step =
-            event.key === "ArrowLeft"
-              ? -7
-              : event.key === "ArrowRight"
-                ? 7
-                : event.key === "ArrowUp"
-                  ? -1
-                  : event.key === "ArrowDown"
-                    ? 1
-                    : 0;
-          if (step === 0) return;
-          event.preventDefault();
-          move(step);
-        }}
-      >
-        {weeks.map((week, weekIndex) => (
-          <div
-            key={week.key}
-            className="activity-col"
-            // Derived, not a fixed nth-child: a 365-day window is 53 or 54
-            // columns, and the narrow grid must show exactly MOBILE_WEEKS.
-            data-narrow-hidden={
-              weekIndex < weeks.length - MOBILE_WEEKS ? "true" : undefined
-            }
-          >
-            {week.monthLabel ? (
-              <span className="activity-month">{week.monthLabel}</span>
-            ) : null}
-            {week.cells.map((day, dayIndex) => {
-              const index = weekIndex * 7 + dayIndex;
-              if (!day) {
-                return <div key={index} aria-hidden />;
-              }
-              return (
-                <div
-                  key={index}
-                  id={`${gridId}-${index}`}
-                  role="option"
-                  aria-selected={index === active}
-                  aria-label={cellLabel(day)}
-                  data-active={index === active}
-                  data-live={day.live ? "true" : undefined}
-                  data-recorded={day.recorded === false ? "false" : undefined}
-                  onMouseEnter={() => setActive(index)}
-                  className="activity-cell"
-                  style={
-                    {
-                      "--level": LEVEL_ALPHA[day.intensity] ?? LEVEL_ALPHA[0],
-                      "--col": weekIndex,
-                    } as CSSProperties
-                  }
-                />
-              );
-            })}
-          </div>
-        ))}
+      {/* The full year always renders; on a narrow viewport it is reached by
+          dragging the strip sideways rather than by dropping half of it. A
+          year with six months cut out of it is not the measurement the
+          caption claims. */}
+      <div ref={scrollRef} className="activity-scroll">
+        <div
+          role="listbox"
+          tabIndex={0}
+          aria-label="Daily AI token usage, last 12 months"
+          aria-activedescendant={
+            active !== null && slots[active] ? `${gridId}-${active}` : undefined
+          }
+          className="activity-grid"
+          style={{ "--weeks": weeks.length } as CSSProperties}
+          onFocus={() => setActive((current) => current ?? lastFilled)}
+          onBlur={() => setActive(null)}
+          onMouseLeave={() => setActive(null)}
+          onKeyDown={(event) => {
+            const step =
+              event.key === "ArrowLeft"
+                ? -7
+                : event.key === "ArrowRight"
+                  ? 7
+                  : event.key === "ArrowUp"
+                    ? -1
+                    : event.key === "ArrowDown"
+                      ? 1
+                      : 0;
+            if (step === 0) return;
+            event.preventDefault();
+            move(step);
+          }}
+        >
+          {weeks.map((week, weekIndex) => (
+            <div key={week.key} className="activity-col">
+              {week.monthLabel ? (
+                <span className="activity-month">{week.monthLabel}</span>
+              ) : null}
+              {week.cells.map((day, dayIndex) => {
+                const index = weekIndex * 7 + dayIndex;
+                if (!day) {
+                  return <div key={index} aria-hidden />;
+                }
+                return (
+                  <div
+                    key={index}
+                    id={`${gridId}-${index}`}
+                    role="option"
+                    aria-selected={index === active}
+                    aria-label={cellLabel(day)}
+                    data-active={index === active}
+                    data-live={day.live ? "true" : undefined}
+                    data-recorded={day.recorded === false ? "false" : undefined}
+                    onMouseEnter={() => setActive(index)}
+                    className="activity-cell"
+                    style={
+                      {
+                        "--level": LEVEL_ALPHA[day.intensity] ?? LEVEL_ALPHA[0],
+                        "--col": weekIndex,
+                      } as CSSProperties
+                    }
+                  />
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

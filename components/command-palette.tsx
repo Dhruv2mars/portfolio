@@ -1,9 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { ArrowUpRight, SearchIcon } from "@/components/icons";
+import { SiteMark } from "@/components/site-mark";
 import { nextTheme, type ColorScheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
@@ -20,7 +28,8 @@ export type CommandItem = {
 
 function matches(item: CommandItem, query: string): boolean {
   if (!query) return true;
-  const haystack = `${item.label} ${item.hint ?? ""} ${item.group}`.toLowerCase();
+  const haystack =
+    `${item.label} ${item.hint ?? ""} ${item.group}`.toLowerCase();
   const needle = query.toLowerCase().trim();
   // Subsequence match, so "ofx" still finds "offdex".
   let i = 0;
@@ -63,7 +72,8 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
       if (!item) return;
       close();
       if (item.action === "toggle-theme") {
-        const current: ColorScheme = resolvedTheme === "light" ? "light" : "dark";
+        const current: ColorScheme =
+          resolvedTheme === "light" ? "light" : "dark";
         setTheme(nextTheme(current));
         return;
       }
@@ -85,7 +95,8 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
       if (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
         setOpen((wasOpen) => {
-          if (!wasOpen) restoreTo.current = document.activeElement as HTMLElement;
+          if (!wasOpen)
+            restoreTo.current = document.activeElement as HTMLElement;
           return !wasOpen;
         });
       }
@@ -129,7 +140,7 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
     <>
       <PaletteTriggers onOpen={openFrom} />
       <div
-        className="palette-backdrop fixed inset-0 z-50 flex items-start justify-center px-4 pt-[12vh]"
+        className="palette-backdrop fixed inset-0 z-50 flex items-center justify-center px-4 max-sm:items-start max-sm:pt-16"
         onMouseDown={(event) => {
           if (event.target === event.currentTarget) close();
         }}
@@ -138,7 +149,7 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
           role="dialog"
           aria-modal="true"
           aria-label="Command palette"
-          className="palette-panel w-full max-w-lg overflow-hidden rounded-xl border border-border bg-popover"
+          className="palette-panel flex w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-popover px-1 shadow-lg ring-1 ring-foreground/10 dark:ring-foreground/20"
           onKeyDown={(event) => {
             if (event.key === "Escape") {
               event.preventDefault();
@@ -160,8 +171,14 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
             }
           }}
         >
-          <div className="flex items-center gap-2.5 border-b border-line px-3.5">
-            <SearchIcon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+          {/* Three fixed bands — 48 of search, 320 of results, 40 of legend.
+              The height never moves, so a query that matches nothing does not
+              collapse the dialog out from under the cursor. */}
+          <div className="flex h-12 shrink-0 items-center gap-2 px-3">
+            <SearchIcon
+              aria-hidden
+              className="size-4 shrink-0 text-muted-foreground"
+            />
             <input
               ref={inputRef}
               value={query}
@@ -177,11 +194,8 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
               aria-activedescendant={
                 results[active] ? `${listId}-${results[active].id}` : undefined
               }
-              className="h-12 w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+              className="h-10 w-full rounded-lg bg-transparent py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
-            <kbd className="rounded-sm border border-line bg-muted px-1.5 py-0.5 font-mono text-[0.625rem] text-muted-foreground">
-              esc
-            </kbd>
           </div>
 
           <div
@@ -189,16 +203,16 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
             id={listId}
             role="listbox"
             aria-label="Results"
-            className="max-h-[52vh] overflow-y-auto p-1.5"
+            className="h-80 shrink-0 overflow-y-auto"
           >
             {results.length === 0 ? (
-              <p className="px-2.5 py-6 text-center text-sm text-muted-foreground">
+              <p className="px-4 py-6 text-center text-sm text-muted-foreground">
                 Nothing matches “{query}”.
               </p>
             ) : (
               Object.entries(grouped).map(([group, groupItems]) => (
-                <div key={group} className="mb-1 last:mb-0">
-                  <p className="px-2.5 pt-2 pb-1 font-mono text-[0.625rem] tracking-wider text-muted-foreground uppercase">
+                <div key={group} className="mt-2 mb-1 px-1 last:mb-2">
+                  <p className="p-2 text-xs font-medium text-muted-foreground">
                     {group}
                   </p>
                   {groupItems.map((item) => {
@@ -217,7 +231,7 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
                         /* The active descendant carries the site ring here
                            exactly as it does in the activity grid, so "where
                            am I" looks the same in both widgets. */
-                        className={`flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-sm ${
+                        className={`flex cursor-pointer items-center gap-2 rounded-lg p-2 text-sm ${
                           isActive
                             ? "bg-accent text-accent-foreground outline-2 -outline-offset-2 outline-ring"
                             : "text-muted-foreground"
@@ -239,10 +253,31 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
               ))
             )}
           </div>
+
+          {/* The legend. It names what Enter will actually do to the row under
+              the cursor — open a page, leave for another site, or throw a
+              switch — rather than promising one of the three. */}
+          <div className="flex h-10 shrink-0 items-center justify-between gap-2 px-3 text-xs font-medium">
+            <SiteMark aria-hidden className="size-6 text-muted-foreground" />
+            <span className="flex items-center gap-2 text-muted-foreground">
+              <span className="max-sm:hidden">
+                {enterLabel(results[active])}
+              </span>
+              <Key>↵</Key>
+            </span>
+          </div>
         </div>
       </div>
     </>
   );
+}
+
+/** What Enter does to the highlighted row, in the site's own words. */
+function enterLabel(item: CommandItem | undefined): string {
+  if (!item) return "Nothing to open";
+  if (item.action) return "Run";
+  if (item.href?.startsWith("mailto:")) return "Write";
+  return item.external ? "Open link" : "Go to page";
 }
 
 /**
@@ -293,10 +328,10 @@ function PaletteTrigger({
       aria-keyshortcuts="Meta+K Control+K"
       data-slot="command-menu-trigger"
       className={cn(
-        "flex h-8 shrink-0 items-center rounded-md text-sm font-medium text-muted-foreground transition-colors",
+        "flex h-8 shrink-0 items-center rounded-lg text-sm font-medium text-muted-foreground transition-colors",
         dock
           ? "min-w-20 gap-2"
-          : "gap-1.5 px-1.5 hover:bg-accent hover:text-accent-foreground",
+          : "gap-1.5 px-1.5 hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
       )}
     >
       <SearchIcon aria-hidden className="size-4 shrink-0" />
@@ -315,7 +350,11 @@ function PaletteTrigger({
  * the header trigger is hidden below `sm` by its container, and there is no
  * shortcut to replace it.
  */
-function PaletteTriggers({ onOpen }: { onOpen: (from: HTMLElement | null) => void }) {
+function PaletteTriggers({
+  onOpen,
+}: {
+  onOpen: (from: HTMLElement | null) => void;
+}) {
   return (
     <>
       <PaletteTrigger onOpen={onOpen} />
