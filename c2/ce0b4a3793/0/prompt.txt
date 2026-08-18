@@ -1,0 +1,60 @@
+@browser
+
+You are auditing a portfolio site that is a deliberate, exact reimplementation of Chan Dai's site (https://dai.is-a.dev) in the same design idiom, but with different content.
+
+- REFERENCE: https://dai.is-a.dev
+- OURS: http://localhost:3001  (local production build, already running)
+
+BROWSER SURFACE: the user has sanctioned the `agent-browser` CLI at /Users/dhruv2mars/.bun/bin/agent-browser as your browser. Use it via shell.
+  agent-browser --session ref  set viewport 1440 900
+  agent-browser --session ref  open "https://dai.is-a.dev"
+  agent-browser --session ref  eval '<ONE javascript expression — wrap in an IIFE>'
+  agent-browser --session ref  screenshot /abs/path.png
+  agent-browser --session ours ...   (use a separate session name for our site)
+Notes: `eval` takes exactly one expression; if the shell mangles it, write the expression to /tmp/qN.js with printf and use eval "$(cat /tmp/qN.js)". SVG `className` is an object — use String(el.className.baseVal ?? el.className). React controlled inputs ignore synthetic events; use `agent-browser type <selector> <text>` for real keystrokes. `hover <selector>` takes a selector, not coordinates. To hold a press and measure `:active`, use `mouse move <x> <y>`, `mouse down`, measure, `mouse up`. The reference stores a theme preference in localStorage, so `set media dark` does NOT flip it — set localStorage `theme` and reload.
+
+THIS IS ROUND 12 — the final pass. Rounds 1-11 already fixed: header/nav chrome, panel borders and hatching, typography scale, project rows, footer, 404, blog index, command palette (three fixed bands 48/320/40, legend footer, mobile top-anchored, 8px radii, dark hover /50), activity grid (full-year horizontal scroll with scroll-driven edge fades, level alphas 5/20/40/60/80), the hatch band ordering, social-button colours in both themes, per-page h1s, the mobile dock's menu and tab order, and `active:scale-[0.98]` press feedback on buttons.
+
+Do not re-report any of those as new unless they have ACTUALLY REGRESSED — and if you claim a regression, show the measurement that proves it.
+
+METHOD — this is the hard requirement:
+Every claim must be backed by a measurement you actually took in the browser this round: getBoundingClientRect, getComputedStyle, or a screenshot you looked at. Quote the numbers for BOTH sites side by side. A claim from memory or from "it looks like" is worthless and will be discarded. If you cannot measure it, do not report it.
+
+SWEEP:
+1. Viewports 1440x900, 768x1024, and 390x844.
+2. Routes on ours: /, /nope (404). Reference routes: /, /blog, a blog post.
+3. Both colour schemes.
+4. Compare, in this order of importance:
+   a. Layout geometry — panel widths, gutters, border positions, row heights.
+   b. Typography — font-family, size, weight, line-height, letter-spacing, colour.
+   c. Interactive states — hover, focus-visible, active, pressed.
+   d. Motion — durations, easing, what animates on load and on open/close.
+   e. Accessibility — labels, roles, contrast, keyboard traversal, reduced motion.
+5. Also check ours alone for: horizontal overflow at 320/390, broken images, missing alt text, unlabeled controls, console errors, hydration warnings.
+
+Content differs by design (different person, different projects). Do NOT report content differences, wording, or copy length. Report only craft: geometry, type, colour, state, motion, semantics.
+
+OUTPUT: write findings to /tmp/critique/round12-findings.md. For each finding:
+  - severity (must-fix / should-fix / nit)
+  - one-line claim
+  - the measurement for the reference, and the measurement for ours
+  - the specific CSS/DOM change you would make
+Rank must-fix first. If a section is genuinely identical, say so in one line rather than padding. AN EMPTY MUST-FIX LIST IS THE EXPECTED AND WELCOME RESULT AT THIS STAGE — do not invent findings to look thorough. A padded report is worse than a short one.
+
+DO NOT REPORT THESE — they are settled, deliberate divergences, each already argued out:
+- Our `:focus-visible` is a deliberate 2px outline at 2px offset on every tab stop; the reference never styles focus and falls back to the UA default. Ours is intentional and better.
+- Under `prefers-reduced-motion` we deliberately keep 150ms colour feedback and kill only movement.
+- OURS has zero published blog posts by the author's choice, so /blog and /blog/<slug> correctly 404 and the nav has no Blog link. This is not a bug.
+- Local production logs two "[Vercel Web Analytics]/Speed Insights failed to load" console lines because /_vercel/* only exists on Vercel.
+- Our activity edge fade IS overflow-proportional; verified twice.
+- The mobile dock's hamburger deliberately has no press-scale, because the reference sets `active:scale-none` on its own.
+- Content density / how much text each section carries is the author's explicit decision.
+
+ROUND 12 FOCUS — go where nobody has looked yet:
+- 768px (tablet) at both themes: does anything fall between the `sm` and `lg` breakpoints on ours that does not on the reference?
+- The mobile menu sheet just added: open/close animation, origin, easing, z-order against the activity grid, and behaviour when the page is scrolled to the very bottom.
+- Text rendering details: `-webkit-font-smoothing`, `text-rendering`, `font-feature-settings`, `font-variant-numeric` on tabular figures, `hyphens`, `overflow-wrap`.
+- Scrollbar styling, `scrollbar-gutter`, and overscroll behaviour.
+- `::selection` colours.
+- The document itself: `<html lang>`, `color-scheme`, `theme-color` meta, viewport meta, favicon set, and whether the first paint flashes the wrong theme.
+- Anything that differs between a cold load and a client-side navigation.

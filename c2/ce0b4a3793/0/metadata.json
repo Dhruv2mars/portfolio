@@ -1,0 +1,68 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "c2ce0b4a3793",
+  "session_id": "01a01597-6a8f-7d33-b1f8-6efe997368f3",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-18T16:08:19.826611Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/apple-icon.tsx",
+    "app/icon.svg",
+    "app/layout.tsx",
+    "app/manifest.ts",
+    "app/og/Geist-Regular.ttf",
+    "app/og/Geist-SemiBold.ttf",
+    "app/og/route.tsx",
+    "components/mobile-dock.tsx",
+    "components/site-header.tsx",
+    "components/site-nav.tsx",
+    "lib/mark.ts",
+    "lib/nav.test.ts",
+    "lib/nav.ts"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-luna",
+  "turn_id": "5e27df171eb1",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 247326,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 5226624,
+    "output_tokens": 23877,
+    "api_call_count": 65
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-18T16:08:19.758143Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 307,
+    "human_modified": 35,
+    "human_removed": 0,
+    "total_committed": 307,
+    "total_lines_changed": 342,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}
