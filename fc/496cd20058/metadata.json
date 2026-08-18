@@ -3,7 +3,7 @@
   "checkpoint_id": "fc496cd20058",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 1,
+  "checkpoints_count": 2,
   "files_touched": [
     "components/command-palette.tsx",
     "components/theme-toggle.tsx"
@@ -14,6 +14,13 @@
       "transcript": "/fc/496cd20058/0/full.jsonl",
       "compact_transcript": "/fc/496cd20058/0/transcript.jsonl",
       "content_hash": "/fc/496cd20058/0/content_hash.txt",
+      "prompt": ""
+    },
+    {
+      "metadata": "/fc/496cd20058/1/metadata.json",
+      "transcript": "/fc/496cd20058/1/full.jsonl",
+      "compact_transcript": "/fc/496cd20058/1/transcript.jsonl",
+      "content_hash": "/fc/496cd20058/1/content_hash.txt",
       "prompt": ""
     }
   ]
