@@ -123,9 +123,14 @@ export default function RootLayout({
             <main
               id={FOCUSABLE_CHROME.mainContentId}
               tabIndex={-1}
-              className="max-w-screen flex-1 overflow-x-clip px-2 outline-none"
+              className="flex max-w-screen flex-1 flex-col overflow-x-clip px-2 outline-none"
             >
-              <div className="mx-auto md:max-w-3xl">{children}</div>
+              {/* A flex column so a short route (404, an empty state) can grow a
+                  railed spacer down to the footer instead of leaving the frame
+                  hanging in a void. */}
+              <div className="mx-auto flex w-full flex-1 flex-col md:max-w-3xl">
+                {children}
+              </div>
             </main>
             <SiteFooter />
           </div>

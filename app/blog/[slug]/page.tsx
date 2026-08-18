@@ -102,11 +102,6 @@ export default async function PostPage({ params }: PageProps) {
           <CustomMDX source={post.content} />
         </PanelContent>
       </Panel>
-
-      <div
-        aria-hidden
-        className="stripe-divider screen-line-bottom h-(--separator-height) w-full border-x border-line"
-      />
     </article>
   );
 }

@@ -68,16 +68,28 @@ export function SiteFooter() {
           <div className="stripe-divider h-12" />
         </div>
 
-        <dl className="flex flex-col gap-4 py-8 font-mono [&_dd]:text-sm [&_dt]:text-right [&_dt]:text-sm [&_dt]:text-muted-foreground [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-2">
+        {/* A ruled matrix, not a gapped stack: every row is a cell with a
+            hairline under it and a rule between label and value, so the
+            colophon reads in the same frame grammar as the panels above. */}
+        <dl className="font-mono text-sm">
           {COLOPHON.map(([label, value]) => (
-            <div key={label} className="grid grid-cols-2 gap-4">
-              <dt>{label}</dt>
-              <dd>{value}</dd>
+            <div
+              key={label}
+              className="grid grid-cols-2 border-b border-line"
+            >
+              <dt className="border-r border-line px-4 py-2.5 text-right text-muted-foreground">
+                {label}
+              </dt>
+              <dd className="px-4 py-2.5 [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-1">
+                {value}
+              </dd>
             </div>
           ))}
-          <div className="grid grid-cols-2 gap-4">
-            <dt>©</dt>
-            <dd className="text-muted-foreground">
+          <div className="grid grid-cols-2">
+            <dt className="border-r border-line px-4 py-2.5 text-right text-muted-foreground">
+              &copy;
+            </dt>
+            <dd className="px-4 py-2.5 text-muted-foreground">
               {new Date().getFullYear()} {site.name}
             </dd>
           </div>

@@ -12,6 +12,10 @@ function initials(name: string): string {
 }
 
 /**
+ * The portrait slot is a monogram plate, not a gap waiting to be filled: with
+ * no photograph set it draws the initials in the display face, so the slot
+ * reads as a mark of its own rather than as a missing image.
+ *
  * 128px on a phone, 160px on desktop — the portrait is one of the two things
  * the hero is for, so it is sized to hold the row rather than to sit politely
  * beside the name.
@@ -45,7 +49,19 @@ function Avatar() {
  */
 export function ProfileHeader() {
   return (
-    <div className="screen-line-bottom grid grid-cols-[auto_1fr] grid-rows-[1fr_auto] overflow-y-clip border-x border-line">
+    <div className="screen-line-bottom relative grid grid-cols-[auto_1fr] grid-rows-[1fr_auto] overflow-y-clip border-x border-line">
+      {/* The floor lattice carried past the rail as a whisper, so the drawing
+          reads as larger than the frame that crops it. Only outside the rail —
+          inside it, the real drawing is doing the work and a second grid would
+          only fight it. */}
+      <div
+        aria-hidden
+        className="hero-lattice pointer-events-none absolute inset-y-0 right-full -z-1 w-[100vw]"
+      />
+      <div
+        aria-hidden
+        className="hero-lattice pointer-events-none absolute inset-y-0 left-full -z-1 w-[100vw]"
+      />
       <figure className="relative col-span-2 p-2 sm:col-span-1 sm:col-start-2 sm:p-4">
         {/* Fills the plate rather than sitting inside it: the drawing is
             scaled to cover and cut at the edges, which is what makes the
@@ -64,19 +80,9 @@ export function ProfileHeader() {
 
       <div className="flex flex-col">
         <div className="z-1 mt-auto border-t border-line">
-          <div className="flex items-baseline gap-2 pl-4">
-            <h1 className="-translate-y-px text-[2rem]/none font-medium tracking-tight">
-              {site.name}
-            </h1>
-            {/* A margin note, in the hand it would be written in: the monogram
-                is a placeholder and says so. It disappears the moment
-                `site.avatar` is set. */}
-            {site.avatar ? null : (
-              <span className="font-handwriting text-lg/none text-muted-foreground/70 select-none max-sm:hidden">
-                portrait pending
-              </span>
-            )}
-          </div>
+          <h1 className="-translate-y-px pl-4 text-[2rem]/none font-medium tracking-tight">
+            {site.name}
+          </h1>
           <p className="flex h-12.5 items-center border-t border-line py-1 pl-4 text-muted-foreground sm:h-9">
             {site.tagline}
           </p>
