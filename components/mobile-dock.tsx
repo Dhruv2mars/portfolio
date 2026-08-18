@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { PaletteTrigger } from "@/components/command-palette";
 import { Separator } from "@/components/separator";
+import { SiteNav } from "@/components/site-nav";
 import type { NavItem } from "@/lib/nav";
 
 /**
@@ -97,16 +97,11 @@ function DockMenu({ items }: { items: readonly NavItem[] }) {
           aria-label="Menu"
           className="palette-panel absolute bottom-full origin-bottom left-1/2 mb-2 flex w-48 -translate-x-1/2 flex-col rounded-xl bg-popover p-1 shadow-md ring ring-foreground/10 dark:ring-foreground/20"
         >
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-              className="flex items-center rounded-lg px-3 py-1.5 text-base text-foreground transition-colors hover:bg-accent"
-            >
-              {item.label}
-            </Link>
-          ))}
+          <SiteNav
+            items={items}
+            variant="sheet"
+            onNavigate={() => setOpen(false)}
+          />
         </div>
       ) : null}
     </div>

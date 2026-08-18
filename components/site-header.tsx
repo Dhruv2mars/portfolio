@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PaletteTrigger } from "@/components/command-palette";
 import { GithubIcon } from "@/components/icons";
 import { Separator } from "@/components/separator";
+import { SiteNav } from "@/components/site-nav";
 import { SiteMark } from "@/components/site-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
@@ -38,15 +39,7 @@ export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
           aria-label={FOCUSABLE_CHROME.primaryNavLabel}
           className="flex items-center max-sm:hidden"
         >
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex h-8 items-center px-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {item.label}
-            </Link>
-          ))}
+          <SiteNav items={items} variant="header" />
         </nav>
 
         {/* The header trigger names a shortcut, so it goes where the nav
