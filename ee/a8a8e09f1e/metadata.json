@@ -3,7 +3,7 @@
   "checkpoint_id": "eea8a8e09f1e",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 2,
+  "checkpoints_count": 6,
   "files_touched": [
     "app/globals.css",
     "app/layout.tsx",
@@ -29,6 +29,20 @@
       "compact_transcript": "/ee/a8a8e09f1e/1/transcript.jsonl",
       "content_hash": "/ee/a8a8e09f1e/1/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/ee/a8a8e09f1e/2/metadata.json",
+      "transcript": "/ee/a8a8e09f1e/2/full.jsonl",
+      "compact_transcript": "/ee/a8a8e09f1e/2/transcript.jsonl",
+      "content_hash": "/ee/a8a8e09f1e/2/content_hash.txt",
+      "prompt": "/ee/a8a8e09f1e/2/prompt.txt"
     }
-  ]
+  ],
+  "token_usage": {
+    "input_tokens": 1446,
+    "cache_creation_tokens": 1888023,
+    "cache_read_tokens": 58846428,
+    "output_tokens": 430734,
+    "api_call_count": 709
+  }
 }
