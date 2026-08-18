@@ -81,6 +81,25 @@ describe("AI Activity read model", () => {
     ]);
   });
 
+  test("days before the feed's first report are unrecorded, not zero", () => {
+    const filled = fillSparseDailySeries(
+      [
+        { date: "2026-01-03", tokens: 10 },
+        { date: "2026-01-04", tokens: 30 },
+      ],
+      "2026-01-04",
+      4,
+    );
+    // The window reaches back further than the meter does; those days are
+    // days nobody counted, not days that counted zero.
+    expect(filled).toEqual([
+      { date: "2026-01-01", tokens: 0, recorded: false },
+      { date: "2026-01-02", tokens: 0, recorded: false },
+      { date: "2026-01-03", tokens: 10 },
+      { date: "2026-01-04", tokens: 30 },
+    ]);
+  });
+
   test("materializeHistory + withLiveToday appends projected today", () => {
     const payload: AiActivityPayload = {
       version: 1,

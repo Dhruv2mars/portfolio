@@ -53,8 +53,10 @@ export function intensityFromTokens(
  * ending on `endDate`, keeping at most `windowDays` cells.
  *
  * Gaps *inside* the feed's coverage are real zeroes — the feed ran that day and
- * reported nothing. Days *past* its last report are not: they are marked
- * unrecorded so the grid can draw the difference.
+ * reported nothing. Days outside it are not, at either end: a day before the
+ * first report is a day nobody was counting, exactly as a day after the last
+ * one is. Both are marked unrecorded so the grid can draw the difference
+ * instead of back-dating a year of quiet days the meter never saw.
  */
 export function fillSparseDailySeries(
   days: readonly DailyTokens[],
@@ -63,6 +65,10 @@ export function fillSparseDailySeries(
 ): DailyTokens[] {
   const byDate = new Map(days.map((d) => [d.date, d.tokens]));
   const covered = days.reduce((last, d) => (d.date > last ? d.date : last), "");
+  const began = days.reduce(
+    (first, d) => (!first || d.date < first ? d.date : first),
+    "",
+  );
   const startDate = shiftYmd(endDate, -(windowDays - 1));
   const filled: DailyTokens[] = [];
   for (
@@ -71,7 +77,7 @@ export function fillSparseDailySeries(
     cursor = shiftYmd(cursor, 1)
   ) {
     filled.push(
-      cursor <= covered
+      began && cursor >= began && cursor <= covered
         ? { date: cursor, tokens: byDate.get(cursor) ?? 0 }
         : { date: cursor, tokens: 0, recorded: false },
     );
