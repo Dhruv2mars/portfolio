@@ -494,6 +494,23 @@
   border: 1px solid var(--muted-foreground);
 }
 
+/* ---------------------------------------------------------------------------
+   Figure 404. Drawn from the same cells as the activity grid, at plate scale:
+   the page that has no data says so in the site's own word for it. Cells size
+   themselves off the column rather than off a fixed pixel, so the plate is the
+   full width of the frame at every viewport.
+--------------------------------------------------------------------------- */
+.glyph-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: 2px;
+  width: 100%;
+}
+
+.glyph-grid > * {
+  aspect-ratio: 1;
+}
+
 /* Half a year at full cell size beats a full year of dust. */
 @media (max-width: 40rem) {
   .activity-grid {

@@ -50,8 +50,9 @@ export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
           ))}
         </nav>
 
-        {/* The palette trigger is a keyboard affordance; a touch viewport has
-            no ⌘K, so it goes with the nav. */}
+        {/* The header trigger names a shortcut, so it goes where the nav
+            goes. Below `sm` the palette puts up a thumb-reachable dock
+            instead — see `CommandPalette`. */}
         <div className="flex items-center max-sm:*:data-[slot=command-menu-trigger]:hidden">
           <Separator orientation="vertical" className="mr-2 h-5 max-sm:hidden" />
           <CommandPalette items={paletteItems(hasPosts)} />

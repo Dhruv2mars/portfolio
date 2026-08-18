@@ -69,10 +69,20 @@ function ProjectItem({ project }: { project: Project }) {
             <h3 className="mb-1 leading-snug font-medium text-balance">
               {project.name}
             </h3>
-            <p className="typeset typeset-description text-muted-foreground">
+            {/* Two lines below `sm`. Every description here fits two at that
+                width except three that spill to a third, and one row an
+                em taller than its neighbours is the thing that reads as
+                sloppy rather than as emphasis. */}
+            <p className="typeset typeset-description text-muted-foreground max-sm:line-clamp-2">
               {project.description}
             </p>
-            <ul className="mt-2 flex flex-wrap gap-1.5">
+            {/* The facts stay on one line at every width, so eight rows
+                stack on one rhythm instead of eight. Below `sm` only the two
+                that every row carries survive — language and year. The note
+                and the host are longer than a phone column and vary row to
+                row, and the row is already a link with an outbound arrow on
+                it, so neither is what a thumb came for. */}
+            <ul className="mt-2 flex flex-wrap gap-1.5 max-sm:flex-nowrap">
               <li className="flex">
                 <Tag>{project.language}</Tag>
               </li>
@@ -80,11 +90,11 @@ function ProjectItem({ project }: { project: Project }) {
                 <Tag className="tabular-nums">{project.year}</Tag>
               </li>
               {project.note ? (
-                <li className="flex">
+                <li className="flex max-sm:hidden">
                   <Tag>{project.note}</Tag>
                 </li>
               ) : null}
-              <li className="flex">
+              <li className="flex max-sm:hidden">
                 <Tag>{destinationHost(project)}</Tag>
               </li>
             </ul>
