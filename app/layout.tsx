@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { getPublishedPosts } from "@/lib/blog";
 import { ogImagePath } from "@/lib/discovery";
@@ -136,6 +137,20 @@ export default function RootLayout({
               </div>
             </main>
             <SiteFooter />
+
+            {/* The bottom edge of the sheet. Ninety-six pixels of the page
+                dissolving into the background, masked so the fade itself
+                fades out rather than ending on a line, plus a solid strip
+                under the home indicator. It is what keeps the last row of
+                content from butting into the edge of the glass — and on a
+                phone it is what the floating palette dock sits on. */}
+            <div aria-hidden className="fade-bottom">
+              <div className="fade-bottom-gradient" />
+              <div className="fade-bottom-rest" />
+            </div>
+
+            {/* The way back up, riding on top of that fade. */}
+            <ScrollToTop />
           </div>
         </ThemeProvider>
         <Analytics />
