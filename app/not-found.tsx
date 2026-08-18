@@ -27,7 +27,7 @@ export default function NotFound() {
     <div className="flex flex-1 flex-col">
       <Panel>
         <PanelHeader>
-          <PanelTitle>
+          <PanelTitle as="h1">
             Nothing lives here
             <PanelTitleSup className="font-mono tabular-nums">404</PanelTitleSup>
           </PanelTitle>
