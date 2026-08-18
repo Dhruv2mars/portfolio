@@ -3,7 +3,7 @@
   "checkpoint_id": "a12ac6bd25ee",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 2,
+  "checkpoints_count": 4,
   "files_touched": [
     "lib/ai-activity.test.ts",
     "lib/ai-activity.ts"
@@ -22,6 +22,20 @@
       "compact_transcript": "/a1/2ac6bd25ee/1/transcript.jsonl",
       "content_hash": "/a1/2ac6bd25ee/1/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/a1/2ac6bd25ee/2/metadata.json",
+      "transcript": "/a1/2ac6bd25ee/2/full.jsonl",
+      "compact_transcript": "/a1/2ac6bd25ee/2/transcript.jsonl",
+      "content_hash": "/a1/2ac6bd25ee/2/content_hash.txt",
+      "prompt": "/a1/2ac6bd25ee/2/prompt.txt"
     }
-  ]
+  ],
+  "token_usage": {
+    "input_tokens": 1946,
+    "cache_creation_tokens": 2273581,
+    "cache_read_tokens": 80741165,
+    "output_tokens": 554513,
+    "api_call_count": 965
+  }
 }
