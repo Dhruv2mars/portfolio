@@ -1,9 +1,30 @@
 import { ImageResponse } from "next/og";
+import { cubeDataUri } from "@/lib/mark";
 import { site } from "@/lib/site";
 
 export const runtime = "edge";
 
-export function GET(request: Request) {
+/**
+ * The card is set in the site's own typeface, which means shipping the file:
+ * satori has no font stack to fall back through, and a share card set in
+ * Helvetica is a share card for some other site. Two weights, read as URLs so
+ * the build traces them into the bundle.
+ */
+const fonts = Promise.all(
+  (
+    [
+      ["Geist", 400, new URL("./Geist-Regular.ttf", import.meta.url)],
+      ["Geist", 600, new URL("./Geist-SemiBold.ttf", import.meta.url)],
+    ] as const
+  ).map(async ([name, weight, url]) => ({
+    name,
+    weight,
+    style: "normal" as const,
+    data: await fetch(url).then((response) => response.arrayBuffer()),
+  })),
+);
+
+export async function GET(request: Request) {
   const url = new URL(request.url);
   const title = (url.searchParams.get("title") || site.name).slice(0, 140);
 
@@ -16,10 +37,10 @@ export function GET(request: Request) {
           width: "100%",
           height: "100%",
           justifyContent: "space-between",
-          background: "#0a0a0c",
-          color: "#ededf0",
+          background: "#09090b",
+          color: "#fafafa",
           padding: "72px",
-          fontFamily: "ui-sans-serif, system-ui, sans-serif",
+          fontFamily: "Geist",
         }}
       >
         <div
@@ -28,18 +49,14 @@ export function GET(request: Request) {
             alignItems: "center",
             gap: 14,
             fontSize: 26,
-            color: "#8f8f97",
+            color: "#a1a1aa",
             letterSpacing: "-0.02em",
           }}
         >
-          <div
-            style={{
-              width: 14,
-              height: 14,
-              borderRadius: 4,
-              background: "#4f74ff",
-            }}
-          />
+          {/* The site's own mark, not a stand-in for it — this card is the
+              only thing most people see before they see the site. */}
+            {/* eslint-disable-next-line @next/next/no-img-element -- satori rasterises this; next/image has no meaning here */}
+          <img src={cubeDataUri("#fafafa")} width={30} height={30} alt="" />
           {site.name}
         </div>
         <div
@@ -58,7 +75,7 @@ export function GET(request: Request) {
           style={{
             display: "flex",
             fontSize: 22,
-            color: "#63636c",
+            color: "#71717a",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
           }}
@@ -70,6 +87,7 @@ export function GET(request: Request) {
     {
       width: 1200,
       height: 630,
+      fonts: await fonts,
     },
   );
 }

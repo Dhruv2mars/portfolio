@@ -65,6 +65,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  /* The dock at the foot of the page pads itself with
+     `env(safe-area-inset-bottom)`, and that variable is zero on iOS unless the
+     page has opted out of the safe-area letterbox first. */
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: dark)", color: "#09090b" },
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },

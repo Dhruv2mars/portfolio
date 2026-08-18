@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-21 -1 42 42">
+  <!-- The header mark at favicon scale: one isometric cube, three tonal steps
+       of the foreground standing in for light. `currentColor` has no meaning in
+       a favicon, so the two foregrounds are written out and switched here
+       rather than inherited. -->
+  <style>
+    g { fill: #09090b }
+    @media (prefers-color-scheme: dark) { g { fill: #fafafa } }
+  </style>
+  <g>
+    <polygon points="0,0 17.321,10 0,20 -17.321,10" />
+    <polygon points="-17.321,10 0,20 0,40 -17.321,30" fill-opacity="0.55" />
+    <polygon points="0,20 17.321,10 17.321,30 0,40" fill-opacity="0.3" />
+  </g>
+</svg>

@@ -27,3 +27,27 @@ export function navItems(hasPublishedPosts: boolean): readonly NavItem[] {
     ? [...BASE_NAV, { label: "Blog", href: "/blog" }]
     : BASE_NAV;
 }
+
+/**
+ * Which section a reader is actually in, given where each one starts and how
+ * far the page has scrolled. The rule is the last section whose top has passed
+ * under the header — not the nearest, which flickers between two neighbours
+ * whenever one is short.
+ *
+ * The bottom of the page is a special case: a final section shorter than the
+ * viewport can never reach the header, so it would never light up. At the
+ * bottom, the last section is the one you are looking at by definition.
+ */
+export function activeSectionId(
+  sections: readonly { id: string; top: number }[],
+  scrollTop: number,
+  atBottom = false,
+): string | null {
+  if (sections.length === 0) return null;
+  if (atBottom) return sections[sections.length - 1].id;
+  let current: string | null = null;
+  for (const section of sections) {
+    if (section.top <= scrollTop) current = section.id;
+  }
+  return current;
+}
