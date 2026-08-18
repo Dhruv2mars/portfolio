@@ -1,0 +1,40 @@
+@browser
+
+You are auditing a portfolio site that is a deliberate, exact reimplementation of Chan Dai's site (https://dai.is-a.dev) in the same design idiom, but with different content.
+
+- REFERENCE: https://dai.is-a.dev
+- OURS: http://localhost:3001  (local production build, already running)
+
+BROWSER SURFACE: the user has sanctioned the `agent-browser` CLI at /Users/dhruv2mars/.bun/bin/agent-browser as your browser. Use it via shell.
+  agent-browser --session ref  set viewport 1440 900
+  agent-browser --session ref  open "https://dai.is-a.dev"
+  agent-browser --session ref  eval '<ONE javascript expression — wrap in an IIFE>'
+  agent-browser --session ref  screenshot /abs/path.png
+  agent-browser --session ours ...   (use a separate session name for our site)
+Notes: `eval` takes exactly one expression. SVG `className` is an object — use String(el.className.baseVal ?? el.className). React controlled inputs ignore synthetic events; use `agent-browser type <selector> <text>` for real keystrokes.
+
+THIS IS ROUND 9. Rounds 1-8 already fixed: header/nav chrome, panel borders and hatching, typography scale, project rows, footer, 404, blog index, command palette (three fixed bands 48/320/40, legend footer, mobile top-anchored, 8px radii, dark hover /50), activity grid (full-year horizontal scroll with scroll-driven edge fades, level alphas 5/20/40/60/80). Do not re-report those as new unless they have actually regressed — verify by measurement before claiming.
+
+METHOD — this is the hard requirement:
+Every claim must be backed by a measurement you actually took in the browser this round: getBoundingClientRect, getComputedStyle, or a screenshot you looked at. Quote the numbers for BOTH sites side by side. A claim from memory or from "it looks like" is worthless and will be discarded. If you cannot measure it, do not report it.
+
+SWEEP:
+1. Viewports 1440x900 and 390x844.
+2. Routes on ours: /, /blog, /blog/<any post>, /nope (404). Reference routes: /, /blog, a blog post.
+3. Both colour schemes (the theme toggle is in the header; or set the `theme` localStorage key and reload).
+4. Compare, in this order of importance:
+   a. Layout geometry — panel widths, gutters, border positions, row heights.
+   b. Typography — font-family, size, weight, line-height, letter-spacing, colour.
+   c. Interactive states — hover, focus-visible ring, active row.
+   d. Motion — durations, easing, what animates on load.
+   e. Accessibility — labels, roles, contrast, keyboard traversal, reduced motion.
+5. Also check ours alone for: horizontal overflow at 390, broken images, missing alt text, unlabeled controls, console errors.
+
+Content differs by design (different person, different projects). Do NOT report content differences. Report only craft: geometry, type, colour, state, motion, semantics.
+
+OUTPUT: write findings to /tmp/critique/round9-findings.md. For each finding:
+  - severity (must-fix / should-fix / nit)
+  - one-line claim
+  - the measurement for the reference, and the measurement for ours
+  - the specific CSS/DOM change you would make
+Rank must-fix first. If a section is genuinely identical, say so in one line rather than padding. An empty must-fix list is a valid and welcome result — do not invent findings to look thorough.
