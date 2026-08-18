@@ -32,7 +32,7 @@ export function CopyLink({ id, label }: { id: string; label: string }) {
           window.location.hash = id;
         }
       }}
-      className="ml-1.5 inline-flex size-7 -translate-y-1 items-center justify-center rounded-lg align-middle text-muted-foreground opacity-0 transition-[color,background-color,opacity] hover:bg-accent hover:text-foreground dark:hover:bg-accent/50 focus-visible:opacity-100 group-hover/panel-title:opacity-100"
+      className="ml-1.5 inline-flex size-7 -translate-y-1 items-center justify-center rounded-lg align-middle text-muted-foreground opacity-0 transition-[color,background-color,opacity] hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50 focus-visible:opacity-100 group-hover/panel-title:opacity-100"
     >
       {copied ? (
         <CheckIcon className="size-4" />

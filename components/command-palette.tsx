@@ -1,7 +1,9 @@
 "use client";
 
 import {
+  createContext,
   useCallback,
+  useContext,
   useEffect,
   useId,
   useMemo,
@@ -40,7 +42,25 @@ function matches(item: CommandItem, query: string): boolean {
   return haystack.includes(needle);
 }
 
-export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
+type PaletteOpener = (from: HTMLElement | null) => void;
+
+const PaletteContext = createContext<PaletteOpener | null>(null);
+
+/**
+ * The palette is one dialog behind two doors, and the doors are not siblings:
+ * one sits in the header, the other in the dock at the foot of the page. The
+ * open state has to live above both, so it lives here and each trigger reaches
+ * it through context — which also lets the dock be mounted where it reads,
+ * after the content, instead of being smuggled into the header for the sake of
+ * sharing a `useState`.
+ */
+export function CommandPaletteProvider({
+  items,
+  children,
+}: {
+  items: readonly CommandItem[];
+  children: React.ReactNode;
+}) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
@@ -127,7 +147,11 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
   }, [active, open]);
 
   if (!open) {
-    return <PaletteTriggers onOpen={openFrom} />;
+    return (
+      <PaletteContext.Provider value={openFrom}>
+        {children}
+      </PaletteContext.Provider>
+    );
   }
 
   const grouped = results.reduce<Record<string, CommandItem[]>>((acc, item) => {
@@ -137,8 +161,8 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
   let flatIndex = -1;
 
   return (
-    <>
-      <PaletteTriggers onOpen={openFrom} />
+    <PaletteContext.Provider value={openFrom}>
+      {children}
       <div
         className="palette-backdrop fixed inset-0 z-50 flex items-center justify-center px-4 max-sm:items-start max-sm:pt-16"
         onMouseDown={(event) => {
@@ -273,7 +297,7 @@ export function CommandPalette({ items }: { items: readonly CommandItem[] }) {
           </div>
         </div>
       </div>
-    </>
+    </PaletteContext.Provider>
   );
 }
 
@@ -318,22 +342,17 @@ function Key({
  * first paint — a state read during render would have to lie on the server
  * first and correct itself after hydration.
  */
-function PaletteTrigger({
-  onOpen,
-  dock,
-}: {
-  onOpen: (from: HTMLElement | null) => void;
-  dock?: boolean;
-}) {
+export function PaletteTrigger({ dock }: { dock?: boolean }) {
+  const openPalette = useContext(PaletteContext);
   return (
     <button
       type="button"
-      onClick={(event) => onOpen(event.currentTarget)}
+      onClick={(event) => openPalette?.(event.currentTarget)}
       aria-label="Open command palette"
       aria-keyshortcuts="Meta+K Control+K"
       data-slot="command-menu-trigger"
       className={cn(
-        "flex h-8 shrink-0 items-center rounded-lg text-sm font-medium text-muted-foreground transition-colors",
+        "flex h-8 shrink-0 touch-manipulation items-center rounded-lg text-sm font-medium text-muted-foreground transition-all active:scale-[0.98]",
         dock
           ? "min-w-20 gap-2"
           : "gap-1.5 px-1.5 hover:bg-accent hover:text-foreground dark:hover:bg-accent/50",
@@ -347,25 +366,5 @@ function PaletteTrigger({
         <Key>K</Key>
       </span>
     </button>
-  );
-}
-
-/**
- * Header trigger plus the touch dock, which is the only way in on a phone —
- * the header trigger is hidden below `sm` by its container, and there is no
- * shortcut to replace it.
- */
-function PaletteTriggers({
-  onOpen,
-}: {
-  onOpen: (from: HTMLElement | null) => void;
-}) {
-  return (
-    <>
-      <PaletteTrigger onOpen={onOpen} />
-      <div className="fixed bottom-[calc(0.5rem+env(safe-area-inset-bottom,0px))] left-1/2 z-50 flex w-fit -translate-x-1/2 items-center rounded-xl bg-popover py-1 pr-1 pl-2.5 shadow-md ring ring-foreground/10 sm:hidden dark:ring-foreground/20">
-        <PaletteTrigger dock onOpen={onOpen} />
-      </div>
-    </>
   );
 }
