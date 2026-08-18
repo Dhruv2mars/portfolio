@@ -225,7 +225,18 @@
  * texture laid beside it.
  */
 @utility hero-lattice {
-  @apply [--pattern-foreground:var(--color-line)]/28;
+  /* Light's hairline is a whisper against a near-white ground and needs more
+     of itself to survive out here at all; dark's has contrast to spare and
+     turns to noise at the same alpha. Two numbers, one drawing. */
+  --lattice-alpha: 48%;
+  @variant dark {
+    --lattice-alpha: 28%;
+  }
+  --pattern-foreground: color-mix(
+    in oklab,
+    var(--color-line) var(--lattice-alpha),
+    transparent
+  );
   background-image:
     repeating-linear-gradient(
       30deg,
@@ -464,6 +475,15 @@
 .activity-grid:focus-visible .activity-cell[data-active="true"] {
   outline: 2px solid var(--ring);
   outline-offset: 1px;
+}
+
+/* A day the feed never reported is not a day of no work. Measured zero is a
+   faint filled square; unreported is an empty frame — so a stalled feed is
+   legible in the drawing itself and not only in the caption under it. */
+.activity-cell[data-recorded="false"] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px
+    color-mix(in oklab, var(--muted-foreground) 16%, transparent);
 }
 
 /* Today is a ring, never a fill — a projection must not read as a record. */

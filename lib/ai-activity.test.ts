@@ -62,6 +62,25 @@ describe("AI Activity read model", () => {
     ]);
   });
 
+  test("days past the feed's last report are unrecorded, not zero", () => {
+    const filled = fillSparseDailySeries(
+      [
+        { date: "2026-01-01", tokens: 10 },
+        { date: "2026-01-03", tokens: 30 },
+      ],
+      "2026-01-05",
+      5,
+    );
+    // The gap inside coverage is a measured quiet day; the tail is no data.
+    expect(filled).toEqual([
+      { date: "2026-01-01", tokens: 10 },
+      { date: "2026-01-02", tokens: 0 },
+      { date: "2026-01-03", tokens: 30 },
+      { date: "2026-01-04", tokens: 0, recorded: false },
+      { date: "2026-01-05", tokens: 0, recorded: false },
+    ]);
+  });
+
   test("materializeHistory + withLiveToday appends projected today", () => {
     const payload: AiActivityPayload = {
       version: 1,
@@ -93,7 +112,7 @@ describe("AI Activity read model", () => {
     expect(activity.lifetimeTokens).toBe(490);
   });
 
-  test("a stale payload is zero-filled up to today, never skipped", () => {
+  test("a stale payload is filled as unrecorded up to today, never skipped", () => {
     const payload: AiActivityPayload = {
       version: 1,
       generatedAt: "2026-07-17T00:20:00.000Z",
@@ -121,6 +140,15 @@ describe("AI Activity read model", () => {
     );
     expect(outage.length).toBe(29);
     expect(outage.every((d) => d.tokens === 0 && d.intensity === 0)).toBe(true);
+    // ...and as *no data*, not as a measured zero. The feed did not report a
+    // quiet month; it did not report at all, and the grid has to say so.
+    expect(outage.every((d) => d.recorded === false)).toBe(true);
+    // Days the feed did cover keep their measurement, outage or not.
+    expect(
+      activity.days
+        .filter((d) => d.date === "2026-07-15" || d.date === "2026-07-16")
+        .every((d) => d.recorded === undefined),
+    ).toBe(true);
     // A month-old feed cannot project today — that would invent activity.
     expect(activity.days.some((d) => d.live)).toBe(false);
     expect(activity.days.at(-1)?.tokens).toBe(0);
