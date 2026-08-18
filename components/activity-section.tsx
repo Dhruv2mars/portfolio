@@ -77,7 +77,12 @@ export async function ActivitySection() {
           <ActivityGrid weeks={weeks} />
         </div>
 
-        <figcaption className="flex items-center justify-between gap-4 border-t border-line px-4 py-3 text-sm text-muted-foreground">
+        {/* The reference's own caption row: a wrapping flex line, not a
+            justified one. Both halves ask for their full width first, so at
+            desktop they share a line with the key pushed right, and on a phone
+            the key drops to its own line instead of crushing the sentence into
+            a four-word column. */}
+        <figcaption className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-line px-4 py-3 text-sm text-muted-foreground">
           <span className="flex items-center gap-2">
             <span className="tracking-wide text-muted-foreground/80">
               Fig. 2.
@@ -85,7 +90,7 @@ export async function ActivitySection() {
             {source === "fallback" ? <Tag>fixture</Tag> : null}
             <span>{provenance}</span>
           </span>
-          <span className="flex shrink-0 items-center gap-1 font-mono text-xs">
+          <span className="ml-auto flex shrink-0 items-center gap-1 font-mono text-xs">
             {hasGaps ? (
               <>
                 <span
