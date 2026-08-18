@@ -34,7 +34,7 @@ export default function BlogPage() {
     <div className="[--separator-height:--spacing(8)]">
       <Panel>
         <PanelHeader>
-          <PanelTitle>
+          <PanelTitle as="h1">
             Blog
             <PanelTitleSup className="tabular-nums">
               {posts.length}

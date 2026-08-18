@@ -35,9 +35,19 @@ export function PanelHeader({
   );
 }
 
-export function PanelTitle({ className, ...props }: React.ComponentProps<"h2">) {
+/**
+ * A panel title is an `h2` because the usual panel is one section of a page
+ * that already has its own `h1`. A page whose whole content *is* one panel —
+ * a post, the blog index, the 404 — passes `as="h1"` so the document keeps a
+ * top-level heading and the panel's own sub-headings still rank below it.
+ */
+export function PanelTitle({
+  as: Tag = "h2",
+  className,
+  ...props
+}: React.ComponentProps<"h2"> & { as?: "h1" | "h2" }) {
   return (
-    <h2
+    <Tag
       data-slot="panel-title"
       className={cn(
         "group/panel-title font-heading text-3xl font-medium tracking-tight text-balance",

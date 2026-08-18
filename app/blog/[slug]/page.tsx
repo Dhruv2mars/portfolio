@@ -88,7 +88,7 @@ export default async function PostPage({ params }: PageProps) {
 
       <Panel>
         <PanelHeader>
-          <PanelTitle className="text-2xl">{post.title}</PanelTitle>
+          <PanelTitle as="h1">{post.title}</PanelTitle>
           <PanelDescription className="typeset-timescale flex flex-wrap items-center gap-x-2 font-mono tabular-nums">
             <time dateTime={post.publishedAt}>
               {formatPostDate(post.publishedAt)}
