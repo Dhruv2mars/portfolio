@@ -30,7 +30,7 @@ export function ScrollToTop() {
         setDirection(y > last ? "down" : "up");
         last = y;
       }
-      setVisible(y > REVEAL_AT);
+      setVisible(y >= REVEAL_AT);
     };
 
     // Scroll fires far more often than a paint can use, so the read is
