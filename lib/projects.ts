@@ -66,7 +66,7 @@ const PROJECTS: readonly Project[] = [
   {
     name: "gunmetal",
     description:
-      "Local OpenAI-compatible API that routes inference through the AI subscriptions you already pay for.",
+      "Local OpenAI-compatible API routing inference through subscriptions you already pay for.",
     url: "https://github.com/Dhruv2mars/gunmetal",
     live: "https://gunmetalapp.vercel.app",
     language: "Rust",

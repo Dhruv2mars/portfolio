@@ -34,6 +34,8 @@ export async function ActivitySection() {
   const updated = updatedLabel(activity.generatedAt, activity.timezone);
   // Only a feed published through yesterday earns a projected today.
   const projecting = activity.days.at(-1)?.live === true;
+  // The key only earns its space when there is something in the grid to key.
+  const hasGaps = activity.days.some((day) => day.recorded === false);
 
   const provenance =
     source === "fallback"
@@ -84,6 +86,15 @@ export async function ActivitySection() {
             <span>{provenance}</span>
           </span>
           <span className="flex shrink-0 items-center gap-1 font-mono text-xs">
+            {hasGaps ? (
+              <>
+                <span
+                  aria-hidden
+                  className="size-2.5 shadow-[inset_0_0_0_1px_var(--color-line)]"
+                />
+                <span className="mr-1.5">no data</span>
+              </>
+            ) : null}
             less
             {LEVEL_ALPHA.map((alpha) => (
               <span

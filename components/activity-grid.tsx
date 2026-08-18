@@ -17,10 +17,12 @@ import {
 const MOBILE_WEEKS = 26;
 
 function cellLabel(day: ActivityDay): string {
+  const date = formatActivityDate(day.date);
+  // An unreported day has no number to read out. Saying "0 tokens" here would
+  // put the same lie in the screen reader that a filled cell puts on screen.
+  if (day.recorded === false) return `${date}: no data`;
   const tokens = `${formatTokenCount(day.tokens)} tokens`;
-  return day.live
-    ? `${formatActivityDate(day.date)}: ${tokens} so far today`
-    : `${formatActivityDate(day.date)}: ${tokens}`;
+  return day.live ? `${date}: ${tokens} so far today` : `${date}: ${tokens}`;
 }
 
 /**
@@ -54,13 +56,20 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
         className="mb-2.5 h-4 px-4 font-mono text-xs text-muted-foreground tabular-nums"
       >
         {activeDay ? (
-          <>
-            <span className="text-foreground">
-              {formatTokenCount(activeDay.tokens)}
-            </span>{" "}
-            tokens · {formatActivityDate(activeDay.date)}
-            {activeDay.live ? " · so far today" : ""}
-          </>
+          activeDay.recorded === false ? (
+            <>
+              <span className="text-foreground">no data</span> ·{" "}
+              {formatActivityDate(activeDay.date)}
+            </>
+          ) : (
+            <>
+              <span className="text-foreground">
+                {formatTokenCount(activeDay.tokens)}
+              </span>{" "}
+              tokens · {formatActivityDate(activeDay.date)}
+              {activeDay.live ? " · so far today" : ""}
+            </>
+          )
         ) : (
           "hover or focus a day"
         )}
@@ -126,6 +135,7 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
                   aria-label={cellLabel(day)}
                   data-active={index === active}
                   data-live={day.live ? "true" : undefined}
+                  data-recorded={day.recorded === false ? "false" : undefined}
                   onMouseEnter={() => setActive(index)}
                   className="activity-cell"
                   style={

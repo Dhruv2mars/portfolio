@@ -33,8 +33,29 @@ function Avatar() {
           className="object-cover"
         />
       ) : (
-        <span className="absolute inset-0 flex items-center justify-center font-heading text-5xl font-medium tracking-tight text-foreground sm:text-6xl">
-          {initials(site.name)}
+        <span
+          role="img"
+          aria-label={`${site.name}, monogram`}
+          className="absolute inset-0 grid place-items-center"
+        >
+          {/* The same lattice the drawing beside it stands on, and a mount
+              inset from the plate edge like the figures elsewhere carry — the
+              monogram is a mark this site drew, not a photograph that failed
+              to load, and it should look like it was meant. */}
+          <span
+            aria-hidden
+            className="hero-lattice absolute inset-0 opacity-70"
+          />
+          <span
+            aria-hidden
+            className="absolute inset-2 rounded-md border border-line"
+          />
+          <span
+            aria-hidden
+            className="relative font-heading text-5xl font-medium tracking-tight text-foreground sm:text-6xl"
+          >
+            {initials(site.name)}
+          </span>
         </span>
       )}
     </div>

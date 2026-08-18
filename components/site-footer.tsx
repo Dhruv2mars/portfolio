@@ -17,47 +17,71 @@ function FooterLink({ href, children }: { href: string; children: string }) {
 }
 
 /**
- * A colophon, not a sitemap: only facts about the artefact itself. Rows are
- * two equal columns with the label right-aligned against the gutter, so the
- * labels and the values each read as a column of their own.
+ * A colophon, not a sitemap: only facts about the artefact itself, and only
+ * facts that are true — no build SHA, because nothing here reads one, and no
+ * licence, because the repo carries no LICENSE file.
+ *
+ * Eight cells exactly, so the four-column grid closes on a full row instead of
+ * trailing off into empty slots.
  */
-const COLOPHON: ReadonlyArray<readonly [string, React.ReactNode]> = [
-  [
-    "Crafted by",
-    <FooterLink key="by" href={`https://github.com/${site.handle}`}>
-      {site.name}
-    </FooterLink>,
-  ],
-  [
-    "Inspired by",
-    <FooterLink key="inspo" href="https://dai.is-a.dev">
-      chanhdai.com
-    </FooterLink>,
-  ],
-  [
-    "Built with",
-    <ul key="stack">
-      <li>Next.js</li>
-      <li>Tailwind CSS</li>
-      <li>TypeScript</li>
-    </ul>,
-  ],
-  [
-    "Deployed on",
-    <FooterLink key="host" href="https://vercel.com">
-      Vercel
-    </FooterLink>,
-  ],
-  [
-    "Source code",
-    <FooterLink
-      key="source"
-      href={`https://github.com/${site.handle}/portfolio`}
-    >
-      GitHub
-    </FooterLink>,
-  ],
-  ["Live at", new URL(site.url).host],
+const COLOPHON: ReadonlyArray<{
+  label: string;
+  value: React.ReactNode;
+}> = [
+  {
+    label: "Crafted by",
+    value: (
+      <FooterLink href={`https://github.com/${site.handle}`}>
+        {site.name}
+      </FooterLink>
+    ),
+  },
+  {
+    label: "Inspired by",
+    value: <FooterLink href="https://dai.is-a.dev">chanhdai.com</FooterLink>,
+  },
+  {
+    label: "Deployed on",
+    value: <FooterLink href="https://vercel.com">Vercel</FooterLink>,
+  },
+  {
+    label: "Source code",
+    value: (
+      <FooterLink href={`https://github.com/${site.handle}/portfolio`}>
+        GitHub
+      </FooterLink>
+    ),
+  },
+  { label: "Live at", value: new URL(site.url).host },
+  {
+    label: "Typeface",
+    value: (
+      <ul className="flex flex-col gap-0.5">
+        <li>Geist</li>
+        <li>IBM Plex Serif</li>
+        <li>Caveat</li>
+      </ul>
+    ),
+  },
+  {
+    label: "Analytics",
+    value: (
+      <ul className="flex flex-col gap-0.5">
+        <li>Vercel Analytics</li>
+        <li>Speed Insights</li>
+      </ul>
+    ),
+  },
+  {
+    label: "Built with",
+    value: (
+      <ul className="flex flex-col gap-0.5">
+        <li>Next.js</li>
+        <li>Tailwind CSS</li>
+        <li>TypeScript</li>
+      </ul>
+    ),
+  },
 ];
 
 export function SiteFooter() {
@@ -68,40 +92,40 @@ export function SiteFooter() {
           <div className="stripe-divider h-12" />
         </div>
 
-        {/* A ruled matrix, not a gapped stack: every row is a cell with a
-            hairline under it and a rule between label and value, so the
-            colophon reads in the same frame grammar as the panels above. */}
-        <dl className="font-mono text-sm">
-          {COLOPHON.map(([label, value]) => (
+        <div className="screen-line-bottom flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3 font-mono text-sm">
+          <span className="font-medium">{new URL(site.url).host}</span>
+          <span className="font-sans text-muted-foreground">
+            {site.tagline} — tooling for coding agents.
+          </span>
+        </div>
+
+        {/* Tiled cells, not bordered rows: a 1px grid gap over a line-coloured
+            ground draws every rule at once, so no cell has to know whether it
+            is last. Two columns on a phone, four once there is room. */}
+        <dl className="grid grid-cols-2 gap-px bg-line font-mono md:grid-cols-4">
+          {COLOPHON.map(({ label, value }) => (
             <div
               key={label}
-              className="grid grid-cols-2 border-b border-line"
+              className="flex min-w-0 flex-col gap-1 bg-background px-4 py-3"
             >
-              <dt className="border-r border-line px-4 py-2.5 text-right text-muted-foreground">
+              <dt className="text-[0.625rem]/4 font-medium tracking-wider text-muted-foreground uppercase">
                 {label}
               </dt>
-              <dd className="px-4 py-2.5 [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-1">
-                {value}
-              </dd>
+              <dd className="text-sm">{value}</dd>
             </div>
           ))}
-          <div className="grid grid-cols-2">
-            <dt className="border-r border-line px-4 py-2.5 text-right text-muted-foreground">
-              &copy;
-            </dt>
-            <dd className="px-4 py-2.5 text-muted-foreground">
-              {new Date().getFullYear()} {site.name}
-            </dd>
-          </div>
         </dl>
 
-        {/* `before:z-1 after:z-1` lifts the hairlines above the background of
-            the centred icon block so the band reads as one continuous rule. */}
-        <div className="screen-line-top screen-line-bottom flex w-full before:z-1 after:z-1">
-          <nav
-            aria-label="Elsewhere"
-            className="mx-auto flex items-center justify-center border-x border-line bg-background"
-          >
+        <div className="screen-line-top h-4" />
+
+        {/* One closing line: the copyright reads left, the glyphs read right,
+            and on a phone they stack centred rather than squeezing. */}
+        <div className="screen-line-top screen-line-bottom flex flex-col items-center justify-center gap-x-4 gap-y-3 px-4 py-3 text-sm text-muted-foreground sm:flex-row sm:justify-between">
+          <span>
+            &copy; {new Date().getFullYear()} {site.name}.
+          </span>
+
+          <nav aria-label="Elsewhere" className="flex items-center gap-3">
             {site.socials.map((social) => {
               const Glyph = SOCIAL_ICONS[social.label];
               const isMail = social.href.startsWith("mailto:");
@@ -112,20 +136,18 @@ export function SiteFooter() {
                     target={isMail ? undefined : "_blank"}
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="flex size-12 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                    className="flex items-center transition-colors hover:text-foreground"
                   >
                     <Glyph className="size-4" />
                   </a>
-                  {/* A rule between every glyph, not only before the last, so
-                      the band reads as ruled cells rather than a huddle. */}
-                  <Separator orientation="vertical" className="h-11 bg-line" />
+                  <Separator orientation="vertical" className="h-4 self-center" />
                 </Fragment>
               );
             })}
             <a
               href={site.rssPath}
               aria-label="RSS feed"
-              className="flex size-12 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="flex items-center transition-colors hover:text-foreground"
             >
               <Rss className="size-4" />
             </a>
