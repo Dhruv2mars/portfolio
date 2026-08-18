@@ -37,7 +37,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={mounted ? `Switch to ${target} theme` : "Switch theme"}
-      className="flex size-8 touch-manipulation items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50"
+      className="flex size-8 touch-manipulation items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-accent hover:text-foreground dark:hover:bg-accent/50"
     >
       {/* Both render until mounted so the control never shifts or flashes. */}
       <Sun className={`size-4.5 ${mounted && current === "dark" ? "block" : "hidden"}`} />

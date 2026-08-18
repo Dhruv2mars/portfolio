@@ -27,10 +27,14 @@ export default function Home() {
   return (
     <div className="[--separator-height:--spacing(8)] **:data-[slot=panel]:scroll-mt-[calc(var(--header-height)+var(--separator-height))]">
       <ProfileHeader />
+
+      {/* The reference bands the hero off from the panels, then runs identity —
+          overview, links, the contribution grid — as one uninterrupted block
+          before the next band. The bands group panels; they do not separate
+          every one of them. */}
+      <PanelDivider />
       <Overview />
       <SocialLinks />
-
-      <PanelDivider />
       <ActivitySection />
 
       <PanelDivider />
