@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "3f750d751672",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "lib/discovery-smoke.test.ts",
+    "lib/discovery.test.ts",
+    "lib/discovery.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/3f/750d751672/0/metadata.json",
+      "transcript": "/3f/750d751672/0/full.jsonl",
+      "compact_transcript": "/3f/750d751672/0/transcript.jsonl",
+      "content_hash": "/3f/750d751672/0/content_hash.txt",
+      "prompt": "/3f/750d751672/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3336,
+    "cache_creation_tokens": 3768298,
+    "cache_read_tokens": 138745673,
+    "output_tokens": 951808,
+    "api_call_count": 1669
+  }
+}
