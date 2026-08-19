@@ -1,10 +1,12 @@
 import { ActivitySection } from "@/components/activity-section";
+import { BlogSection, HOME_POST_LIMIT } from "@/components/blog-section";
 import { Overview, SocialLinks } from "@/components/overview";
 import { ProfileHeader } from "@/components/profile-header";
 import {
   HOME_PROJECT_LIMIT,
   ProjectsSection,
 } from "@/components/projects-section";
+import { getPublishedPosts } from "@/lib/blog";
 import { cn } from "@/lib/utils";
 
 /** Matches the AI Activity blob's own cache window. */
@@ -27,6 +29,10 @@ function PanelDivider({ className }: { className?: string }) {
 }
 
 export default function Home() {
+  // Nothing empty is ever shown: with no Post published there is no Blog
+  // panel, the same rule the nav and `/blog` itself follow.
+  const hasPosts = getPublishedPosts().length > 0;
+
   return (
     <div className="[--separator-height:--spacing(8)] **:data-[slot=panel]:scroll-mt-[calc(var(--header-height)+var(--separator-height))]">
       <ProfileHeader />
@@ -42,6 +48,13 @@ export default function Home() {
 
       <PanelDivider />
       <ProjectsSection limit={HOME_PROJECT_LIMIT} />
+
+      {hasPosts ? (
+        <>
+          <PanelDivider />
+          <BlogSection limit={HOME_POST_LIMIT} />
+        </>
+      ) : null}
       {/* No trailing divider. Bands go *between* panels; the footer opens with
           its own, and two adjacent bands read as a double border. */}
     </div>
