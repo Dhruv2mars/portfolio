@@ -56,8 +56,7 @@ describe("discovery contracts", () => {
     expect(urls).toContain("https://dhruv2mars.com");
     expect(urls).toContain("https://dhruv2mars.com/blog");
     expect(urls).toContain("https://dhruv2mars.com/blog/judgment");
-    // `/projects` only exists as a redirect to the Home section.
-    expect(urls).not.toContain("https://dhruv2mars.com/projects");
+    expect(urls).toContain("https://dhruv2mars.com/projects");
 
     const encoded = buildSitemapEntries({
       siteUrl: "https://dhruv2mars.com",
@@ -73,6 +72,9 @@ describe("discovery contracts", () => {
       siteUrl: "https://dhruv2mars.com",
       posts: [],
     });
-    expect(entries.map((e) => e.url)).toEqual(["https://dhruv2mars.com"]);
+    expect(entries.map((e) => e.url)).toEqual([
+      "https://dhruv2mars.com",
+      "https://dhruv2mars.com/projects",
+    ]);
   });
 });

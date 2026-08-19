@@ -35,11 +35,11 @@ describe("discovery route smoke", () => {
     const entries = sitemap();
     const urls = entries.map((e) => e.url);
     expect(urls).toContain("https://dhruv2mars.com");
-    // Blog is a route only once a Post is published; /projects is a redirect.
+    // Blog is a route only once a Post is published; /projects always is.
     expect(urls.includes("https://dhruv2mars.com/blog")).toBe(
       getPublishedPosts().length > 0,
     );
-    expect(urls).not.toContain("https://dhruv2mars.com/projects");
+    expect(urls).toContain("https://dhruv2mars.com/projects");
 
     const robotsFile = robots();
     expect(robotsFile.sitemap).toBe("https://dhruv2mars.com/sitemap.xml");
