@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "81402ad35815",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 2,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/81/402ad35815/0/metadata.json",
+      "transcript": "/81/402ad35815/0/full.jsonl",
+      "compact_transcript": "/81/402ad35815/0/transcript.jsonl",
+      "content_hash": "/81/402ad35815/0/content_hash.txt",
+      "prompt": "/81/402ad35815/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3186,
+    "cache_creation_tokens": 3453699,
+    "cache_read_tokens": 132766545,
+    "output_tokens": 906537,
+    "api_call_count": 1592
+  }
+}
