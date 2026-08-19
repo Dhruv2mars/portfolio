@@ -43,7 +43,7 @@ export function BlogSection({
           <CopyLink id="blog" label="Blog" />
         </PanelTitle>
         <PanelDescription>
-          Notes on building tooling for coding agents.
+          Notes on coding agents and the models behind them.
         </PanelDescription>
       </PanelHeader>
 
