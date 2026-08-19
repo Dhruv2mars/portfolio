@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { CopyLink } from "@/components/copy-link";
+import { MoreLink } from "@/components/more-link";
 import { Panel, PanelHeader, PanelTitle, PanelTitleSup } from "@/components/panel";
 import { ProjectRow } from "@/components/project-row";
 import { getProjects } from "@/lib/projects";
@@ -41,15 +41,7 @@ export function ProjectsSection({
         ))}
       </ul>
 
-      {hidden > 0 ? (
-        <Link
-          href="/projects"
-          className="flex h-12 touch-manipulation items-center justify-center gap-1.5 border-t border-line text-sm text-muted-foreground transition-colors hover:bg-accent-muted hover:text-foreground"
-        >
-          Show more
-          <span className="tabular-nums opacity-60">({hidden})</span>
-        </Link>
-      ) : null}
+      {hidden > 0 ? <MoreLink href="/projects">All projects</MoreLink> : null}
     </Panel>
   );
 }
