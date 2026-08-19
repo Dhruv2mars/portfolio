@@ -43,10 +43,10 @@ export const metadata: Metadata = {
     default: `${site.name} — ${site.tagline}`,
     template: `%s · ${site.name}`,
   },
-  description: site.positioning,
+  description: site.description,
   openGraph: {
     title: site.name,
-    description: site.positioning,
+    description: site.description,
     url: site.url,
     siteName: site.name,
     type: "website",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: site.name,
-    description: site.positioning,
+    description: site.description,
     images: [ogImagePath(site.name)],
   },
   alternates: {
@@ -83,7 +83,7 @@ const jsonLd = {
       "@type": "WebSite",
       name: site.name,
       url: site.url,
-      description: site.positioning,
+      description: site.description,
       author: { "@type": "Person", name: site.name, url: site.url },
     },
     {

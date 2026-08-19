@@ -6,10 +6,15 @@ export type SocialLink = {
 export const site = {
   name: "Dhruv Sharma",
   handle: "Dhruv2mars",
-  /** The positioning, shown under the name. Lowercase on purpose. */
+  /** The role, shown under the name. Lowercase on purpose. */
   tagline: "agentic engineer",
-  /** One line of context. Proof lives below it, not in it. */
-  positioning:
+  /**
+   * The one-line description search results, feed readers and the install
+   * manifest read. It is not rendered on the page: the hero already says the
+   * name and the role, and a third line under them was prose the page did not
+   * need. See `app/layout.tsx`.
+   */
+  description:
     "I build tooling for coding agents — repro harnesses, queues, local-first inference — and ship with them every day.",
   url: "https://dhruv2mars.com",
   /**
@@ -23,7 +28,7 @@ export const site = {
    * the map query, so there is nothing to keep in sync. `null` draws no row
    * rather than a placeholder — an empty pin is worse than no pin.
    */
-  location: null as string | null,
+  location: "New Delhi, India" as string | null,
   /**
    * The IANA zone the clock in the overview runs on. Read off the author's own
    * machine rather than guessed; change it here and the clock, the hands and

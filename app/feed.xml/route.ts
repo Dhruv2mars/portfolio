@@ -6,7 +6,7 @@ export async function GET() {
   const xml = buildRssXml({
     siteUrl: site.url,
     siteName: site.name,
-    description: site.positioning,
+    description: site.description,
     posts: getPublishedPosts(),
   });
 
