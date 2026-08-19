@@ -88,6 +88,15 @@ export function Rss(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Disclosure marker. Points down when closed, up when open. */
+export function ChevronIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="m4 6.5 4 4 4-4" />
+    </Icon>
+  );
+}
+
 /** External destination marker on a row. */
 export function LinkIcon(props: SVGProps<SVGSVGElement>) {
   return (
