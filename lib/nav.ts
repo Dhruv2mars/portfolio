@@ -5,7 +5,7 @@ export type NavItem = {
   section?: string;
 };
 
-export const HOME_SECTIONS = ["activity", "work"] as const;
+export const HOME_SECTIONS = ["projects"] as const;
 export type HomeSectionId = (typeof HOME_SECTIONS)[number];
 
 /**
@@ -14,8 +14,7 @@ export type HomeSectionId = (typeof HOME_SECTIONS)[number];
  * navigation. `section` stays lowercase — it is a DOM id, not prose.
  */
 const BASE_NAV: readonly NavItem[] = [
-  { label: "Activity", href: "/#activity", section: "activity" },
-  { label: "Work", href: "/#work", section: "work" },
+  { label: "Projects", href: "/#projects", section: "projects" },
 ];
 
 /**

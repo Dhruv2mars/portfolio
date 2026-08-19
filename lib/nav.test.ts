@@ -26,7 +26,7 @@ describe("navigation shows only what exists", () => {
 describe("the nav marks the section a reader is actually in", () => {
   const sections = [
     { id: "activity", top: 600 },
-    { id: "work", top: 1400 },
+    { id: "projects", top: 1400 },
   ];
 
   test("nothing is current above the first section", () => {
@@ -37,12 +37,12 @@ describe("the nav marks the section a reader is actually in", () => {
   test("a section becomes current the moment its top passes", () => {
     expect(activeSectionId(sections, 600)).toBe("activity");
     expect(activeSectionId(sections, 1399)).toBe("activity");
-    expect(activeSectionId(sections, 1400)).toBe("work");
+    expect(activeSectionId(sections, 1400)).toBe("projects");
   });
 
   test("the last section wins at the foot of the page, however short", () => {
-    // Scrolled nowhere near `work`, but there is no more page to scroll.
-    expect(activeSectionId(sections, 700, true)).toBe("work");
+    // Scrolled nowhere near `projects`, but there is no more page to scroll.
+    expect(activeSectionId(sections, 700, true)).toBe("projects");
   });
 
   test("a page with no sections has nothing to mark", () => {
