@@ -1,15 +1,11 @@
 import Link from "next/link";
 import { PaletteTrigger } from "@/components/command-palette";
-import { GithubIcon } from "@/components/icons";
 import { Separator } from "@/components/separator";
 import { SiteNav } from "@/components/site-nav";
-import { SiteMark } from "@/components/site-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { navItems } from "@/lib/nav";
 import { site } from "@/lib/site";
-
-const GITHUB = `https://github.com/${site.handle}`;
 
 export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
   const items = navItems(hasPosts);
@@ -22,9 +18,10 @@ export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
         <Link
           href="/"
           aria-label="Home"
-          className="flex items-center gap-2 pl-1 text-foreground"
+          className="flex items-center pl-2 text-foreground"
         >
-          <SiteMark className="h-8 shrink-0" />
+          {/* The wordmark alone. A glyph beside it would be a second mark
+              competing with the one the hero already draws. */}
           <span className="font-heading text-base font-medium tracking-tight">
             {site.handle.toLowerCase()}
           </span>
@@ -44,20 +41,12 @@ export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
 
         {/* The header trigger names a shortcut, so it goes where the nav
             goes. Below `sm` the palette puts up a thumb-reachable dock
-            instead — see `MobileDock`. */}
+            instead — see `MobileDock`. GitHub is not here: it is already a
+            glyph in the links row, and a link that appears twice on one
+            screen is one link too many. */}
         <div className="flex items-center max-sm:*:data-[slot=command-menu-trigger]:hidden">
           <Separator orientation="vertical" className="mr-2 h-5 max-sm:hidden" />
           <PaletteTrigger />
-          <Separator orientation="vertical" className="mx-2 h-5 max-sm:hidden" />
-          <a
-            href={GITHUB}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="flex size-8 touch-manipulation items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
-          >
-            <GithubIcon className="size-4.5" />
-          </a>
           <Separator orientation="vertical" className="mx-2 h-5" />
           <ThemeToggle />
         </div>

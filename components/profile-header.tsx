@@ -38,14 +38,11 @@ function Avatar() {
           aria-label={`${site.name}, monogram`}
           className="absolute inset-0 grid place-items-center"
         >
-          {/* The same lattice the drawing beside it stands on, and a mount
-              inset from the plate edge like the figures elsewhere carry — the
-              monogram is a mark this site drew, not a photograph that failed
-              to load, and it should look like it was meant. */}
-          <span
-            aria-hidden
-            className="hero-lattice absolute inset-0 opacity-70"
-          />
+          {/* A mount inset from the plate edge, like the figures elsewhere
+              carry — the monogram is a mark this site drew, not a photograph
+              that failed to load, and it should look like it was meant. No
+              texture behind it: the hero is a plain sheet, and the only
+              drawing on it is the one inside Fig. 1's own frame. */}
           <span
             aria-hidden
             className="absolute inset-2 rounded-md border border-line"
@@ -71,18 +68,10 @@ function Avatar() {
 export function ProfileHeader() {
   return (
     <div className="screen-line-bottom relative grid grid-cols-[auto_1fr] grid-rows-[1fr_auto] overflow-y-clip border-x border-line">
-      {/* The floor lattice carried past the rail as a whisper, so the drawing
-          reads as larger than the frame that crops it. Only outside the rail —
-          inside it, the real drawing is doing the work and a second grid would
-          only fight it. */}
-      <div
-        aria-hidden
-        className="hero-lattice pointer-events-none absolute inset-y-0 right-full -z-1 w-[100vw]"
-      />
-      <div
-        aria-hidden
-        className="hero-lattice pointer-events-none absolute inset-y-0 left-full -z-1 w-[100vw]"
-      />
+      {/* Nothing bleeds out of here. The reference lets its hero texture run
+          past the rail and off the screen; ours does not. A pattern outside
+          the frame turns the top of the page into wallpaper, and the only
+          lines the hero needs are the ones that divide it. */}
       <figure className="relative col-span-2 p-2 sm:col-span-1 sm:col-start-2 sm:p-4">
         {/* Fills the plate rather than sitting inside it: the drawing is
             scaled to cover and cut at the edges, which is what makes the
