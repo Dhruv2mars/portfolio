@@ -9,6 +9,11 @@ import {
   type ActivityWeek,
 } from "@/lib/activity-grid";
 
+/** The rail the strip is drawn on, and what a day may cost inside it. */
+const CELL_GAP = 2;
+const CELL_MIN = 12;
+const CELL_MAX = 18;
+
 /** How long a held arrow key waits before it starts walking, and how fast. */
 const REPEAT_DELAY_MS = 300;
 const REPEAT_INTERVAL_MS = 55;
@@ -42,6 +47,35 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
   const [active, setActive] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // The largest whole-pixel square the rail can hold. Whole pixels because a
+  // fractional track rounds unevenly — one week 12px wide, the next 13 — and
+  // on a grid of squares that reads as a wobble rather than as a measurement.
+  // Measured rather than guessed: the rail is a different width on a phone,
+  // and the answer has to be a length before the browser can lay any of it out.
+  const [cellSize, setCellSize] = useState(CELL_MIN);
+
+  useEffect(() => {
+    const strip = scrollRef.current;
+    if (!strip) return;
+    const measure = () => {
+      const style = getComputedStyle(strip);
+      const rail =
+        strip.clientWidth -
+        parseFloat(style.paddingInlineStart) -
+        parseFloat(style.paddingInlineEnd) -
+        // The grid's own gutter, kept for the focus ring.
+        6;
+      const fits = Math.floor(
+        (rail - (weeks.length - 1) * CELL_GAP) / weeks.length,
+      );
+      setCellSize(Math.min(CELL_MAX, Math.max(CELL_MIN, fits)));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(strip);
+    return () => observer.disconnect();
+  }, [weeks.length]);
+
   // When the record is genuinely wider than the rail, the end of it is the
   // part worth opening on — today is the last column. A rail that is short by
   // only a few pixels is left where it is: scrolling it would push the first
@@ -51,7 +85,9 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
     if (!strip) return;
     const overflow = strip.scrollWidth - strip.clientWidth;
     if (overflow > 64) strip.scrollLeft = strip.scrollWidth;
-  }, [weeks]);
+    // `cellSize` is what decides whether there is an overflow at all, so the
+    // rail is only worth opening on its end once that has been measured.
+  }, [weeks, cellSize]);
 
   const move = useCallback(
     (delta: number) => {
@@ -93,7 +129,12 @@ export function ActivityGrid({ weeks }: { weeks: readonly ActivityWeek[] }) {
               active !== null && slots[active] ? `${gridId}-${active}` : undefined
             }
             className="activity-grid"
-            style={{ "--weeks": weeks.length } as CSSProperties}
+            style={
+              {
+                "--weeks": weeks.length,
+                "--cell-size": `${cellSize}px`,
+              } as CSSProperties
+            }
             onFocus={() => setActive((current) => current ?? lastFilled)}
             onBlur={() => {
               stopRepeat();

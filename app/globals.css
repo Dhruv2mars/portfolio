@@ -394,23 +394,23 @@
    grid is a measuring instrument, so its cells are not decorated. Intensity
    is carried by the neutral foreground at five opacities.
 
-   The cell is fluid with a 12px floor: the drawn window is a handful of
-   months, not a fixed year, so a fixed cell would leave the panel two-thirds
-   empty on a desktop and the floor is what puts the strip back into a scroll
-   on a phone.
+   The cell size is measured, not declared: the drawn window is a handful of
+   months rather than a fixed year, so one hard-coded size would leave the
+   panel two-thirds empty. The grid picks the largest whole-pixel cell its rail
+   can hold, between a 12px floor — which is what puts the strip back into a
+   scroll on a phone — and an 18px ceiling, past which a day reads as a tile.
 --------------------------------------------------------------------------- */
 
 .activity-grid {
   --cell-size: 12px;
   --cell-gap: 2px;
   display: grid;
-  grid-template-columns: repeat(var(--weeks, 53), minmax(var(--cell-size), 1fr));
+  /* Whole pixels, and the same number of them in every column. A fractional
+     track (`1fr`) let the browser round one week to 12px and the next to 13,
+     which on a grid of squares is visible as a wobble in every row — so the
+     size is measured once, in whole pixels, and handed down as a length. */
+  grid-template-columns: repeat(var(--weeks, 53), var(--cell-size));
   gap: var(--cell-gap);
-  width: 100%;
-  min-width: calc(
-    var(--weeks, 53) * var(--cell-size) + (var(--weeks, 53) - 1) *
-      var(--cell-gap)
-  );
   /* The grid is one tab stop, but the thing that moves is the active cell, so
      the ring is drawn there instead of around all 365 of them. */
   outline: none;
@@ -421,7 +421,7 @@
 .activity-col {
   position: relative;
   display: grid;
-  grid-template-rows: repeat(7, auto);
+  grid-template-rows: repeat(7, var(--cell-size));
   gap: var(--cell-gap);
   padding-top: 1.05rem;
 }
@@ -512,7 +512,8 @@
     transparent
   );
   position: relative;
-  aspect-ratio: 1;
+  width: var(--cell-size);
+  height: var(--cell-size);
   animation: fade-in 260ms var(--ease-out-quint) both;
   animation-delay: calc(var(--col, 0) * 5ms + 320ms);
   /* No transition on the marker. A cursor that fades in over a tenth of a
