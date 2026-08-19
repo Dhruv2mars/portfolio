@@ -86,8 +86,12 @@ export function ProfileHeader() {
       <figure className="relative col-span-2 p-2 sm:col-span-1 sm:col-start-2 sm:p-4">
         {/* Fills the plate rather than sitting inside it: the drawing is
             scaled to cover and cut at the edges, which is what makes the
-            lattice read as continuing past the frame. */}
-        <SiteMarkIsometric className="h-56 w-full sm:h-90" />
+            lattice read as continuing past the frame.
+
+            The plate keeps a ratio rather than a height, so it grows with the
+            rail instead of stepping at the breakpoint — the reference's plate
+            is the same shape at every width it is drawn at. */}
+        <SiteMarkIsometric className="aspect-[556/354] w-full" />
         <figcaption className="pointer-events-none absolute right-2 bottom-2 text-sm leading-none tracking-wide text-[color-mix(in_oklab,var(--muted-foreground)_60%,var(--background))] tabular-nums select-none sm:right-4 sm:bottom-4">
           Fig. 1.
         </figcaption>

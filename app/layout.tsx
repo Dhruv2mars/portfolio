@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CommandPaletteProvider } from "@/components/command-palette";
 import { MobileDock } from "@/components/mobile-dock";
+import { ThemeColor } from "@/components/theme-color";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -125,6 +126,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
         <ThemeProvider>
+          <ThemeColor />
           {/* One palette for the whole shell: the header's trigger and the
               dock's are two doors onto the same dialog, so the state sits
               above both rather than inside either. */}
