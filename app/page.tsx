@@ -1,7 +1,10 @@
 import { ActivitySection } from "@/components/activity-section";
 import { Overview, SocialLinks } from "@/components/overview";
 import { ProfileHeader } from "@/components/profile-header";
-import { ProjectsSection } from "@/components/projects-section";
+import {
+  HOME_PROJECT_LIMIT,
+  ProjectsSection,
+} from "@/components/projects-section";
 import { cn } from "@/lib/utils";
 
 /** Matches the AI Activity blob's own cache window. */
@@ -38,7 +41,7 @@ export default function Home() {
       <ActivitySection />
 
       <PanelDivider />
-      <ProjectsSection />
+      <ProjectsSection limit={HOME_PROJECT_LIMIT} />
       {/* No trailing divider. Bands go *between* panels; the footer opens with
           its own, and two adjacent bands read as a double border. */}
     </div>
