@@ -1,9 +1,20 @@
 import { Panel, PanelContent } from "@/components/panel";
-import { SOCIAL_ICONS } from "@/components/icons";
+import { MapPinIcon, SOCIAL_ICONS } from "@/components/icons";
+import { LocalTime } from "@/components/local-time";
+import { OverviewRow } from "@/components/overview-row";
 import { site } from "@/lib/site";
 
-/** One line of context. Proof lives in the panels below it, not in it. */
+/**
+ * One line of context, and under it the handful of facts that are true of the
+ * author rather than of the work: where they are, and what time it is there.
+ * Proof lives in the panels below, not here.
+ *
+ * The facts are set in mono behind their own glyphs so they read as a legend
+ * to the page rather than as more prose — the same treatment the captions
+ * elsewhere get, for the same reason.
+ */
 export function Overview() {
+  const facts = site.location || site.timezone;
   return (
     <Panel>
       {/* Every panel on the page is a landmark, so every panel gets a name.
@@ -16,6 +27,24 @@ export function Overview() {
           {site.positioning}
         </p>
       </PanelContent>
+      {facts ? (
+        <div className="screen-line-top grid gap-x-4 gap-y-2.5 p-4 sm:grid-cols-2">
+          {site.location ? (
+            <OverviewRow icon={<MapPinIcon />}>
+              <a
+                className="link"
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.location)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Location: ${site.location}`}
+              >
+                {site.location}
+              </a>
+            </OverviewRow>
+          ) : null}
+          {site.timezone ? <LocalTime zone={site.timezone} /> : null}
+        </div>
+      ) : null}
     </Panel>
   );
 }
