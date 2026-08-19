@@ -5,6 +5,7 @@ import { PaletteTrigger } from "@/components/command-palette";
 import { Separator } from "@/components/separator";
 import { SiteNav } from "@/components/site-nav";
 import type { NavItem } from "@/lib/nav";
+import { usePresence } from "@/lib/use-presence";
 
 /**
  * The dock is the whole of the site's chrome on a phone. Above `sm` the header
@@ -35,6 +36,10 @@ export function MobileDock({ items }: { items: readonly NavItem[] }) {
  */
 function DockMenu({ items }: { items: readonly NavItem[] }) {
   const [open, setOpen] = useState(false);
+  // The sheet outlives its own state by the length of its exit — see
+  // `usePresence`. Everything else here still keys off `open`, which is the
+  // truth; `present` only decides whether the node is still on screen.
+  const sheet = usePresence(open, 100);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
@@ -90,12 +95,17 @@ function DockMenu({ items }: { items: readonly NavItem[] }) {
         />
       </button>
 
-      {open ? (
+      {sheet.present ? (
         <div
           ref={sheetRef}
           role="dialog"
           aria-label="Menu"
-          className="palette-panel absolute bottom-full origin-bottom left-1/2 mb-2 flex w-48 -translate-x-1/2 flex-col rounded-xl bg-popover p-1 shadow-md ring ring-foreground/10 dark:ring-foreground/20"
+          data-state={sheet.state}
+          /* On the way out it is a picture of a sheet, not a sheet: `inert`
+             takes it out of the tab order and off the hit-testing map for the
+             tenth of a second it spends leaving. */
+          inert={!open}
+          className="dock-sheet absolute bottom-full left-1/2 mb-2 flex w-48 -translate-x-1/2 flex-col rounded-xl bg-popover p-1 shadow-md ring ring-foreground/10 dark:ring-foreground/20"
         >
           <SiteNav
             items={items}

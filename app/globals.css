@@ -407,6 +407,19 @@
   }
 }
 
+/* Written out rather than run as `fade-in … reverse`: reversing an animation
+   that has already finished does not restart it, it re-reads the same finished
+   playhead against the other end of the timeline — so the element snaps to the
+   far keyframe instead of travelling to it. An exit needs its own name. */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Activity mosaic. Fixed 12px blocks on a 2px gutter, square corners — the
    grid is a measuring instrument, so its cells are not decorated. Intensity
@@ -784,17 +797,84 @@
   }
 }
 
+@keyframes palette-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
 /* The reference opens its dialog in a tenth of a second, from 95% and
    centred — no rise. A dialog that is already under the cursor's attention
-   does not need to travel to earn it. */
+   does not need to travel to earn it.
+
+   It leaves the same way. React unmounts a node the instant its state says so,
+   which is why the exit needs `usePresence` to hold the node for the length of
+   the animation — CSS alone, `@starting-style` included, never gets a frame. */
 .palette-panel {
   animation: palette-in 100ms var(--ease-out-quint) both;
+}
+
+.palette-panel[data-state="closed"] {
+  animation: palette-out 100ms var(--ease-out-quint) both;
 }
 
 .palette-backdrop {
   animation: fade-in 160ms linear both;
   background: color-mix(in oklab, var(--background) 62%, transparent);
   backdrop-filter: blur(6px);
+}
+
+/* The backdrop takes longer to arrive than to leave, and leaves in step with
+   the panel rather than outliving it: a dismissal that is still fading after
+   the thing being dismissed has gone reads as lag. */
+.palette-backdrop[data-state="closed"] {
+  animation: fade-out 100ms linear both;
+}
+
+/* ---------------------------------------------------------------------------
+   Dock sheet
+
+   The same tenth of a second as the palette, but it is not the same motion.
+   The palette arrives centred, where the eye already is; the sheet arrives
+   above a control at the foot of the screen, so it rises the 8px it is offset
+   from that control and scales out of a point 8px *below* its own bottom edge
+   — the dock button. It grows out of the thing that was pressed.
+--------------------------------------------------------------------------- */
+
+@keyframes dock-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes dock-sheet-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+}
+
+.dock-sheet {
+  transform-origin: 50% calc(100% + 8px);
+  animation: dock-sheet-in 100ms var(--ease-out-quint) both;
+}
+
+.dock-sheet[data-state="closed"] {
+  animation: dock-sheet-out 100ms var(--ease-out-quint) both;
 }
 
 /* ---------------------------------------------------------------------------
@@ -813,7 +893,9 @@
     animation-iteration-count: 1 !important;
   }
   .activity-cell,
-  .palette-panel {
+  .palette-panel,
+  .palette-backdrop,
+  .dock-sheet {
     animation: none !important;
     opacity: 1;
     transform: none;
