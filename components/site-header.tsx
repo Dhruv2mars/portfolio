@@ -29,12 +29,12 @@ export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
 
         <div className="flex-1" />
 
-        {/* Below `sm` the bar collapses to mark plus controls. The nav targets
-            are in-page anchors on a single scroll, so losing them costs
-            nothing, and keeping them cost the theme toggle its right gutter. */}
+        {/* Below `sm` the bar collapses to mark plus controls: the same
+            routes are a thumb's reach away in the dock, and keeping them here
+            cost the theme toggle its right gutter. */}
         <nav
           aria-label={FOCUSABLE_CHROME.primaryNavLabel}
-          className="flex items-center max-sm:hidden"
+          className="flex items-center gap-4 max-sm:hidden"
         >
           <SiteNav items={items} variant="header" />
         </nav>

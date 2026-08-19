@@ -1,21 +1,17 @@
 export type NavItem = {
   label: string;
   href: string;
-  /** In-page anchors get scroll-spy treatment; routes do not. */
-  section?: string;
 };
 
-export const HOME_SECTIONS = ["projects"] as const;
-export type HomeSectionId = (typeof HOME_SECTIONS)[number];
-
 /**
- * Labels are title-case: they are proper names for places on the page, and at
- * the header's small size lowercase reads as a stylistic tic rather than as
- * navigation. `section` stays lowercase — it is a DOM id, not prose.
+ * Every nav entry is a route. The home page carries samples of these places,
+ * but the nav points at the places themselves — a header link that scrolls the
+ * page you are already on is a link that does nothing on every other page.
+ *
+ * Labels are title-case: they are proper names for pages, and at the header's
+ * small size lowercase reads as a stylistic tic rather than as navigation.
  */
-const BASE_NAV: readonly NavItem[] = [
-  { label: "Projects", href: "/#projects", section: "projects" },
-];
+const BASE_NAV: readonly NavItem[] = [{ label: "Projects", href: "/projects" }];
 
 /**
  * Blog only appears once a real Post is published. Nothing empty is ever
@@ -28,25 +24,11 @@ export function navItems(hasPublishedPosts: boolean): readonly NavItem[] {
 }
 
 /**
- * Which section a reader is actually in, given where each one starts and how
- * far the page has scrolled. The rule is the last section whose top has passed
- * under the header — not the nearest, which flickers between two neighbours
- * whenever one is short.
- *
- * The bottom of the page is a special case: a final section shorter than the
- * viewport can never reach the header, so it would never light up. At the
- * bottom, the last section is the one you are looking at by definition.
+ * Which entry the reader is inside. A section of a route counts as that route
+ * — `/blog/a-post` is still the Blog — but only on a segment boundary, so
+ * `/projects-archive` is not `/projects`.
  */
-export function activeSectionId(
-  sections: readonly { id: string; top: number }[],
-  scrollTop: number,
-  atBottom = false,
-): string | null {
-  if (sections.length === 0) return null;
-  if (atBottom) return sections[sections.length - 1].id;
-  let current: string | null = null;
-  for (const section of sections) {
-    if (section.top <= scrollTop) current = section.id;
-  }
-  return current;
+export function isCurrentRoute(href: string, pathname: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
