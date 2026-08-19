@@ -39,9 +39,10 @@ const KIND_ICONS: Record<ProjectKind, typeof BoxIcon> = {
  * that both expands and navigates makes the reader guess which one a click
  * bought, and one of the two answers is a lost page.
  *
- * The 56px gutter column carries the kind glyph and the dashed rule runs the
- * full height of the row, so an opened record stays hung off the same rail as
- * its title instead of floating free at the left margin.
+ * One hover surface, though. The row lights as a whole, because it is one
+ * thing; a title that lit while the gutter beside it stayed cold read as two
+ * rows stacked. The link is the exception: it darkens on its own, so the
+ * reader can see which of the two doors is under the pointer.
  */
 export function ProjectRow({ project }: { project: Project }) {
   const [open, setOpen] = useState(false);
@@ -50,53 +51,53 @@ export function ProjectRow({ project }: { project: Project }) {
 
   return (
     <li className="border-b border-line last:border-b-0">
-      <div className="grid grid-cols-[3.5rem_1fr]">
-        <div className="flex h-14 items-center justify-center">
-          <IconTile>
-            <KindIcon />
-          </IconTile>
-        </div>
+      {/* `relative` scopes the stretched trigger to the row: the record below
+          is a sibling, so opening one never puts a button over its own text. */}
+      <div className="relative flex items-center transition-[background-color] duration-150 ease-out hover:bg-accent-muted has-[button:active]:bg-accent">
+        <IconTile className="mx-4">
+          <KindIcon />
+        </IconTile>
 
-        <div className="flex min-w-0 border-l border-dashed border-line">
+        <div className="flex min-w-0 flex-1 items-center gap-2 border-l border-dashed border-line py-4 pr-2 pl-4">
+          {/* The whole row toggles, via a pseudo-element rather than a wrapper,
+              so the heading stays the button's accessible name. */}
           <button
             type="button"
             aria-expanded={open}
             aria-controls={detailsId}
             onClick={() => setOpen((value) => !value)}
-            className="flex h-14 min-w-0 flex-1 touch-manipulation items-center gap-2 pr-2 pl-4 text-left transition-colors hover:bg-accent-muted"
+            className="min-w-0 flex-1 touch-manipulation text-left before:absolute before:inset-0"
           >
-            <h3 className="min-w-0 flex-1 truncate font-medium">
-              {project.name}
-            </h3>
-            <ChevronIcon
-              data-open={open}
-              className="size-4 shrink-0 text-muted-foreground transition-[rotate,color] duration-200 data-[open=true]:rotate-180 data-[open=true]:text-foreground"
-            />
+            <h3 className="truncate font-medium">{project.name}</h3>
           </button>
 
+          {/* `after:-inset-2` is the hit area: 16px of glyph is a target only a
+              mouse can hit, and this is a link a thumb has to be able to take
+              without opening the record by mistake. */}
           <a
             href={project.live ?? project.url}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${project.name} — ${destinationHost(project)}`}
-            className="flex h-14 w-12 shrink-0 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:bg-accent-muted hover:text-foreground"
+            className="relative flex size-6 shrink-0 touch-manipulation items-center justify-center text-muted-foreground transition-[color] duration-150 ease-out after:absolute after:-inset-2 hover:text-foreground active:text-foreground"
           >
-            <LinkIcon className="size-4" />
+            <LinkIcon className="pointer-events-none size-4" />
           </a>
+
+          <ChevronIcon
+            data-open={open}
+            aria-hidden
+            className="size-4 shrink-0 text-muted-foreground transition-[rotate,color] duration-200 ease-out data-[open=true]:rotate-180 data-[open=true]:text-foreground"
+          />
         </div>
       </div>
 
       {/* `0fr → 1fr` rather than a measured pixel height: the record can be one
           line or three, and a height the row had to measure first is a height
           that is wrong for one frame. */}
-      <div
-        id={detailsId}
-        data-open={open}
-        className="project-details grid grid-cols-[3.5rem_1fr]"
-      >
-        <div aria-hidden />
-        <div className="overflow-hidden border-l border-dashed border-line">
-          <div className="px-4 pt-1 pb-4">
+      <div id={detailsId} data-open={open} className="project-details grid">
+        <div className="overflow-hidden">
+          <div className="border-t border-line p-4">
             <p className="typeset typeset-description text-muted-foreground">
               {project.description}
             </p>
