@@ -11,7 +11,7 @@ export function generateMetadata(): Metadata {
   if (getPublishedPosts().length === 0) return { title: "Nothing lives here" };
   return {
     title: "Blog",
-    description: "Notes on building tooling for coding agents.",
+    description: "Notes on coding agents and the models behind them.",
   };
 }
 
