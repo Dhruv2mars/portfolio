@@ -82,8 +82,6 @@ export function buildActivityWeeks(
     const month = first.date.slice(0, 7);
     if (month === labelled) return;
     labelled = month;
-    // Skip a label that would collide with the previous one on a stub week.
-    if (index === 0 && week.cells[0] === null) return;
     week.monthLabel = monthAbbreviation(first.date);
   });
 

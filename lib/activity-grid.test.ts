@@ -6,12 +6,15 @@ import {
   weekdayIndex,
 } from "@/lib/activity-grid";
 import type { ActivityDay } from "@/lib/ai-activity";
-import { fillSparseDailySeries, intensityFromTokens } from "@/lib/ai-activity";
+import { buildDailySeries } from "@/lib/ai-activity";
+import { shiftYmd } from "@/lib/ai-activity-payload";
 
+/** A quiet window of the given length: layout is what is under test here. */
 function series(endDate: string, days: number): ActivityDay[] {
-  return fillSparseDailySeries([], endDate, days).map((day) => ({
+  const start = shiftYmd(endDate, -(days - 1));
+  return buildDailySeries([], start, endDate).map((day) => ({
     ...day,
-    intensity: intensityFromTokens(day.tokens, 1),
+    intensity: 0,
   }));
 }
 
@@ -48,10 +51,24 @@ describe("activity grid layout", () => {
 
   test("a month is labelled at most once, never on the last column", () => {
     const weeks = buildActivityWeeks(series("2026-08-15", 365));
-    const labels = weeks.flatMap((w) => (w.monthLabel ? [w.monthLabel] : []));
-    expect(new Set(labels).size).toBe(labels.length);
-    expect(labels.length).toBeGreaterThanOrEqual(11);
+    const labelled = weeks.flatMap((week) =>
+      week.monthLabel ? [week.cells.find(Boolean)!.date.slice(0, 7)] : [],
+    );
+    expect(new Set(labelled).size).toBe(labelled.length);
+    expect(labelled.length).toBeGreaterThanOrEqual(11);
     expect(weeks.at(-1)!.monthLabel).toBeUndefined();
+  });
+
+  test("the first month is labelled even when its week opens on a stub", () => {
+    // 2026-01-01 is a Thursday, so week 0 is three empty slots and then Jan.
+    const weeks = buildActivityWeeks(
+      buildDailySeries([], "2026-01-01", "2026-03-01").map((day) => ({
+        ...day,
+        intensity: 0 as const,
+      })),
+    );
+    expect(weeks[0]!.cells[0]).toBeNull();
+    expect(weeks[0]!.monthLabel).toBe("Jan");
   });
 
   test("an empty series produces no columns", () => {

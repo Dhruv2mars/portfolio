@@ -9,57 +9,29 @@ import {
   PanelDescription,
   PanelHeader,
   PanelTitle,
-  PanelTitleSup,
 } from "@/components/panel";
-import { Tag } from "@/components/tag";
-import { buildActivityWeeks, LEVEL_ALPHA } from "@/lib/activity-grid";
-import { formatTokenCount, materializeAiActivity } from "@/lib/ai-activity";
+import { buildActivityWeeks } from "@/lib/activity-grid";
+import { formatCompactTokens, materializeAiActivity } from "@/lib/ai-activity";
 import { getAiActivityPayload } from "@/lib/ai-activity-store";
 
-function updatedLabel(generatedAt: string | null, timeZone: string): string {
-  if (!generatedAt) return "";
-  const date = new Date(generatedAt);
-  if (Number.isNaN(date.getTime())) return "";
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    timeZone,
-  }).format(date);
-}
-
 export async function ActivitySection() {
-  const { payload, source } = await getAiActivityPayload();
+  const { payload } = await getAiActivityPayload();
   const activity = materializeAiActivity(payload);
   const weeks = buildActivityWeeks(activity.days);
-  const updated = updatedLabel(activity.generatedAt, activity.timezone);
-  // Only a feed published through yesterday earns a projected today.
-  const projecting = activity.days.at(-1)?.live === true;
-  // The key only earns its space when there is something in the grid to key.
-  const hasGaps = activity.days.some((day) => day.recorded === false);
-
-  const provenance =
-    source === "fallback"
-      ? "fixture data — the live feed is unavailable"
-      : !updated
-        ? ""
-        : projecting
-          ? `updated ${updated}`
-          : `feed stalled — last updated ${updated}`;
 
   return (
     <Panel id="activity">
       <PanelHeader>
         <PanelTitle>
-          AI activity
-          <PanelTitleSup>{formatTokenCount(activity.lifetimeTokens)}</PanelTitleSup>
-          <CopyLink id="activity" label="AI activity" />
+          Token activity
+          <CopyLink id="activity" label="Token activity" />
         </PanelTitle>
-        <PanelDescription>
-          Tokens through coding agents since I started measuring — one cell per
-          day
-          {projecting
-            ? ", today ringed rather than filled because it is still a projection."
-            : "."}
+        {/* The lifetime total, and nothing about how it got here. The feed is
+            the site's plumbing; a reader who wanted a build log would be
+            reading the repo. */}
+        <PanelDescription className="font-mono tabular-nums">
+          {formatCompactTokens(activity.lifetimeTokens)} tokens through coding
+          agents
         </PanelDescription>
       </PanelHeader>
 
@@ -70,50 +42,10 @@ export async function ActivitySection() {
             only appears where both exist. */}
         <HandwrittenNote className="top-6 right-full mr-5 hidden w-28 flex-col items-end text-right pointer-fine:xl:flex">
           <span className="-rotate-6">arrow keys walk the grid</span>
-          <HandwrittenArrow className="translate-x-3 -rotate-6 -scale-x-100" />
+          <HandwrittenArrow className="translate-x-3 -rotate-6" />
         </HandwrittenNote>
 
-        <div className="py-4">
-          <ActivityGrid weeks={weeks} />
-        </div>
-
-        {/* The reference's own caption row: a wrapping flex line, not a
-            justified one. Both halves ask for their full width first, so at
-            desktop they share a line with the key pushed right, and on a phone
-            the key drops to its own line instead of crushing the sentence into
-            a four-word column. */}
-        <figcaption className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-line px-4 py-3 text-sm text-muted-foreground">
-          <span className="flex items-center gap-2">
-            <span className="tracking-wide text-muted-foreground/80">
-              Fig. 2.
-            </span>
-            {source === "fallback" ? <Tag>fixture</Tag> : null}
-            <span>{provenance}</span>
-          </span>
-          <span className="ml-auto flex shrink-0 items-center gap-1 font-mono text-xs">
-            {hasGaps ? (
-              <>
-                <span
-                  aria-hidden
-                  className="size-2.5 shadow-[inset_0_0_0_1px_var(--color-line)]"
-                />
-                <span className="mr-1.5">no data</span>
-              </>
-            ) : null}
-            less
-            {LEVEL_ALPHA.map((alpha) => (
-              <span
-                key={alpha}
-                aria-hidden
-                className="size-2.5"
-                style={{
-                  background: `color-mix(in oklab, var(--muted-foreground) ${alpha}, transparent)`,
-                }}
-              />
-            ))}
-            more
-          </span>
-        </figcaption>
+        <ActivityGrid weeks={weeks} />
       </figure>
     </Panel>
   );
