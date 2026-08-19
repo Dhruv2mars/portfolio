@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "39bb6c25fb7d",
+  "session_id": "348538aa-0cba-4f9a-8a4d-1a91bbdfb3b4",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-19T17:00:03.188766Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/blog/page.tsx",
+    "components/blog-section.tsx",
+    "content/blog/gpt-5-6-review.mdx"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "6d0a6729584a",
+  "checkpoint_transcript_start": 16,
+  "transcript_lines_at_start": 16,
+  "compact_transcript_start": 2,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-19T17:00:03.181483Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 67,
+    "human_modified": 2,
+    "human_removed": 0,
+    "total_committed": 67,
+    "total_lines_changed": 69,
+    "agent_percentage": 0,
+    "metric_version": 2
+  }
+}
