@@ -253,3 +253,53 @@ tell me whats the status? and how much we have achieved. how much %age is left b
 ---
 
 in my site, location, timezone will be additions other than the usual social/connect stuff. and just we will focus on the heatmap in future, not now. do the rest, once u are done with this sweep, open the dev server so that i can give u exact details and updates for fine tuning.
+
+---
+
+few changes:
+- remove that cube from dhruv2mars in top left of navbar. no need, just dhruv2mars is enough. 
+- there shouldnt be the cross design in the hero (top section) of the page, just the sections breaks is enough, like below the name bar, then below the heatmap bar. chan dai's site has plain without design/pattern in the top hero secitons. 
+- i have something in mind for the fig 1, but we will do it later. but note, the design/pattern will be inside that box/section only, not coming out of it like chan's. 
+- "I build tooling for coding agents..." remove this line and section, not needed. 
+- the location is new delhi, india. so do the things according to this. 
+- like the "arrow keys walk" text, similar style should be for, "say hi" for the socials section. 
+- always make sure the arrow points in the right direction. 
+- the ai activity section has a lot to be changed. u need to make it much cleaner. change the heading to "token activity". no need for that huge number adjecent with heading. remove that "token through coding..." line and replace it with the total token number (in B or M. billion, etc), not like the full exact no. remove "hover or focus a day" line. on right of fig2, change that stalled, last updated line. instead of that, on hover, the token number, date, comes in that section instead. (obv, tokens in b/m). the no data, less more section, it should be much simpler/cleaner, where just simple less to more, where the least is no data, this is better. on hover over the heatmap, the selection is kind of slow/laggy, not smooth and fast, fix that. also, the arrow keys only work press after press, it doesnt move if i hold the arrow keys, so fix that as well. also, make sure the overall heatmap looks filled, and not empty. so u might need to strip out a few months with no activity, and the last cell will be of current (today) date, which will be empty (obv). for the exact data and the funcitoning of the token activity heatmap, u will first use tokscale and get all of the data for all time, ever. then for the updates and all, here is how it will work, for the current date, it will fetch the data from my system (tokscale again) at midnight to get the token data for that date. no live counter and stuff, no update button/last updated. 
+
+- "Curated, not enumerated..." remove this line/section, not needed. 
+- for projects, there shouldnt be the tagline/subheading, it should be just the project name like chan's. on click, it will expand where it will show the details, texts, etc. the link icon on the right will either take them to the landing page/website, or github repo page. remove the tag pills, no need for those. no need for the everything else on github section. instead we will have the show more section like chan, but working in a diff way (more on this below). 
+- basically, in the navbar, instead of activity and work, i want projects and blogs. the show more in the projects on home page, will take the user to projects, where it will have all. similarly, when we have a few blogs done, we will show a curated list of a few on home, with show more section which will similarly take them to blogs page. also, no need for the github icon in navbar, as i already have that in the socials section. 
+- no need for the last section, dhruv2mars.com and rest. no need for that. just keep the footer (copyright, socials, rss, etc), from that section. also, basically, like the attached image, that chandai graphic/animation, i will have similar for dhruv2mars.
+
+[Attached image "image.png" is saved at: /Users/dhruv2mars/.t3/userdata/attachments/a66fffa0-14cb-4e78-bc87-40de3db7b52b-d39bcc2b-cf63-4e05-b243-4a1df4054ff5.png]
+
+---
+
+few changes:
+- remove that cube from dhruv2mars in top left of navbar. no need, just dhruv2mars is enough. 
+- there shouldnt be the cross design in the hero (top section) of the page, just the sections breaks is enough, like below the name bar, then below the heatmap bar. chan dai's site has plain without design/pattern in the top hero secitons. 
+- i have something in mind for the fig 1, but we will do it later. but note, the design/pattern will be inside that box/section only, not coming out of it like chan's. 
+- "I build tooling for coding agents..." remove this line and section, not needed. 
+- the location is new delhi, india. so do the things according to this. 
+- like the "arrow keys walk" text, similar style should be for, "say hi" for the socials section. 
+- always make sure the arrow points in the right direction. 
+- the ai activity section has a lot to be changed. u need to make it much cleaner. change the heading to "token activity". no need for that huge number adjecent with heading. remove that "token through coding..." line and replace it with the total token number (in B or M. billion, etc), not like the full exact no. remove "hover or focus a day" line. on right of fig2, change that stalled, last updated line. instead of that, on hover, the token number, date, comes in that section instead. (obv, tokens in b/m). the no data, less more section, it should be much simpler/cleaner, where just simple less to more, where the least is no data, this is better. on hover over the heatmap, the selection is kind of slow/laggy, not smooth and fast, fix that. also, the arrow keys only work press after press, it doesnt move if i hold the arrow keys, so fix that as well. also, make sure the overall heatmap looks filled, and not empty. so u might need to strip out a few months with no activity, and the last cell will be of current (today) date, which will be empty (obv). for the exact data and the funcitoning of the token activity heatmap, u will first use tokscale and get all of the data for all time, ever. then for the updates and all, here is how it will work, for the current date, it will fetch the data from my system (tokscale again) at midnight to get the token data for that date. no live counter and stuff, no update button/last updated. 
+
+- "Curated, not enumerated..." remove this line/section, not needed. 
+- for projects, there shouldnt be the tagline/subheading, it should be just the project name like chan's. on click, it will expand where it will show the details, texts, etc. the link icon on the right will either take them to the landing page/website, or github repo page. remove the tag pills, no need for those. no need for the everything else on github section. instead we will have the show more section like chan, but working in a diff way (more on this below). 
+- basically, in the navbar, instead of activity and work, i want projects and blogs. the show more in the projects on home page, will take the user to projects, where it will have all. similarly, when we have a few blogs done, we will show a curated list of a few on home, with show more section which will similarly take them to blogs page. also, no need for the github icon in navbar, as i already have that in the socials section. 
+- no need for the last section, dhruv2mars.com and rest. no need for that. just keep the footer (copyright, socials, rss, etc), from that section. also, basically, like the attached image, that chandai graphic/animation, i will have similar for dhruv2mars.
+
+[Attached image "image.png" is saved at: /Users/dhruv2mars/.t3/userdata/attachments/a66fffa0-14cb-4e78-bc87-40de3db7b52b-d39bcc2b-cf63-4e05-b243-4a1df4054ff5.png]
+
+---
+
+continue or are u done?
+
+---
+
+continue or are u done?
+
+---
+
+continue or are u done?
