@@ -98,7 +98,7 @@ export default async function PostPage({ params }: PageProps) {
           </PanelDescription>
         </PanelHeader>
 
-        <PanelContent className="prose">
+        <PanelContent className="typeset prose">
           <CustomMDX source={post.content} />
         </PanelContent>
       </Panel>

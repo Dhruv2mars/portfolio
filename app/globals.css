@@ -717,6 +717,9 @@
 .prose h3 + * {
   margin-top: 0.75em;
 }
+.prose > :first-child {
+  margin-top: 0;
+}
 .prose a {
   color: var(--link);
   text-decoration: underline;
@@ -786,6 +789,32 @@
 }
 .prose .anchor {
   position: absolute;
+}
+
+/* Reference marks (ⓘ) sit quiet beside the term they gloss; the definition
+   they jump to lights up once so you land on the right line. */
+.prose a[href^="#"]:not(.anchor) {
+  color: var(--muted-foreground);
+  text-decoration: none;
+  font-size: 0.8em;
+  vertical-align: 0.35em;
+  margin-left: 0.1em;
+  transition: color 150ms ease;
+}
+.prose a[href^="#"]:not(.anchor):hover {
+  color: var(--foreground);
+}
+@keyframes prose-target {
+  from {
+    background-color: var(--accent-muted);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+.prose h2:target,
+.prose h3:target {
+  animation: prose-target 1.2s ease-out;
 }
 
 /* sugar-high — four roles, no rainbow */
