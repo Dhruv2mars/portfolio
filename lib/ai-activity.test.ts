@@ -1,18 +1,17 @@
 import { describe, expect, test } from "bun:test";
 import {
-  ACTIVITY_WINDOW_DAYS,
+  ACTIVITY_MAX_MONTHS,
+  activityWindowStart,
   buildAiActivity,
-  dayFractionElapsed,
-  fillSparseDailySeries,
+  buildDailySeries,
+  formatCompactTokens,
+  formatTokenCount,
   intensityFromTokens,
   materializeAiActivity,
-  materializeHistory,
-  projectTodayTokens,
-  sevenDayMinBaseline,
-  withLiveToday,
+  quartileThresholds,
   type DailyTokens,
 } from "./ai-activity";
-import { shiftYmd, type AiActivityPayload } from "./ai-activity-payload";
+import { shiftMonth, shiftYmd, type AiActivityPayload } from "./ai-activity-payload";
 
 const FIXTURE: readonly DailyTokens[] = [
   { date: "2026-01-01", tokens: 0 },
@@ -22,250 +21,223 @@ const FIXTURE: readonly DailyTokens[] = [
   { date: "2026-01-05", tokens: 80_000 },
 ];
 
-describe("AI Activity read model", () => {
-  test("maps intensity relative to the densest day in the series", () => {
-    const activity = buildAiActivity(FIXTURE);
-    expect(activity.days.map((d) => d.intensity)).toEqual([0, 1, 1, 2, 4]);
+/** `count` worked days at the head of a month, the rest of it silent. */
+function workedMonth(month: string, count: number): DailyTokens[] {
+  return Array.from({ length: count }, (_, i) => ({
+    date: `${month}-${String(i + 1).padStart(2, "0")}`,
+    tokens: 1_000 * (i + 1),
+  }));
+}
+
+describe("intensity scale", () => {
+  test("cuts at the quartiles of the days that had work in them", () => {
+    // Zeros are the empty step, not a quarter of the scale, so they cannot
+    // drag the cuts down.
+    expect(quartileThresholds(FIXTURE)).toEqual([8_500, 25_000, 80_000]);
   });
 
-  test("lifetime summary prefers payload lifetime when provided", () => {
-    const activity = buildAiActivity(FIXTURE, { lifetimeTokens: 9_999_999 });
-    expect(activity.lifetimeTokens).toBe(9_999_999);
+  test("one huge day does not flatten the rest into one grey step", () => {
+    const days = [
+      ...Array.from({ length: 8 }, (_, i) => ({
+        date: `2026-01-0${i + 1}`,
+        tokens: (i + 1) * 1_000,
+      })),
+      { date: "2026-01-09", tokens: 400_000_000 },
+    ];
+    const thresholds = quartileThresholds(days);
+    const levels = days.map((d) => intensityFromTokens(d.tokens, thresholds));
+    // Every step is spent on days that exist, top step included.
+    expect(new Set(levels)).toEqual(new Set([1, 2, 3, 4]));
   });
 
-  test("lifetime summary falls back to series sum", () => {
-    const activity = buildAiActivity(FIXTURE);
-    expect(activity.lifetimeTokens).toBe(1_200 + 8_500 + 25_000 + 80_000);
+  test("a series with no work at all has no filled steps to hand out", () => {
+    expect(quartileThresholds([{ date: "2026-01-01", tokens: 0 }])).toEqual([
+      0, 0, 0,
+    ]);
   });
 
-  test("relative intensity buckets by ratio to max", () => {
-    expect(intensityFromTokens(0, 100)).toBe(0);
-    expect(intensityFromTokens(25, 100)).toBe(1);
-    expect(intensityFromTokens(50, 100)).toBe(2);
-    expect(intensityFromTokens(75, 100)).toBe(3);
-    expect(intensityFromTokens(100, 100)).toBe(4);
+  test("buckets are lower-inclusive and zero is always empty", () => {
+    const thresholds = [10, 20, 30] as const;
+    expect(intensityFromTokens(0, thresholds)).toBe(0);
+    expect(intensityFromTokens(1, thresholds)).toBe(1);
+    expect(intensityFromTokens(10, thresholds)).toBe(1);
+    expect(intensityFromTokens(11, thresholds)).toBe(2);
+    expect(intensityFromTokens(20, thresholds)).toBe(2);
+    expect(intensityFromTokens(30, thresholds)).toBe(3);
+    expect(intensityFromTokens(31, thresholds)).toBe(4);
   });
+});
 
-  test("fillSparseDailySeries zero-fills calendar gaps", () => {
-    const filled = fillSparseDailySeries(
-      [
-        { date: "2026-01-01", tokens: 10 },
-        { date: "2026-01-03", tokens: 30 },
-      ],
-      "2026-01-03",
-      3,
-    );
-    expect(filled).toEqual([
+describe("daily series", () => {
+  test("zero-fills calendar gaps inside the window", () => {
+    expect(
+      buildDailySeries(
+        [
+          { date: "2026-01-01", tokens: 10 },
+          { date: "2026-01-03", tokens: 30 },
+        ],
+        "2026-01-01",
+        "2026-01-03",
+      ),
+    ).toEqual([
       { date: "2026-01-01", tokens: 10 },
       { date: "2026-01-02", tokens: 0 },
       { date: "2026-01-03", tokens: 30 },
     ]);
   });
 
-  test("days past the feed's last report are unrecorded, not zero", () => {
-    const filled = fillSparseDailySeries(
-      [
-        { date: "2026-01-01", tokens: 10 },
-        { date: "2026-01-03", tokens: 30 },
-      ],
-      "2026-01-05",
-      5,
-    );
-    // The gap inside coverage is a measured quiet day; the tail is no data.
-    expect(filled).toEqual([
-      { date: "2026-01-01", tokens: 10 },
-      { date: "2026-01-02", tokens: 0 },
-      { date: "2026-01-03", tokens: 30 },
-      { date: "2026-01-04", tokens: 0, recorded: false },
-      { date: "2026-01-05", tokens: 0, recorded: false },
+  test("spans both ends inclusively and stays consecutive across a month", () => {
+    const series = buildDailySeries([], "2026-01-30", "2026-02-02");
+    expect(series.map((d) => d.date)).toEqual([
+      "2026-01-30",
+      "2026-01-31",
+      "2026-02-01",
+      "2026-02-02",
     ]);
   });
 
-  test("days before the feed's first report are unrecorded, not zero", () => {
-    const filled = fillSparseDailySeries(
+  test("days outside the window are left out, not folded in", () => {
+    const series = buildDailySeries(
       [
-        { date: "2026-01-03", tokens: 10 },
-        { date: "2026-01-04", tokens: 30 },
+        { date: "2025-12-31", tokens: 99 },
+        { date: "2026-01-02", tokens: 30 },
       ],
-      "2026-01-04",
-      4,
+      "2026-01-01",
+      "2026-01-02",
     );
-    // The window reaches back further than the meter does; those days are
-    // days nobody counted, not days that counted zero.
-    expect(filled).toEqual([
-      { date: "2026-01-01", tokens: 0, recorded: false },
-      { date: "2026-01-02", tokens: 0, recorded: false },
-      { date: "2026-01-03", tokens: 10 },
-      { date: "2026-01-04", tokens: 30 },
+    expect(series).toEqual([
+      { date: "2026-01-01", tokens: 0 },
+      { date: "2026-01-02", tokens: 30 },
     ]);
   });
+});
 
-  test("materializeHistory + withLiveToday appends projected today", () => {
+describe("window", () => {
+  test("walks back while the months were worked in, stops at the first that was not", () => {
+    const days = [
+      ...workedMonth("2026-05", 2),
+      ...workedMonth("2026-06", 20),
+      ...workedMonth("2026-07", 20),
+      ...workedMonth("2026-08", 10),
+    ];
+    expect(activityWindowStart(days, "2026-08-19")).toBe("2026-06-01");
+  });
+
+  test("the current month is always drawn, however young it is", () => {
+    expect(activityWindowStart([], "2026-08-19")).toBe("2026-08-01");
+  });
+
+  test("a long record is cut to the cap", () => {
+    const days = Array.from({ length: 24 }, (_, i) =>
+      workedMonth(shiftMonth("2026-08-19", -i).slice(0, 7), 25),
+    ).flat();
+    expect(activityWindowStart(days, "2026-08-19")).toBe(
+      shiftMonth("2026-08-19", -(ACTIVITY_MAX_MONTHS - 1)),
+    );
+    expect(activityWindowStart(days, "2026-08-19", 3)).toBe("2026-06-01");
+  });
+});
+
+describe("read model", () => {
+  test("lifetime prefers the payload total over the drawn window", () => {
+    expect(buildAiActivity(FIXTURE, { lifetimeTokens: 9_999_999 }).lifetimeTokens).toBe(
+      9_999_999,
+    );
+  });
+
+  test("lifetime falls back to the sum of the series", () => {
+    expect(buildAiActivity(FIXTURE).lifetimeTokens).toBe(
+      1_200 + 8_500 + 25_000 + 80_000,
+    );
+  });
+
+  test("materialize ends on today in the payload's timezone", () => {
     const payload: AiActivityPayload = {
       version: 1,
-      generatedAt: "2026-07-17T00:20:00.000Z",
+      generatedAt: "2026-08-19T00:20:00.000Z",
       timezone: "Asia/Kolkata",
-      days: [
-        { date: "2026-07-10", tokens: 100 },
-        { date: "2026-07-11", tokens: 80 },
-        { date: "2026-07-12", tokens: 60 },
-        { date: "2026-07-13", tokens: 40 },
-        { date: "2026-07-14", tokens: 90 },
-        { date: "2026-07-15", tokens: 70 },
-        { date: "2026-07-16", tokens: 50 },
-      ],
-      lifetimeTokens: 490,
+      days: [...workedMonth("2026-07", 20), ...workedMonth("2026-08", 15)],
+      lifetimeTokens: 10_406_452_370,
     };
-    const noon = new Date("2026-07-17T12:00:00+05:30");
-    const history = materializeHistory(payload);
-    expect(history.days.at(-1)?.date).toBe("2026-07-16");
-    expect(history.lifetimeTokens).toBe(490);
+    const activity = materializeAiActivity(
+      payload,
+      new Date("2026-08-19T12:00:00+05:30"),
+    );
 
-    const activity = withLiveToday(history, noon);
-    const today = activity.days.at(-1);
-    expect(today?.date).toBe("2026-07-17");
-    expect(today?.live).toBe(true);
-    expect(today?.tokens).toBeGreaterThan(0);
-    expect(today?.tokens).toBeLessThanOrEqual(40);
-    // Lifetime stays published nightly total (excludes synthetic today).
-    expect(activity.lifetimeTokens).toBe(490);
+    expect(activity.timezone).toBe("Asia/Kolkata");
+    expect(activity.lifetimeTokens).toBe(10_406_452_370);
+    expect(activity.days.at(0)?.date).toBe("2026-07-01");
+    expect(activity.days.at(-1)?.date).toBe("2026-08-19");
+    expect(activity.days.length).toBe(31 + 19);
+    for (let i = 1; i < activity.days.length; i += 1) {
+      expect(shiftYmd(activity.days[i - 1]!.date, 1)).toBe(activity.days[i]!.date);
+    }
   });
 
-  test("a stale payload is filled as unrecorded up to today, never skipped", () => {
+  test("today is drawn empty until the nightly sync reaches it", () => {
+    const payload: AiActivityPayload = {
+      version: 1,
+      generatedAt: "2026-08-19T00:20:00.000Z",
+      timezone: "Asia/Kolkata",
+      days: workedMonth("2026-08", 18),
+      lifetimeTokens: 500,
+    };
+    const today = materializeAiActivity(
+      payload,
+      new Date("2026-08-19T12:00:00+05:30"),
+    ).days.at(-1);
+    // No projection, no live counter: an uncounted day counts zero.
+    expect(today).toEqual({ date: "2026-08-19", tokens: 0, intensity: 0 });
+  });
+
+  test("the last cell follows the reader's timezone, not the runner's", () => {
+    const payload: AiActivityPayload = {
+      version: 1,
+      generatedAt: "2026-08-19T00:20:00.000Z",
+      timezone: "Asia/Kolkata",
+      days: workedMonth("2026-08", 18),
+      lifetimeTokens: 500,
+    };
+    // 19:00Z is already past midnight in New Delhi.
+    const activity = materializeAiActivity(
+      payload,
+      new Date("2026-08-19T19:00:00Z"),
+    );
+    expect(activity.days.at(-1)?.date).toBe("2026-08-20");
+  });
+
+  test("a stale feed reads as silence, never as invented activity", () => {
     const payload: AiActivityPayload = {
       version: 1,
       generatedAt: "2026-07-17T00:20:00.000Z",
       timezone: "Asia/Kolkata",
-      days: [
-        { date: "2026-07-15", tokens: 70 },
-        { date: "2026-07-16", tokens: 50 },
-      ],
+      days: workedMonth("2026-07", 16),
       lifetimeTokens: 120,
     };
     // A month after the last nightly sync.
-    const noon = new Date("2026-08-15T12:00:00+05:30");
-    const activity = withLiveToday(materializeHistory(payload), noon);
-
-    const dates = activity.days.map((d) => d.date);
-    expect(dates.at(-1)).toBe("2026-08-15");
-    expect(dates.at(0)).toBe(shiftYmd("2026-08-15", -(dates.length - 1)));
-    // Consecutive calendar days, no jump across the outage.
-    for (let i = 1; i < dates.length; i += 1) {
-      expect(shiftYmd(dates[i - 1]!, 1)).toBe(dates[i]!);
-    }
-    // The outage reads as silence, not as activity.
-    const outage = activity.days.filter(
-      (d) => d.date > "2026-07-16" && d.date < "2026-08-15",
-    );
-    expect(outage.length).toBe(29);
-    expect(outage.every((d) => d.tokens === 0 && d.intensity === 0)).toBe(true);
-    // ...and as *no data*, not as a measured zero. The feed did not report a
-    // quiet month; it did not report at all, and the grid has to say so.
-    expect(outage.every((d) => d.recorded === false)).toBe(true);
-    // Days the feed did cover keep their measurement, outage or not.
-    expect(
-      activity.days
-        .filter((d) => d.date === "2026-07-15" || d.date === "2026-07-16")
-        .every((d) => d.recorded === undefined),
-    ).toBe(true);
-    // A month-old feed cannot project today — that would invent activity.
-    expect(activity.days.some((d) => d.live)).toBe(false);
-    expect(activity.days.at(-1)?.tokens).toBe(0);
-  });
-
-  test("the display window never exceeds one year of cells", () => {
-    const payload: AiActivityPayload = {
-      version: 1,
-      generatedAt: "2026-07-17T00:20:00.000Z",
-      timezone: "Asia/Kolkata",
-      days: [
-        { date: "2024-01-01", tokens: 10 },
-        { date: "2026-07-16", tokens: 50 },
-      ],
-      lifetimeTokens: 60,
-    };
     const activity = materializeAiActivity(
       payload,
       new Date("2026-08-15T12:00:00+05:30"),
     );
-    expect(activity.days.length).toBeLessThanOrEqual(ACTIVITY_WINDOW_DAYS);
-    expect(activity.days.at(-1)?.date).toBe("2026-08-15");
-  });
-
-  test("materializeAiActivity can omit live today for SSR", () => {
-    const payload: AiActivityPayload = {
-      version: 1,
-      generatedAt: "2026-07-17T00:20:00.000Z",
-      timezone: "Asia/Kolkata",
-      days: [{ date: "2026-07-16", tokens: 50 }],
-      lifetimeTokens: 50,
-    };
-    const noon = new Date("2026-07-17T12:00:00+05:30");
-    const activity = materializeAiActivity(payload, noon, {
-      includeLiveToday: false,
-    });
-    expect(activity.days.at(-1)?.date).toBe("2026-07-16");
-    expect(activity.days.some((d) => d.live)).toBe(false);
-    expect(activity.lifetimeTokens).toBe(50);
-  });
-
-  test("materialize fills sparse history so weekdays stay aligned", () => {
-    const payload: AiActivityPayload = {
-      version: 1,
-      generatedAt: "2026-07-17T00:20:00.000Z",
-      timezone: "Asia/Kolkata",
-      days: [
-        { date: "2026-07-10", tokens: 10 },
-        { date: "2026-07-16", tokens: 20 },
-      ],
-      lifetimeTokens: 30,
-    };
-    const activity = materializeAiActivity(payload, new Date(), {
-      includeLiveToday: false,
-    });
-    const window = activity.days.slice(-7);
-    expect(window.map((d) => d.date)).toEqual([
-      "2026-07-10",
-      "2026-07-11",
-      "2026-07-12",
-      "2026-07-13",
-      "2026-07-14",
-      "2026-07-15",
-      "2026-07-16",
-    ]);
-    expect(window.map((d) => d.tokens)).toEqual([10, 0, 0, 0, 0, 0, 20]);
+    const outage = activity.days.filter((d) => d.date > "2026-07-16");
+    expect(outage.length).toBe(30);
+    expect(outage.every((d) => d.tokens === 0 && d.intensity === 0)).toBe(true);
+    // The published lifetime is not rewritten by the outage.
+    expect(activity.lifetimeTokens).toBe(120);
   });
 });
 
-describe("AI Activity projection helpers", () => {
-  test("sevenDayMinBaseline uses the minimum of the last 7 positive days", () => {
-    const days = [
-      { date: "2026-07-10", tokens: 50 },
-      { date: "2026-07-11", tokens: 40 },
-      { date: "2026-07-12", tokens: 0 },
-      { date: "2026-07-13", tokens: 20 },
-      { date: "2026-07-14", tokens: 30 },
-      { date: "2026-07-15", tokens: 25 },
-      { date: "2026-07-16", tokens: 60 },
-    ];
-    expect(sevenDayMinBaseline(days, "2026-07-17")).toBe(20);
+describe("number formatting", () => {
+  test("exact counts keep every digit", () => {
+    expect(formatTokenCount(10_406_452_370)).toBe("10,406,452,370");
   });
 
-  test("projectTodayTokens scales the 7-day min by elapsed day fraction", () => {
-    const days = [
-      { date: "2026-07-10", tokens: 100 },
-      { date: "2026-07-11", tokens: 80 },
-      { date: "2026-07-12", tokens: 60 },
-      { date: "2026-07-13", tokens: 40 },
-      { date: "2026-07-14", tokens: 90 },
-      { date: "2026-07-15", tokens: 70 },
-      { date: "2026-07-16", tokens: 50 },
-    ];
-    const noon = new Date("2026-07-17T12:00:00+05:30");
-    const projection = projectTodayTokens(days, noon, "Asia/Kolkata");
-    expect(projection.date).toBe("2026-07-17");
-    expect(projection.baseline).toBe(40);
-    const fraction = dayFractionElapsed(noon, "Asia/Kolkata");
-    expect(projection.tokens).toBe(Math.round(40 * fraction));
+  test("compact counts read as a magnitude", () => {
+    expect(formatCompactTokens(10_406_452_370)).toBe("10.4B");
+    expect(formatCompactTokens(512_000_000)).toBe("512M");
+    expect(formatCompactTokens(84_240)).toBe("84.2K");
+    expect(formatCompactTokens(999)).toBe("999");
+    expect(formatCompactTokens(0)).toBe("0");
+    expect(formatCompactTokens(1_000)).toBe("1K");
   });
 });

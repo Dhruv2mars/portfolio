@@ -2,249 +2,195 @@ import {
   AI_ACTIVITY_TIMEZONE,
   calendarDateInTimeZone,
   type AiActivityPayload,
+  shiftMonth,
   shiftYmd,
+  startOfMonth,
 } from "@/lib/ai-activity-payload";
 
 export type DailyTokens = {
   date: string;
   tokens: number;
-  /**
-   * Present, and `false`, only for days the feed never reached. A day measured
-   * at zero and a day never measured are both "no tokens", but only the first
-   * is a fact — the grid must not draw them the same. Absent means recorded,
-   * so a series that is fully covered serialises exactly as it always did.
-   */
-  recorded?: false;
 };
 
 export type Intensity = 0 | 1 | 2 | 3 | 4;
 
 export type ActivityDay = DailyTokens & {
   intensity: Intensity;
-  /** Synthetic “live” projection for the current local day. */
-  live?: boolean;
 };
 
 export type AiActivity = {
   days: ActivityDay[];
+  /** All-time total, from the payload — not the sum of the drawn window. */
   lifetimeTokens: number;
-  /** ISO timestamp of the nightly payload, when known. */
-  generatedAt: string | null;
   timezone: string;
 };
 
 export type AiActivitySource = "blob" | "fallback";
 
-/** GitHub-like 5-level scale relative to the densest day in the series. */
+/**
+ * Four filled steps, cut at the quartiles of the days that had any work in
+ * them — not at quarters of the busiest day.
+ *
+ * A single 400M-token afternoon against 140 ordinary days is what a scale
+ * measured off the maximum draws: one black square and a grey field. Cutting
+ * at the quartiles spends the four steps on the days there actually are, so
+ * the grid reads as a distribution rather than as one outlier and its
+ * shadow.
+ */
+export type IntensityThresholds = readonly [number, number, number];
+
+export function quartileThresholds(
+  days: readonly DailyTokens[],
+): IntensityThresholds {
+  const positive = days
+    .map((day) => day.tokens)
+    .filter((tokens) => tokens > 0)
+    .sort((a, b) => a - b);
+  if (positive.length === 0) return [0, 0, 0];
+  const at = (ratio: number) =>
+    positive[
+      Math.min(positive.length - 1, Math.floor(positive.length * ratio))
+    ]!;
+  return [at(0.25), at(0.5), at(0.75)];
+}
+
 export function intensityFromTokens(
   tokens: number,
-  maxTokens: number,
+  thresholds: IntensityThresholds,
 ): Intensity {
-  if (tokens <= 0 || maxTokens <= 0) return 0;
-  const ratio = tokens / maxTokens;
-  if (ratio <= 0.25) return 1;
-  if (ratio <= 0.5) return 2;
-  if (ratio <= 0.75) return 3;
+  if (tokens <= 0) return 0;
+  if (tokens <= thresholds[0]) return 1;
+  if (tokens <= thresholds[1]) return 2;
+  if (tokens <= thresholds[2]) return 3;
   return 4;
 }
 
+/** Never draw more than this much history, however long the record runs. */
+export const ACTIVITY_MAX_MONTHS = 12;
+
 /**
- * Expand a sparse daily series into consecutive calendar days (0-filled gaps)
- * ending on `endDate`, keeping at most `windowDays` cells.
- *
- * Gaps *inside* the feed's coverage are real zeroes — the feed ran that day and
- * reported nothing. Days outside it are not, at either end: a day before the
- * first report is a day nobody was counting, exactly as a day after the last
- * one is. Both are marked unrecorded so the grid can draw the difference
- * instead of back-dating a year of quiet days the meter never saw.
+ * A month earns its columns by being worked in on at least this share of its
+ * days. Below it the month is a few marks in a field of blanks, which draws
+ * as an outage rather than as the beginning of a record.
  */
-export function fillSparseDailySeries(
+export const ACTIVITY_MIN_MONTH_RATIO = 0.25;
+
+/** Days in the calendar month a YYYY-MM-DD date falls in. */
+function daysInMonth(date: string): number {
+  const [y, m] = date.split("-").map(Number);
+  return new Date(Date.UTC(y!, m!, 0)).getUTCDate();
+}
+
+/**
+ * Where the drawing starts: walk back from this month for as long as each
+ * month was worked in, and stop at the first one that was not.
+ *
+ * The window is chosen rather than fixed because a fixed year of cells is
+ * mostly a picture of the months before the habit existed — and the first few
+ * scattered days of a tool being tried out are not a record of using it. The
+ * rule slides forward on its own: a quiet month never enters the window, and
+ * once the run is longer than the cap the cap is what shows.
+ */
+export function activityWindowStart(
   days: readonly DailyTokens[],
-  endDate: string,
-  windowDays = 365,
-): DailyTokens[] {
-  const byDate = new Map(days.map((d) => [d.date, d.tokens]));
-  const covered = days.reduce((last, d) => (d.date > last ? d.date : last), "");
-  const began = days.reduce(
-    (first, d) => (!first || d.date < first ? d.date : first),
-    "",
-  );
-  const startDate = shiftYmd(endDate, -(windowDays - 1));
-  const filled: DailyTokens[] = [];
-  for (
-    let cursor = startDate;
-    cursor <= endDate;
-    cursor = shiftYmd(cursor, 1)
-  ) {
-    filled.push(
-      began && cursor >= began && cursor <= covered
-        ? { date: cursor, tokens: byDate.get(cursor) ?? 0 }
-        : { date: cursor, tokens: 0, recorded: false },
-    );
+  today: string,
+  maxMonths = ACTIVITY_MAX_MONTHS,
+): string {
+  const activeDays = new Map<string, number>();
+  for (const day of days) {
+    if (day.tokens <= 0) continue;
+    const month = day.date.slice(0, 7);
+    activeDays.set(month, (activeDays.get(month) ?? 0) + 1);
   }
-  return filled;
+
+  // The current month is always in, however young it is — it is the month the
+  // grid's last cell lives in.
+  let start = startOfMonth(today);
+  for (let back = 1; back < maxMonths; back++) {
+    const month = shiftMonth(today, -back);
+    const needed = Math.ceil(daysInMonth(month) * ACTIVITY_MIN_MONTH_RATIO);
+    if ((activeDays.get(month.slice(0, 7)) ?? 0) < needed) break;
+    start = month;
+  }
+  return start;
+}
+
+/**
+ * Expand a sparse series into consecutive calendar days from `start` to `end`.
+ *
+ * Inside this window an absent day is a measured zero, not a hole: the meter
+ * reads every local session on the machine, so a day it never mentions is a
+ * day nothing ran. The one genuinely unknown day is today, which the nightly
+ * sync has not reached yet — and today's zero is drawn as the emptiest step,
+ * which is what it is.
+ */
+export function buildDailySeries(
+  days: readonly DailyTokens[],
+  start: string,
+  end: string,
+): DailyTokens[] {
+  const byDate = new Map(days.map((day) => [day.date, day.tokens]));
+  const series: DailyTokens[] = [];
+  for (let cursor = start; cursor <= end; cursor = shiftYmd(cursor, 1)) {
+    series.push({ date: cursor, tokens: byDate.get(cursor) ?? 0 });
+  }
+  return series;
 }
 
 export function buildAiActivity(
   series: readonly DailyTokens[],
-  options?: {
-    liveDate?: string;
-    generatedAt?: string | null;
-    timezone?: string;
-    /** Authoritative lifetime from the payload (preferred over series sum). */
-    lifetimeTokens?: number;
-  },
+  options?: { timezone?: string; lifetimeTokens?: number },
 ): AiActivity {
-  const max = Math.max(0, ...series.map((d) => d.tokens));
-  const liveDate = options?.liveDate;
-
-  const days: ActivityDay[] = series.map((day) => ({
-    ...day,
-    intensity: intensityFromTokens(day.tokens, max),
-    live: liveDate === day.date ? true : undefined,
-  }));
-
-  const seriesSum = series.reduce((sum, day) => sum + day.tokens, 0);
-  const lifetimeTokens =
-    options?.lifetimeTokens !== undefined
-      ? options.lifetimeTokens
-      : seriesSum;
+  const thresholds = quartileThresholds(series);
 
   return {
-    days,
-    lifetimeTokens,
-    generatedAt: options?.generatedAt ?? null,
+    days: series.map((day) => ({
+      ...day,
+      intensity: intensityFromTokens(day.tokens, thresholds),
+    })),
+    lifetimeTokens:
+      options?.lifetimeTokens ??
+      series.reduce((sum, day) => sum + day.tokens, 0),
     timezone: options?.timezone ?? AI_ACTIVITY_TIMEZONE,
-  };
-}
-
-/**
- * Fraction of the local calendar day elapsed [0, 1].
- */
-export function dayFractionElapsed(now: Date, timeZone: string): number {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone,
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hourCycle: "h23",
-  }).formatToParts(now);
-  const hour = Number(parts.find((p) => p.type === "hour")?.value ?? 0);
-  const minute = Number(parts.find((p) => p.type === "minute")?.value ?? 0);
-  const second = Number(parts.find((p) => p.type === "second")?.value ?? 0);
-  const elapsed = hour * 3600 + minute * 60 + second;
-  return Math.min(1, Math.max(0, elapsed / 86_400));
-}
-
-/**
- * Conservative full-day baseline: minimum of the last up-to-7 days
- * before `beforeDate` that have tokens > 0.
- */
-export function sevenDayMinBaseline(
-  days: readonly { date: string; tokens: number }[],
-  beforeDate: string,
-): number {
-  const prior = days
-    .filter((d) => d.date < beforeDate && d.tokens > 0)
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(-7);
-  if (prior.length === 0) return 0;
-  return Math.min(...prior.map((d) => d.tokens));
-}
-
-/** Projected tokens “so far today” from the 7-day min baseline. */
-export function projectTodayTokens(
-  days: readonly { date: string; tokens: number }[],
-  now: Date,
-  timeZone: string,
-): { date: string; tokens: number; baseline: number } {
-  const today = calendarDateInTimeZone(now, timeZone);
-  const baseline = sevenDayMinBaseline(days, today);
-  const tokens = Math.round(baseline * dayFractionElapsed(now, timeZone));
-  return { date: today, tokens, baseline };
-}
-
-/** Cacheable history through the payload’s last published day (no live today). */
-export function materializeHistory(payload: AiActivityPayload): AiActivity {
-  const timeZone = payload.timezone || AI_ACTIVITY_TIMEZONE;
-  const history = [...payload.days].sort((a, b) =>
-    a.date.localeCompare(b.date),
-  );
-  const endHistory = history.at(-1)!.date;
-
-  return buildAiActivity(fillSparseDailySeries(history, endHistory, 364), {
-    generatedAt: payload.generatedAt,
-    timezone: timeZone,
-    lifetimeTokens: payload.lifetimeTokens,
-  });
-}
-
-/** Window kept for display: one year of consecutive days ending today. */
-export const ACTIVITY_WINDOW_DAYS = 365;
-
-/**
- * Extend the history to today. Two rules keep the grid honest:
- *
- * 1. Days between the last published day and today are filled, never skipped —
- *    the series must stay consecutive or every cell lands on the wrong weekday.
- *    They are filled as *unrecorded*, not as zero: the feed did not report a
- *    quiet day, it did not report at all.
- * 2. Today is projected only when the payload is fresh (published through
- *    yesterday). A stale feed means no data, and no data is drawn as an empty
- *    slot, not as a guess from month-old numbers.
- *
- * Lifetime stays the published nightly total (excludes synthetic today).
- */
-export function withLiveToday(history: AiActivity, now = new Date()): AiActivity {
-  const timeZone = history.timezone;
-  const today = calendarDateInTimeZone(now, timeZone);
-  const lastPublished = history.days.at(-1)?.date ?? "";
-  // Avoid duplicating the last published day if clocks briefly disagree.
-  if (!lastPublished || today <= lastPublished) return history;
-
-  const fresh = shiftYmd(today, -1) <= lastPublished;
-  const max = Math.max(0, ...history.days.map((d) => d.tokens));
-
-  const appended: ActivityDay[] = [];
-  for (
-    let cursor = shiftYmd(lastPublished, 1);
-    cursor <= today;
-    cursor = shiftYmd(cursor, 1)
-  ) {
-    if (cursor === today && fresh) {
-      const projection = projectTodayTokens(history.days, now, timeZone);
-      appended.push({
-        date: today,
-        tokens: projection.tokens,
-        intensity: intensityFromTokens(projection.tokens, max),
-        live: true,
-      });
-    } else {
-      appended.push({ date: cursor, tokens: 0, intensity: 0, recorded: false });
-    }
-  }
-
-  return {
-    days: [...history.days, ...appended].slice(-ACTIVITY_WINDOW_DAYS),
-    lifetimeTokens: history.lifetimeTokens,
-    generatedAt: history.generatedAt,
-    timezone: history.timezone,
   };
 }
 
 export function materializeAiActivity(
   payload: AiActivityPayload,
   now = new Date(),
-  options?: { includeLiveToday?: boolean },
 ): AiActivity {
-  const history = materializeHistory(payload);
-  if (options?.includeLiveToday === false) return history;
-  return withLiveToday(history, now);
+  const timezone = payload.timezone || AI_ACTIVITY_TIMEZONE;
+  const today = calendarDateInTimeZone(now, timezone);
+  const start = activityWindowStart(payload.days, today);
+
+  return buildAiActivity(buildDailySeries(payload.days, start, today), {
+    timezone,
+    lifetimeTokens: payload.lifetimeTokens,
+  });
 }
 
+/** Exact count. Used where a number is a number: alt text, tests, scripts. */
 export function formatTokenCount(tokens: number): string {
   return new Intl.NumberFormat("en-US").format(tokens);
 }
 
-export const LIVE_COUNT_START_RATIO = 0.8;
-export const LIVE_COUNT_DURATION_MS = 90_000;
+/**
+ * The number as it is read aloud: `10.4B`, `512M`, `84.2K`. Ten billion is
+ * eleven digits, and eleven digits is a serial number, not a quantity — the
+ * page wants the magnitude, and the magnitude is the first three characters.
+ */
+export function formatCompactTokens(tokens: number): string {
+  const value = Math.max(0, Math.round(tokens));
+  for (const [limit, suffix] of [
+    [1e12, "T"],
+    [1e9, "B"],
+    [1e6, "M"],
+    [1e3, "K"],
+  ] as const) {
+    if (value >= limit) {
+      const scaled = value / limit;
+      return `${scaled >= 100 ? Math.round(scaled) : Number(scaled.toFixed(1))}${suffix}`;
+    }
+  }
+  return String(value);
+}

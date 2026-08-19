@@ -111,6 +111,20 @@ export function shiftYmd(date: string, deltaDays: number): string {
   return calendarDateInTimeZone(utcNoon, "UTC");
 }
 
+/** First day of the month a date falls in. */
+export function startOfMonth(date: string): string {
+  return `${date.slice(0, 7)}-01`;
+}
+
+/** Same day-of-month `deltaMonths` away, clamped to the 1st. */
+export function shiftMonth(date: string, deltaMonths: number): string {
+  const [y, m] = date.split("-").map(Number);
+  const total = y! * 12 + (m! - 1) + deltaMonths;
+  const year = Math.floor(total / 12);
+  const month = total - year * 12 + 1;
+  return `${String(year).padStart(4, "0")}-${String(month).padStart(2, "0")}-01`;
+}
+
 /** Previous calendar day (YYYY-MM-DD) in a timezone. */
 export function yesterdayInTimeZone(now: Date, timeZone: string): string {
   return shiftYmd(calendarDateInTimeZone(now, timeZone), -1);
