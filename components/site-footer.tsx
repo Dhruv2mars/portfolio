@@ -12,18 +12,6 @@ export function SiteFooter() {
           <div className="stripe-divider h-12" />
         </div>
 
-        {/* The name at plate scale, and nothing else. A colophon listing the
-            framework, the host and the typefaces was a spec sheet for the
-            page rather than anything a reader came for. */}
-        <div className="screen-line-bottom px-4 py-8 sm:px-6 sm:py-10">
-          <SiteWordmark
-            text={site.handle.toLowerCase()}
-            className="w-full text-foreground"
-          />
-        </div>
-
-        <div className="screen-line-top h-4" />
-
         {/* One closing line: the copyright reads left, the glyphs read right,
             and on a phone they stack centred rather than squeezing. */}
         <div className="screen-line-top screen-line-bottom flex flex-col items-center justify-center gap-x-4 gap-y-3 px-4 py-3 text-sm text-muted-foreground sm:flex-row sm:justify-between">
@@ -58,6 +46,16 @@ export function SiteFooter() {
               <Rss className="size-4" />
             </a>
           </nav>
+        </div>
+
+        {/* The name at plate scale, last, the way a colophon signs a book.
+            Nothing follows it: a list of links under the signature would read
+            as a caption on the drawing. */}
+        <div className="screen-line-bottom px-4 py-8 sm:px-6 sm:py-10">
+          <SiteWordmark
+            text={site.handle.toLowerCase()}
+            className="w-full text-foreground"
+          />
         </div>
 
         {/* Run-out. The fixed bottom fade is the last thing every scroll meets,
