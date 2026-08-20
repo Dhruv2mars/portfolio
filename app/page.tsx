@@ -1,6 +1,6 @@
 import { ActivitySection } from "@/components/activity-section";
 import { BlogSection, HOME_POST_LIMIT } from "@/components/blog-section";
-import { Overview, SocialLinks } from "@/components/overview";
+import { Overview } from "@/components/overview";
 import { ProfileHeader } from "@/components/profile-header";
 import {
   HOME_PROJECT_LIMIT,
@@ -43,7 +43,6 @@ export default function Home() {
           every one of them. */}
       <PanelDivider />
       <Overview />
-      <SocialLinks />
       <ActivitySection />
 
       <PanelDivider />
