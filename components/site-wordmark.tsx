@@ -14,7 +14,8 @@ import { useId, type PointerEvent as ReactPointerEvent } from "react";
  * activity grid uses, so the page closes on the unit it opened with.
  *
  * Two passes over one cell set. The first is a hairline outline that is always
- * there — the name is present on the page whether or not anyone touches it.
+ * there, drawn in the mark's own ink at a third strength — the name is legible
+ * on the page whether or not anyone touches it.
  * The second fills those same cells through a gradient that is transparent
  * until 62.5% of its own length and solid after, and the gradient's near end is
  * tied to the pointer. So the ink is not painted *at* the cursor; it runs away
@@ -150,11 +151,17 @@ export function SiteWordmark({
           </motion.linearGradient>
         </defs>
 
+        {/* The outline carries the name on its own, so it is drawn in the
+            mark's own ink at low opacity rather than in the hairline border
+            token: `--line` is a rule between panels, and a rule that reads
+            against a panel disappears against the page. At a tenth of a cell
+            it is still a hairline; it is simply a visible one. */}
         <use
           href={`#${cellsId}`}
           fill="none"
-          className="stroke-line"
-          strokeWidth={0.08}
+          stroke="currentColor"
+          strokeOpacity={0.32}
+          strokeWidth={0.09}
         />
         <use href={`#${cellsId}`} fill={`url(#${inkId})`} />
       </svg>
