@@ -1,0 +1,71 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "18a698a64c76",
+  "session_id": "cd84d462-126f-4f87-8eb4-cbc1d604b050",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-20T17:40:01.859248Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "components/site-wordmark.tsx"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5",
+  "turn_id": "6c20f1d894ce",
+  "checkpoint_transcript_start": 847,
+  "transcript_lines_at_start": 847,
+  "compact_transcript_start": 183,
+  "token_usage": {
+    "input_tokens": 74,
+    "cache_creation_tokens": 57778,
+    "cache_read_tokens": 2426427,
+    "output_tokens": 18497,
+    "api_call_count": 37
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01NDd21X3v6nkte5D1zSXvYQ",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "caveman"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "6c20f1d894ce",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 16,
+        "end": 17,
+        "entry_ids": [
+          "59b99b96-5437-4d85-8517-dc09f22c634a"
+        ],
+        "tool_use_id": "toolu_01NDd21X3v6nkte5D1zSXvYQ"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NDd21X3v6nkte5D1zSXvYQ"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: caveman",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "initial_attribution": {
+    "calculated_at": "2026-08-20T17:40:01.730481Z",
+    "agent_lines": 106,
+    "agent_removed": 23,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 106,
+    "total_lines_changed": 167,
+    "agent_percentage": 77.24550898203593,
+    "metric_version": 2
+  }
+}

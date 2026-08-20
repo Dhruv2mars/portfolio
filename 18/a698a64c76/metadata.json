@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "18a698a64c76",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "components/site-wordmark.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/18/a698a64c76/0/metadata.json",
+      "transcript": "/18/a698a64c76/0/full.jsonl",
+      "compact_transcript": "/18/a698a64c76/0/transcript.jsonl",
+      "content_hash": "/18/a698a64c76/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 74,
+    "cache_creation_tokens": 57778,
+    "cache_read_tokens": 2426427,
+    "output_tokens": 18497,
+    "api_call_count": 37
+  }
+}
