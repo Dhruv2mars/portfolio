@@ -88,6 +88,43 @@ export function Rss(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Speaker with two waves. The waves carry `data-wave` so the pronunciation
+ *  button can animate them outward while the name is being said. */
+export function VolumeIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path
+        d="M8.2 3.1 5.1 5.9H3.2a.7.7 0 0 0-.7.7v2.8a.7.7 0 0 0 .7.7h1.9l3.1 2.8a.45.45 0 0 0 .75-.33V3.43a.45.45 0 0 0-.75-.33Z"
+        fill="currentColor"
+        stroke="none"
+      />
+      <path data-wave="near" d="M11 6.3a2.5 2.5 0 0 1 0 3.4" />
+      <path data-wave="far" d="M12.9 4.5a5 5 0 0 1 0 7" />
+    </Icon>
+  );
+}
+
+/** The system share glyph: a tray with a line leaving it. */
+export function ShareIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="M8 10V2.8" />
+      <path d="m5.5 5.3 2.5-2.5 2.5 2.5" />
+      <path d="M4.6 7.6H3.2a.7.7 0 0 0-.7.7v4.5a.7.7 0 0 0 .7.7h9.6a.7.7 0 0 0 .7-.7V8.3a.7.7 0 0 0-.7-.7h-1.4" />
+    </Icon>
+  );
+}
+
+/** Forward, for "next post". */
+export function ArrowRight(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="M2.5 8h11" />
+      <path d="m9.5 4 4 4-4 4" />
+    </Icon>
+  );
+}
+
 /** Disclosure marker. Points down when closed, up when open. */
 export function ChevronIcon(props: SVGProps<SVGSVGElement>) {
   return (

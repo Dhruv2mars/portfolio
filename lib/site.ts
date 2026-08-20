@@ -9,6 +9,29 @@ export const site = {
   /** The role, shown under the name. Lowercase on purpose. */
   tagline: "agentic engineer",
   /**
+   * The role line said more than one way. The first is the canonical one — it
+   * is what `tagline` carries into metadata and structured data, where nothing
+   * can rotate — and the rest widen it without the hero growing a paragraph.
+   */
+  flipSentences: [
+    "agentic engineer",
+    "prototyper",
+    "tooling for coding agents",
+    "local-first by default",
+  ] as const,
+  /**
+   * How the name sounds. `respelling` is spelled for an English voice rather
+   * than for a reader; `phonetic` is the true reading and is what the Visitor
+   * is shown. `audio` is a slot in the same spirit as `avatar`: point it at a
+   * recording and the button plays that instead of synthesising, with no other
+   * change.
+   */
+  pronunciation: {
+    respelling: "Droov Sharma",
+    phonetic: "/dʱruːʋ ˈʃərmə/",
+    audio: null as string | null,
+  },
+  /**
    * The one-line description search results, feed readers and the install
    * manifest read. It is not rendered on the page: the hero already says the
    * name and the role, and a third line under them was prose the page did not
