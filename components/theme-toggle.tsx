@@ -39,9 +39,13 @@ export function ThemeToggle() {
       aria-label={mounted ? `Switch to ${target} theme` : "Switch theme"}
       className="flex size-8 touch-manipulation items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
     >
-      {/* Both render until mounted so the control never shifts or flashes. */}
-      <Sun className={`size-4.5 ${mounted && current === "dark" ? "block" : "hidden"}`} />
-      <Moon className={`size-4.5 ${mounted && current === "dark" ? "hidden" : "block"}`} />
+      {/* The glyph names the theme you are in, not the one you would get.
+          A control that shows its own destination reads as a status light the
+          first time and a lie the second; every toolkit worth copying — and
+          the reference — shows the current scheme and puts the action in the
+          label. Only one is ever visible, so the control never shifts. */}
+      <Moon className={`size-4.5 ${mounted && current === "dark" ? "block" : "hidden"}`} />
+      <Sun className={`size-4.5 ${mounted && current === "dark" ? "hidden" : "block"}`} />
     </button>
   );
 }
