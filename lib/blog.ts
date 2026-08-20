@@ -1,20 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export type PostFrontmatter = {
-  title: string;
-  publishedAt: string;
-  summary: string;
-  tags?: string[];
-  draft?: boolean;
-  image?: string;
-};
+import type { PostRecord } from "@/lib/posts";
 
-export type PostRecord = PostFrontmatter & {
-  slug: string;
-  content: string;
-  readingTimeMinutes: number;
-};
+/** The shape lives in `lib/posts`, which has no filesystem in it. */
+export type { PostFrontmatter, PostRecord, PostSummary } from "@/lib/posts";
 
 const POSTS_DIR = path.join(process.cwd(), "content", "blog");
 
@@ -175,13 +165,4 @@ export function getPostBySlug(slug: string): PostRecord | undefined {
 
 export function getLatestPublishedPosts(limit = 3): PostRecord[] {
   return selectLatestPublished(getAllPosts(), limit);
-}
-
-export function formatPostDate(date: string): string {
-  const value = date.includes("T") ? date : `${date}T00:00:00`;
-  return new Date(value).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
 }

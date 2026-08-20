@@ -199,6 +199,15 @@ export function SearchIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** The cross that empties a field. Not `XIcon` — that one is a company. */
+export function CloseIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="m4 4 8 8M12 4l-8 8" />
+    </Icon>
+  );
+}
+
 export function CopyIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <Icon {...props}>

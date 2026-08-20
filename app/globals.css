@@ -297,6 +297,14 @@
     @apply scroll-mt-18;
   }
 
+  /* The field draws its own clear button, in the site's own glyph. WebKit
+     offers a second one, in its own, and two crosses in one input is one
+     too many. */
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
   /* One focus ring for the whole site. Every keyboard affordance — header
      buttons, palette rows, inline links, the mosaic — draws the same 2px
      outline at the same offset, so focus never changes shape as it moves.
