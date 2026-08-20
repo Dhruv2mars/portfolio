@@ -64,3 +64,51 @@ export function searchPosts<T extends Pick<PostSummary, "title" | "summary" | "t
     return haystack.includes(needle);
   });
 }
+
+/**
+ * The posts either side of one, in the order the index lists them: newest
+ * first. `newer` is therefore the entry above in that list and `older` the one
+ * below — named for what they are rather than for which arrow key reaches
+ * them, because "previous post" in a reverse-chronological list is a coin
+ * toss and the label is the only thing telling the Visitor where they'll land.
+ *
+ * Either end is `null`, which is how the page knows to draw a dead control
+ * rather than a link to nothing.
+ */
+export function findNeighbours<T extends { slug: string }>(
+  posts: readonly T[],
+  slug: string,
+): { newer: T | null; older: T | null } {
+  const index = posts.findIndex((post) => post.slug === slug);
+  if (index === -1) return { newer: null, older: null };
+  return {
+    newer: posts[index - 1] ?? null,
+    older: posts[index + 1] ?? null,
+  };
+}
+
+/**
+ * The post as plain markdown: what "Copy page" puts on the clipboard and what
+ * `/blog/<slug>/raw.md` serves.
+ *
+ * The frontmatter is bookkeeping for the build, so it is not reproduced; the
+ * two facts it holds that a reader wants — what this is and when it was
+ * written — are restated as text instead. The canonical URL rides along
+ * because the likeliest next thing to happen to this string is being pasted
+ * into a model, and a model that cannot cite where the words came from will
+ * invent somewhere.
+ */
+export function postMarkdown(
+  post: Pick<PostSummary, "title" | "summary" | "publishedAt">,
+  url: string,
+  content: string,
+): string {
+  return (
+    [
+      `# ${post.title}`,
+      `> ${post.summary}`,
+      `${formatPostDate(post.publishedAt)} · ${url}`,
+      content.trim(),
+    ].join("\n\n") + "\n"
+  );
+}

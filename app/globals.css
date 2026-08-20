@@ -240,6 +240,14 @@
   }
 }
 
+/* The quiet control: a toolbar button that is an icon at rest and a surface
+   only once it is under the pointer. Used by every action on a post — copy,
+   share, the two arrows — so the row reads as one set rather than four
+   buttons that happen to sit together. */
+@utility action-button {
+  @apply inline-flex h-8 min-w-8 items-center justify-center gap-1.5 rounded-lg px-2 text-sm text-muted-foreground transition-colors select-none active:scale-[0.98] hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-40 dark:hover:bg-accent/50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0;
+}
+
 /* ---------------------------------------------------------------------------
    Base
 --------------------------------------------------------------------------- */
