@@ -93,10 +93,14 @@ Eight, curated, in this order. Tier 1 is the agentic thesis; Tier 2 earns its pl
 08  openutm-v0  Cross-platform UTM alternative
 ```
 
-Rows, not cards — mark, name, one line, language and year as pills, outbound link. Hover reveals the
-destination host. A Project's own mark is checked into `public/projects` and drawn as a mask in the
-row's ink; a Project without one gets the glyph for its kind. No thumbnails, no detail pages, no
-screenshots.
+Rows, not cards — mark, name, one line, and language, standing, and year as pills. The whole row is
+one door to the thing itself; a Project whose live address is not its repository gets a second small
+door to the source. Hover reveals the destination host. A Project's own mark is checked into
+`public/projects` and drawn as a mask in the row's ink; a Project without one gets the glyph for its
+kind. No thumbnails, no detail pages, no screenshots.
+
+Nothing on a row is disclosed. An index of eight rows that shows eight names and eight identical
+years is not an index, and a search field that matches hidden text is a trick.
 
 `pi-queue` shows **"published on npm"** as a fact and never a download counter — the real number is
 too small to help. Revisit if relunar gains traction.
