@@ -61,6 +61,37 @@
         "label": "Skill: caveman",
         "default_collapsed": true
       }
+    },
+    {
+      "id": "claude-skill-toolu_01Ek4bFSanC6yfTAfHuWWowD",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "impeccable"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "8992e8c246ff",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1617,
+        "end": 1618,
+        "entry_ids": [
+          "914b05db-069e-48b8-a523-9e73aec456b5"
+        ],
+        "tool_use_id": "toolu_01Ek4bFSanC6yfTAfHuWWowD"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01Ek4bFSanC6yfTAfHuWWowD"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: impeccable",
+        "default_collapsed": true
+      }
     }
   ],
   "initial_attribution": {
