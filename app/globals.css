@@ -669,40 +669,6 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Footer wordmark. The same cell set drawn twice: an empty layer that is
-   always there, and a filled layer masked to a soft right-to-left edge. The
-   mask slides in on the footer's own scroll, so the name fills as the page
-   ends rather than firing once, unseen, at load. Browsers without
-   `animation-timeline` drop that line and play it on the document clock,
-   which is the same motion, just earlier.
---------------------------------------------------------------------------- */
-.wordmark-empty {
-  fill: none;
-  stroke: var(--color-line);
-  stroke-width: 0.08;
-}
-
-.wordmark-filled {
-  fill: currentColor;
-  mask-image: linear-gradient(to right, transparent 5%, #000 70%);
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  mask-position: 0 0;
-  animation: wordmark-wipe 1.2s var(--ease-out-quint) both;
-  animation-timeline: view();
-  animation-range: entry 15% entry 95%;
-}
-
-@keyframes wordmark-wipe {
-  from {
-    mask-position: 100% 0;
-  }
-  to {
-    mask-position: 0 0;
-  }
-}
-
-/* ---------------------------------------------------------------------------
    Figure 404. Drawn from the same cells as the activity grid, at plate scale:
    the page that has no data says so in the site's own word for it. Cells size
    themselves off the column rather than off a fixed pixel, so the plate is the
@@ -977,10 +943,6 @@
   }
   .project-details {
     transition: none;
-  }
-  .wordmark-filled {
-    animation: none !important;
-    mask-position: 0 0;
   }
   .activity-cell,
   .palette-panel,
