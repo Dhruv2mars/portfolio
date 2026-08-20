@@ -1,4 +1,7 @@
+import { weekdayIndex } from "@/lib/ai-activity-payload";
 import type { ActivityDay } from "@/lib/ai-activity";
+
+export { weekdayIndex };
 
 /**
  * Five steps of the neutral foreground. Intensity is opacity, never hue.
@@ -16,12 +19,6 @@ export type ActivityWeek = {
   /** Sunday → Saturday. `null` pads the partial first and last weeks. */
   cells: (ActivityDay | null)[];
 };
-
-/** Day of week (0 = Sunday) for a YYYY-MM-DD calendar date. */
-export function weekdayIndex(date: string): number {
-  const [y, m, d] = date.split("-").map(Number);
-  return new Date(Date.UTC(y!, m! - 1, d!, 12)).getUTCDay();
-}
 
 export function monthAbbreviation(date: string): string {
   const [y, m, d] = date.split("-").map(Number);

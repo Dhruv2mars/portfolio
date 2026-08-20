@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import {
-  ACTIVITY_MAX_MONTHS,
+  ACTIVITY_WEEKS,
   activityWindowStart,
   buildAiActivity,
   buildDailySeries,
@@ -11,7 +11,11 @@ import {
   quartileThresholds,
   type DailyTokens,
 } from "./ai-activity";
-import { shiftMonth, shiftYmd, type AiActivityPayload } from "./ai-activity-payload";
+import {
+  shiftYmd,
+  weekdayIndex,
+  type AiActivityPayload,
+} from "./ai-activity-payload";
 
 const FIXTURE: readonly DailyTokens[] = [
   { date: "2026-01-01", tokens: 0 },
@@ -113,28 +117,35 @@ describe("daily series", () => {
 });
 
 describe("window", () => {
-  test("walks back while the months were worked in, stops at the first that was not", () => {
-    const days = [
-      ...workedMonth("2026-05", 2),
-      ...workedMonth("2026-06", 20),
-      ...workedMonth("2026-07", 20),
-      ...workedMonth("2026-08", 10),
-    ];
-    expect(activityWindowStart(days, "2026-08-19")).toBe("2026-06-01");
+  test("opens on a Sunday, so every column is a whole week", () => {
+    // 2026-08-19 is a Wednesday; its week opens on the 16th, and 52 Sundays
+    // before that is 2025-08-17.
+    expect(activityWindowStart("2026-08-19")).toBe("2025-08-17");
+    expect(weekdayIndex(activityWindowStart("2026-08-19"))).toBe(0);
   });
 
-  test("the current month is always drawn, however young it is", () => {
-    expect(activityWindowStart([], "2026-08-19")).toBe("2026-08-01");
-  });
-
-  test("a long record is cut to the cap", () => {
-    const days = Array.from({ length: 24 }, (_, i) =>
-      workedMonth(shiftMonth("2026-08-19", -i).slice(0, 7), 25),
-    ).flat();
-    expect(activityWindowStart(days, "2026-08-19")).toBe(
-      shiftMonth("2026-08-19", -(ACTIVITY_MAX_MONTHS - 1)),
+  test("is the same width whatever day it is asked on", () => {
+    const widths = new Set(
+      Array.from({ length: 14 }, (_, i) => {
+        const today = shiftYmd("2026-08-19", i);
+        const start = activityWindowStart(today);
+        return Math.round(
+          (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) /
+            86_400_000,
+        );
+      }),
     );
-    expect(activityWindowStart(days, "2026-08-19", 3)).toBe("2026-06-01");
+    // 52 whole weeks plus however much of this one has happened — 53 columns
+    // on every day of the week, including Saturday.
+    for (const days of widths) {
+      expect(Math.ceil((days + 1) / 7)).toBe(ACTIVITY_WEEKS + 1);
+    }
+  });
+
+  test("a shorter window is still Sunday-aligned", () => {
+    // Wednesday 2026-08-19 sits in the week that opened on the 16th; four
+    // Sundays before that is 2026-07-19.
+    expect(activityWindowStart("2026-08-19", 4)).toBe("2026-07-19");
   });
 });
 
@@ -166,9 +177,10 @@ describe("read model", () => {
 
     expect(activity.timezone).toBe("Asia/Kolkata");
     expect(activity.lifetimeTokens).toBe(10_406_452_370);
-    expect(activity.days.at(0)?.date).toBe("2026-07-01");
+    // The window is the calendar, not the record: months before the habit are
+    // drawn empty rather than cropped away.
+    expect(activity.days.at(0)?.date).toBe(activityWindowStart("2026-08-19"));
     expect(activity.days.at(-1)?.date).toBe("2026-08-19");
-    expect(activity.days.length).toBe(31 + 19);
     for (let i = 1; i < activity.days.length; i += 1) {
       expect(shiftYmd(activity.days[i - 1]!.date, 1)).toBe(activity.days[i]!.date);
     }
