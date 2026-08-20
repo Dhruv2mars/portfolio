@@ -15,6 +15,7 @@ import {
   WindowIcon,
 } from "@/components/icons";
 import { IconTile } from "@/components/icon-tile";
+import { Tag } from "@/components/tag";
 import { destinationHost, type Project, type ProjectKind } from "@/lib/projects";
 
 /**
@@ -34,6 +35,55 @@ const KIND_ICONS: Record<ProjectKind, typeof BoxIcon> = {
 };
 
 /**
+ * The project's own mark where it has one, the kind glyph where it does not.
+ *
+ * A silhouette is drawn as a mask in the row's own ink, so a project mark and
+ * a kind glyph are the same weight of thing and the gutter stays one column of
+ * one colour. A mark that carries its own colour is drawn as an image, grey
+ * until the row is under the pointer — the reference's treatment, and the
+ * reason is the same: eight logos at full saturation is a sponsor wall.
+ */
+function ProjectMark({ project }: { project: Project }) {
+  if (project.logo?.mono) {
+    return (
+      <span
+        aria-hidden
+        className="mx-4 size-6 shrink-0 bg-muted-foreground transition-colors duration-150 ease-out select-none group-hover/project:bg-foreground"
+        style={{
+          maskImage: `url(${project.logo.src})`,
+          maskSize: "contain",
+          maskRepeat: "no-repeat",
+          maskPosition: "center",
+        }}
+      />
+    );
+  }
+
+  if (project.logo) {
+    return (
+      // A 465-byte SVG at 24px: there is nothing for the image optimizer to
+      // do to it, and routing it through one would cost a request.
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={project.logo.src}
+        alt=""
+        aria-hidden
+        width={24}
+        height={24}
+        className="mx-4 size-6 shrink-0 grayscale transition-[filter] duration-150 ease-out select-none group-hover/project:grayscale-0"
+      />
+    );
+  }
+
+  const KindIcon = KIND_ICONS[project.kind] ?? BoxIcon;
+  return (
+    <IconTile className="mx-4">
+      <KindIcon />
+    </IconTile>
+  );
+}
+
+/**
  * A row is a name and two doors. The name opens the record in place; the arrow
  * leaves for the thing itself. They are separate controls on purpose — a row
  * that both expands and navigates makes the reader guess which one a click
@@ -47,16 +97,14 @@ const KIND_ICONS: Record<ProjectKind, typeof BoxIcon> = {
 export function ProjectRow({ project }: { project: Project }) {
   const [open, setOpen] = useState(false);
   const detailsId = useId();
-  const KindIcon = KIND_ICONS[project.kind] ?? BoxIcon;
+  const tags = [project.language, project.note].filter(Boolean) as string[];
 
   return (
     <li className="border-b border-line last:border-b-0">
       {/* `relative` scopes the stretched trigger to the row: the record below
           is a sibling, so opening one never puts a button over its own text. */}
-      <div className="relative flex items-center transition-[background-color] duration-150 ease-out hover:bg-accent-muted has-[button:active]:bg-accent">
-        <IconTile className="mx-4">
-          <KindIcon />
-        </IconTile>
+      <div className="group/project relative flex items-center transition-[background-color] duration-150 ease-out hover:bg-accent-muted has-[button:active]:bg-accent">
+        <ProjectMark project={project} />
 
         <div className="flex min-w-0 flex-1 items-center gap-2 border-l border-dashed border-line py-4 pr-2 pl-4">
           {/* The whole row toggles, via a pseudo-element rather than a wrapper,
@@ -68,7 +116,13 @@ export function ProjectRow({ project }: { project: Project }) {
             onClick={() => setOpen((value) => !value)}
             className="min-w-0 flex-1 touch-manipulation text-left before:absolute before:inset-0"
           >
-            <h3 className="truncate font-medium">{project.name}</h3>
+            <h3 className="truncate leading-snug font-medium">{project.name}</h3>
+            {/* The year belongs to the row, not to the record: it is how the
+                list is ordered, so it has to be legible without opening
+                anything. */}
+            <p className="font-mono text-sm text-muted-foreground tabular-nums">
+              {project.year}
+            </p>
           </button>
 
           {/* `after:-inset-2` is the hit area: 16px of glyph is a target only a
@@ -97,23 +151,22 @@ export function ProjectRow({ project }: { project: Project }) {
           that is wrong for one frame. */}
       <div id={detailsId} data-open={open} className="project-details grid">
         <div className="overflow-hidden">
-          <div className="border-t border-line p-4">
+          <div className="space-y-4 border-t border-line p-4">
             <p className="typeset typeset-description text-muted-foreground">
               {project.description}
             </p>
-            {/* One line of facts, separated the way a caption is. Pills would
-                make four labels out of four words and put a border around
-                each of them. */}
-            <p className="mt-2 font-mono text-xs tracking-tight text-muted-foreground/80 tabular-nums">
-              {[
-                project.language,
-                String(project.year),
-                project.note,
-                destinationHost(project),
-              ]
-                .filter(Boolean)
-                .join("  ·  ")}
-            </p>
+            {/* Only the facts that are labels. The year is in the row above
+                and the host is in the link beside it, so putting either here
+                would be saying it twice in a shape that claims it is new. */}
+            {tags.length > 0 ? (
+              <ul className="flex flex-wrap gap-1.5">
+                {tags.map((tag) => (
+                  <li key={tag} className="flex">
+                    <Tag>{tag}</Tag>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </div>
         </div>
       </div>

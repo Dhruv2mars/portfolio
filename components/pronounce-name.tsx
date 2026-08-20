@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { VolumeIcon } from "@/components/icons";
 import { site } from "@/lib/site";
 
@@ -18,20 +18,31 @@ import { site } from "@/lib/site";
  * If the machine can neither play nor speak, no button is drawn. A control that
  * does nothing is worse than an absent one.
  */
+/** Neither of these can change during a page's life, so there is nothing to
+ *  subscribe to — this is `useSyncExternalStore` used purely to read the
+ *  browser once, after hydration, without an effect that sets state. */
+const subscribeNever = () => () => {};
+const canPlay = () =>
+  Boolean(site.pronunciation.audio) || "speechSynthesis" in window;
+
 export function PronounceName() {
-  const [available, setAvailable] = useState(false);
+  const available = useSyncExternalStore(
+    subscribeNever,
+    canPlay,
+    // The server cannot know, and a button rendered there and then withdrawn
+    // is a layout shift next to the name. It arrives with hydration instead.
+    () => false,
+  );
   const [speaking, setSpeaking] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
-    setAvailable(
-      Boolean(site.pronunciation.audio) || "speechSynthesis" in window,
-    );
-    return () => {
+  useEffect(
+    () => () => {
       audioRef.current?.pause();
       if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-    };
-  }, []);
+    },
+    [],
+  );
 
   const play = useCallback(() => {
     if (speaking) return;
