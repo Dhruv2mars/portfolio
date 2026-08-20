@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { FlipSentences } from "@/components/flip-sentences";
+import { PronounceName } from "@/components/pronounce-name";
 import { SiteMarkIsometric } from "@/components/site-mark";
 import { site } from "@/lib/site";
 
@@ -94,15 +96,20 @@ export function ProfileHeader() {
 
       <div className="flex flex-col">
         <div className="z-1 mt-auto border-t border-line">
-          <h1 className="-translate-y-px pl-4 text-[2rem]/none font-medium tracking-tight">
+          <h1 className="-translate-y-px flex items-center gap-2 pl-4 text-[2rem]/none font-medium tracking-tight">
             {site.name}
+            {/* Inside the heading, not beside it: the button is about this
+                name, and a name and the way to hear it are one object. */}
+            <PronounceName />
           </h1>
           {/* The one line that reads as a caption rather than as prose, so it
-              is set in mono at the small size — and swept once on load, which
-              is the reference's own way of pointing at it without shouting. */}
-          <p className="flex h-12.5 items-center border-t border-line py-1 pl-4 font-mono text-sm text-balance text-muted-foreground sm:h-9">
-            <span className="shimmer inline-block">{site.tagline}</span>
-          </p>
+              is set in mono at the small size — and swept once on arrival,
+              which is the reference's own way of pointing at it without
+              shouting. */}
+          <FlipSentences
+            sentences={site.flipSentences}
+            className="h-12.5 border-t border-line py-1 pl-4 font-mono text-sm text-balance text-muted-foreground sm:h-9"
+          />
         </div>
       </div>
     </div>
