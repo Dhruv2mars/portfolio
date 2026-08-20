@@ -24,6 +24,18 @@ export type Project = {
   kind: ProjectKind;
   /** Short third-party signal. Only ever a fact, never a vanity metric. */
   note?: string;
+  /**
+   * The project's own mark, when it has one, checked into `public/projects`
+   * rather than fetched from the project's site — a row must not depend on
+   * eight other origins being up, and the Visitor must not be announced to
+   * them for looking at this page.
+   *
+   * `mono` says the file is a silhouette, which is most of them: it is then
+   * drawn as a mask in the row's own ink, so a project mark and a kind glyph
+   * are the same weight of thing. Marks that carry their own colour (a full
+   * composition, not a glyph) drop `mono` and are drawn as an image.
+   */
+  logo?: { src: string; mono?: boolean };
 };
 
 /**
@@ -42,6 +54,7 @@ const PROJECTS: readonly Project[] = [
     year: 2026,
     kind: "cli",
     note: "published on npm",
+    logo: { src: "/projects/relunar.svg", mono: true },
   },
   {
     name: "pi-queue",
@@ -72,6 +85,7 @@ const PROJECTS: readonly Project[] = [
     language: "Rust",
     year: 2026,
     kind: "server",
+    logo: { src: "/projects/gunmetal.svg", mono: true },
   },
   {
     name: "mdv-ts",
@@ -91,6 +105,7 @@ const PROJECTS: readonly Project[] = [
     language: "TypeScript",
     year: 2026,
     kind: "canvas",
+    logo: { src: "/projects/block.svg" },
   },
   {
     name: "codexchat",
