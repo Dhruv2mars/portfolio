@@ -1,0 +1,76 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "77da115eb7cf",
+  "session_id": "cd84d462-126f-4f87-8eb4-cbc1d604b050",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-20T12:53:08.008589Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "components/project-row.tsx",
+    "components/pronounce-name.tsx",
+    "lib/projects.ts",
+    "public/projects/block.svg",
+    "public/projects/gunmetal.svg",
+    "public/projects/relunar.svg"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5",
+  "turn_id": "9b69bb2e92c8",
+  "checkpoint_transcript_start": 662,
+  "transcript_lines_at_start": 662,
+  "compact_transcript_start": 141,
+  "token_usage": {
+    "input_tokens": 34,
+    "cache_creation_tokens": 19630,
+    "cache_read_tokens": 1408020,
+    "output_tokens": 9662,
+    "api_call_count": 17
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01NDd21X3v6nkte5D1zSXvYQ",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "caveman"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "9b69bb2e92c8",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 16,
+        "end": 17,
+        "entry_ids": [
+          "59b99b96-5437-4d85-8517-dc09f22c634a"
+        ],
+        "tool_use_id": "toolu_01NDd21X3v6nkte5D1zSXvYQ"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NDd21X3v6nkte5D1zSXvYQ"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: caveman",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "initial_attribution": {
+    "calculated_at": "2026-08-20T12:53:07.902099Z",
+    "agent_lines": 135,
+    "agent_removed": 29,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 135,
+    "total_lines_changed": 164,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}

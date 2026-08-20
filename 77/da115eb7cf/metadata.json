@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "77da115eb7cf",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "components/project-row.tsx",
+    "components/pronounce-name.tsx",
+    "lib/projects.ts",
+    "public/projects/block.svg",
+    "public/projects/gunmetal.svg",
+    "public/projects/relunar.svg"
+  ],
+  "sessions": [
+    {
+      "metadata": "/77/da115eb7cf/0/metadata.json",
+      "transcript": "/77/da115eb7cf/0/full.jsonl",
+      "compact_transcript": "/77/da115eb7cf/0/transcript.jsonl",
+      "content_hash": "/77/da115eb7cf/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 34,
+    "cache_creation_tokens": 19630,
+    "cache_read_tokens": 1408020,
+    "output_tokens": 9662,
+    "api_call_count": 17
+  }
+}
