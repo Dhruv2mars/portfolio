@@ -1,8 +1,19 @@
-import { Fragment } from "react";
 import { Rss, SOCIAL_ICONS } from "@/components/icons";
-import { Separator } from "@/components/separator";
 import { SiteWordmark } from "@/components/site-wordmark";
 import { site } from "@/lib/site";
+
+/**
+ * The profiles, minus the mailbox.
+ *
+ * The overview's "say hi" row is the directory — it is the place that answers
+ * "how do I reach this person", so it carries every way, email included. The
+ * footer is a signature, and a signature does not repeat the directory: it
+ * carries the three places the work lives, and the feed, which is a property
+ * of the site rather than of the person and so belongs here and nowhere else.
+ */
+const FOOTER_SOCIALS = site.socials.filter(
+  (social) => !social.href.startsWith("mailto:"),
+);
 
 export function SiteFooter() {
   return (
@@ -15,32 +26,36 @@ export function SiteFooter() {
         {/* One closing line: the copyright reads left, the glyphs read right,
             and on a phone they stack centred rather than squeezing. */}
         <div className="screen-line-top screen-line-bottom flex flex-col items-center justify-center gap-x-4 gap-y-3 px-4 py-3 text-sm text-muted-foreground sm:flex-row sm:justify-between">
+          {/* The mark, not the legal name: the wordmark below signs the page
+              and this line should agree with it. */}
           <span>
-            &copy; {new Date().getFullYear()} {site.name}.
+            &copy; {new Date().getFullYear()} {site.handle.toLowerCase()}.
           </span>
 
-          <nav aria-label="Elsewhere" className="flex items-center gap-3">
-            {site.socials.map((social) => {
+          {/* Four glyphs on one gutter. The rules that used to stand between
+              them were 16px of hairline at 12px intervals — texture, at this
+              size, not structure. */}
+          <nav aria-label="Elsewhere" className="flex items-center gap-4">
+            {FOOTER_SOCIALS.map((social) => {
               const Glyph = SOCIAL_ICONS[social.label];
-              const isMail = social.href.startsWith("mailto:");
               return (
-                <Fragment key={social.label}>
-                  <a
-                    href={social.href}
-                    target={isMail ? undefined : "_blank"}
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    className="flex items-center transition-colors hover:text-foreground"
-                  >
-                    <Glyph className="size-4" />
-                  </a>
-                  <Separator orientation="vertical" className="h-4 self-center" />
-                </Fragment>
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  title={social.label}
+                  className="flex items-center transition-colors hover:text-foreground"
+                >
+                  <Glyph className="size-4" />
+                </a>
               );
             })}
             <a
               href={site.rssPath}
               aria-label="RSS feed"
+              title="RSS feed — paste this address into a feed reader"
               className="flex items-center transition-colors hover:text-foreground"
             >
               <Rss className="size-4" />

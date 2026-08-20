@@ -8,6 +8,7 @@ export async function GET() {
     siteName: site.name,
     description: site.description,
     posts: getPublishedPosts(),
+    feedPath: site.rssPath,
   });
 
   return new Response(xml, {
