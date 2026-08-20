@@ -101,7 +101,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const hasPosts = getPublishedPosts().length > 0;
+  const posts = getPublishedPosts();
+  const hasPosts = posts.length > 0;
 
   return (
     <html
@@ -130,7 +131,7 @@ export default function RootLayout({
           {/* One palette for the whole shell: the header's trigger and the
               dock's are two doors onto the same dialog, so the state sits
               above both rather than inside either. */}
-          <CommandPaletteProvider items={paletteItems(hasPosts)}>
+          <CommandPaletteProvider items={paletteItems(posts)}>
             {/* `isolate` keeps the full-bleed hairlines (which paint at -z-1)
               above the page background instead of under it. */}
             <div className="group/layout relative isolate flex min-h-[100dvh] flex-col">

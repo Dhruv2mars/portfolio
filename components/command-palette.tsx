@@ -13,7 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { ArrowUpRight, SearchIcon } from "@/components/icons";
-import { SiteMark } from "@/components/site-mark";
+import { ShortMark } from "@/components/short-mark";
 import { nextTheme, type ColorScheme } from "@/lib/theme";
 import { usePresence } from "@/lib/use-presence";
 import { cn } from "@/lib/utils";
@@ -26,7 +26,7 @@ export type CommandItem = {
   href?: string;
   external?: boolean;
   /** Present for behaviour-only entries such as the theme switch. */
-  action?: "toggle-theme";
+  action?: "toggle-theme" | "copy-url";
 };
 
 function matches(item: CommandItem, query: string): boolean {
@@ -100,6 +100,10 @@ export function CommandPaletteProvider({
         const current: ColorScheme =
           resolvedTheme === "light" ? "light" : "dark";
         setTheme(nextTheme(current));
+        return;
+      }
+      if (item.action === "copy-url") {
+        void navigator.clipboard?.writeText(window.location.href);
         return;
       }
       if (!item.href) return;
@@ -194,6 +198,12 @@ export function CommandPaletteProvider({
               setActive((i) =>
                 results.length ? (i - 1 + results.length) % results.length : 0,
               );
+            } else if (event.key === "Home") {
+              event.preventDefault();
+              setActive(0);
+            } else if (event.key === "End") {
+              event.preventDefault();
+              setActive(Math.max(0, results.length - 1));
             } else if (event.key === "Enter") {
               event.preventDefault();
               run(results[active]);
@@ -246,8 +256,16 @@ export function CommandPaletteProvider({
               </p>
             ) : (
               Object.entries(grouped).map(([group, groupItems]) => (
-                <div key={group} className="mt-2 mb-1 px-1 last:mb-2">
-                  <p className="p-2 text-xs font-medium text-muted-foreground">
+                <div
+                  key={group}
+                  role="group"
+                  aria-labelledby={`${listId}-group-${group}`}
+                  className="mt-2 mb-1 px-1 last:mb-2"
+                >
+                  <p
+                    id={`${listId}-group-${group}`}
+                    className="p-2 text-xs font-medium text-muted-foreground"
+                  >
                     {group}
                   </p>
                   {groupItems.map((item) => {
@@ -295,12 +313,18 @@ export function CommandPaletteProvider({
               the cursor — open a page, leave for another site, or throw a
               switch — rather than promising one of the three. */}
           <div className="flex h-10 shrink-0 items-center justify-between gap-2 px-3 text-xs font-medium">
-            <SiteMark aria-hidden className="size-6 text-muted-foreground" />
-            <span className="flex items-center gap-2 text-muted-foreground">
-              <span className="max-sm:hidden">
-                {enterLabel(results[active])}
+            <ShortMark className="text-muted-foreground" />
+            <span className="flex items-center gap-3 text-muted-foreground">
+              <span className="flex items-center gap-1 max-sm:hidden">
+                <Key>↑</Key>
+                <Key>↓</Key>
               </span>
-              <Key>↵</Key>
+              <span className="flex items-center gap-2">
+                <span className="max-sm:hidden">
+                  {enterLabel(results[active])}
+                </span>
+                <Key>↵</Key>
+              </span>
             </span>
           </div>
         </div>
@@ -312,6 +336,7 @@ export function CommandPaletteProvider({
 /** What Enter does to the highlighted row, in the site's own words. */
 function enterLabel(item: CommandItem | undefined): string {
   if (!item) return "Nothing to open";
+  if (item.action === "copy-url") return "Copy";
   if (item.action) return "Run";
   if (item.href?.startsWith("mailto:")) return "Write";
   return item.external ? "Open link" : "Go to page";
