@@ -10,7 +10,8 @@ import {
   PanelHeader,
   PanelTitle,
 } from "@/components/panel";
-import { formatPostDate, getPostBySlug, getPublishedPosts } from "@/lib/blog";
+import { getPostBySlug, getPublishedPosts } from "@/lib/blog";
+import { formatPostDate } from "@/lib/posts";
 import { ogImagePath } from "@/lib/discovery";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { site } from "@/lib/site";

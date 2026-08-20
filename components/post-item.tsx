@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { formatPostDate, type PostRecord } from "@/lib/blog";
+import { formatPostDate, type PostSummary } from "@/lib/posts";
 
 /**
  * One Post, as a row across the page.
@@ -21,7 +21,7 @@ export function PostItem({
   post,
   headingAs = "h2",
 }: {
-  post: PostRecord;
+  post: PostSummary;
   headingAs?: "h2" | "h3";
 }) {
   const Heading = headingAs;
