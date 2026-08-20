@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { PaletteTrigger } from "@/components/command-palette";
 import { Separator } from "@/components/separator";
+import { SiteHeaderMark } from "@/components/site-header-mark";
 import { SiteNav } from "@/components/site-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FOCUSABLE_CHROME } from "@/lib/a11y";
 import { navItems } from "@/lib/nav";
-import { site } from "@/lib/site";
 
 export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
   const items = navItems(hasPosts);
@@ -22,9 +22,7 @@ export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
         >
           {/* The wordmark alone. A glyph beside it would be a second mark
               competing with the one the hero already draws. */}
-          <span className="font-heading text-base font-medium tracking-tight">
-            {site.handle.toLowerCase()}
-          </span>
+          <SiteHeaderMark />
         </Link>
 
         <div className="flex-1" />
