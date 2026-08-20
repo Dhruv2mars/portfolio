@@ -26,14 +26,17 @@ demo, a dataset. The organising rule of the whole site: a section exists only wh
 _Avoid_: Aspiration, roadmap, "coming soon", placeholder content, invented metrics
 
 **Home**:
-The only substantial surface. A single dense scroll: Masthead → AI Activity → Projects → footer.
-Everything the Visitor needs is on it; sub-routes exist for Blog only.
+The densest surface, and the one that has to work in sixty seconds. A single scroll: Masthead →
+Overview → AI Activity → Projects → Blog → footer, with the last two showing a sample and a door to
+the full index. `/projects` and `/blog` hold the whole of what Home samples; nothing else has a
+sub-route.
 _Avoid_: Landing page, multi-page site, hub, dashboard
 
 **Masthead**:
-The top block — avatar slot, name, the tagline, one short line of positioning, social links. The
-avatar slot is reserved and deliberately unfilled until a real portrait exists; it is a designed
-absence, not a missing asset.
+The top block — avatar slot, name (with a button that says it out loud), and the tagline said more
+than one way. The avatar slot is reserved and deliberately unfilled until a real portrait exists; it
+is a designed absence, not a missing asset. The social links and the where/when of the author sit
+below it in the Overview, not in the Masthead itself.
 _Avoid_: Hero, banner, About section, long bio
 
 **AI Activity**:
@@ -49,13 +52,15 @@ judgment about Proof, not a mirror of the account.
 _Avoid_: Case study, work item, portfolio piece, repo list
 
 **Blog / Post**:
-The writing surface. `/blog` and `/blog/[slug]`, MDX, with RSS at `/feed.xml`. Zero Posts exist
-today; the pipeline ships fully wired but the section and its nav entry stay hidden until a real
-Post is published. Nothing empty is ever shown to a Visitor.
+The writing surface. `/blog` and `/blog/[slug]`, MDX, with RSS at `/feed.xml` and each Post also
+served as source at `/blog/[slug]/raw.md`. The index is rows and a filter; a Post carries a toolbar
+(copy, hand to a model, share, the Post either side), its own contents list, and its neighbours at
+the end. The Blog section, its nav entry and the route itself stay hidden while zero Posts are
+published — nothing empty is ever shown to a Visitor.
 _Avoid_: Articles, Journal, Newsletter, empty states, test posts presented as writing
 
 **Reference**:
-dai.is-a.dev — the design idiom the Portfolio is built in, chosen deliberately as the bar to be
+chanhdai.com (`ncdai/chanhdai.com`, formerly dai.is-a.dev) — the design idiom the Portfolio is built in, chosen deliberately as the bar to be
 measured against. Its *design language* is adopted; its *information architecture* is not, because
 it is sized to proof this site does not have.
 _Avoid_: Inspiration, clone, template, "based on"

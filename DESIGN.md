@@ -4,7 +4,7 @@ Read before touching code. Supersedes the retired LEDGER contract (see `docs/adr
 
 ## 0. Relationship to the Reference
 
-dai.is-a.dev is the bar. We build in its idiom on purpose. Two rules govern what transfers:
+chanhdai.com (`ncdai/chanhdai.com`) is the bar. We build in its idiom on purpose. Two rules govern what transfers:
 
 **Adopt — the design language.** Dark-first with a real light theme. Geist Sans + Geist Mono. Small
 type, tight tracking, generous line-height. Hairline borders instead of shadows. Quiet chrome that
@@ -23,30 +23,41 @@ content**. Every section must be dense with real Proof or it does not exist.
 
 ## 1. Stack
 
-Next.js (App Router) · React · TypeScript · Tailwind v4 · shadcn/ui on Radix + Base UI primitives ·
-Motion for animation · `next-themes` · MDX via `next-mdx-remote` · Vercel. Latest stable at build
-time. `bun` for everything.
+Next.js (App Router) · React · TypeScript · Tailwind v4 · Motion for animation · `next-themes` ·
+MDX via `next-mdx-remote` with `rehype-sanitize` · `sugar-high` for code · Vercel. Latest stable at
+build time. `bun` for everything.
+
+**No component library.** Every primitive here — panel, icon set, command palette, menu, tabs, the
+search field — is written in this repo. A dependency earns its place by doing something we cannot:
+Motion does springs, `next-themes` does the no-flash theme boot. A dropdown does not qualify.
 
 ## 2. Surfaces
 
 ```
-/                 Masthead → AI Activity → Projects → footer      (single dense scroll)
-/blog             hidden until the first real Post exists
-/blog/[slug]      Post
-/feed.xml         RSS                    ← survives from the old build
-/writings         301 → /blog            ← survives from the old build
-/og               dynamic OG images
+/                    Masthead → Overview → AI Activity → Projects → Blog → footer
+/projects            every Project, one panel, filtered
+/blog                every Post, one panel, filtered
+/blog/[slug]         Post
+/blog/[slug]/raw.md  the Post as source, for a reader or a model
+/feed.xml            RSS                    ← survives from the old build
+/writings            301 → /blog            ← survives from the old build
+/og                  dynamic OG images
 /sitemap.xml /robots.txt
 404
 ```
+
+`/projects` and `/blog` are the same page twice: one panel, an `h1` carrying the count, one search
+field, one kind of row. A Visitor who has used either has learned both. Home shows the head of each
+list and a door to the rest.
 
 `rehype-sanitize` on all MDX and escaped JSON-LD embedding survive from the old build unchanged.
 Regressing either is a security bug, not a style change.
 
 ## 3. Masthead
 
-One block, no hero. Avatar slot · name · `agentic engineer` · one line of positioning · social links
-(x · github · linkedin · email).
+One block, no hero. Avatar slot · name, with a button that pronounces it · the tagline, flipping
+through the several ways it is true. The social links and the author's location and local time live
+in the Overview panel below, where they are context rather than chrome.
 
 **The avatar slot is a designed absence.** No portrait exists yet. Reserve the exact final footprint
 and render a bordered placeholder that carries the same cursor-tracking light interaction a real
@@ -82,11 +93,27 @@ Eight, curated, in this order. Tier 1 is the agentic thesis; Tier 2 earns its pl
 08  openutm-v0  Cross-platform UTM alternative
 ```
 
-Rows, not cards — name, one line, language, year, outbound link. Hover reveals the destination host.
-No thumbnails, no detail pages, no tag chips.
+Rows, not cards — mark, name, one line, language and year as pills, outbound link. Hover reveals the
+destination host. A Project's own mark is checked into `public/projects` and drawn as a mask in the
+row's ink; a Project without one gets the glyph for its kind. No thumbnails, no detail pages, no
+screenshots.
 
 `pi-queue` shows **"published on npm"** as a fact and never a download counter — the real number is
 too small to help. Revisit if relunar gains traction.
+
+## 5b. Blog
+
+Rows, not cards: date, title, one line, reading time. A card grid with no images is a list wearing a
+costume.
+
+A Post page is a document you can do something with. Above the title: back to the index, copy the
+Post as Markdown, hand it to a model, share it, and step to the Post either side (`←` / `→`, which
+bail on modifier keys and on any field that has focus). The arrows are labelled **Newer** and
+**Older**, never Previous/Next — in a reverse-chronological list those words are a coin toss.
+
+The contents list sits at the front of the Post rather than floating in the margin: this frame is
+one railed column and has no margin. It is drawn only when there are at least two headings, and it
+does not track the reading position — it is an index, not chrome.
 
 ## 6. Type, colour, motion
 
@@ -107,7 +134,7 @@ feedback.
 ## 7. Prohibitions
 
 No empty sections. No placeholder or invented data. No "coming soon". No fake metrics. No box
-shadows. No gradients except the heatmap ramp. No thumbnails or project detail pages. No hamburger
+shadows outside the one popover surface (a menu must detach from the page under it). No gradients except the heatmap ramp. No thumbnails or project detail pages. No hamburger
 menu. No perpetual animation. No page-level fade on route change. No dashboard grammar.
 
 ## 8. Acceptance tests
@@ -125,3 +152,7 @@ menu. No perpetual animation. No page-level fade on route change. No dashboard g
 9. Lighthouse: performance ≥95, accessibility 100, best practices 100, SEO 100. CLS = 0.
 10. `/writings` still permanent-redirects to `/blog` (Next emits 308, which
     preserves the method); `/feed.xml` still validates.
+11. Every link in a Post's contents list resolves to a heading id that the MDX
+    renderer actually emitted — one `slugify`, in `lib/slug.ts`, imported by
+    both.
+12. `/blog/[slug]/raw.md` serves `text/markdown` and contains no frontmatter.
