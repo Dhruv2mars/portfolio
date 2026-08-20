@@ -27,7 +27,7 @@ export function TocInline({ entries }: { entries: TocEntry[] }) {
         On this page
       </p>
 
-      <ol className="mt-2.5 space-y-1.5">
+      <ol className="mt-2 space-y-1">
         {entries.map((entry) => (
           <li
             key={entry.slug}
@@ -35,9 +35,13 @@ export function TocInline({ entries }: { entries: TocEntry[] }) {
             // already says everything a marker would.
             className={entry.depth === 3 ? "pl-4" : undefined}
           >
+            {/* No standing underline, unlike every other link on the site: ten
+                of them stacked is a list wearing ten rules, and the reader is
+                looking down a column of titles rather than reading a sentence
+                with a link in it. The rule comes back under the pointer. */}
             <a
               href={`#${entry.slug}`}
-              className="link-underline text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-block text-sm text-muted-foreground underline-offset-3 transition-colors hover:text-foreground hover:underline hover:decoration-current/40"
             >
               {entry.text}
             </a>
