@@ -394,21 +394,21 @@
    grid is a measuring instrument, so its cells are not decorated. Intensity
    is carried by the neutral foreground at five opacities.
 
-   The cell size is measured, not declared: the drawn window is a handful of
-   months rather than a fixed year, so one hard-coded size would leave the
-   panel two-thirds empty. The grid picks the largest whole-pixel cell its rail
-   can hold, between a 12px floor — which is what puts the strip back into a
-   scroll on a phone — and an 18px ceiling, past which a day reads as a tile.
+   Every measurement here is the reference's: a 12px block on a 2px gutter,
+   under a 22px label band. They are not arbitrary — a rolling year at that
+   size is a fixed 740px plate, the same shape every month of every year, which
+   is the whole point of drawing a habit as a calendar. A cell that grew to
+   fill the rail would make the same year a different picture each visit.
 --------------------------------------------------------------------------- */
 
 .activity-grid {
   --cell-size: 12px;
   --cell-gap: 2px;
+  --label-size: 12px;
   display: grid;
-  /* Whole pixels, and the same number of them in every column. A fractional
-     track (`1fr`) let the browser round one week to 12px and the next to 13,
-     which on a grid of squares is visible as a wobble in every row — so the
-     size is measured once, in whole pixels, and handed down as a length. */
+  /* A length, not a fraction. A `1fr` track lets the browser round one week
+     to 12px and the next to 13, which on a grid of squares reads as a wobble
+     in every row. */
   grid-template-columns: repeat(var(--weeks, 53), var(--cell-size));
   gap: var(--cell-gap);
   /* The grid is one tab stop, but the thing that moves is the active cell, so
@@ -423,7 +423,9 @@
   display: grid;
   grid-template-rows: repeat(7, var(--cell-size));
   gap: var(--cell-gap);
-  padding-top: 1.05rem;
+  /* The label band: the type size plus the 8px of air the reference leaves
+     under it, so the months sit above the plate rather than on it. */
+  padding-top: calc(var(--label-size) + 8px);
 }
 
 /* Sits above its own column, allowed to overflow it. */
@@ -432,7 +434,7 @@
   top: 0;
   left: 0;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--label-size);
   line-height: 1;
   color: var(--muted-foreground);
   white-space: nowrap;
@@ -588,6 +590,35 @@
     background-image: none;
     animation: none;
     -webkit-text-fill-color: currentColor;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Name pronunciation. The speaker's two waves pulse while the name is being
+   said, offset so they read as leaving the cone rather than blinking together.
+   Nothing else moves: the glyph is the state, so it must not also be a toy.
+--------------------------------------------------------------------------- */
+@keyframes pronounce-wave {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+[data-slot="pronounce"][data-speaking] [data-wave="near"] {
+  animation: pronounce-wave 0.9s ease-in-out infinite;
+}
+
+[data-slot="pronounce"][data-speaking] [data-wave="far"] {
+  animation: pronounce-wave 0.9s ease-in-out 0.15s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="pronounce"][data-speaking] [data-wave] {
+    animation: none;
   }
 }
 

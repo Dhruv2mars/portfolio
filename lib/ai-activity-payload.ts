@@ -112,6 +112,12 @@ export function shiftYmd(date: string, deltaDays: number): string {
 }
 
 /** First day of the month a date falls in. */
+/** Day of week (0 = Sunday) for a YYYY-MM-DD calendar date. */
+export function weekdayIndex(date: string): number {
+  const [y, m, d] = date.split("-").map(Number);
+  return new Date(Date.UTC(y!, m! - 1, d!, 12)).getUTCDay();
+}
+
 export function startOfMonth(date: string): string {
   return `${date.slice(0, 7)}-01`;
 }

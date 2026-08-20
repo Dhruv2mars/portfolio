@@ -2,9 +2,8 @@ import {
   AI_ACTIVITY_TIMEZONE,
   calendarDateInTimeZone,
   type AiActivityPayload,
-  shiftMonth,
   shiftYmd,
-  startOfMonth,
+  weekdayIndex,
 } from "@/lib/ai-activity-payload";
 
 export type DailyTokens = {
@@ -18,10 +17,26 @@ export type ActivityDay = DailyTokens & {
   intensity: Intensity;
 };
 
+/**
+ * The four numbers under the title. One total is a milestone and says nothing
+ * about whether the habit is still alive; four nested windows say the same
+ * thing the grid says, in figures, for the Visitor who reads numbers before
+ * pictures. All but the first are sums of the drawn series, so they can never
+ * disagree with the cells above them.
+ */
+export type ActivityTotals = {
+  /** All-time, from the payload — not the sum of the drawn window. */
+  lifetime: number;
+  days30: number;
+  days7: number;
+  today: number;
+};
+
 export type AiActivity = {
   days: ActivityDay[];
   /** All-time total, from the payload — not the sum of the drawn window. */
   lifetimeTokens: number;
+  totals: ActivityTotals;
   timezone: string;
 };
 
@@ -65,54 +80,36 @@ export function intensityFromTokens(
   return 4;
 }
 
-/** Never draw more than this much history, however long the record runs. */
-export const ACTIVITY_MAX_MONTHS = 12;
-
 /**
- * A month earns its columns by being worked in on at least this share of its
- * days. Below it the month is a few marks in a field of blanks, which draws
- * as an outage rather than as the beginning of a record.
- */
-export const ACTIVITY_MIN_MONTH_RATIO = 0.25;
-
-/** Days in the calendar month a YYYY-MM-DD date falls in. */
-function daysInMonth(date: string): number {
-  const [y, m] = date.split("-").map(Number);
-  return new Date(Date.UTC(y!, m!, 0)).getUTCDate();
-}
-
-/**
- * Where the drawing starts: walk back from this month for as long as each
- * month was worked in, and stop at the first one that was not.
+ * The frame is a fixed year, and it does not move.
  *
- * The window is chosen rather than fixed because a fixed year of cells is
- * mostly a picture of the months before the habit existed — and the first few
- * scattered days of a tool being tried out are not a record of using it. The
- * rule slides forward on its own: a quiet month never enters the window, and
- * once the run is longer than the cap the cap is what shows.
+ * An earlier version chose the window from the record — walk back for as long
+ * as each month was worked in, stop at the first that was not — which meant the
+ * figure was a different shape every month and a different shape again on the
+ * day a quiet month rolled out of it. A measure whose axis changes with what it
+ * measures is not a measure. So the grid is a calendar: fifty-two weeks back
+ * from today, Sunday-aligned, exactly as the reference and every graph like it
+ * draws one. The months before the habit existed are drawn empty, which is what
+ * they were, and the record reads as having started rather than as having been
+ * cropped.
+ */
+export const ACTIVITY_WEEKS = 52;
+
+/**
+ * The Sunday that opens the window: this week's Sunday, then fifty-two Sundays
+ * back from it.
+ *
+ * Counting whole weeks off the current week — rather than counting 364 days
+ * back from today and rounding — is what makes the plate exactly 53 columns on
+ * every day of every week. Counting days puts a Saturday at exactly 52 columns
+ * and every other day at 53, and a figure that loses a column once a week is a
+ * figure that moves under the Visitor.
  */
 export function activityWindowStart(
-  days: readonly DailyTokens[],
   today: string,
-  maxMonths = ACTIVITY_MAX_MONTHS,
+  weeks = ACTIVITY_WEEKS,
 ): string {
-  const activeDays = new Map<string, number>();
-  for (const day of days) {
-    if (day.tokens <= 0) continue;
-    const month = day.date.slice(0, 7);
-    activeDays.set(month, (activeDays.get(month) ?? 0) + 1);
-  }
-
-  // The current month is always in, however young it is — it is the month the
-  // grid's last cell lives in.
-  let start = startOfMonth(today);
-  for (let back = 1; back < maxMonths; back++) {
-    const month = shiftMonth(today, -back);
-    const needed = Math.ceil(daysInMonth(month) * ACTIVITY_MIN_MONTH_RATIO);
-    if ((activeDays.get(month.slice(0, 7)) ?? 0) < needed) break;
-    start = month;
-  }
-  return start;
+  return shiftYmd(today, -(weekdayIndex(today) + weeks * 7));
 }
 
 /**
@@ -137,20 +134,34 @@ export function buildDailySeries(
   return series;
 }
 
+/** Sum of the last `count` days of a consecutive series ending today. */
+function sumTrailing(days: readonly DailyTokens[], count: number): number {
+  return days
+    .slice(-count)
+    .reduce((total, day) => total + Math.max(0, day.tokens), 0);
+}
+
 export function buildAiActivity(
   series: readonly DailyTokens[],
   options?: { timezone?: string; lifetimeTokens?: number },
 ): AiActivity {
   const thresholds = quartileThresholds(series);
+  const lifetimeTokens =
+    options?.lifetimeTokens ??
+    series.reduce((sum, day) => sum + day.tokens, 0);
 
   return {
     days: series.map((day) => ({
       ...day,
       intensity: intensityFromTokens(day.tokens, thresholds),
     })),
-    lifetimeTokens:
-      options?.lifetimeTokens ??
-      series.reduce((sum, day) => sum + day.tokens, 0),
+    lifetimeTokens,
+    totals: {
+      lifetime: lifetimeTokens,
+      days30: sumTrailing(series, 30),
+      days7: sumTrailing(series, 7),
+      today: sumTrailing(series, 1),
+    },
     timezone: options?.timezone ?? AI_ACTIVITY_TIMEZONE,
   };
 }
@@ -161,7 +172,7 @@ export function materializeAiActivity(
 ): AiActivity {
   const timezone = payload.timezone || AI_ACTIVITY_TIMEZONE;
   const today = calendarDateInTimeZone(now, timezone);
-  const start = activityWindowStart(payload.days, today);
+  const start = activityWindowStart(today);
 
   return buildAiActivity(buildDailySeries(payload.days, start, today), {
     timezone,
