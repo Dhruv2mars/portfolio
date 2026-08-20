@@ -1,3 +1,5 @@
+import { filterByQuery } from "@/lib/search";
+
 /**
  * What kind of thing the project *is*, which is what its gutter glyph draws.
  * Kept here as a plain string union so this module stays free of React —
@@ -132,6 +134,25 @@ export function getProjects(): readonly Project[] {
 }
 
 export const PROJECT_NAMES = PROJECTS.map((p) => p.name);
+
+/**
+ * Everything a row shows, plus the year and the kind, which are things a
+ * Visitor looks for by name ("rust", "2026", "cli") even though the kind is
+ * only ever drawn as a glyph.
+ */
+export function searchProjects(
+  projects: readonly Project[],
+  query: string,
+): Project[] {
+  return filterByQuery(projects, query, (project) => [
+    project.name,
+    project.description,
+    project.language,
+    project.kind,
+    project.note,
+    project.year,
+  ]);
+}
 
 /** Host shown on hover, e.g. `relunar.com`. */
 export function destinationHost(project: Project): string {

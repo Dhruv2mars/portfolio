@@ -1,3 +1,5 @@
+import { filterByQuery } from "@/lib/search";
+
 /**
  * What a Post *is*, and the things you can do with one without touching a
  * disk.
@@ -39,42 +41,20 @@ export function formatPostDate(date: string): string {
 }
 
 /**
- * Spaces are dropped as well as case folded, so "codingagents" finds "coding
- * agents" — the reference does this, and it is right: someone typing fast into
- * a filter is not typing prose.
- */
-const normalize = (text: string) => text.toLowerCase().replaceAll(" ", "");
-
-/**
  * Title, summary and tags. Not the body — a filter that matched body text
  * would return a Post whose row shows nothing of why it matched, which reads
  * as a bug even when it is a hit.
  */
-export function searchPosts<T extends Pick<PostSummary, "title" | "summary" | "tags">>(
-  posts: readonly T[],
-  query: string,
-): T[] {
-  const needle = normalize(query.trim());
-  if (!needle) return [...posts];
-
-  return posts.filter((post) => {
-    const haystack = normalize(
-      [post.title, post.summary, ...(post.tags ?? [])].join(" "),
-    );
-    return haystack.includes(needle);
-  });
+export function searchPosts<
+  T extends Pick<PostSummary, "title" | "summary" | "tags">,
+>(posts: readonly T[], query: string): T[] {
+  return filterByQuery(posts, query, (post) => [
+    post.title,
+    post.summary,
+    ...(post.tags ?? []),
+  ]);
 }
 
-/**
- * The posts either side of one, in the order the index lists them: newest
- * first. `newer` is therefore the entry above in that list and `older` the one
- * below — named for what they are rather than for which arrow key reaches
- * them, because "previous post" in a reverse-chronological list is a coin
- * toss and the label is the only thing telling the Visitor where they'll land.
- *
- * Either end is `null`, which is how the page knows to draw a dead control
- * rather than a link to nothing.
- */
 export function findNeighbours<T extends { slug: string }>(
   posts: readonly T[],
   slug: string,
