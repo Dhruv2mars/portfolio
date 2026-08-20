@@ -59,8 +59,14 @@ export const metadata: Metadata = {
     images: [ogImagePath(site.name)],
   },
   alternates: {
+    // The auto-discovery link. It is what lets a reader be handed
+    // `dhruv2mars.com` and find the feed on its own, which is how most people
+    // subscribe — they never see `/feed.xml`. The title is what the reader
+    // then files it under.
     types: {
-      "application/rss+xml": site.rssPath,
+      "application/rss+xml": [
+        { url: site.rssPath, title: `${site.name} — Blog` },
+      ],
     },
   },
 };
