@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CloseIcon, SearchIcon } from "@/components/icons";
 import { PostItem } from "@/components/post-item";
+import { SearchField, SearchStatus } from "@/components/search-field";
 import { searchPosts, type PostSummary } from "@/lib/posts";
 
 /**
@@ -23,51 +23,13 @@ export function PostSearch({ posts }: { posts: PostSummary[] }) {
 
   return (
     <>
-      <div className="screen-line-bottom p-2">
-        <div className="relative flex items-center">
-          <SearchIcon
-            aria-hidden
-            className="pointer-events-none absolute left-3 size-4 text-muted-foreground"
-          />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            onKeyDown={(event) => {
-              // Escape empties the field before it does anything else — the
-              // same key the palette closes with, doing the same job here.
-              if (event.key === "Escape" && query) {
-                event.preventDefault();
-                setQuery("");
-              }
-            }}
-            placeholder="Search posts…"
-            aria-label="Search posts"
-            autoComplete="off"
-            spellCheck={false}
-            /* 16px on a phone: anything smaller and iOS zooms the page on
-               focus, which lands the Visitor somewhere they did not ask to
-               be. */
-            className="h-9 w-full rounded-lg border border-border bg-transparent pr-9 pl-9 text-base text-foreground placeholder:text-muted-foreground sm:text-sm dark:bg-input/30"
-          />
-          {query ? (
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              aria-label="Clear search"
-              className="absolute right-1.5 flex size-6 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <CloseIcon className="size-4" />
-            </button>
-          ) : null}
-        </div>
-      </div>
-
-      {/* The result of typing is a list changing shape somewhere below the
-          field, which a screen reader has no way to notice. This says it. */}
-      <p role="status" className="sr-only">
-        {shown.length === 1 ? "1 post" : `${shown.length} posts`}
-      </p>
+      <SearchField
+        value={query}
+        onChange={setQuery}
+        label="Search posts"
+        placeholder="Search posts…"
+      />
+      <SearchStatus count={shown.length} noun="post" />
 
       {shown.length > 0 ? (
         <ul>

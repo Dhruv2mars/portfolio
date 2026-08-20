@@ -8,17 +8,11 @@ import { getProjects } from "@/lib/projects";
 export const HOME_PROJECT_LIMIT = 5;
 
 /**
- * On the home page this is a sample with a door at the bottom; on `/projects`
- * it is the whole list and the door is gone. Same rows either way — the page
- * decides how many, the row decides nothing.
+ * The sample on the home page: the first few rows and a door to the rest.
+ * `/projects` draws its own panel around the whole list — it is a page rather
+ * than a section, so it owns its `h1` and its filter, and shares only the row.
  */
-export function ProjectsSection({
-  limit,
-  as = "h2",
-}: {
-  limit?: number;
-  as?: "h1" | "h2";
-}) {
+export function ProjectsSection({ limit }: { limit?: number }) {
   const projects = getProjects();
   const shown = limit ? projects.slice(0, limit) : projects;
   const hidden = projects.length - shown.length;
@@ -26,7 +20,7 @@ export function ProjectsSection({
   return (
     <Panel id="projects">
       <PanelHeader>
-        <PanelTitle as={as}>
+        <PanelTitle>
           Projects
           <PanelTitleSup className="tabular-nums">
             {projects.length}

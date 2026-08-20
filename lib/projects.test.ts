@@ -1,5 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { destinationHost, getProjects, PROJECT_NAMES } from "@/lib/projects";
+import {
+  destinationHost,
+  getProjects,
+  PROJECT_NAMES,
+  searchProjects,
+} from "@/lib/projects";
 
 describe("Projects are curated, not enumerated", () => {
   test("the list stays small enough to read in one pass", () => {
@@ -32,5 +37,37 @@ describe("Projects are curated, not enumerated", () => {
       if (!project.note) continue;
       expect(project.note).not.toMatch(/\d/);
     }
+  });
+});
+
+describe("searchProjects", () => {
+  const all = getProjects();
+
+  test("an empty query is not a filter", () => {
+    expect(searchProjects(all, "  ")).toHaveLength(all.length);
+  });
+
+  test("matches the language, which is what a visitor scans for", () => {
+    const rust = searchProjects(all, "rust");
+    expect(rust.length).toBeGreaterThan(0);
+    expect(rust.every((p) => p.language === "Rust")).toBe(true);
+  });
+
+  test("matches the description, not only the name", () => {
+    expect(searchProjects(all, "webgpu").map((p) => p.name)).toEqual(["block"]);
+  });
+
+  test("a hyphen in the name need not be typed", () => {
+    expect(searchProjects(all, "pi queue").map((p) => p.name)).toEqual([
+      "pi-queue",
+    ]);
+  });
+
+  test("matches the year, which is a number on the row", () => {
+    expect(searchProjects(all, "2026")).toHaveLength(all.length);
+  });
+
+  test("no match is an empty list, never the whole list", () => {
+    expect(searchProjects(all, "cobol")).toEqual([]);
   });
 });
