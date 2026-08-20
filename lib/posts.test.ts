@@ -1,5 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { formatPostDate, searchPosts, type PostSummary } from "@/lib/posts";
+import {
+  findNeighbours,
+  formatPostDate,
+  postMarkdown,
+  searchPosts,
+  type PostSummary,
+} from "@/lib/posts";
 
 const post = (over: Partial<PostSummary>): PostSummary => ({
   slug: "a-post",
@@ -73,5 +79,64 @@ describe("formatPostDate", () => {
     // The formatter reads it as local midnight so the day printed is the day
     // written.
     expect(formatPostDate("2026-01-01")).toBe("January 1, 2026");
+  });
+});
+
+describe("findNeighbours", () => {
+  test("the middle of the list has one on each side", () => {
+    const list = [post({ slug: "a" }), post({ slug: "b" }), post({ slug: "c" })];
+    const { newer, older } = findNeighbours(list, "b");
+    expect(newer?.slug).toBe("a");
+    expect(older?.slug).toBe("c");
+  });
+
+  test("the newest post has nothing above it", () => {
+    const list = [post({ slug: "a" }), post({ slug: "b" })];
+    expect(findNeighbours(list, "a")).toMatchObject({ newer: null });
+  });
+
+  test("the oldest post has nothing below it", () => {
+    const list = [post({ slug: "a" }), post({ slug: "b" })];
+    expect(findNeighbours(list, "b")).toMatchObject({ older: null });
+  });
+
+  test("the only post is an island", () => {
+    expect(findNeighbours([post({ slug: "a" })], "a")).toEqual({
+      newer: null,
+      older: null,
+    });
+  });
+
+  test("an unknown slug is neighbourless, not an exception", () => {
+    expect(findNeighbours([post({ slug: "a" })], "nope")).toEqual({
+      newer: null,
+      older: null,
+    });
+  });
+});
+
+describe("postMarkdown", () => {
+  const source = postMarkdown(
+    post({ title: "A Post", summary: "About it.", publishedAt: "2026-01-01" }),
+    "https://example.com/blog/a-post",
+    "\n\nBody text.\n",
+  );
+
+  test("opens with the title as an h1", () => {
+    expect(source.startsWith("# A Post\n")).toBe(true);
+  });
+
+  test("carries the summary, the date and the canonical URL", () => {
+    expect(source).toContain("> About it.");
+    expect(source).toContain("January 1, 2026");
+    expect(source).toContain("https://example.com/blog/a-post");
+  });
+
+  test("no frontmatter leaks into it", () => {
+    expect(source).not.toContain("---");
+  });
+
+  test("ends in exactly one newline, so a paste is not padded", () => {
+    expect(source.endsWith("Body text.\n")).toBe(true);
   });
 });
