@@ -1,14 +1,11 @@
-"use client";
-
-import { useId, useState } from "react";
 import {
+  ArrowUpRight,
   BoxIcon,
   ChatIcon,
-  ChevronIcon,
   DeviceIcon,
   DocumentIcon,
+  GithubIcon,
   GridIcon,
-  LinkIcon,
   QueueIcon,
   ServerIcon,
   TerminalIcon,
@@ -48,7 +45,7 @@ function ProjectMark({ project }: { project: Project }) {
     return (
       <span
         aria-hidden
-        className="mx-4 size-6 shrink-0 bg-muted-foreground transition-colors duration-150 ease-out select-none group-hover/project:bg-foreground"
+        className="mt-0.5 size-6 shrink-0 bg-muted-foreground transition-colors duration-150 ease-out select-none group-hover/project:bg-foreground"
         style={{
           maskImage: `url(${project.logo.src})`,
           maskSize: "contain",
@@ -70,104 +67,104 @@ function ProjectMark({ project }: { project: Project }) {
         aria-hidden
         width={24}
         height={24}
-        className="mx-4 size-6 shrink-0 grayscale transition-[filter] duration-150 ease-out select-none group-hover/project:grayscale-0"
+        className="mt-0.5 size-6 shrink-0 grayscale transition-[filter] duration-150 ease-out select-none group-hover/project:grayscale-0"
       />
     );
   }
 
   const KindIcon = KIND_ICONS[project.kind] ?? BoxIcon;
   return (
-    <IconTile className="mx-4">
+    <IconTile className="mt-0.5">
       <KindIcon />
     </IconTile>
   );
 }
 
 /**
- * A row is a name and two doors. The name opens the record in place; the arrow
- * leaves for the thing itself. They are separate controls on purpose — a row
- * that both expands and navigates makes the reader guess which one a click
- * bought, and one of the two answers is a lost page.
+ * One Project, as a row across the page — the same shape a Post row has, on
+ * purpose. `/projects` and `/blog` are the same page twice, and a Visitor who
+ * has read one list should not have to learn how the other one is read.
  *
- * One hover surface, though. The row lights as a whole, because it is one
- * thing; a title that lit while the gutter beside it stayed cold read as two
- * rows stacked. The link is the exception: it darkens on its own, so the
- * reader can see which of the two doors is under the pointer.
+ * The row used to keep its sentence and its facts behind a disclosure, which
+ * made an index of eight rows eight names and eight identical years: nothing
+ * to scan, and a filter matching text nobody could see. What a row knows, a
+ * row says. The whole row is one door — the thing itself — and the repository
+ * gets its own small door when it is somewhere else.
  */
-export function ProjectRow({ project }: { project: Project }) {
-  const [open, setOpen] = useState(false);
-  const detailsId = useId();
-  const tags = [project.language, project.note].filter(Boolean) as string[];
+export function ProjectRow({
+  project,
+  headingAs = "h3",
+}: {
+  project: Project;
+  headingAs?: "h2" | "h3";
+}) {
+  const Heading = headingAs;
+  const href = project.live ?? project.url;
+  // Only when the live thing is not already the repository, so no row carries
+  // two controls that land in the same place.
+  const source = project.live ? project.url : null;
+  const tags = [project.language, project.note, String(project.year)].filter(
+    Boolean,
+  ) as string[];
 
   return (
     <li className="border-b border-line last:border-b-0">
-      {/* `relative` scopes the stretched trigger to the row: the record below
-          is a sibling, so opening one never puts a button over its own text. */}
-      <div className="group/project relative flex items-center transition-[background-color] duration-150 ease-out hover:bg-accent-muted has-[button:active]:bg-accent">
+      {/* `relative` scopes the stretched link to this row, so the next
+          Project's name never falls under this one's target. */}
+      <div className="group/project relative flex items-start gap-4 p-4 transition-[background-color] duration-150 ease-out hover:bg-accent-muted">
         <ProjectMark project={project} />
 
-        <div className="flex min-w-0 flex-1 items-center gap-2 border-l border-dashed border-line py-4 pr-2 pl-4">
-          {/* The whole row toggles, via a pseudo-element rather than a wrapper,
-              so the heading stays the button's accessible name. */}
-          <button
-            type="button"
-            aria-expanded={open}
-            aria-controls={detailsId}
-            onClick={() => setOpen((value) => !value)}
-            className="min-w-0 flex-1 touch-manipulation text-left before:absolute before:inset-0"
-          >
-            <h3 className="truncate leading-snug font-medium">{project.name}</h3>
-            {/* The year belongs to the row, not to the record: it is how the
-                list is ordered, so it has to be legible without opening
-                anything. */}
-            <p className="font-mono text-sm text-muted-foreground tabular-nums">
-              {project.year}
-            </p>
-          </button>
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
+          <Heading className="leading-snug font-medium">
+            <a href={href} target="_blank" rel="noopener noreferrer">
+              <span aria-hidden className="absolute inset-0" />
+              {project.name}
+            </a>
+          </Heading>
 
-          {/* `after:-inset-2` is the hit area: 16px of glyph is a target only a
-              mouse can hit, and this is a link a thumb has to be able to take
-              without opening the record by mistake. */}
-          <a
-            href={project.live ?? project.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${project.name} — ${destinationHost(project)}`}
-            className="relative flex size-6 shrink-0 touch-manipulation items-center justify-center text-muted-foreground transition-[color] duration-150 ease-out after:absolute after:-inset-2 hover:text-foreground active:text-foreground"
-          >
-            <LinkIcon className="pointer-events-none size-4" />
-          </a>
+          <p className="typeset typeset-description text-muted-foreground">
+            {project.description}
+          </p>
 
-          <ChevronIcon
-            data-open={open}
-            aria-hidden
-            className="size-4 shrink-0 text-muted-foreground transition-[rotate,color] duration-200 ease-out data-[open=true]:rotate-180 data-[open=true]:text-foreground"
-          />
+          <ul className="mt-1.5 flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <li key={tag} className="flex">
+                <Tag>{tag}</Tag>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
 
-      {/* `0fr → 1fr` rather than a measured pixel height: the record can be one
-          line or three, and a height the row had to measure first is a height
-          that is wrong for one frame. */}
-      <div id={detailsId} data-open={open} className="project-details grid">
-        <div className="overflow-hidden">
-          <div className="space-y-4 border-t border-line p-4">
-            <p className="typeset typeset-description text-muted-foreground">
-              {project.description}
-            </p>
-            {/* Only the facts that are labels. The year is in the row above
-                and the host is in the link beside it, so putting either here
-                would be saying it twice in a shape that claims it is new. */}
-            {tags.length > 0 ? (
-              <ul className="flex flex-wrap gap-1.5">
-                {tags.map((tag) => (
-                  <li key={tag} className="flex">
-                    <Tag>{tag}</Tag>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
+        <div className="flex shrink-0 items-center gap-2 self-center">
+          {/* Where the row lands, said in words rather than left to the
+              browser's status bar — and only under the pointer, because it is
+              a confirmation of a choice rather than one more thing to read. */}
+          <span
+            aria-hidden
+            className="font-mono text-xs text-muted-foreground opacity-0 transition-opacity duration-150 ease-out group-hover/project:opacity-100 max-sm:hidden"
+          >
+            {destinationHost(project)}
+          </span>
+
+          {/* `after:-inset-2` is the hit area: 16px of glyph is a target only
+              a mouse can hit, and this is a link a thumb has to be able to
+              take without leaving for the live site by mistake. */}
+          {source ? (
+            <a
+              href={source}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.name} source on GitHub`}
+              className="relative flex size-6 touch-manipulation items-center justify-center text-muted-foreground transition-[color] duration-150 ease-out after:absolute after:-inset-2 hover:text-foreground active:text-foreground"
+            >
+              <GithubIcon className="pointer-events-none size-4" />
+            </a>
+          ) : null}
+
+          <ArrowUpRight
+            aria-hidden
+            className="size-4 text-muted-foreground transition-colors duration-150 ease-out group-hover/project:text-foreground"
+          />
         </div>
       </div>
     </li>

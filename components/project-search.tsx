@@ -34,7 +34,11 @@ export function ProjectSearch({ projects }: { projects: Project[] }) {
       {shown.length > 0 ? (
         <ul>
           {shown.map((project) => (
-            <ProjectRow key={project.name} project={project} />
+            <ProjectRow
+              key={project.name}
+              project={project}
+              headingAs="h2"
+            />
           ))}
         </ul>
       ) : (
