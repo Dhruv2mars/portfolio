@@ -1,17 +1,21 @@
 import { cn } from "@/lib/utils";
 
 /**
- * The mark is a true isometric cube: every face is a rhombus on the 30° axes,
- * generated from one edge length rather than drawn by eye. Three tonal steps
- * of the foreground stand in for light, so the mark inverts correctly with the
- * theme and needs no second asset.
+ * Fig. 1 — the hero construction.
+ *
+ * Drawn, not rendered: faces are outlined and hatched rather than filled with
+ * tone, and the floor lattice runs off every edge of the plate to be cut there.
+ * That is the frame's own habit — a line is stopped by the viewport, never
+ * tidied to fit — and it is what keeps the figure attached to the page instead
+ * of floating on it.
+ *
+ * Geometry is true isometric: one edge length, the 30° axes, everything else
+ * derived. This is a figure, not the brand mark — the mark is `ShortMark`.
  */
 
 const EDGE = 20;
 const HALF_W = (EDGE * Math.sqrt(3)) / 2; // horizontal run of one axis
 const HALF_H = EDGE / 2; // vertical rise of one axis
-
-type Cell = { x: number; y: number; z: number };
 
 function points(pairs: Array<[number, number]>): string {
   return pairs.map(([x, y]) => `${round(x)},${round(y)}`).join(" ");
@@ -20,65 +24,6 @@ function points(pairs: Array<[number, number]>): string {
 function round(n: number): number {
   return Math.round(n * 1000) / 1000;
 }
-
-/** Screen position of a cell's top vertex. */
-function origin({ x, y, z }: Cell): [number, number] {
-  return [(x - y) * HALF_W, (x + y) * HALF_H - z * EDGE];
-}
-
-function Cube({ cell }: { cell: Cell }) {
-  const [ox, oy] = origin(cell);
-  const top = points([
-    [ox, oy],
-    [ox + HALF_W, oy + HALF_H],
-    [ox, oy + EDGE],
-    [ox - HALF_W, oy + HALF_H],
-  ]);
-  const left = points([
-    [ox - HALF_W, oy + HALF_H],
-    [ox, oy + EDGE],
-    [ox, oy + EDGE + EDGE],
-    [ox - HALF_W, oy + HALF_H + EDGE],
-  ]);
-  const right = points([
-    [ox, oy + EDGE],
-    [ox + HALF_W, oy + HALF_H],
-    [ox + HALF_W, oy + HALF_H + EDGE],
-    [ox, oy + EDGE + EDGE],
-  ]);
-
-  return (
-    <g>
-      <polygon points={top} fill="currentColor" fillOpacity="1" />
-      <polygon points={left} fill="currentColor" fillOpacity="0.55" />
-      <polygon points={right} fill="currentColor" fillOpacity="0.3" />
-    </g>
-  );
-}
-
-/** The brand mark: one cube. Used at h-8 in the header. */
-export function SiteMark({ className, ...props }: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      viewBox="-18.5 -1 37 42"
-      className={cn("text-foreground", className)}
-      aria-hidden="true"
-      {...props}
-    >
-      <Cube cell={{ x: 0, y: 0, z: 0 }} />
-    </svg>
-  );
-}
-
-/* ---------------------------------------------------------------------------
-   Fig. 1 — the hero construction.
-
-   Drawn, not rendered: faces are outlined and hatched rather than filled with
-   tone, and the floor lattice runs off every edge of the plate to be cut there.
-   That is the frame's own habit — a line is stopped by the viewport, never
-   tidied to fit — and it is what keeps the figure attached to the page instead
-   of floating on it.
---------------------------------------------------------------------------- */
 
 /** Corner (i, j) of the cell lattice, raised by `lift` edge-lengths. */
 function corner(i: number, j: number, lift: number): [number, number] {
@@ -129,7 +74,7 @@ function SlabShape({ slab }: { slab: Slab }) {
       />
       <polygon
         points={points([back, right, front, left])}
-        fill="url(#site-mark-hatch)"
+        fill="url(#site-figure-hatch)"
         strokeOpacity={0.7}
       />
     </g>
@@ -176,7 +121,7 @@ function FloorLattice() {
   );
 }
 
-export function SiteMarkIsometric({
+export function SiteFigure({
   className,
   ...props
 }: React.ComponentProps<"svg">) {
@@ -194,7 +139,7 @@ export function SiteMarkIsometric({
         {/* Hatching on the 30° axis, so the shading is made of the same lines
             as everything else on the page. */}
         <pattern
-          id="site-mark-hatch"
+          id="site-figure-hatch"
           width="5"
           height="5"
           patternUnits="userSpaceOnUse"

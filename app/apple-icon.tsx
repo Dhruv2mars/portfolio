@@ -1,8 +1,11 @@
 import { ImageResponse } from "next/og";
-import { cubeDataUri } from "@/lib/mark";
+import { MARK_RATIO, markDataUri } from "@/lib/mark";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
+
+/** The mark is a wordmark, so it is sized off the plate's width, not its box. */
+const WIDTH = 132;
 
 /**
  * iOS composites the home-screen icon onto its own rounded plate and honours
@@ -23,7 +26,12 @@ export default function AppleIcon() {
           background: "#09090b",
         }}
       >
-        <img src={cubeDataUri("#fafafa")} width={104} height={104} alt="" />
+        <img
+          src={markDataUri("#fafafa")}
+          width={WIDTH}
+          height={Math.round(WIDTH / MARK_RATIO)}
+          alt=""
+        />
       </div>
     ),
     size,
