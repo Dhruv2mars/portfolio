@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "cedc755f77b1",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "lib/projects.ts",
+    "public/projects/offdex.svg"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ce/dc755f77b1/0/metadata.json",
+      "transcript": "/ce/dc755f77b1/0/full.jsonl",
+      "compact_transcript": "/ce/dc755f77b1/0/transcript.jsonl",
+      "content_hash": "/ce/dc755f77b1/0/content_hash.txt",
+      "prompt": "/ce/dc755f77b1/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 56,
+    "cache_creation_tokens": 119376,
+    "cache_read_tokens": 2820640,
+    "output_tokens": 10621,
+    "api_call_count": 28
+  }
+}
