@@ -40,7 +40,7 @@ export type AiActivity = {
   timezone: string;
 };
 
-export type AiActivitySource = "blob" | "fallback";
+export type AiActivitySource = "tokscale" | "blob" | "fallback";
 
 /**
  * Four filled steps, cut at the quartiles of the days that had any work in
