@@ -3,108 +3,23 @@
   "checkpoint_id": "44a3bd4adb41",
   "session_id": "01a02460-a2f6-7832-8282-16d9d726790e",
   "strategy": "manual-commit",
-  "created_at": "2026-08-21T13:07:03.789026Z",
+  "created_at": "2026-08-21T13:07:36.625119Z",
   "branch": "feat/cha-footer-graphics",
   "checkpoints_count": 2,
   "save_step_count": 1,
-  "files_touched": [
-    "components/site-figure.tsx"
-  ],
+  "files_touched": [],
   "agent": "Codex",
   "model": "gpt-5.6-luna",
   "turn_id": "ba2775d14960",
   "compact_transcript_start": 0,
   "token_usage": {
-    "input_tokens": 492944,
+    "input_tokens": 494185,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 7232384,
-    "output_tokens": 31036,
-    "api_call_count": 55
+    "cache_read_tokens": 7789952,
+    "output_tokens": 31874,
+    "api_call_count": 58
   },
   "session_metrics": {
     "turn_count": 2
-  },
-  "initial_attribution": {
-    "calculated_at": "2026-08-21T13:07:03.699953Z",
-    "agent_lines": 0,
-    "agent_removed": 0,
-    "human_added": 0,
-    "human_modified": 5,
-    "human_removed": 161,
-    "total_committed": 0,
-    "total_lines_changed": 183,
-    "agent_percentage": 0,
-    "metric_version": 2
-  },
-  "prompt_attributions": [
-    {
-      "checkpoint_number": 1,
-      "user_lines_added": 1402,
-      "user_lines_removed": 569,
-      "agent_lines_added": 0,
-      "agent_lines_removed": 0,
-      "user_added_per_file": {
-        ".claude/agents/entire-search.md": 25,
-        ".claude/settings.json": 112,
-        ".codex/agents/entire-search.toml": 23,
-        ".codex/config.toml": 3,
-        ".codex/hooks.json": 55,
-        ".cursor/hooks.json": 40,
-        ".factory/settings.json": 122,
-        ".gemini/agents/entire-search.md": 28,
-        ".gemini/settings.json": 141,
-        ".gitignore": 3,
-        ".opencode/plugins/entire.ts": 216,
-        "DESIGN.md": 14,
-        "bun.lock": 77,
-        "components/activity-section.tsx": 1,
-        "components/overview.tsx": 10,
-        "components/profile-header.tsx": 15,
-        "components/pronounce-name.tsx": 17,
-        "components/token-ridge.tsx": 80,
-        "lib/ai-activity-payload.ts": 4,
-        "lib/ai-activity-store.ts": 4,
-        "lib/ai-activity.ts": 1,
-        "lib/token-ridge.test.ts": 92,
-        "lib/token-ridge.ts": 230,
-        "lib/tokscale.ts": 88,
-        "package.json": 1
-      },
-      "user_removed_per_file": {
-        "DESIGN.md": 2,
-        "components/activity-section.tsx": 37,
-        "components/icons.tsx": 26,
-        "components/local-time.tsx": 84,
-        "components/overview-row.tsx": 36,
-        "components/overview.tsx": 39,
-        "components/profile-header.tsx": 26,
-        "components/pronounce-name.tsx": 3,
-        "components/site-figure.tsx": 166,
-        "lib/ai-activity-payload.ts": 1,
-        "lib/ai-activity.ts": 1,
-        "lib/local-time.test.ts": 64,
-        "lib/local-time.ts": 72,
-        "lib/site.ts": 12
-      }
-    },
-    {
-      "checkpoint_number": 2,
-      "user_lines_added": 765,
-      "user_lines_removed": 0,
-      "agent_lines_added": 637,
-      "agent_lines_removed": 569,
-      "user_added_per_file": {
-        ".claude/agents/entire-search.md": 25,
-        ".claude/settings.json": 112,
-        ".codex/agents/entire-search.toml": 23,
-        ".codex/config.toml": 3,
-        ".codex/hooks.json": 55,
-        ".cursor/hooks.json": 40,
-        ".factory/settings.json": 122,
-        ".gemini/agents/entire-search.md": 28,
-        ".gemini/settings.json": 141,
-        ".opencode/plugins/entire.ts": 216
-      }
-    }
-  ]
+  }
 }
