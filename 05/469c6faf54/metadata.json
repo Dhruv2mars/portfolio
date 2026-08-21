@@ -1,0 +1,19 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "05469c6faf54",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "bun.lock",
+    "lib/ai-activity-store.ts",
+    "lib/ai-activity.ts",
+    "package.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/05/469c6faf54/0/metadata.json",
+      "prompt": ""
+    }
+  ]
+}
