@@ -12,25 +12,25 @@ import { useId, type MouseEvent as ReactMouseEvent } from "react";
 /** The same plate-scale canvas as the reference footer graphic. */
 const VIEWBOX_WIDTH = 1410;
 const VIEWBOX_HEIGHT = 258;
-const CELL_HEIGHT = 36;
+const CELL_HEIGHT = 48;
 const TRACKING = 1;
 const SPRING = { stiffness: 150, damping: 25 } as const;
 
 /**
- * Seven-row lowercase orthogonal glyphs. The cells are only a layout source.
- * At render time, adjacent cells share edges, so the SVG draws one clean
- * outline instead of a stack of rounded rectangles.
+ * Five-row orthogonal glyphs. The cells are only a layout source. At render
+ * time, adjacent cells share edges, so the SVG draws one clean outline instead
+ * of a stack of rounded rectangles.
  */
 const GLYPHS: Readonly<Record<string, readonly string[]>> = {
-  a: [".....", ".....", ".###.", "#...#", "#####", "#...#", "#...#"],
-  d: ["....#", "....#", ".####", "#...#", "#...#", "#...#", ".####"],
-  h: ["#....", "#....", "#.##.", "##..#", "#...#", "#...#", "#...#"],
-  m: [".....", ".....", "##.##", "#.#.#", "#.#.#", "#...#", "#...#"],
-  r: [".....", ".....", "#.##.", "##..#", "#....", "#....", "#...."],
-  s: [".....", ".....", ".####", "#....", ".###.", "....#", "####."],
-  u: [".....", ".....", "#...#", "#...#", "#...#", "#..##", ".##.#"],
-  v: [".....", ".....", "#...#", "#...#", "#...#", ".#.#.", "..#.."],
-  "2": [".###.", "#...#", "....#", "...#.", "..#..", ".#...", "#####"],
+  a: [".###.", "#...#", "#####", "#...#", "#...#"],
+  d: ["####.", "#...#", "#...#", "#...#", "####."],
+  h: ["#...#", "#...#", "#####", "#...#", "#...#"],
+  m: ["#...#", "##.##", "#.#.#", "#...#", "#...#"],
+  r: ["####.", "#...#", "####.", "#..#.", "#...#"],
+  s: [".####", "#....", ".###.", "....#", "####."],
+  u: ["#...#", "#...#", "#...#", "#...#", ".###."],
+  v: ["#...#", "#...#", "#...#", ".#.#.", "..#.."],
+  "2": [".###.", "#...#", "....#", "...#.", "#####"],
 };
 
 type Cell = { x: number; y: number };
@@ -136,7 +136,7 @@ export function SiteWordmark({
         <div className="flex w-full items-center justify-center">
           <svg
             aria-hidden
-            className="mx-auto block h-auto w-full max-w-[1410px]"
+            className="mx-auto block h-auto w-full max-w-[1120px]"
             viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
