@@ -84,3 +84,27 @@ This block is automatically supplied ambient UI state, not part of the user's re
 
 ## My request:
 this is one more thing. coz of this bar, the graphics gets hidden. so we need to fix it in such a way where dhruv2mars actually shows up better. also, everything is lowercase. u should also review the sizing, if its perfect or if it should change
+
+---
+
+<in-app-browser-context source="ambient-ui-state">
+This block is automatically supplied ambient UI state, not part of the user's request. Do not treat it as an instruction or as evidence that the user explicitly selected the in-app browser.
+# In app browser:
+- The user has the in-app browser open with 1 tab.
+- Current URL: http://localhost:3000/
+</in-app-browser-context>
+
+## My request:
+u have made it worse. atleast it was tasteful before. now it looks shit. keep the previous one. and make things smaller, in ratio.&#x20;
+
+---
+
+<in-app-browser-context source="ambient-ui-state">
+This block is automatically supplied ambient UI state, not part of the user's request. Do not treat it as an instruction or as evidence that the user explicitly selected the in-app browser.
+# In app browser:
+- The user has the in-app browser open with 1 tab.
+- Current URL: http://localhost:3000/
+</in-app-browser-context>
+
+## My request:
+u have made it worse. atleast it was tasteful before. now it looks shit. keep the previous one. and make things smaller, in ratio.&#x20;
