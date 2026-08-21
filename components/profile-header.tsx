@@ -1,7 +1,11 @@
 import Image from "next/image";
 import { FlipSentences } from "@/components/flip-sentences";
+import { HeroChart } from "@/components/hero-chart";
 import { PronounceName } from "@/components/pronounce-name";
-import { SiteFigure } from "@/components/site-figure";
+import { formatActivityDate } from "@/lib/activity-grid";
+import { formatCompactTokens, formatTokenCount } from "@/lib/ai-activity";
+import { getAiActivityPayload } from "@/lib/ai-activity-store";
+import { buildHeroSeries, type HeroSeries } from "@/lib/hero-series";
 import { site } from "@/lib/site";
 
 /** "Dhruv Sharma" → "DS". */
@@ -62,39 +66,73 @@ function Avatar() {
 }
 
 /**
- * The hero is a four-cell frame rather than a stacked block: the mark occupies
- * a plate captioned like a figure, the avatar sits in its own gutter column,
- * and the name and role stack against the bottom edge so all three meet on one
- * baseline. Nothing here is centred.
+ * What the figure says, for anyone not looking at it.
+ *
+ * The drawing is a shape; this is the same reading in words, and it carries
+ * the smoothing window because a smoothed curve that does not say so is a
+ * claim about days that were never worked that way.
  */
-export function ProfileHeader() {
+function heroDescription(series: HeroSeries): string {
+  return [
+    `${site.name}'s AI token use in ${series.year}, January 1 to`,
+    `${formatActivityDate(series.to)}:`,
+    `${formatTokenCount(series.total)} tokens,`,
+    `busiest day ${formatActivityDate(series.peak.date)}`,
+    `at ${formatCompactTokens(series.peak.tokens)}.`,
+    `Drawn as a ${series.smoothingDays}-day mean.`,
+  ].join(" ");
+}
+
+/**
+ * The hero is a four-cell frame rather than a stacked block: the record
+ * occupies a plate captioned like a figure, the avatar sits in its own gutter
+ * column, and the name and role stack against the bottom edge so all three
+ * meet on one baseline. Nothing here is centred.
+ */
+export async function ProfileHeader() {
+  const { payload } = await getAiActivityPayload();
+  const series = buildHeroSeries(payload);
+
   return (
     <div className="screen-line-bottom relative grid grid-cols-[auto_1fr] grid-rows-[1fr_auto] overflow-y-clip border-x border-line">
       {/* Nothing bleeds out of here. The reference lets its hero texture run
           past the rail and off the screen; ours does not. A pattern outside
           the frame turns the top of the page into wallpaper, and the only
-          lines the hero needs are the ones that divide it. */}
-      <figure className="relative col-span-2 p-2 sm:col-span-1 sm:col-start-2 sm:p-4">
-        {/* Fills the plate rather than sitting inside it: the drawing is
-            scaled to cover and cut at the edges, which is what makes the
-            lattice read as continuing past the frame.
+          lines the hero needs are the ones that divide it.
 
-            The plate keeps a ratio rather than a height, so it grows with the
-            rail instead of stepping at the breakpoint — the reference's plate
-            is the same shape at every width it is drawn at. */}
-        <SiteFigure className="aspect-[556/354] w-full" />
-        <figcaption className="pointer-events-none absolute right-2 bottom-2 text-sm leading-none tracking-wide text-[color-mix(in_oklab,var(--muted-foreground)_60%,var(--background))] tabular-nums select-none sm:right-4 sm:bottom-4">
-          Fig. 1.
+          The plate spans the whole rail rather than the column beside the
+          avatar, so the year opens at the frame's own left edge. January is
+          the quietest fortnight of the record and the monogram stands over
+          it — which is the truth of the figure, not a crop of it: the habit
+          started small, and the mark is what is in front of it. */}
+      <figure className="relative col-span-2 col-start-1 row-start-1 aspect-[3/2] sm:aspect-[766/394]">
+        <HeroChart
+          points={series.points.map(({ day, value }) => ({ day, value }))}
+          months={series.months}
+          ticks={series.ticks}
+          xDomain={series.xDomain}
+          yDomain={series.yDomain}
+          description={heroDescription(series)}
+        />
+        {/* Kept where every other figure on this site keeps it, and made to
+            carry the window it was smoothed on — a mean drawn as if it were
+            a measurement is the one lie a chart can tell quietly. */}
+        <figcaption className="pointer-events-none absolute top-2 right-2 text-right text-[0.625rem]/none tracking-wide text-[color-mix(in_oklab,var(--muted-foreground)_60%,var(--background))] tabular-nums select-none sm:top-4 sm:right-4">
+          Fig. 1. {series.year} — {series.smoothingDays}-day mean
         </figcaption>
       </figure>
 
-      <div className="flex flex-col sm:row-span-2 sm:row-start-1">
+      {/* Placed rather than flowed: the plate above now spans both columns, so
+          the gutter has to be told it still owns column one — otherwise the
+          grid opens a third column and the monogram lands on the wrong side
+          of the page. */}
+      <div className="flex flex-col sm:col-start-1 sm:row-span-2 sm:row-start-1">
         <div className="screen-line-top mt-auto shrink-0 border-r border-line">
           <Avatar />
         </div>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col sm:col-start-2 sm:row-start-2">
         <div className="z-1 mt-auto border-t border-line">
           <h1 className="-translate-y-px flex items-center gap-2 pl-4 text-[2rem]/none font-medium tracking-tight">
             {site.name}

@@ -62,14 +62,26 @@ describe("smoothTriangular", () => {
 });
 
 describe("niceScale", () => {
-  test("labels are round numbers off the 1 / 2 / 5 ladder", () => {
+  test("labels are round numbers off the ladder", () => {
     const { ticks } = niceScale(133_000_000);
-    expect(ticks).toEqual([50_000_000, 100_000_000]);
+    expect(ticks).toEqual([
+      25_000_000, 50_000_000, 75_000_000, 100_000_000, 125_000_000,
+    ]);
   });
 
-  test("the top of the scale clears the peak", () => {
+  test("the top of the scale clears the peak without stranding it", () => {
     const { max } = niceScale(133_000_000);
     expect(max).toBeGreaterThan(133_000_000);
+    // The curve must reach most of the way up the plate, not float halfway.
+    expect(133_000_000 / max).toBeGreaterThan(0.9);
+  });
+
+  test("the label count stays near the target across magnitudes", () => {
+    for (const peak of [37, 1_400, 158_000_000, 633_639_231, 9.4e11]) {
+      const { ticks } = niceScale(peak);
+      expect(ticks.length).toBeGreaterThanOrEqual(2);
+      expect(ticks.length).toBeLessThanOrEqual(6);
+    }
   });
 
   test("no label is drawn above the peak", () => {

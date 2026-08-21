@@ -108,31 +108,53 @@ export function smoothTriangular(
   });
 }
 
+/** Steps a reader already knows how to say, so a label is never arithmetic. */
+const TICK_LADDER = [1, 2, 2.5, 5] as const;
+
 /**
- * A round number above the peak, and the ladder of labels below it.
+ * The top of the scale, and the ladder of labels below it.
  *
- * Steps come from the 1 / 2 / 5 ladder so a label is always a number a reader
- * already knows how to say. The top of the scale clears the peak by a step so
- * the curve has air above it rather than touching the plate's edge.
+ * Rounding the ceiling up to a whole step is the textbook move and it is wrong
+ * here: a peak of 158 against a step of 50 buys a scale of 200, and the curve
+ * then spends a fifth of the plate proving there is nothing above it. The plate
+ * is the figure, so the scale clears the peak by a hair and no more — the
+ * ceiling is never drawn, only the labelled levels under it, and those still
+ * land on round numbers.
+ *
+ * The step is chosen by how many labels it yields rather than by dividing the
+ * peak, because the count is what is actually being tuned; ties go to the
+ * quieter scale.
  */
 export function niceScale(
   peak: number,
-  targetTicks = 4,
+  targetTicks = 5,
 ): { max: number; ticks: number[] } {
   if (!Number.isFinite(peak) || peak <= 0) return { max: 1, ticks: [] };
 
-  const rough = peak / targetTicks;
-  const magnitude = 10 ** Math.floor(Math.log10(rough));
-  const step =
-    magnitude *
-    ([1, 2, 5, 10].find((m) => magnitude * m >= rough) ?? 10);
+  const magnitude = 10 ** Math.floor(Math.log10(peak / targetTicks));
+  const steps = TICK_LADDER.flatMap((m) => [
+    m * magnitude,
+    m * magnitude * 10,
+  ]).sort((a, b) => b - a);
 
-  const max = Math.ceil(peak / step) * step + step * 0.5;
+  let step = steps[0]!;
+  let best = Number.POSITIVE_INFINITY;
+  for (const candidate of steps) {
+    const count = Math.floor(peak / candidate);
+    const distance = Math.abs(count - targetTicks);
+    // `<` not `<=`, and the list runs coarse to fine, so a tie keeps the
+    // quieter scale rather than the denser one.
+    if (distance < best) {
+      best = distance;
+      step = candidate;
+    }
+  }
+
   const ticks: number[] = [];
   for (let value = step; value <= peak; value += step) {
-    ticks.push(Number(value.toFixed(6)));
+    ticks.push(Number(value.toPrecision(12)));
   }
-  return { max, ticks };
+  return { max: peak * 1.05, ticks };
 }
 
 /** Centre each month's span inside the window, so a partial month sits at its
