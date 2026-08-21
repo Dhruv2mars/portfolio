@@ -1,0 +1,181 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "18424b1c7e5e",
+  "session_id": "c4efb1ab-f1b3-46e4-a225-24261fc21ef9",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-21T08:13:27.613558Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 6,
+  "save_step_count": 3,
+  "files_touched": [
+    "components/icons.tsx",
+    "components/pronounce-name.tsx",
+    "lib/site.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "dadc92b9b27e",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 136,
+    "cache_creation_tokens": 126904,
+    "cache_read_tokens": 6395630,
+    "output_tokens": 57518,
+    "api_call_count": 68
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01C1hyYTB7pjtCoFT4ftunVa",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "caveman"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "dadc92b9b27e",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 17,
+        "end": 18,
+        "entry_ids": [
+          "06510f32-53df-4232-8d94-43f8f309f8d0"
+        ],
+        "tool_use_id": "toolu_01C1hyYTB7pjtCoFT4ftunVa"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01C1hyYTB7pjtCoFT4ftunVa"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: caveman",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01V3naYe9aUQExX8vdTCB4hX",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "prototype"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "dadc92b9b27e",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 78,
+        "end": 79,
+        "entry_ids": [
+          "cdb59390-a7fd-432a-9cf8-0cd7f3908f33"
+        ],
+        "tool_use_id": "toolu_01V3naYe9aUQExX8vdTCB4hX"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01V3naYe9aUQExX8vdTCB4hX"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: prototype",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 6
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-21T08:13:27.502121Z",
+    "agent_lines": 26,
+    "agent_removed": 19,
+    "human_added": 0,
+    "human_modified": 38,
+    "human_removed": 11,
+    "total_committed": 64,
+    "total_lines_changed": 94,
+    "agent_percentage": 47.87234042553192,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 788,
+      "user_lines_removed": 344,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216,
+        "DESIGN.md": 3,
+        "components/icons.tsx": 10,
+        "components/overview.tsx": 8,
+        "components/pronounce-name.tsx": 1,
+        "lib/site.ts": 1
+      },
+      "user_removed_per_file": {
+        "DESIGN.md": 2,
+        "components/icons.tsx": 35,
+        "components/local-time.tsx": 84,
+        "components/overview-row.tsx": 36,
+        "components/overview.tsx": 37,
+        "components/pronounce-name.tsx": 1,
+        "lib/local-time.test.ts": 64,
+        "lib/local-time.ts": 72,
+        "lib/site.ts": 13
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 23,
+      "agent_lines_removed": 344,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 23,
+      "agent_lines_removed": 344,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}

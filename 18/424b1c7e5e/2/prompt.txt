@@ -1,0 +1,15 @@
+this is a graph of the token activity. i though instead of the usual heatmap chart, we build something like this. basically, in the hero section, where we currently have a abstract style design, we put this. where x axis is the months, and y axis is the token usage. think it like this, our site is called dhruv2mars, and this graph looks like mountain ranges. so it can work. it will follow the same design guidelines and identity as out whole site. when the user will hover cursor over the line, it will show the token usage? i havent thought about the interaction part yet, on how to make that better. and for the 4 stats, we will add 4 boxes (tabs) on the left, above the DS logo box. for the data updatation, it will work like currently, we will be getting daily usage everyday, so the graph and stats will get updated automatically based on that. 
+
+what do u think of this plan, and your thoughts/take on this.
+
+[Attached image "image.png" is saved at: /Users/dhruv2mars/.t3/userdata/attachments/9c745523-2e7d-427a-8b47-95232d961e9a-506d4ab8-eace-44f3-a29f-8869b6d913d8.png]
+
+---
+
+this redesign part of this branch only. so we will work in this. use $prototype to build me (image attached) section only. that way, i can see if u understood what i meant, and if the implementation is correct. the tiles are just static numbers, no interactivity on user end, and obv it was 15pt smoothened coz original was too jagged with peaks, and it didnt looked great.
+
+[Attached image "image.png" is saved at: /Users/dhruv2mars/.t3/userdata/attachments/9c745523-2e7d-427a-8b47-95232d961e9a-f027b869-f67f-460b-a3aa-b9453a0fd84f.png]
+
+---
+
+u know what, just build it as an example, to see how it is actually looking.
