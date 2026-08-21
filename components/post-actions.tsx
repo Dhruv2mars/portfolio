@@ -118,7 +118,7 @@ export function PostActions({
 
   return (
     <div className="flex items-center gap-1">
-      <div className="inline-flex shrink-0 overflow-hidden rounded-lg bg-accent-muted ring-1 ring-inset ring-line/70">
+      <div className="inline-flex shrink-0 overflow-visible rounded-lg bg-accent-muted ring-1 ring-inset ring-line/70">
         <button
           type="button"
           onClick={async () => {

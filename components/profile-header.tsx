@@ -24,15 +24,15 @@ function initials(name: string): string {
  */
 function Avatar() {
   return (
-    <div className="relative m-0.5 size-32 overflow-hidden rounded-xl border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
+    <div className="relative m-0.5 size-32 overflow-hidden rounded-full border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
       {site.avatar ? (
         <Image
           src={site.avatar}
-          alt={site.name}
+          alt={`${site.name}, profile portrait`}
           fill
           sizes="(min-width: 640px) 160px, 128px"
           priority
-          className="object-cover"
+          className="object-contain"
         />
       ) : (
         <span

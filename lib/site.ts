@@ -45,7 +45,7 @@ export const site = {
    * a monogram at the same size; setting this to an image path is the only
    * change needed to fill it, with no layout shift.
    */
-  avatar: null as string | null,
+  avatar: "/avatar/sunny.webp" as string | null,
   /**
    * Where the author is, written the way it should read. The same string is
    * the map query, so there is nothing to keep in sync. `null` draws no row
