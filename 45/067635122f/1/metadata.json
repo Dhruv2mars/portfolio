@@ -1,0 +1,89 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "45067635122f",
+  "session_id": "01a024ec-0262-75e0-830e-470c249951b0",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-21T15:25:34.584153Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "components/site-wordmark.tsx"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-luna",
+  "turn_id": "bde028fd5e97",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 56712,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 239872,
+    "output_tokens": 1579,
+    "api_call_count": 8
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-21T15:25:34.549741Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 14,
+    "human_removed": 14,
+    "total_committed": 0,
+    "total_lines_changed": 28,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 1416,
+      "user_lines_removed": 583,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".gitignore": 3,
+        ".opencode/plugins/entire.ts": 216,
+        "DESIGN.md": 14,
+        "bun.lock": 77,
+        "components/activity-section.tsx": 1,
+        "components/overview.tsx": 10,
+        "components/profile-header.tsx": 15,
+        "components/pronounce-name.tsx": 17,
+        "components/site-wordmark.tsx": 14,
+        "components/token-ridge.tsx": 80,
+        "lib/ai-activity-payload.ts": 4,
+        "lib/ai-activity-store.ts": 4,
+        "lib/ai-activity.ts": 1,
+        "lib/token-ridge.test.ts": 92,
+        "lib/token-ridge.ts": 230,
+        "lib/tokscale.ts": 88,
+        "package.json": 1
+      },
+      "user_removed_per_file": {
+        "DESIGN.md": 2,
+        "components/activity-section.tsx": 37,
+        "components/icons.tsx": 26,
+        "components/local-time.tsx": 84,
+        "components/overview-row.tsx": 36,
+        "components/overview.tsx": 39,
+        "components/profile-header.tsx": 26,
+        "components/pronounce-name.tsx": 3,
+        "components/site-figure.tsx": 166,
+        "components/site-wordmark.tsx": 14,
+        "lib/ai-activity-payload.ts": 1,
+        "lib/ai-activity.ts": 1,
+        "lib/local-time.test.ts": 64,
+        "lib/local-time.ts": 72,
+        "lib/site.ts": 12
+      }
+    }
+  ]
+}
