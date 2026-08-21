@@ -1,0 +1,1 @@
+remove the new del, timezone section from the site. it isnt fulfilling any purpose.
