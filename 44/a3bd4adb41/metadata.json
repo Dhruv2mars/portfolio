@@ -3,7 +3,7 @@
   "checkpoint_id": "44a3bd4adb41",
   "strategy": "manual-commit",
   "branch": "feat/cha-footer-graphics",
-  "checkpoints_count": 26,
+  "checkpoints_count": 28,
   "files_touched": [
     "components/site-figure.tsx",
     "components/site-wordmark.tsx"
@@ -43,6 +43,13 @@
       "compact_transcript": "/44/a3bd4adb41/4/transcript.jsonl",
       "content_hash": "/44/a3bd4adb41/4/content_hash.txt",
       "prompt": "/44/a3bd4adb41/4/prompt.txt"
+    },
+    {
+      "metadata": "/44/a3bd4adb41/5/metadata.json",
+      "transcript": "/44/a3bd4adb41/5/full.jsonl",
+      "compact_transcript": "/44/a3bd4adb41/5/transcript.jsonl",
+      "content_hash": "/44/a3bd4adb41/5/content_hash.txt",
+      "prompt": "/44/a3bd4adb41/5/prompt.txt"
     }
   ],
   "token_usage": {

@@ -1,0 +1,11 @@
+use all emil skills to review the whole site, and tell me what all is wrong/incomplete/inconsistent.
+
+---
+
+use all emil skills to review the whole site, and tell me what all is wrong/incomplete/inconsistent.
+
+---
+
+few changes:
+- invert the animation of subline "agentic engg, prototyper. currently it goes top to bottom, it should go upwards. 
+- in projects section: i liked how it was before, where it would just show the name and upon click it would expand, and no github icon, etc, just the arrow for redirect and the expand/collapse icon. just change what i have mentioned here, keep everything else the same, such as the favicon/logos, pills, etc.
