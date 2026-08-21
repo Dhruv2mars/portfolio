@@ -3,10 +3,19 @@
   "checkpoint_id": "d4d44c48daaa",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 1,
+  "checkpoints_count": 2,
   "files_touched": [
+    "app/apple-icon.tsx",
+    "app/globals.css",
+    "app/icon.svg",
+    "app/og/route.tsx",
     "components/flip-sentences.tsx",
-    "components/project-row.tsx"
+    "components/profile-header.tsx",
+    "components/project-row.tsx",
+    "components/site-figure.tsx",
+    "components/site-mark.tsx",
+    "lib/mark.test.ts",
+    "lib/mark.ts"
   ],
   "sessions": [
     {
@@ -15,13 +24,20 @@
       "compact_transcript": "/d4/d44c48daaa/0/transcript.jsonl",
       "content_hash": "/d4/d44c48daaa/0/content_hash.txt",
       "prompt": "/d4/d44c48daaa/0/prompt.txt"
+    },
+    {
+      "metadata": "/d4/d44c48daaa/1/metadata.json",
+      "transcript": "/d4/d44c48daaa/1/full.jsonl",
+      "compact_transcript": "/d4/d44c48daaa/1/transcript.jsonl",
+      "content_hash": "/d4/d44c48daaa/1/content_hash.txt",
+      "prompt": "/d4/d44c48daaa/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 982,
-    "cache_creation_tokens": 1199621,
-    "cache_read_tokens": 40041948,
-    "output_tokens": 255154,
-    "api_call_count": 495
+    "input_tokens": 1032,
+    "cache_creation_tokens": 1262149,
+    "cache_read_tokens": 41153289,
+    "output_tokens": 273452,
+    "api_call_count": 520
   }
 }

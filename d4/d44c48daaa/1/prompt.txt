@@ -1,0 +1,1 @@
+currently i can see the cube favicon in a few places still, as we have moved from that cube to d2m, i want u to make sure in the whole codebase there is no more that cube and instead we are using d2m (like how we did in the cmd+k panel).

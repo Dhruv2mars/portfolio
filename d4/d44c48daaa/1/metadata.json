@@ -1,0 +1,66 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "d4d44c48daaa",
+  "session_id": "dec0ffa0-1e2b-49fa-9c46-c4f50310c14f",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-21T06:01:19.144175Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/apple-icon.tsx",
+    "app/globals.css",
+    "app/icon.svg",
+    "app/og/route.tsx",
+    "components/flip-sentences.tsx",
+    "components/profile-header.tsx",
+    "components/project-row.tsx",
+    "components/site-figure.tsx",
+    "components/site-mark.tsx",
+    "lib/mark.test.ts",
+    "lib/mark.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "407cdfd8948c",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 50,
+    "cache_creation_tokens": 62528,
+    "cache_read_tokens": 1111341,
+    "output_tokens": 18298,
+    "api_call_count": 25
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-21T06:01:19.128902Z",
+    "agent_lines": 350,
+    "agent_removed": 339,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 350,
+    "total_lines_changed": 689,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}
