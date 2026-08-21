@@ -77,6 +77,7 @@ const PROJECTS: readonly Project[] = [
     language: "TypeScript",
     year: 2026,
     kind: "app",
+    logo: { src: "/projects/offdex.svg", mono: true },
   },
   {
     name: "gunmetal",
