@@ -1,0 +1,29 @@
+i want to update the hero section of the site completely. the whole section except the DS logo, dhruv sharma and agentic engg text sections. first, i want to clear the place out, so remove whatever is there in it, make it plaiin white.
+
+---
+
+i want to update the hero section of the site completely. the whole section except the DS logo, dhruv sharma and agentic engg text sections. first, i want to clear the place out, so remove whatever is there in it, make it plaiin white.
+
+---
+
+great. now there are 2 sub sections in hero, 2 rectangles, one big, then one small. right? just make them red to let me know u understand what i mean
+
+---
+
+no, u got it wrong. the part which contains the text, my name and agentic engg is not part of it. and then what about the space left on top of the DS icon.
+
+---
+
+correct, now u got it perfectly.
+
+---
+
+correct, now u got it perfectly.
+
+---
+
+make the color of both same red.
+
+---
+
+make the color of both same red.
