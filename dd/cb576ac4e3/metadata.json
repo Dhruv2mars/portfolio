@@ -3,7 +3,7 @@
   "checkpoint_id": "ddcb576ac4e3",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 10,
+  "checkpoints_count": 12,
   "files_touched": [
     "components/icons.tsx",
     "components/overview.tsx",
@@ -21,6 +21,13 @@
     {
       "metadata": "/dd/cb576ac4e3/2/metadata.json",
       "prompt": ""
+    },
+    {
+      "metadata": "/dd/cb576ac4e3/3/metadata.json",
+      "transcript": "/dd/cb576ac4e3/3/full.jsonl",
+      "compact_transcript": "/dd/cb576ac4e3/3/transcript.jsonl",
+      "content_hash": "/dd/cb576ac4e3/3/content_hash.txt",
+      "prompt": "/dd/cb576ac4e3/3/prompt.txt"
     }
   ]
 }
