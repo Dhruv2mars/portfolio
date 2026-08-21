@@ -7,74 +7,94 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { useId, type PointerEvent as ReactPointerEvent } from "react";
+import { useId, type MouseEvent as ReactMouseEvent } from "react";
 
-/**
- * The name, drawn rather than set: a 7-row bitmap on the same square cell the
- * activity grid uses, so the page closes on the unit it opened with.
- *
- * Two passes over one cell set. The first is a hairline outline that is always
- * there, drawn in the mark's own ink at a third strength — the name is legible
- * on the page whether or not anyone touches it.
- * The second fills those same cells through a gradient that is transparent
- * until 62.5% of its own length and solid after, and the gradient's near end is
- * tied to the pointer. So the ink is not painted *at* the cursor; it runs away
- * from it, and moving across the mark tips a wash of it from one side of the
- * name to the other.
- *
- * At rest the near end sits at the horizontal middle, which makes the gradient
- * vertical: the bottom of the letters is inked and the tops fade to outline, so
- * the signature reads as filling up rather than as waiting for a mouse. A
- * phone, which never sends a pointer, gets that resting state and nothing else
- * — which is the point of choosing a resting state that stands on its own.
- *
- * The cells are declared once in `<defs>` and drawn twice with `<use>`, so the
- * markup carries ~140 rects rather than ~280.
- */
-const GLYPHS: Readonly<Record<string, readonly string[]>> = {
-  a: [".....", ".....", ".###.", "....#", ".####", "#...#", ".####"],
-  d: ["....#", "....#", ".####", "#...#", "#...#", "#...#", ".####"],
-  h: ["#....", "#....", "#.##.", "##..#", "#...#", "#...#", "#...#"],
-  m: [".....", ".....", "##.##", "#.#.#", "#.#.#", "#.#.#", "#.#.#"],
-  r: [".....", ".....", "#.##.", "##..#", "#....", "#....", "#...."],
-  s: [".....", ".....", ".####", "#....", ".###.", "....#", "####."],
-  u: [".....", ".....", "#...#", "#...#", "#...#", "#..##", ".##.#"],
-  v: [".....", ".....", "#...#", "#...#", "#...#", ".#.#.", "..#.."],
-  "2": [".###.", "#...#", "....#", "...#.", "..#..", ".#...", "#####"],
-};
-
-const ROWS = 7;
-/** One blank column between letters — the grid's own gutter, not kerning. */
+/** The same plate-scale canvas as the reference footer graphic. */
+const VIEWBOX_WIDTH = 1410;
+const VIEWBOX_HEIGHT = 258;
+const CELL_HEIGHT = 48;
 const TRACKING = 1;
-
-/**
- * Where the wash stops being nothing and starts being ink, measured along the
- * gradient rather than across the mark. The reference's number, and it is the
- * one that makes the resting state work: 0.625 of seven rows puts the tide line
- * between the fifth and sixth, which is where these letterforms have their
- * waist.
- */
-const INK_OFFSET = 0.625;
-
-/** Heavy enough that the wash lags the pointer instead of tracking it. */
 const SPRING = { stiffness: 150, damping: 25 } as const;
 
+/**
+ * Five-row orthogonal glyphs. The cells are only a layout source. At render
+ * time, adjacent cells share edges, so the SVG draws one clean outline instead
+ * of a stack of rounded rectangles.
+ */
+const GLYPHS: Readonly<Record<string, readonly string[]>> = {
+  a: [".####", "....#", ".####", "#...#", ".####"],
+  d: [".####", "#...#", "#...#", "#...#", ".####"],
+  h: ["#.##.", "##..#", "#...#", "#...#", "#...#"],
+  m: ["##.##", "#.#.#", "#.#.#", "#.#.#", "#.#.#"],
+  r: ["#.##.", "##..#", "#....", "#....", "#...."],
+  s: [".####", "#....", ".###.", "....#", "####."],
+  u: ["#...#", "#...#", "#...#", "#..##", ".##.#"],
+  v: ["#...#", "#...#", "#...#", ".#.#.", "..#.."],
+  "2": [".###.", "#...#", "....#", "...#.", "#####"],
+};
+
+type Cell = { x: number; y: number };
+
 function layout(text: string) {
-  const cells: { x: number; y: number }[] = [];
+  const cells: Cell[] = [];
   let cursor = 0;
 
   for (const char of text) {
     const glyph = GLYPHS[char];
     if (!glyph) continue;
+
     for (let y = 0; y < glyph.length; y++) {
       for (let x = 0; x < glyph[y].length; x++) {
         if (glyph[y][x] === "#") cells.push({ x: cursor + x, y });
       }
     }
+
     cursor += glyph[0].length + TRACKING;
   }
 
-  return { cells, width: Math.max(cursor - TRACKING, 0) };
+  return {
+    cells,
+    columns: Math.max(cursor - TRACKING, 1),
+  };
+}
+
+function formatCoordinate(value: number) {
+  return value.toFixed(3).replace(/\.?(0+)$/, "");
+}
+
+function buildPaths(cells: Cell[], columns: number) {
+  const cellWidth = (VIEWBOX_WIDTH - 2) / columns;
+  const occupied = new Set(cells.map((cell) => `${cell.x}:${cell.y}`));
+  const fill: string[] = [];
+  const outline: string[] = [];
+
+  for (const cell of cells) {
+    const x0 = 1 + cell.x * cellWidth;
+    const x1 = 1 + (cell.x + 1) * cellWidth;
+    const y0 = 1 + cell.y * CELL_HEIGHT;
+    const y1 = y0 + CELL_HEIGHT;
+    const x = formatCoordinate(x0);
+    const right = formatCoordinate(x1);
+    const y = formatCoordinate(y0);
+    const bottom = formatCoordinate(y1);
+
+    fill.push(`M${x} ${y}H${right}V${bottom}H${x}Z`);
+
+    if (!occupied.has(`${cell.x}:${cell.y - 1}`)) {
+      outline.push(`M${x} ${y}H${right}`);
+    }
+    if (!occupied.has(`${cell.x + 1}:${cell.y}`)) {
+      outline.push(`M${right} ${y}V${bottom}`);
+    }
+    if (!occupied.has(`${cell.x}:${cell.y + 1}`)) {
+      outline.push(`M${right} ${bottom}H${x}`);
+    }
+    if (!occupied.has(`${cell.x - 1}:${cell.y}`)) {
+      outline.push(`M${x} ${bottom}V${y}`);
+    }
+  }
+
+  return { fill: fill.join(""), outline: outline.join("") };
 }
 
 export function SiteWordmark({
@@ -84,87 +104,76 @@ export function SiteWordmark({
   text: string;
   className?: string;
 }) {
-  // `useId` returns a value fenced in characters that are legal in an HTML id
-  // but not in a CSS selector, and `fill="url(#…)"` is read as one. Stripping
-  // them back to the counter keeps the uniqueness and loses the hazard.
   const id = useId().replace(/[^a-zA-Z0-9-]/g, "");
-  const cellsId = `${id}-cells`;
-  const inkId = `${id}-ink`;
-
-  const { cells, width } = layout(text);
+  const gradientId = `${id}-gradient`;
   const reduced = useReducedMotion();
-
-  /** The pointer as a fraction of the mark's width. Centre is the rest. */
   const ratio = useMotionValue(0.5);
-  const x1 = useSpring(useTransform(ratio, [0, 1], [0, width]), SPRING);
+  const gradientX1 = useSpring(
+    useTransform(ratio, [0, 1], [0, VIEWBOX_WIDTH]),
+    SPRING,
+  );
+  const { cells, columns } = layout(text);
+  const paths = buildPaths(cells, columns);
 
-  const handleMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+  const handleMouseMove = (event: ReactMouseEvent<HTMLDivElement>) => {
     if (reduced) return;
-    const box = event.currentTarget.getBoundingClientRect();
-    if (box.width === 0) return;
-    ratio.set((event.clientX - box.left) / box.width);
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    if (rect.width === 0) return;
+
+    ratio.set((event.clientX - rect.left) / rect.width);
   };
 
   return (
     <div
-      onPointerMove={handleMove}
-      onPointerLeave={() => ratio.set(0.5)}
-      className={className}
+      className={`screen-line-bottom after:z-1 after:bg-foreground/15 ${className ?? ""}`}
     >
-      <svg
-        aria-hidden
-        viewBox={`0 0 ${width} ${ROWS}`}
-        className="w-full"
-        preserveAspectRatio="xMidYMid meet"
+      <div
+        className="overflow-hidden"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => ratio.set(0.5)}
       >
-        <defs>
-          <g id={cellsId}>
-            {cells.map((cell) => (
-              <rect
-                key={`${cell.x}-${cell.y}`}
-                x={cell.x + 0.08}
-                y={cell.y + 0.08}
-                width={0.84}
-                height={0.84}
-                rx={0.14}
-              />
-            ))}
-          </g>
-
-          {/* The far end is pinned to the foot of the mark's midline, so the
-              pointer only ever swings the near end around it. `userSpaceOnUse`
-              because the near end is a coordinate, not a fraction of a box. */}
-          <motion.linearGradient
-            id={inkId}
-            x1={x1}
-            y1={0}
-            x2={width / 2}
-            y2={ROWS}
-            gradientUnits="userSpaceOnUse"
+        <div className="flex w-full translate-y-[37.5%] items-center justify-center">
+          <svg
+            aria-hidden
+            className="mx-auto block h-auto w-full max-w-[1410px]"
+            viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <stop
-              offset={INK_OFFSET}
-              stopColor="currentColor"
-              stopOpacity={0}
+            <path
+              d={paths.fill}
+              fill={`url(#${gradientId})`}
+              fillRule="nonzero"
             />
-            <stop offset={1} stopColor="currentColor" />
-          </motion.linearGradient>
-        </defs>
-
-        {/* The outline carries the name on its own, so it is drawn in the
-            mark's own ink at low opacity rather than in the hairline border
-            token: `--line` is a rule between panels, and a rule that reads
-            against a panel disappears against the page. At a tenth of a cell
-            it is still a hairline; it is simply a visible one. */}
-        <use
-          href={`#${cellsId}`}
-          fill="none"
-          stroke="currentColor"
-          strokeOpacity={0.32}
-          strokeWidth={0.09}
-        />
-        <use href={`#${cellsId}`} fill={`url(#${inkId})`} />
-      </svg>
+            <path
+              d={paths.outline}
+              className="stroke-foreground/10"
+              strokeWidth="2"
+              strokeLinecap="square"
+              strokeLinejoin="miter"
+              vectorEffect="non-scaling-stroke"
+            />
+            <defs>
+              <motion.linearGradient
+                id={gradientId}
+                x1={gradientX1}
+                y1="1"
+                x2="705"
+                y2="257"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop
+                  offset="0.625"
+                  stopColor="var(--foreground)"
+                  stopOpacity="0"
+                />
+                <stop offset="1" stopColor="var(--foreground)" />
+              </motion.linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
     </div>
   );
 }
