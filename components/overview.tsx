@@ -31,8 +31,8 @@ export function Overview() {
           it and a pointer to follow it. */}
       <div className="relative">
         <HandwrittenNote className="top-4 right-full mr-4 hidden w-24 flex-col items-end text-right pointer-fine:xl:flex">
-          <span className="-rotate-6">say hi</span>
-          <HandwrittenArrow className="mt-0.5 translate-x-4 -rotate-12" />
+          <span className="-translate-x-[14px] -rotate-6">say hi</span>
+          <HandwrittenArrow className="mt-0.5 -translate-y-[9px] translate-x-2 rotate-[44deg] -scale-y-100" />
         </HandwrittenNote>
         <PanelContent className="flex flex-wrap gap-2">
           {site.socials.map((social) => {
