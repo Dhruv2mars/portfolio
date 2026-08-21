@@ -1,0 +1,56 @@
+Yes. Blog flow needs two gates:
+
+`write → inspect → publish`
+
+| StageWhat happens |                                                                             |
+| ----------------- | --------------------------------------------------------------------------- |
+| Draft             | Write one MDX file on `blog/<slug>` branch.                                 |
+| PR preview        | Vercel creates rendered URL.                                                |
+| Stable preview    | Merge to `main`; `preview.dhruv2mars.com` updates.                          |
+| Visual QA         | Check desktop/mobile, light/dark, typography, links, code, images, OG card. |
+| Publish           | Change frontmatter `status: draft` → `published`. Preview again.            |
+| GA                | You approve exact deployment. Promote immutable build to production.        |
+| Rollback          | Re-point production to previous approved deployment.                        |
+
+Draft posts should:
+
+- show `DRAFT` banner on preview;
+- remain accessible by direct slug on preview;
+- stay out of blog index, search, RSS, sitemap, and JSON-LD;
+- never appear on production accidentally.
+
+Frontmatter:
+```yaml
+title: ...
+description: ...
+status: draft
+publishedAt: 2026-08-21
+tags: [...]
+```
+
+Automated checks:
+
+- MDX/frontmatter schema
+- duplicate slugs
+- broken internal links
+- missing images
+- lint, typecheck, tests
+- production build
+- OG metadata
+- RSS/sitemap output
+
+Your job: write content. System job: render it, test it, expose preview, block unsafe release.
+
+Recommended additions:
+```arduino
+bun run blog:new "Post title"
+bun run blog:check
+```
+
+No CMS needed yet. MDX stays source of truth. Main branch becomes preview. Production only changes through explicit approval.
+
+
+
+
+
+what do u think of the above plan for blog workflow!?
