@@ -125,7 +125,7 @@ export function PostActions({
             if (await copy(markdown)) markCopiedPage();
           }}
           title="Copy this post as Markdown"
-          className="action-button rounded-none px-2.5"
+          className="post-action-button rounded-none px-2 text-[0.8125rem] leading-[1.5] font-medium"
         >
           {copiedPage ? <CheckIcon /> : <CopyIcon />}
           <span className="max-sm:sr-only">
@@ -136,8 +136,9 @@ export function PostActions({
         <Menu
           label="More copy options"
           trigger={<ChevronIcon />}
+          triggerVariant="compact"
           className="border-l border-line/70"
-          triggerClassName="rounded-none px-2"
+          triggerClassName="rounded-none px-1.5"
         >
           <MenuLink href={rawUrl}>
             <DocumentIcon />
@@ -157,7 +158,12 @@ export function PostActions({
         </Menu>
       </div>
 
-      <Menu label="Share this post" trigger={<ShareIcon />}>
+      <Menu
+        label="Share this post"
+        trigger={<ShareIcon />}
+        triggerVariant="compact"
+        triggerClassName="rounded-lg px-1.5"
+      >
         <MenuItem
           onClick={async () => {
             if (await copy(url)) markCopiedLink();
@@ -225,7 +231,7 @@ function Neighbour({
       href={`/blog/${post.slug}`}
       aria-label={`${label}: ${post.title}`}
       title={`${label} — ${post.title}`}
-      className="action-button"
+      className="post-action-button rounded-lg px-1.5"
     >
       <Icon />
     </Link>

@@ -18,6 +18,7 @@ export function Menu({
   label,
   trigger,
   className,
+  triggerVariant = "default",
   triggerClassName,
   children,
 }: {
@@ -25,6 +26,7 @@ export function Menu({
   label: string;
   trigger: React.ReactNode;
   className?: string;
+  triggerVariant?: "default" | "compact";
   triggerClassName?: string;
   children: React.ReactNode;
 }) {
@@ -117,7 +119,12 @@ export function Menu({
             requestAnimationFrame(() => items()[0]?.focus());
           }
         }}
-        className={cn("action-button", triggerClassName)}
+        className={cn(
+          triggerVariant === "compact"
+            ? "post-action-button"
+            : "action-button",
+          triggerClassName,
+        )}
       >
         {trigger}
       </button>

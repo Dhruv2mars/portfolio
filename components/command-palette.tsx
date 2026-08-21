@@ -385,7 +385,7 @@ export function PaletteTrigger({ dock }: { dock?: boolean }) {
       aria-keyshortcuts="Meta+K Control+K"
       data-slot="command-menu-trigger"
       className={cn(
-        "flex h-8 shrink-0 touch-manipulation items-center rounded-lg text-sm font-medium text-muted-foreground transition-all active:scale-[0.98]",
+        "flex h-8 shrink-0 touch-manipulation items-center rounded-lg text-sm font-medium text-muted-foreground transition-[background-color,color,transform] active:scale-[0.98]",
         dock
           ? "min-w-20 gap-2"
           : "gap-1.5 px-1.5 hover:bg-accent hover:text-foreground dark:hover:bg-accent/50",
