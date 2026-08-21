@@ -3,7 +3,7 @@
   "checkpoint_id": "4065a161bc41",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 12,
+  "checkpoints_count": 14,
   "files_touched": [
     "components/site-wordmark.tsx"
   ],
@@ -25,13 +25,20 @@
       "compact_transcript": "/40/65a161bc41/2/transcript.jsonl",
       "content_hash": "/40/65a161bc41/2/content_hash.txt",
       "prompt": "/40/65a161bc41/2/prompt.txt"
+    },
+    {
+      "metadata": "/40/65a161bc41/3/metadata.json",
+      "transcript": "/40/65a161bc41/3/full.jsonl",
+      "compact_transcript": "/40/65a161bc41/3/transcript.jsonl",
+      "content_hash": "/40/65a161bc41/3/content_hash.txt",
+      "prompt": "/40/65a161bc41/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 803537,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 25406976,
-    "output_tokens": 76320,
-    "api_call_count": 203
+    "input_tokens": 803961,
+    "cache_creation_tokens": 626810,
+    "cache_read_tokens": 42919526,
+    "output_tokens": 207646,
+    "api_call_count": 417
   }
 }
