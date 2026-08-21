@@ -3,7 +3,7 @@
   "checkpoint_id": "44a3bd4adb41",
   "strategy": "manual-commit",
   "branch": "feat/cha-footer-graphics",
-  "checkpoints_count": 28,
+  "checkpoints_count": 38,
   "files_touched": [
     "components/site-figure.tsx",
     "components/site-wordmark.tsx"
@@ -50,13 +50,20 @@
       "compact_transcript": "/44/a3bd4adb41/5/transcript.jsonl",
       "content_hash": "/44/a3bd4adb41/5/content_hash.txt",
       "prompt": "/44/a3bd4adb41/5/prompt.txt"
+    },
+    {
+      "metadata": "/44/a3bd4adb41/6/metadata.json",
+      "transcript": "/44/a3bd4adb41/6/full.jsonl",
+      "compact_transcript": "/44/a3bd4adb41/6/transcript.jsonl",
+      "content_hash": "/44/a3bd4adb41/6/content_hash.txt",
+      "prompt": "/44/a3bd4adb41/6/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 1372509,
-    "cache_creation_tokens": 490396,
-    "cache_read_tokens": 36132823,
-    "output_tokens": 219033,
-    "api_call_count": 373
+    "input_tokens": 1372547,
+    "cache_creation_tokens": 516531,
+    "cache_read_tokens": 36828637,
+    "output_tokens": 226463,
+    "api_call_count": 392
   }
 }
