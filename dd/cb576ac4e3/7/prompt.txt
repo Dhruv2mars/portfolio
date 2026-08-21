@@ -1,0 +1,7 @@
+firstly, hero is seperate, so gradien,etc doesnt apply here, we think about hero independently. 
+secondly, there were a lot of changed, work that i did which did not reflect. like i remove the place, timezone section entirely, i updated the say hi arrow posi as well, where did that work went. make sure that our git and everything is perfect.
+
+---
+
+firstly, hero is seperate, so gradien,etc doesnt apply here, we think about hero independently. 
+secondly, there were a lot of changed, work that i did which did not reflect. like i remove the place, timezone section entirely, i updated the say hi arrow posi as well, where did that work went. make sure that our git and everything is perfect.

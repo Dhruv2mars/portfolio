@@ -3,7 +3,7 @@
   "checkpoint_id": "ddcb576ac4e3",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 24,
+  "checkpoints_count": 26,
   "files_touched": [
     "components/icons.tsx",
     "components/overview.tsx",
@@ -43,6 +43,20 @@
       "compact_transcript": "/dd/cb576ac4e3/6/transcript.jsonl",
       "content_hash": "/dd/cb576ac4e3/6/content_hash.txt",
       "prompt": "/dd/cb576ac4e3/6/prompt.txt"
+    },
+    {
+      "metadata": "/dd/cb576ac4e3/7/metadata.json",
+      "transcript": "/dd/cb576ac4e3/7/full.jsonl",
+      "compact_transcript": "/dd/cb576ac4e3/7/transcript.jsonl",
+      "content_hash": "/dd/cb576ac4e3/7/content_hash.txt",
+      "prompt": "/dd/cb576ac4e3/7/prompt.txt"
     }
-  ]
+  ],
+  "token_usage": {
+    "input_tokens": 72,
+    "cache_creation_tokens": 171438,
+    "cache_read_tokens": 3419773,
+    "output_tokens": 23451,
+    "api_call_count": 36
+  }
 }
