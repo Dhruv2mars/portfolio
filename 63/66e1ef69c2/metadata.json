@@ -3,7 +3,7 @@
   "checkpoint_id": "6366e1ef69c2",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 12,
+  "checkpoints_count": 14,
   "files_touched": [
     "components/pronounce-name.tsx"
   ],
@@ -26,6 +26,10 @@
       "compact_transcript": "/63/66e1ef69c2/3/transcript.jsonl",
       "content_hash": "/63/66e1ef69c2/3/content_hash.txt",
       "prompt": "/63/66e1ef69c2/3/prompt.txt"
+    },
+    {
+      "metadata": "/63/66e1ef69c2/4/metadata.json",
+      "prompt": ""
     }
   ],
   "token_usage": {
