@@ -165,32 +165,6 @@ export function BoxIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function MapPinIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <Icon {...props}>
-      <path d="M13 6.5c0 3.5-3.66 6.94-4.6 7.73a.62.62 0 0 1-.8 0C6.66 13.44 3 10 3 6.5a5 5 0 0 1 10 0" />
-      <circle cx="8" cy="6.5" r="2" />
-    </Icon>
-  );
-}
-
-/**
- * A clock face whose hands are drawn from an actual time — see `handsPath`.
- * Without one it renders no hands rather than a wrong pair, which is the only
- * honest thing an unset clock can show.
- */
-export function ClockIcon({
-  hands,
-  ...props
-}: SVGProps<SVGSVGElement> & { hands?: string }) {
-  return (
-    <Icon {...props}>
-      <circle cx="8" cy="8" r="6.5" />
-      <path d={hands} />
-    </Icon>
-  );
-}
-
 export function SearchIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <Icon {...props}>

@@ -46,18 +46,6 @@ export const site = {
    * change needed to fill it, with no layout shift.
    */
   avatar: "/avatar/sunny.webp" as string | null,
-  /**
-   * Where the author is, written the way it should read. The same string is
-   * the map query, so there is nothing to keep in sync. `null` draws no row
-   * rather than a placeholder — an empty pin is worse than no pin.
-   */
-  location: "New Delhi, India" as string | null,
-  /**
-   * The IANA zone the clock in the overview runs on. Read off the author's own
-   * machine rather than guessed; change it here and the clock, the hands and
-   * the distance to the reader all follow.
-   */
-  timezone: "Asia/Kolkata" as string | null,
   socials: [
     { label: "X", href: "https://x.com/Dhruv2mars" },
     { label: "GitHub", href: "https://github.com/Dhruv2mars" },
