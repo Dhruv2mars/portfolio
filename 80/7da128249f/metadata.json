@@ -3,7 +3,7 @@
   "checkpoint_id": "807da128249f",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 12,
+  "checkpoints_count": 14,
   "files_touched": [
     ".gitignore",
     "lib/ai-activity-payload.ts"
@@ -27,6 +27,10 @@
       "compact_transcript": "/80/7da128249f/3/transcript.jsonl",
       "content_hash": "/80/7da128249f/3/content_hash.txt",
       "prompt": "/80/7da128249f/3/prompt.txt"
+    },
+    {
+      "metadata": "/80/7da128249f/4/metadata.json",
+      "prompt": ""
     }
   ],
   "token_usage": {
