@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "6366e1ef69c2",
+  "session_id": "01a024f8-55cd-75b3-8e10-770c33af255e",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-21T23:56:29.295771Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 8,
+  "files_touched": [
+    "components/pronounce-name.tsx"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-sol",
+  "turn_id": "81b054a997f8",
+  "session_metrics": {
+    "turn_count": 10
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-21T23:56:29.293957Z",
+    "agent_lines": 17,
+    "agent_removed": 3,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 17,
+    "total_lines_changed": 20,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}
