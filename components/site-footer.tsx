@@ -63,25 +63,13 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        {/* The name at plate scale, last, the way a colophon signs a book.
-            Nothing follows it: a list of links under the signature would read
-            as a caption on the drawing. */}
-        <div className="screen-line-bottom px-4 py-8 sm:px-6 sm:py-10">
-          <SiteWordmark
-            text={site.handle.toLowerCase()}
-            className="w-full text-foreground"
-          />
-        </div>
-
-        {/* Run-out. The fixed bottom fade is the last thing every scroll meets,
-            so the sheet has to keep going for at least its height past the last
-            row — otherwise the last line reads through the fade. The
-            reference spends this space on a drawing; we spend it on rail —
-            the wrapper's own, which already runs the height of the footer. */}
-        <div aria-hidden className="h-(--fade-bottom-height)" />
-
-        <div className="pb-[env(safe-area-inset-bottom,0)]" />
       </div>
+
+      <SiteWordmark text={site.handle.toLowerCase()} className="text-foreground" />
+
+      <div aria-hidden className="h-(--fade-bottom-height)" />
+
+      <div className="pb-[env(safe-area-inset-bottom,0)]" />
     </footer>
   );
 }
