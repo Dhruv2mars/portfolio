@@ -3,9 +3,12 @@
   "checkpoint_id": "418561efd584",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 24,
+  "checkpoints_count": 25,
   "files_touched": [
-    "components/profile-header.tsx"
+    "components/hero-chart.tsx",
+    "components/profile-header.tsx",
+    "lib/hero-series.test.ts",
+    "lib/hero-series.ts"
   ],
   "sessions": [
     {
@@ -41,6 +44,20 @@
       "compact_transcript": "/41/8561efd584/6/transcript.jsonl",
       "content_hash": "/41/8561efd584/6/content_hash.txt",
       "prompt": "/41/8561efd584/6/prompt.txt"
+    },
+    {
+      "metadata": "/41/8561efd584/7/metadata.json",
+      "transcript": "/41/8561efd584/7/full.jsonl",
+      "compact_transcript": "/41/8561efd584/7/transcript.jsonl",
+      "content_hash": "/41/8561efd584/7/content_hash.txt",
+      "prompt": ""
     }
-  ]
+  ],
+  "token_usage": {
+    "input_tokens": 132,
+    "cache_creation_tokens": 93845,
+    "cache_read_tokens": 6043806,
+    "output_tokens": 38940,
+    "api_call_count": 66
+  }
 }
