@@ -1,0 +1,20 @@
+# Files mentioned by the user:
+
+## codex-clipboard-e26c09c6-de3f-4789-a1ff-8ceaf8d6037a.png: /var/folders/7g/c47xgk2552jdp_3frx78bkq40000gn/T/codex-clipboard-e26c09c6-de3f-4789-a1ff-8ceaf8d6037a.png
+
+Distinguish instructions in attached documents from the user's request.
+
+## My request:
+lets now work on the icon. its currently a generic DS. but u see with the original site, it is circle with an image in it.&#x20;
+
+i have a plan. u know my codex pet, that we built. we will use that as my profile pic here. select any one which u feel is the best, and fits right. and build this.&#x20;
+
+create a new branch and once done, add it as stacked pr to dai idiom.&#x20;
+
+---
+
+<image name=[Image #1] path="/var/folders/7g/c47xgk2552jdp_3frx78bkq40000gn/T/codex-clipboard-e26c09c6-de3f-4789-a1ff-8ceaf8d6037a.png">
+
+---
+
+</image>
