@@ -3,7 +3,7 @@
   "checkpoint_id": "05469c6faf54",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 22,
+  "checkpoints_count": 24,
   "files_touched": [
     "bun.lock",
     "lib/ai-activity-store.ts",
@@ -42,6 +42,13 @@
       "compact_transcript": "/05/469c6faf54/5/transcript.jsonl",
       "content_hash": "/05/469c6faf54/5/content_hash.txt",
       "prompt": "/05/469c6faf54/5/prompt.txt"
+    },
+    {
+      "metadata": "/05/469c6faf54/6/metadata.json",
+      "transcript": "/05/469c6faf54/6/full.jsonl",
+      "compact_transcript": "/05/469c6faf54/6/transcript.jsonl",
+      "content_hash": "/05/469c6faf54/6/content_hash.txt",
+      "prompt": "/05/469c6faf54/6/prompt.txt"
     }
   ],
   "token_usage": {
