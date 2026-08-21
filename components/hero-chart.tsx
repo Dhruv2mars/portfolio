@@ -37,9 +37,18 @@ type HeroChartProps = {
  * nobody reads. Set the numbers on the drawing instead and they are found
  * exactly when they are wanted and invisible the rest of the time.
  */
-const Y_GUTTER = 48;
+const Y_GUTTER = 58;
 /** The stub after each number — enough to point at the level, not a rule. */
 const TICK_DASH = 7;
+/**
+ * And the air between the number and its stub.
+ *
+ * Set tight, the two read as one glyph — `150M—` — and the stub stops being a
+ * mark that points at a level and becomes a hyphen. Held apart, the number is
+ * a label and the stub is the thing indicating where that label lands, which
+ * is what each of them is.
+ */
+const TICK_GAP = 11;
 /** Room above the curve so the peak has air rather than the plate's edge. */
 const TOP_ROOM = 26;
 /** And below the month row, so it sits on the plate rather than on the rule. */
@@ -69,7 +78,7 @@ function YTick({ x = 0, y = 0, payload, size }: TickProps & { size: number }) {
       className="fill-muted-foreground/70 stroke-muted-foreground/45"
     >
       <text
-        x={-(TICK_DASH + 5)}
+        x={-(TICK_DASH + TICK_GAP)}
         dy="0.32em"
         textAnchor="end"
         style={labelStyle(size)}
@@ -122,7 +131,17 @@ export function HeroChart({
     <motion.div
       role="img"
       aria-label={description}
-      className={cn("size-full text-foreground", className)}
+      // Not pure foreground. A 1.25px hairline in the text colour is the
+      // hardest mark on the page, and it wins an argument with the name set
+      // in 32px directly under it — the hero would then be a chart with a
+      // caption rather than a person with a record. Held a step back from
+      // black it is still the darkest line in the plate and no longer the
+      // loudest thing in the hero. The stop below rides the same colour, so
+      // the fill follows the line rather than drifting off it.
+      className={cn(
+        "size-full text-[color-mix(in_oklab,var(--foreground)_82%,var(--background))]",
+        className,
+      )}
       // The record accumulates left to right, so it arrives that way. A wipe
       // rather than a fade: a fade says "an image loaded", a wipe says "this
       // was measured, in this order". Recharts' own animation is not used —
@@ -151,7 +170,7 @@ export function HeroChart({
               {/* Weight under the line, thinning to nothing before the
                   baseline — so the area reads as the curve's own shadow
                   rather than as a filled shape with an edge of its own. */}
-              <stop offset="0%" stopColor="currentColor" stopOpacity={0.2} />
+              <stop offset="0%" stopColor="currentColor" stopOpacity={0.22} />
               <stop offset="45%" stopColor="currentColor" stopOpacity={0.075} />
               <stop offset="100%" stopColor="currentColor" stopOpacity={0} />
             </linearGradient>

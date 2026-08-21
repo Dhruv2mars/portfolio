@@ -154,7 +154,11 @@ export function niceScale(
   for (let value = step; value <= peak; value += step) {
     ticks.push(Number(value.toPrecision(12)));
   }
-  return { max: peak * 1.05, ticks };
+  // A tenth over the peak. Tighter and the busiest fortnight of the year is
+  // drawn touching the top of the plate, which reads as a curve that ran out
+  // of room rather than as a maximum; looser and it floats in the middle of a
+  // field proving there is nothing above it.
+  return { max: peak * 1.1, ticks };
 }
 
 /** Centre each month's span inside the window, so a partial month sits at its

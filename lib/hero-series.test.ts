@@ -71,9 +71,10 @@ describe("niceScale", () => {
 
   test("the top of the scale clears the peak without stranding it", () => {
     const { max } = niceScale(133_000_000);
-    expect(max).toBeGreaterThan(133_000_000);
-    // The curve must reach most of the way up the plate, not float halfway.
-    expect(133_000_000 / max).toBeGreaterThan(0.9);
+    // A band, not a floor: the peak must reach most of the way up the plate
+    // without being drawn against its top edge.
+    expect(133_000_000 / max).toBeGreaterThan(0.88);
+    expect(133_000_000 / max).toBeLessThan(0.94);
   });
 
   test("the label count stays near the target across magnitudes", () => {
