@@ -3,7 +3,7 @@
   "checkpoint_id": "5546b258f24a",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 22,
+  "checkpoints_count": 24,
   "files_touched": [
     "DESIGN.md"
   ],
@@ -34,6 +34,13 @@
     {
       "metadata": "/55/46b258f24a/5/metadata.json",
       "prompt": ""
+    },
+    {
+      "metadata": "/55/46b258f24a/6/metadata.json",
+      "transcript": "/55/46b258f24a/6/full.jsonl",
+      "compact_transcript": "/55/46b258f24a/6/transcript.jsonl",
+      "content_hash": "/55/46b258f24a/6/content_hash.txt",
+      "prompt": "/55/46b258f24a/6/prompt.txt"
     }
   ]
 }
