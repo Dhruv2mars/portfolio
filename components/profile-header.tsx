@@ -4,7 +4,7 @@ import { PronounceName } from "@/components/pronounce-name";
 import { SiteFigure } from "@/components/site-figure";
 import { site } from "@/lib/site";
 
-/** "Dhruv Sharma" → "DS". */
+/** "Dhruv Sharma" → "DS" for the missing-asset fallback. */
 function initials(name: string): string {
   return name
     .split(/\s+/)
@@ -13,26 +13,18 @@ function initials(name: string): string {
     .join("");
 }
 
-/**
- * The portrait slot is a monogram plate, not a gap waiting to be filled: with
- * no photograph set it draws the initials in the display face, so the slot
- * reads as a mark of its own rather than as a missing image.
- *
- * 128px on a phone, 160px on desktop — the portrait is one of the two things
- * the hero is for, so it is sized to hold the row rather than to sit politely
- * beside the name.
- */
+/** 128px on phones, 160px on desktop. */
 function Avatar() {
   return (
-    <div className="relative m-0.5 size-32 overflow-hidden rounded-xl border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
+    <div className="relative m-0.5 size-32 overflow-hidden rounded-full border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
       {site.avatar ? (
         <Image
           src={site.avatar}
-          alt={site.name}
+          alt={`${site.name}, profile portrait`}
           fill
           sizes="(min-width: 640px) 160px, 128px"
           priority
-          className="object-cover"
+          className="object-contain"
         />
       ) : (
         <span

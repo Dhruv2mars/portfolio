@@ -16,8 +16,8 @@ describe("site identity", () => {
     }
   });
 
-  test("the avatar slot is empty on purpose, not by accident", () => {
-    // Setting this to a path is the only change needed to fill the masthead.
-    expect(site.avatar).toBeNull();
+  test("the masthead uses the current Codex pet portrait", async () => {
+    expect(site.avatar).toBe("/avatar/sunny.webp");
+    expect(await Bun.file(`public${site.avatar}`).exists()).toBe(true);
   });
 });

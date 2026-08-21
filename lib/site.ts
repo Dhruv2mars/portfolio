@@ -41,11 +41,10 @@ export const site = {
     "I build tooling for coding agents — repro harnesses, queues, local-first inference — and ship with them every day.",
   url: "https://dhruv2mars.com",
   /**
-   * No portrait exists yet. The profile header reserves this slot and renders
-   * a monogram at the same size; setting this to an image path is the only
-   * change needed to fill it, with no layout shift.
+   * Current Codex pet portrait. The profile header keeps its monogram fallback
+   * so a missing asset never turns the masthead into a broken image.
    */
-  avatar: null as string | null,
+  avatar: "/avatar/sunny.webp" as string | null,
   /**
    * Where the author is, written the way it should read. The same string is
    * the map query, so there is nothing to keep in sync. `null` draws no row
