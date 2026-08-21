@@ -1,78 +1,91 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { VolumeIcon } from "@/components/icons";
 import { site } from "@/lib/site";
 
 /**
  * Say the name.
  *
- * A recording is the correct answer and the slot is here for one:
- * `site.pronunciation.audio` takes precedence the moment it is set. Until a
- * recording exists the button synthesises from a respelling — "Droov Sharma"
- * rather than "Dhruv Sharma", because an English voice reads the true spelling
- * as three syllables. That is a substitute, not a fake: the phonetic reading is
- * printed in the button's own title, so the Visitor always has the real answer
- * even if the voice on their machine mangles it.
+ * The button plays a recording, not a synthesiser. A voice reading `/dʱruːʋ/`
+ * off an English phoneme set has no breathy-voiced d and no retroflex v to
+ * read it with, so it says a different name confidently — which is worse than
+ * saying nothing. The true reading stays in the button's own title for anyone
+ * who would rather read it than hear it.
  *
- * If the machine can neither play nor speak, no button is drawn. A control that
- * does nothing is worse than an absent one.
+ * Playback goes through Web Audio rather than an `<audio>` element: the clip
+ * is decoded once into a buffer, so a second press replays from memory on the
+ * same frame instead of seeking a stream. A name is a one-second sound and a
+ * press should sound instantly.
  */
-/** Neither of these can change during a page's life, so there is nothing to
- *  subscribe to — this is `useSyncExternalStore` used purely to read the
- *  browser once, after hydration, without an effect that sets state. */
-const subscribeNever = () => () => {};
-const canPlay = () =>
-  Boolean(site.pronunciation.audio) || "speechSynthesis" in window;
+
+/** Decoded once per document, not once per mount, and shared by every press. */
+let decoded: Promise<AudioBuffer> | null = null;
+let context: AudioContext | null = null;
+
+function audioContext(): AudioContext {
+  return (context ??= new AudioContext());
+}
+
+function buffer(url: string): Promise<AudioBuffer> {
+  return (decoded ??= fetch(url)
+    .then((response) => {
+      if (!response.ok) throw new Error(`pronunciation: ${response.status}`);
+      return response.arrayBuffer();
+    })
+    .then((bytes) => audioContext().decodeAudioData(bytes))
+    .catch((error) => {
+      // Drop the failed attempt so the next press can try again rather than
+      // inheriting one bad network moment for the life of the page.
+      decoded = null;
+      throw error;
+    }));
+}
 
 export function PronounceName() {
-  const available = useSyncExternalStore(
-    subscribeNever,
-    canPlay,
-    // The server cannot know, and a button rendered there and then withdrawn
-    // is a layout shift next to the name. It arrives with hydration instead.
-    () => false,
-  );
   const [speaking, setSpeaking] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const sourceRef = useRef<AudioBufferSourceNode | null>(null);
 
   useEffect(
     () => () => {
-      audioRef.current?.pause();
-      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      sourceRef.current?.stop();
+      sourceRef.current = null;
     },
     [],
   );
 
   const play = useCallback(() => {
-    if (speaking) return;
+    const url = site.pronunciation.audio;
+    if (!url) return;
 
-    if (site.pronunciation.audio) {
-      const audio = (audioRef.current ??= new Audio(site.pronunciation.audio));
-      audio.currentTime = 0;
-      setSpeaking(true);
-      audio.onended = () => setSpeaking(false);
-      audio.onerror = () => setSpeaking(false);
-      void audio.play().catch(() => setSpeaking(false));
-      return;
-    }
+    // Constructed on the press, so nothing is suspended waiting for a gesture
+    // that may never come — a visitor who never clicks never opens a context.
+    const ctx = audioContext();
+    if (ctx.state === "suspended") void ctx.resume();
 
-    const utterance = new SpeechSynthesisUtterance(
-      site.pronunciation.respelling,
-    );
-    utterance.lang = "en-US";
-    // Slower than speech, because the point is the shape of the word.
-    utterance.rate = 0.85;
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-    // Chrome keeps a spoken queue across pages; clear it or a second press
-    // stacks instead of replaying.
-    window.speechSynthesis.cancel();
     setSpeaking(true);
-    window.speechSynthesis.speak(utterance);
-  }, [speaking]);
 
-  if (!available) return null;
+    buffer(url)
+      .then((clip) => {
+        // A second press restarts the name rather than layering it.
+        sourceRef.current?.stop();
+
+        const source = ctx.createBufferSource();
+        source.buffer = clip;
+        source.connect(ctx.destination);
+        source.onended = () => {
+          if (sourceRef.current === source) {
+            sourceRef.current = null;
+            setSpeaking(false);
+          }
+        };
+        source.start(0);
+        sourceRef.current = source;
+      })
+      .catch(() => setSpeaking(false));
+  }, []);
+
+  if (!site.pronunciation.audio) return null;
 
   return (
     <button
@@ -82,9 +95,14 @@ export function PronounceName() {
       data-speaking={speaking || undefined}
       title={`${site.name} ${site.pronunciation.phonetic}`}
       aria-label={`Hear how ${site.name} is pronounced`}
-      className="flex size-6 shrink-0 touch-manipulation items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
+      className="relative flex size-6 shrink-0 touch-manipulation items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
     >
-      <VolumeIcon className="size-4" />
+      {/* The tap target a finger needs, without the box a cursor would see. */}
+      <span
+        className="absolute top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 pointer-fine:hidden"
+        aria-hidden
+      />
+      <VolumeIcon className="size-4.5" />
     </button>
   );
 }
