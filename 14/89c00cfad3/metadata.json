@@ -3,7 +3,7 @@
   "checkpoint_id": "1489c00cfad3",
   "strategy": "manual-commit",
   "branch": "chore/vercel-preview-release",
-  "checkpoints_count": 11,
+  "checkpoints_count": 13,
   "files_touched": [
     "lib/site.ts"
   ],
@@ -26,6 +26,10 @@
       "compact_transcript": "/14/89c00cfad3/3/transcript.jsonl",
       "content_hash": "/14/89c00cfad3/3/content_hash.txt",
       "prompt": "/14/89c00cfad3/3/prompt.txt"
+    },
+    {
+      "metadata": "/14/89c00cfad3/4/metadata.json",
+      "prompt": ""
     }
   ],
   "token_usage": {
