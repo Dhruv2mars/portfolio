@@ -15,9 +15,20 @@ import { site } from "@/lib/site";
  *
  * Playback goes through Web Audio rather than an `<audio>` element: the clip
  * is decoded once into a buffer, so a second press replays from memory on the
- * same frame instead of seeking a stream. A name is a one-second sound and a
- * press should sound instantly.
+ * same frame instead of seeking a stream. What delay there is is deliberate
+ * and measured, not whatever the network happened to cost.
  */
+
+/**
+ * Seconds between the press and the first sample.
+ *
+ * Zero is technically correct and reads as a glitch: the name arrives before
+ * the press has finished registering as a press, so the two feel unrelated. A
+ * beat of air lets the button acknowledge the click first and the voice answer
+ * it second. Scheduled on the audio clock rather than a timer, so the beat is
+ * the same length every press.
+ */
+const LEAD_IN = 0.12;
 
 /** Decoded once per document, not once per mount, and shared by every press. */
 let decoded: Promise<AudioBuffer> | null = null;
@@ -79,7 +90,10 @@ export function PronounceName() {
             setSpeaking(false);
           }
         };
-        source.start(0);
+        // The waves start pulsing on the press while the voice waits out the
+        // lead-in. They loop rather than track the audio, so the head start
+        // reads as the glyph winding up, not as the sound running late.
+        source.start(ctx.currentTime + LEAD_IN);
         sourceRef.current = source;
       })
       .catch(() => setSpeaking(false));
