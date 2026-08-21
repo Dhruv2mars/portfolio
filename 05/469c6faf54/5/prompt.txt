@@ -1,0 +1,67 @@
+my site is deployed on vercel. i want a few things:&#x20;
+
+- currently we do have previews available, like for pr. but i want a always static version for preview deploys, like, preview\.dhruv2mars.com. it will be part of the release process, everything will be first deployed to previews, even on main, then once confirmed by me, it will be GA. this is one thing i want.&#x20;
+
+---
+
+i have bought the domain from hostinger. take it from here and do everything
+
+---
+
+i have bought the domain from hostinger. take it from here and do everything
+
+---
+
+open it in helium instead. there i have already logged in
+
+---
+
+open it in helium instead. there i have already logged in
+
+---
+
+try now.&#x20;
+
+---
+
+try now.&#x20;
+
+---
+
+use [@Computer](plugin://computer-use@openai-bundled) to naviagete [@Helium](plugin://computer-use@openai-bundled?app=net.imput.helium)&#x20;
+
+---
+
+use [@Computer](plugin://computer-use@openai-bundled) to naviagete [@Helium](plugin://computer-use@openai-bundled?app=net.imput.helium)&#x20;
+
+---
+
+is 38 ready for merging? have u made everything perfectly and made sure everything is working perfectly
+
+---
+
+is 38 ready for merging? have u made everything perfectly and made sure everything is working perfectly
+
+---
+
+target main for it now,&#x20;
+
+---
+
+target main for it now,&#x20;
+
+---
+
+didnt u merge 38 to main?&#x20;
+
+---
+
+didnt u merge 38 to main?&#x20;
+
+---
+
+yes, do it&#x20;
+
+---
+
+yes, do it&#x20;
