@@ -56,8 +56,27 @@ Regressing either is a security bug, not a style change.
 ## 3. Masthead
 
 One block, no hero. Avatar slot · name, with a button that pronounces it · the tagline, flipping
-through the several ways it is true. The social links and the author's location and local time live
-in the Overview panel below, where they are context rather than chrome.
+through the several ways it is true. The social links live in the Overview panel below, where they
+are the panel's whole content: a location and a clock were tried there and removed, because neither
+changed what a reader does next.
+
+**The plate carries the record, not an ornament.** The masthead's figure plate held an isometric
+drawing that meant nothing; it now holds the same measurements the activity grid holds, drawn as one
+curve. The window is fixed by the calendar — January 1 to today, so the figure is the same shape
+tomorrow as it is now and one quiet fortnight cannot crop it. The series is smoothed on a 15-day
+triangular window, stated in the caption and never hidden. Mass is conserved across the smoothing,
+including at both ends, and the interpolation is monotone cubic, so the curve cannot invent a peak
+or dip below a real zero.
+
+The scale is set inside the plot rather than in a gutter beside it: labelled levels on round numbers,
+each followed by a short stub, and nothing else. No gridlines, no axis rules, no tooltip — a hero is
+looked at, not interrogated, and §4's grid is where a day is read off. The curve arrives as a
+left-to-right wipe because the record accumulates in that order.
+
+**The hero is its own case.** It is the one plate on the site judged on its own terms rather than
+against the panel idiom: it is the first thing seen, it is a picture before it is a table, and the
+rules that keep the panels below it quiet are the wrong rules for it. §7's prohibitions are written
+for the page under the masthead.
 
 **The avatar slot is a designed absence.** No portrait exists yet. Reserve the exact final footprint
 and render a bordered placeholder that carries the same cursor-tracking light interaction a real
@@ -68,14 +87,22 @@ zero layout shift. It must never read as a broken image.
 
 The density anchor and the largest element above the fold. A year grid of day cells, intensity by
 token count, with a hover/focus readout carrying the exact value — the readout is a fixed line, not a
-floating tooltip, so nothing reflows. Lifetime total set large.
+floating tooltip, so nothing reflows.
 
-- Server-rendered with the real total present in the HTML before hydration. No skeleton, no
+A band of totals — all time, 30 days, 7 days, today — stood above the grid and was removed. It
+restated the picture under it in figures and cost a band of the page to do it, and a lifetime number
+is a milestone rather than a measurement: it goes up and never comes down, so it says nothing about
+whether the habit is still alive. The readout carries the exact value for any day worth asking about,
+and §3's curve carries the shape.
+
+- Server-rendered with the real measurements in the HTML before hydration. No skeleton, no
   client-only fetch, no hydration mismatch.
 - One SVG, not hundreds of nodes. Grid semantics with a per-cell accessible name.
 - Full keyboard traversal; the readout is an `aria-live` region.
 - Below the tablet breakpoint the grid re-orients to a month matrix rather than scrolling
   horizontally. Every cell has a ≥24×24 hit area.
+- Source order is tokscale → Vercel Blob → fixture. The `tokscale-sync` CLI publishes daily totals to
+  a public Worker read API; the blob is the previous pipeline, kept as a fallback.
 - Fixture fallback renders identically and is labelled `fixture`. Data is never invented.
 
 ## 5. Projects
@@ -138,12 +165,13 @@ feedback.
 ## 7. Prohibitions
 
 No empty sections. No placeholder or invented data. No "coming soon". No fake metrics. No box
-shadows outside the one popover surface (a menu must detach from the page under it). No gradients except the heatmap ramp. No thumbnails or project detail pages. No hamburger
+shadows outside the one popover surface (a menu must detach from the page under it). No gradients
+except the heatmap ramp and the hero's own fill (§3). No thumbnails or project detail pages. No hamburger
 menu. No perpetual animation. No page-level fade on route change. No dashboard grammar.
 
 ## 8. Acceptance tests
 
-1. `curl` of `/` contains the real lifetime token total; console shows no hydration mismatch.
+1. `curl` of `/` contains the real per-day token counts; console shows no hydration mismatch.
 2. At 1440×900 the masthead and the complete year grid are visible without scrolling.
 3. Zero horizontal scroll at 390, 768, 1024, 1280, 1440, 2560.
 4. Every interactive target ≥24×24 at 390. Heatmap cells are the one
