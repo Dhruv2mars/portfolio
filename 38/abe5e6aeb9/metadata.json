@@ -3,7 +3,7 @@
   "checkpoint_id": "38abe5e6aeb9",
   "strategy": "manual-commit",
   "branch": "chore/vercel-preview-release",
-  "checkpoints_count": 13,
+  "checkpoints_count": 15,
   "files_touched": [
     "components/profile-header.tsx",
     "lib/site.test.ts",
@@ -38,13 +38,20 @@
       "compact_transcript": "/38/abe5e6aeb9/4/transcript.jsonl",
       "content_hash": "/38/abe5e6aeb9/4/content_hash.txt",
       "prompt": "/38/abe5e6aeb9/4/prompt.txt"
+    },
+    {
+      "metadata": "/38/abe5e6aeb9/5/metadata.json",
+      "transcript": "/38/abe5e6aeb9/5/full.jsonl",
+      "compact_transcript": "/38/abe5e6aeb9/5/transcript.jsonl",
+      "content_hash": "/38/abe5e6aeb9/5/content_hash.txt",
+      "prompt": "/38/abe5e6aeb9/5/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 141307,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 11388416,
-    "output_tokens": 27783,
-    "api_call_count": 72
+    "input_tokens": 144647,
+    "cache_creation_tokens": 3769731,
+    "cache_read_tokens": 150331269,
+    "output_tokens": 980817,
+    "api_call_count": 1743
   }
 }
