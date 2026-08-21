@@ -1,0 +1,153 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "d4d44c48daaa",
+  "session_id": "cd84d462-126f-4f87-8eb4-cbc1d604b050",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-21T06:01:09.924621Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "components/flip-sentences.tsx",
+    "components/project-row.tsx"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5",
+  "turn_id": "e46d1e06e85b",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 982,
+    "cache_creation_tokens": 1199621,
+    "cache_read_tokens": 40041948,
+    "output_tokens": 255154,
+    "api_call_count": 495
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01NDd21X3v6nkte5D1zSXvYQ",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "caveman"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "e46d1e06e85b",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 16,
+        "end": 17,
+        "entry_ids": [
+          "59b99b96-5437-4d85-8517-dc09f22c634a"
+        ],
+        "tool_use_id": "toolu_01NDd21X3v6nkte5D1zSXvYQ"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NDd21X3v6nkte5D1zSXvYQ"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: caveman",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01Ek4bFSanC6yfTAfHuWWowD",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "impeccable"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "e46d1e06e85b",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1617,
+        "end": 1618,
+        "entry_ids": [
+          "914b05db-069e-48b8-a523-9e73aec456b5"
+        ],
+        "tool_use_id": "toolu_01Ek4bFSanC6yfTAfHuWWowD"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01Ek4bFSanC6yfTAfHuWWowD"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: impeccable",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01FjJx6xnCBcaRgva9CgCVC8",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "emil-design-eng"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "e46d1e06e85b",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 2295,
+        "end": 2296,
+        "entry_ids": [
+          "c7ce3a96-50b9-400a-83db-278b0b8aae69"
+        ],
+        "tool_use_id": "toolu_01FjJx6xnCBcaRgva9CgCVC8"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01FjJx6xnCBcaRgva9CgCVC8"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: emil-design-eng",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "initial_attribution": {
+    "calculated_at": "2026-08-21T06:01:09.239133Z",
+    "agent_lines": 75,
+    "agent_removed": 67,
+    "human_added": 275,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 350,
+    "total_lines_changed": 689,
+    "agent_percentage": 20.609579100145137,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}
