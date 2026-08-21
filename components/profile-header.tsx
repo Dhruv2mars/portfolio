@@ -8,7 +8,7 @@ import { getAiActivityPayload } from "@/lib/ai-activity-store";
 import { buildHeroSeries, type HeroSeries } from "@/lib/hero-series";
 import { site } from "@/lib/site";
 
-/** "Dhruv Sharma" → "DS". */
+/** "Dhruv Sharma" → "DS" for the missing-asset fallback. */
 function initials(name: string): string {
   return name
     .split(/\s+/)
@@ -17,15 +17,7 @@ function initials(name: string): string {
     .join("");
 }
 
-/**
- * The portrait slot is a monogram plate, not a gap waiting to be filled: with
- * no photograph set it draws the initials in the display face, so the slot
- * reads as a mark of its own rather than as a missing image.
- *
- * 128px on a phone, 160px on desktop — the portrait is one of the two things
- * the hero is for, so it is sized to hold the row rather than to sit politely
- * beside the name.
- */
+/** 128px on phones, 160px on desktop. */
 function Avatar() {
   return (
     <div className="relative m-0.5 size-32 overflow-hidden rounded-full border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
@@ -46,9 +38,7 @@ function Avatar() {
         >
           {/* A mount inset from the plate edge, like the figures elsewhere
               carry — the monogram is a mark this site drew, not a photograph
-              that failed to load, and it should look like it was meant. No
-              texture behind it: the hero is a plain sheet, and the only
-              drawing on it is the one inside Fig. 1's own frame. */}
+              that failed to load, and it should look like it was meant. */}
           <span
             aria-hidden
             className="absolute inset-2 rounded-md border border-line"
