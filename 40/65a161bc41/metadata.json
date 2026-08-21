@@ -3,7 +3,7 @@
   "checkpoint_id": "4065a161bc41",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 10,
+  "checkpoints_count": 12,
   "files_touched": [
     "components/site-wordmark.tsx"
   ],
@@ -18,6 +18,13 @@
     {
       "metadata": "/40/65a161bc41/1/metadata.json",
       "prompt": ""
+    },
+    {
+      "metadata": "/40/65a161bc41/2/metadata.json",
+      "transcript": "/40/65a161bc41/2/full.jsonl",
+      "compact_transcript": "/40/65a161bc41/2/transcript.jsonl",
+      "content_hash": "/40/65a161bc41/2/content_hash.txt",
+      "prompt": "/40/65a161bc41/2/prompt.txt"
     }
   ],
   "token_usage": {
