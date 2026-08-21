@@ -117,38 +117,45 @@ export function PostActions({
   const prompt = `Read ${rawUrl}, I want to ask questions about it.`;
 
   return (
-    <div className="flex items-center gap-0.5">
-      <button
-        type="button"
-        onClick={async () => {
-          if (await copy(markdown)) markCopiedPage();
-        }}
-        title="Copy this post as Markdown"
-        className="action-button"
-      >
-        {copiedPage ? <CheckIcon /> : <CopyIcon />}
-        <span className="max-sm:sr-only">
-          {copiedPage ? "Copied" : "Copy page"}
-        </span>
-      </button>
-
-      <Menu label="Open this post elsewhere" trigger={<ChevronIcon />}>
-        <MenuLink href={rawUrl}>
-          <DocumentIcon />
-          View as Markdown
-        </MenuLink>
-        <MenuSeparator />
-        <MenuLink
-          href={`https://chatgpt.com/?hint=search&q=${encodeURIComponent(prompt)}`}
+    <div className="flex items-center gap-1">
+      <div className="inline-flex shrink-0 overflow-hidden rounded-lg bg-accent-muted ring-1 ring-inset ring-line/70">
+        <button
+          type="button"
+          onClick={async () => {
+            if (await copy(markdown)) markCopiedPage();
+          }}
+          title="Copy this post as Markdown"
+          className="action-button rounded-none px-2.5"
         >
-          <ChatIcon />
-          Open in ChatGPT
-        </MenuLink>
-        <MenuLink href={`https://claude.ai/new?q=${encodeURIComponent(prompt)}`}>
-          <ChatIcon />
-          Open in Claude
-        </MenuLink>
-      </Menu>
+          {copiedPage ? <CheckIcon /> : <CopyIcon />}
+          <span className="max-sm:sr-only">
+            {copiedPage ? "Copied" : "Copy page"}
+          </span>
+        </button>
+
+        <Menu
+          label="More copy options"
+          trigger={<ChevronIcon />}
+          className="border-l border-line/70"
+          triggerClassName="rounded-none px-2"
+        >
+          <MenuLink href={rawUrl}>
+            <DocumentIcon />
+            View as Markdown
+          </MenuLink>
+          <MenuSeparator />
+          <MenuLink
+            href={`https://chatgpt.com/?hint=search&q=${encodeURIComponent(prompt)}`}
+          >
+            <ChatIcon />
+            Open in ChatGPT
+          </MenuLink>
+          <MenuLink href={`https://claude.ai/new?q=${encodeURIComponent(prompt)}`}>
+            <ChatIcon />
+            Open in Claude
+          </MenuLink>
+        </Menu>
+      </div>
 
       <Menu label="Share this post" trigger={<ShareIcon />}>
         <MenuItem
@@ -197,8 +204,8 @@ export function PostActions({
  * feed: "previous" in a list that runs newest-first is a coin toss, and the
  * label is the only thing telling the Visitor which way time runs.
  *
- * At the ends the control stays in place as a disabled button rather than
- * disappearing, so the pair does not shuffle sideways from post to post.
+ * Missing neighbours stay out of the toolbar. A dead arrow is visual noise,
+ * especially on a one-post blog, and a live arrow keeps its meaning obvious.
  */
 function Neighbour({
   post,
@@ -211,13 +218,7 @@ function Neighbour({
   const label =
     direction === "newer" ? "Newer post (←)" : "Older post (→)";
 
-  if (!post) {
-    return (
-      <button type="button" disabled aria-hidden tabIndex={-1} className="action-button">
-        <Icon />
-      </button>
-    );
-  }
+  if (!post) return null;
 
   return (
     <Link

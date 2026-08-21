@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PostItem } from "@/components/post-item";
 import { SearchField, SearchStatus } from "@/components/search-field";
 import { searchPosts, type PostSummary } from "@/lib/posts";
@@ -8,24 +8,45 @@ import { searchPosts, type PostSummary } from "@/lib/posts";
 /**
  * The index, with a filter over it.
  *
- * The reference keeps its query in the URL, which buys a shareable search and
- * costs a query-state dependency, a Suspense boundary and a router write on
- * every keystroke. A filter over a list this size is a glance, not a
- * destination — nobody sends a friend a link to a filtered blog index — so the
- * query lives in the component and the URL stays the address of the page.
+ * The query lives in the component for instant filtering and mirrors the URL
+ * without a route transition, so a filtered index can be shared or refreshed
+ * without turning every keystroke into a server navigation.
  *
  * The list is not virtualised and does not need to be: it is filtering an
  * array that was already sent, in memory, with no request behind it.
  */
-export function PostSearch({ posts }: { posts: PostSummary[] }) {
-  const [query, setQuery] = useState("");
+export function PostSearch({
+  posts,
+  initialQuery = "",
+}: {
+  posts: PostSummary[];
+  initialQuery?: string;
+}) {
+  const [query, setQuery] = useState(initialQuery);
   const shown = useMemo(() => searchPosts(posts, query), [posts, query]);
+
+  useEffect(() => {
+    const onPopState = () => {
+      setQuery(new URL(window.location.href).searchParams.get("q") ?? "");
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  const updateQuery = (value: string) => {
+    setQuery(value);
+    const url = new URL(window.location.href);
+    const normalized = value.trim();
+    if (normalized) url.searchParams.set("q", normalized);
+    else url.searchParams.delete("q");
+    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+  };
 
   return (
     <>
       <SearchField
         value={query}
-        onChange={setQuery}
+        onChange={updateQuery}
         label="Search posts"
         placeholder="Search posts…"
       />

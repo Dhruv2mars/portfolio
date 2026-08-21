@@ -18,10 +18,19 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function BlogPage() {
+type BlogPageProps = {
+  searchParams?: Promise<{ q?: string | string[] }>;
+};
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
   // Nothing empty is ever shown to a Visitor (CONTEXT.md → Blog / Post).
   const posts = getPublishedPosts();
   if (posts.length === 0) notFound();
+
+  const params = await searchParams;
+  const initialQuery = Array.isArray(params?.q)
+    ? (params.q[0] ?? "")
+    : (params?.q ?? "");
 
   // The body is the one thing a row never draws, and the rows are drawn in the
   // browser here — so it is dropped before the list crosses over rather than
@@ -67,7 +76,7 @@ export default function BlogPage() {
           </PanelTitle>
         </PanelHeader>
 
-        <PostSearch posts={summaries} />
+        <PostSearch posts={summaries} initialQuery={initialQuery} />
       </Panel>
     </>
   );

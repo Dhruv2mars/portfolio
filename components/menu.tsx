@@ -18,12 +18,14 @@ export function Menu({
   label,
   trigger,
   className,
+  triggerClassName,
   children,
 }: {
   /** What the trigger is called, for anyone who cannot see its icon. */
   label: string;
   trigger: React.ReactNode;
   className?: string;
+  triggerClassName?: string;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -115,7 +117,7 @@ export function Menu({
             requestAnimationFrame(() => items()[0]?.focus());
           }
         }}
-        className="action-button"
+        className={cn("action-button", triggerClassName)}
       >
         {trigger}
       </button>

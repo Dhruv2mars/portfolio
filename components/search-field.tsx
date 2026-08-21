@@ -42,6 +42,7 @@ export function SearchField({
           }}
           placeholder={placeholder}
           aria-label={label}
+          name="q"
           autoComplete="off"
           spellCheck={false}
           /* 16px on a phone: anything smaller and iOS zooms the page on focus,
