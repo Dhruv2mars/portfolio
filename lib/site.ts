@@ -41,8 +41,8 @@ export const site = {
     "I build tooling for coding agents — repro harnesses, queues, local-first inference — and ship with them every day.",
   url: "https://dhruv2mars.com",
   /**
-   * Current Codex pet portrait. The profile header keeps its monogram fallback
-   * so a missing asset never turns the masthead into a broken image.
+   * Current Codex pet portrait. When no portrait is configured, the profile
+   * header renders a monogram at the same size.
    */
   avatar: "/avatar/sunny.webp" as string | null,
   /**
