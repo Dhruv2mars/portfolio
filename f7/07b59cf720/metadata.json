@@ -3,7 +3,7 @@
   "checkpoint_id": "f707b59cf720",
   "strategy": "manual-commit",
   "branch": "chore/vercel-preview-release",
-  "checkpoints_count": 2,
+  "checkpoints_count": 3,
   "files_touched": [
     "docs/release-process.md"
   ],
@@ -21,13 +21,20 @@
       "compact_transcript": "/f7/07b59cf720/1/transcript.jsonl",
       "content_hash": "/f7/07b59cf720/1/content_hash.txt",
       "prompt": "/f7/07b59cf720/1/prompt.txt"
+    },
+    {
+      "metadata": "/f7/07b59cf720/2/metadata.json",
+      "transcript": "/f7/07b59cf720/2/full.jsonl",
+      "compact_transcript": "/f7/07b59cf720/2/transcript.jsonl",
+      "content_hash": "/f7/07b59cf720/2/content_hash.txt",
+      "prompt": "/f7/07b59cf720/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 472948,
+    "input_tokens": 719224,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 23096576,
-    "output_tokens": 66785,
-    "api_call_count": 202
+    "cache_read_tokens": 32614912,
+    "output_tokens": 95467,
+    "api_call_count": 282
   }
 }

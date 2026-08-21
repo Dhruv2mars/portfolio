@@ -1,0 +1,9 @@
+my site is deployed on vercel. i want a few things:&#x20;
+
+- currently we do have previews available, like for pr. but i want a always static version for preview deploys, like, preview\.dhruv2mars.com. it will be part of the release process, everything will be first deployed to previews, even on main, then once confirmed by me, it will be GA. this is one thing i want.&#x20;
+
+---
+
+my site is deployed on vercel. i want a few things:&#x20;
+
+- currently we do have previews available, like for pr. but i want a always static version for preview deploys, like, preview\.dhruv2mars.com. it will be part of the release process, everything will be first deployed to previews, even on main, then once confirmed by me, it will be GA. this is one thing i want.&#x20;
