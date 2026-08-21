@@ -20,16 +20,16 @@ export const site = {
     "local-first by default",
   ] as const,
   /**
-   * How the name sounds. `respelling` is spelled for an English voice rather
-   * than for a reader; `phonetic` is the true reading and is what the Visitor
-   * is shown. `audio` is a slot in the same spirit as `avatar`: point it at a
-   * recording and the button plays that instead of synthesising, with no other
-   * change.
+   * How the name sounds. `audio` is the answer — a recording of the name being
+   * said — and `phonetic` is the same answer written down, shown on the button
+   * for anyone who would rather read it. With no recording the button is not
+   * drawn: a synthesised English voice has neither the breathy d nor the
+   * retroflex v, so it says a different name confidently, which is worse than
+   * silence.
    */
   pronunciation: {
-    respelling: "Droov Sharma",
     phonetic: "/dʱruːʋ ˈʃərmə/",
-    audio: null as string | null,
+    audio: "/audio/dhruv-sharma.mp3" as string | null,
   },
   /**
    * The one-line description search results, feed readers and the install
