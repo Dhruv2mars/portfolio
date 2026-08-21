@@ -133,10 +133,10 @@ export function SiteWordmark({
         onMouseMove={handleMouseMove}
         onMouseLeave={() => ratio.set(0.5)}
       >
-        <div className="flex w-full items-center justify-center">
+        <div className="flex w-full translate-y-[37.5%] items-center justify-center">
           <svg
             aria-hidden
-            className="mx-auto block h-auto w-full max-w-[1120px]"
+            className="mx-auto block h-auto w-full max-w-[1410px]"
             viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
