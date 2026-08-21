@@ -1,0 +1,21 @@
+we have to do the hero section somewhat like in the image. the hero section is the one in red on the page. that is the only place where u are going to work. note, u are not going to edit anything else, like the DS icon, or dhruv sharma/text sections. use tokscale-sync to get the data. u have to make the chart using recharts, in the same style as image, minimal, sleek, elegant. the data will be of this year only, up until now, and obviously, since the graph is starting from very left, jan will get behind the DS icon, which is intended. use emil design and all other emil family skills such as animate, etc. the image is for ur inspiration, u have to make sure everything looks perfect, focus on minute details, and getting everything right.
+
+[Attached image "image.png" is saved at: /Users/dhruv2mars/.t3/userdata/attachments/941576a9-a0f0-4bd3-b4e5-6b9b578a91b6-62e1f8e9-05f8-4da4-9963-eaccc8f6af86.png]
+
+---
+
+we have to do the hero section somewhat like in the image. the hero section is the one in red on the page. that is the only place where u are going to work. note, u are not going to edit anything else, like the DS icon, or dhruv sharma/text sections. use tokscale-sync to get the data. u have to make the chart using recharts, in the same style as image, minimal, sleek, elegant. the data will be of this year only, up until now, and obviously, since the graph is starting from very left, jan will get behind the DS icon, which is intended. use emil design and all other emil family skills such as animate, etc. the image is for ur inspiration, u have to make sure everything looks perfect, focus on minute details, and getting everything right.
+
+[Attached image "image.png" is saved at: /Users/dhruv2mars/.t3/userdata/attachments/941576a9-a0f0-4bd3-b4e5-6b9b578a91b6-62e1f8e9-05f8-4da4-9963-eaccc8f6af86.png]
+
+---
+
+continue working!!!!
+
+---
+
+continue working!!!!
+
+---
+
+there has been changes to main. make sure git is clean and u have pulled the updates. then continue the work!
