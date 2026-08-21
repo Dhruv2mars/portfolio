@@ -3,7 +3,7 @@
   "checkpoint_id": "418561efd584",
   "strategy": "manual-commit",
   "branch": "feat/dai-idiom-rebuild",
-  "checkpoints_count": 12,
+  "checkpoints_count": 14,
   "files_touched": [
     "components/profile-header.tsx"
   ],
@@ -26,6 +26,10 @@
       "compact_transcript": "/41/8561efd584/3/transcript.jsonl",
       "content_hash": "/41/8561efd584/3/content_hash.txt",
       "prompt": "/41/8561efd584/3/prompt.txt"
+    },
+    {
+      "metadata": "/41/8561efd584/4/metadata.json",
+      "prompt": ""
     }
   ]
 }
