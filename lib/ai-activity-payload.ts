@@ -6,7 +6,10 @@ export type AiActivityPayload = {
   version: 1;
   generatedAt: string;
   timezone: string;
-  /** Complete days only (through yesterday in `timezone`). */
+  /**
+   * Ascending by date, in `timezone`. The tokscale source includes today, so
+   * the last entry is a day still in progress and will grow before it settles.
+   */
   days: { date: string; tokens: number }[];
   lifetimeTokens: number;
 };

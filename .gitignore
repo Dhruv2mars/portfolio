@@ -26,3 +26,6 @@ bun.lockb
 
 # critique artifacts (screenshots, progress page)
 .critique/
+
+# macOS
+.DS_Store
