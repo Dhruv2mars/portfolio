@@ -928,6 +928,25 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Project disclosure. A row opens by growing its own track from nothing, so
+   the record can be one line or five and the row never has to be measured
+   first. `visibility` rather than `display`, so the closed record stays out of
+   the tab order and off the screen reader without killing the transition.
+--------------------------------------------------------------------------- */
+.project-details {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 240ms var(--ease-out-quint),
+    visibility 240ms;
+}
+
+.project-details[data-open="true"] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+/* ---------------------------------------------------------------------------
    Reduced motion: movement goes, colour feedback stays.
 --------------------------------------------------------------------------- */
 
@@ -941,6 +960,9 @@
     animation-duration: 0.001ms !important;
     animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
+  }
+  .project-details {
+    transition: none;
   }
   .activity-cell,
   .palette-panel,

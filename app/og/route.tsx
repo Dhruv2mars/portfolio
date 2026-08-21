@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { cubeDataUri } from "@/lib/mark";
+import { MARK_RATIO, markDataUri } from "@/lib/mark";
 import { site } from "@/lib/site";
 
 export const runtime = "edge";
@@ -23,6 +23,9 @@ const fonts = Promise.all(
     data: await fetch(url).then((response) => response.arrayBuffer()),
   })),
 );
+
+/** Set to the cap height of the name beside it, so the two sit on one line. */
+const MARK_HEIGHT = 19;
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -55,8 +58,13 @@ export async function GET(request: Request) {
         >
           {/* The site's own mark, not a stand-in for it — this card is the
               only thing most people see before they see the site. */}
-            {/* eslint-disable-next-line @next/next/no-img-element -- satori rasterises this; next/image has no meaning here */}
-          <img src={cubeDataUri("#fafafa")} width={30} height={30} alt="" />
+          {/* eslint-disable-next-line @next/next/no-img-element -- satori rasterises this; next/image has no meaning here */}
+          <img
+            src={markDataUri("#fafafa")}
+            width={Math.round(MARK_HEIGHT * MARK_RATIO)}
+            height={MARK_HEIGHT}
+            alt=""
+          />
           {site.name}
         </div>
         <div

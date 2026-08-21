@@ -21,14 +21,17 @@ import { cn } from "@/lib/utils";
 
 const INTERVAL_MS = 3000;
 
+// The line travels upwards: the arriving sentence rises from below the
+// baseline and the leaving one continues up and out. One direction for both
+// halves, so the rotation reads as a single column of text moving past a
+// window rather than two unrelated fades.
 const VARIANTS = {
-  initial: { y: "-20%", opacity: 0, filter: "blur(1px)" },
+  initial: { y: "20%", opacity: 0, filter: "blur(1px)" },
   animate: { y: "0%", opacity: 1, filter: "blur(0px)" },
   exit: {
-    y: "40%",
+    y: "-40%",
     opacity: 0,
     filter: "blur(1px)",
-    transition: { ease: "easeOut" as const },
   },
 };
 

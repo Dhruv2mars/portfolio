@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { FlipSentences } from "@/components/flip-sentences";
 import { PronounceName } from "@/components/pronounce-name";
-import { SiteMarkIsometric } from "@/components/site-mark";
+import { SiteFigure } from "@/components/site-figure";
 import { site } from "@/lib/site";
 
 /** "Dhruv Sharma" → "DS". */
@@ -82,7 +82,7 @@ export function ProfileHeader() {
             The plate keeps a ratio rather than a height, so it grows with the
             rail instead of stepping at the breakpoint — the reference's plate
             is the same shape at every width it is drawn at. */}
-        <SiteMarkIsometric className="aspect-[556/354] w-full" />
+        <SiteFigure className="aspect-[556/354] w-full" />
         <figcaption className="pointer-events-none absolute right-2 bottom-2 text-sm leading-none tracking-wide text-[color-mix(in_oklab,var(--muted-foreground)_60%,var(--background))] tabular-nums select-none sm:right-4 sm:bottom-4">
           Fig. 1.
         </figcaption>
