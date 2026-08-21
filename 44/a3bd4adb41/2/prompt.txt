@@ -1,1 +1,5 @@
 i have the dhruv2mars logo animation on top right of the site. basically, i wanted what anthropic has for their sites. where on scroll, anthropic turns to ai. since my shortform is d2m, i wanted the same. review using all the emil skills if the current implementation is correct and if its done right? if not, what is wrong
+
+---
+
+whatever is wrong/inconsistent/inaccurate/incorrect, fix it within this branch only. and test and verify that everything is working as it should, take use of emil skills.&#x20;
