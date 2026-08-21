@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "05469c6faf54",
+  "session_id": "01a02468-6faa-76b0-b5c3-55e35fb61872",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-21T16:51:10.659877Z",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "bun.lock",
+    "lib/ai-activity-store.ts",
+    "lib/ai-activity.ts",
+    "package.json"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-luna",
+  "turn_id": "2f65358ab705",
+  "session_metrics": {
+    "turn_count": 4
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-21T16:51:10.658663Z",
+    "agent_lines": 83,
+    "agent_removed": 1,
+    "human_added": 495,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 578,
+    "total_lines_changed": 579,
+    "agent_percentage": 14.507772020725387,
+    "metric_version": 2
+  }
+}
