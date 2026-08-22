@@ -64,14 +64,18 @@ changed what a reader does next.
 drawing that meant nothing; it now holds the same measurements the activity grid holds, drawn as one
 curve. The window is fixed by the calendar — January 1 to today, so the figure is the same shape
 tomorrow as it is now and one quiet fortnight cannot crop it. The series is smoothed on a 15-day
-triangular window, stated in the caption and never hidden. Mass is conserved across the smoothing,
-including at both ends, and the interpolation is monotone cubic, so the curve cannot invent a peak
-or dip below a real zero.
+triangular window, stated in the figure's description and never hidden — the caption is pared to
+`Fig. 1.` because the year is legible off the month row and a plate does not need to narrate itself,
+but a smoothed curve that says nowhere that it is smoothed is the one lie a chart can tell quietly.
+Mass is conserved across the smoothing, including at both ends, and the interpolation is monotone
+cubic, so the curve cannot invent a peak or dip below a real zero.
 
 The scale is set inside the plot rather than in a gutter beside it: labelled levels on round numbers,
 each followed by a short stub, and nothing else. No gridlines, no axis rules, no tooltip — a hero is
-looked at, not interrogated, and §4's grid is where a day is read off. The curve arrives as a
-left-to-right wipe because the record accumulates in that order.
+looked at, not interrogated, and §4's grid is where a day is read off. No full-bleed rule crosses the
+plate either: the panels below rule the page edge to edge, and one run across here would cut the
+figure in half at the height of the monogram. The curve arrives as a left-to-right wipe because the
+record accumulates in that order.
 
 **The hero is its own case.** It is the one plate on the site judged on its own terms rather than
 against the panel idiom: it is the first thing seen, it is a picture before it is a table, and the

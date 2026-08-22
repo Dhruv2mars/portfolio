@@ -104,11 +104,12 @@ export async function ProfileHeader() {
           yDomain={series.yDomain}
           description={heroDescription(series)}
         />
-        {/* Kept where every other figure on this site keeps it, and made to
-            carry the window it was smoothed on — a mean drawn as if it were
-            a measurement is the one lie a chart can tell quietly. */}
+        {/* Kept where every other figure on this site keeps it, and pared to
+            the number alone — the year is legible off the month row and the
+            smoothing window is carried by the figure's own description, so
+            neither needs restating in the corner of the plate. */}
         <figcaption className="pointer-events-none absolute top-2 right-2 text-right text-[0.625rem]/none tracking-wide text-[color-mix(in_oklab,var(--muted-foreground)_60%,var(--background))] tabular-nums select-none sm:top-4 sm:right-4">
-          Fig. 1. {series.year} — {series.smoothingDays}-day mean
+          Fig. 1.
         </figcaption>
       </figure>
 
@@ -117,7 +118,13 @@ export async function ProfileHeader() {
           grid opens a third column and the monogram lands on the wrong side
           of the page. */}
       <div className="flex flex-col sm:col-start-1 sm:row-span-2 sm:row-start-1">
-        <div className="screen-line-top mt-auto shrink-0 border-r border-line">
+        {/* No rule over the plate. The panels below draw their hairlines to
+            200vw so the page reads as one ruled sheet; run one across here and
+            it cuts the figure in half at the height of the monogram's crown.
+            The plate is a picture, and a picture is not ruled. The square keeps
+            its right edge, which is the gutter it stands in, not a line through
+            the drawing. */}
+        <div className="mt-auto shrink-0 border-r border-line">
           <Avatar />
         </div>
       </div>
