@@ -1,0 +1,19 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "0806e015ada7",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "components/profile-header.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/08/06e015ada7/0/metadata.json",
+      "transcript": "/08/06e015ada7/0/full.jsonl",
+      "compact_transcript": "/08/06e015ada7/0/transcript.jsonl",
+      "content_hash": "/08/06e015ada7/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
