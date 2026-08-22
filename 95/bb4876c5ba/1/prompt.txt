@@ -1,0 +1,12 @@
+1. if nothing dependent/linked to them, u can remove them. 
+2. okay.
+
+---
+
+now, lets get back and focus on the hero. tell me a few things:
+- is the current graph accurate, like as we wanted the 15pt smoothining. such that, higher jagged peaks get smoothened out, and to make up for the loss, valleys will rise. is the graph accurate with the token (in m) markings, months, etc?
+- there are a few changes: just keep fig 1 and remove the rest of the line. remove that horizonatal line that passes through the whole page, above the logo square. keep that square, but remove the rest of hori line.
+
+---
+
+just a thing: the current graph feels like it is heavy on bottom right. as if it is too much positioned on the bottom and to the right. is it the case? and why is it feeling like this? for the bottom part, it is feeling too close to Dhruv Sharma section, the months written, thats getting too close, cant we do smting about it?
