@@ -91,10 +91,12 @@ export async function ProfileHeader() {
           lines the hero needs are the ones that divide it.
 
           The plate spans the whole rail rather than the column beside the
-          avatar, so the year opens at the frame's own left edge. January is
-          the quietest fortnight of the record and the monogram stands over
-          it — which is the truth of the figure, not a crop of it: the habit
-          started small, and the mark is what is in front of it. */}
+          avatar, so the year opens at the frame's own left edge — which puts
+          the opening weeks, and the two month labels over them, behind the
+          monogram. That is the truth of the figure rather than a crop of it:
+          those are the quietest weeks of the record, the habit started small,
+          and the mark is what stands in front of it. The scale is readable
+          from 25M up, which is above the monogram's crown. */}
       <figure className="relative col-span-2 col-start-1 row-start-1 aspect-[3/2] sm:aspect-[766/394]">
         <HeroChart
           points={series.points.map(({ day, value }) => ({ day, value }))}

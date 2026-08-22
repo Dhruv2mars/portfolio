@@ -33,11 +33,28 @@ type HeroChartProps = {
 /**
  * The scale lives inside the plot, at the left, not in a gutter beside it.
  *
- * An axis column would cost the curve a tenth of its width to draw a rule
- * nobody reads. Set the numbers on the drawing instead and they are found
- * exactly when they are wanted and invisible the rest of the time.
+ * An axis column costs the curve a fourteenth of its width to draw a rule
+ * nobody reads — and worse than the width, it shifts the whole drawing right,
+ * so the year opens a thumb inside the plate with a blank band beside it and
+ * reads as a picture pushed into its own corner. Asked for no width at all the
+ * axis is dropped outright and the scale goes with it, so it keeps its column
+ * and the plot is pulled back over the column by the same amount: the numbers
+ * are laid on the drawing rather than set beside it, and the year opens at the
+ * plate's own left edge. They land on January, which is the quietest fortnight
+ * of the record and the part standing behind the monogram, so the only thing
+ * they cover is the thing already covered.
  */
 const Y_GUTTER = 58;
+/**
+ * Right edge of the number column, measured from the tick.
+ *
+ * Mono digits, so every number ends on this line and the column reads as one
+ * edge rather than as six labels of different lengths. Set flush to the plate
+ * the longest of them — `100M`, six pixels wider than `25M` — hangs a hair off
+ * the left edge and is shaved by the frame; this holds the whole column a
+ * thumb inside it.
+ */
+const LABEL_RIGHT = 44;
 /** The stub after each number — enough to point at the level, not a rule. */
 const TICK_DASH = 7;
 /**
@@ -49,10 +66,18 @@ const TICK_DASH = 7;
  * is what each of them is.
  */
 const TICK_GAP = 11;
-/** Room above the curve so the peak has air rather than the plate's edge. */
-const TOP_ROOM = 26;
-/** And below the month row, so it sits on the plate rather than on the rule. */
-const BOTTOM_ROOM = 8;
+/**
+ * Room above the curve, and below the month row.
+ *
+ * The budget between them is what decides whether the figure sits in its plate
+ * or slumps to the floor of it. Weighted to the top, the curve gets a band of
+ * unused sky it never reaches into while the month row is pressed against the
+ * name beneath — the drawing then reads as bottom-heavy even though the peak
+ * is where the peak belongs. Weighted the other way the curve stands taller in
+ * the same plate and the months get a margin to sit in.
+ */
+const TOP_ROOM = 12;
+const BOTTOM_ROOM = 30;
 
 const LABEL_SIZE = 10;
 
@@ -72,13 +97,18 @@ function labelStyle(size: number): React.CSSProperties {
 }
 
 function YTick({ x = 0, y = 0, payload, size }: TickProps & { size: number }) {
+  // The offsets run to the right of the tick rather than to its left. The plot
+  // is pulled back over the axis column, so the tick stands off the plate's
+  // left edge and everything the reader sees is laid inward from it. The `x`
+  // recharts hands down is used rather than a constant: drop it and the axis
+  // renders six empty groups.
   return (
     <g
       transform={`translate(${x},${y})`}
       className="fill-muted-foreground/70 stroke-muted-foreground/45"
     >
       <text
-        x={-(TICK_DASH + TICK_GAP)}
+        x={LABEL_RIGHT}
         dy="0.32em"
         textAnchor="end"
         style={labelStyle(size)}
@@ -86,7 +116,13 @@ function YTick({ x = 0, y = 0, payload, size }: TickProps & { size: number }) {
       >
         {formatCompactTokens(payload?.value ?? 0)}
       </text>
-      <line x1={-TICK_DASH} x2={-1} y1={0} y2={0} strokeWidth={1} />
+      <line
+        x1={LABEL_RIGHT + TICK_GAP}
+        x2={LABEL_RIGHT + TICK_GAP + TICK_DASH}
+        y1={0}
+        y2={0}
+        strokeWidth={1}
+      />
     </g>
   );
 }
@@ -160,7 +196,17 @@ export function HeroChart({
       >
         <AreaChart
           data={points}
-          margin={{ top: TOP_ROOM, right: 0, bottom: BOTTOM_ROOM, left: 0 }}
+          // The axis keeps its width so it still renders — asked for none it is
+          // dropped outright and the scale goes with it — and the plot is
+          // pulled back over it by the same amount, so the column costs the
+          // drawing nothing and the labels end up laid on it rather than
+          // beside it.
+          margin={{
+            top: TOP_ROOM,
+            right: 0,
+            bottom: BOTTOM_ROOM,
+            left: -Y_GUTTER,
+          }}
           // The figure is looked at, not used. No hover state, no crosshair,
           // and no cursor change over a drawing that cannot be clicked.
           style={{ pointerEvents: "none" }}
