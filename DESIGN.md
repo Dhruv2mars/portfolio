@@ -77,6 +77,15 @@ plate either: the panels below rule the page edge to edge, and one run across he
 figure in half at the height of the monogram. The curve arrives as a left-to-right wipe because the
 record accumulates in that order.
 
+**The figure sits at a distance.** It is behind the name and behind the monogram, and it is drawn
+that way: the ink is mixed toward the background rather than faded with alpha, so contrast collapses
+toward the colour of the air the way distance actually works and the line walks toward near-black in
+dark and near-white in light instead of merely thinning. The curve holds roughly 4.6:1 against its
+background; the name above it holds 19:1, and that ordering is the point. The scale and month labels
+step back too, but a shorter step — recede the reading as far as the drawing and the plate stops
+being a record and becomes a texture. None of this is AA text: the plate is one `role="img"` and the
+description carries the reading in words.
+
 **The hero is its own case.** It is the one plate on the site judged on its own terms rather than
 against the panel idiom: it is the first thing seen, it is a picture before it is a table, and the
 rules that keep the panels below it quiet are the wrong rules for it. §7's prohibitions are written

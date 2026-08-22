@@ -105,7 +105,7 @@ function YTick({ x = 0, y = 0, payload, size }: TickProps & { size: number }) {
   return (
     <g
       transform={`translate(${x},${y})`}
-      className="fill-muted-foreground/70 stroke-muted-foreground/45"
+      className="fill-muted-foreground/55 stroke-muted-foreground/35"
     >
       <text
         x={LABEL_RIGHT}
@@ -142,7 +142,10 @@ function XTick({
       y={y}
       dy="0.9em"
       textAnchor="middle"
-      className="fill-muted-foreground/70"
+      // A step back, but a shorter step than the curve takes. The labels are
+      // the reading of the figure; recede them as far as the drawing and the
+      // plate stops being a record and becomes a texture.
+      className="fill-muted-foreground/55"
       style={labelStyle(size)}
     >
       {label}
@@ -167,15 +170,22 @@ export function HeroChart({
     <motion.div
       role="img"
       aria-label={description}
-      // Not pure foreground. A 1.25px hairline in the text colour is the
-      // hardest mark on the page, and it wins an argument with the name set
-      // in 32px directly under it — the hero would then be a chart with a
-      // caption rather than a person with a record. Held a step back from
-      // black it is still the darkest line in the plate and no longer the
-      // loudest thing in the hero. The stop below rides the same colour, so
-      // the fill follows the line rather than drifting off it.
+      // Held well back from the foreground, and mixed toward the background
+      // rather than faded with alpha.
+      //
+      // The figure is meant to sit at a distance — behind the name, behind the
+      // monogram, a thing seen across a room rather than a chart handed to you.
+      // That is aerial perspective, and aerial perspective is contrast
+      // collapsing toward the colour of the air, not ink going transparent.
+      // A `color-mix` in oklab does exactly that and does it correctly in both
+      // themes: the line walks toward near-black in dark and toward near-white
+      // in light, where a flat `opacity` would only ever thin it. It also keeps
+      // the hairline from winning an argument with the name set in 32px
+      // directly under it — the hero would then be a chart with a caption
+      // rather than a person with a record. The stops below ride the same
+      // colour, so the fill follows the line rather than drifting off it.
       className={cn(
-        "size-full text-[color-mix(in_oklab,var(--foreground)_82%,var(--background))]",
+        "size-full text-[color-mix(in_oklab,var(--foreground)_52%,var(--background))]",
         className,
       )}
       // The record accumulates left to right, so it arrives that way. A wipe
@@ -215,9 +225,12 @@ export function HeroChart({
             <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
               {/* Weight under the line, thinning to nothing before the
                   baseline — so the area reads as the curve's own shadow
-                  rather than as a filled shape with an edge of its own. */}
-              <stop offset="0%" stopColor="currentColor" stopOpacity={0.22} />
-              <stop offset="45%" stopColor="currentColor" stopOpacity={0.075} />
+                  rather than as a filled shape with an edge of its own. Pulled
+                  down with the line it hangs from: a shadow that held its
+                  weight while the line receded would read as haze in front of
+                  the drawing instead of distance behind it. */}
+              <stop offset="0%" stopColor="currentColor" stopOpacity={0.14} />
+              <stop offset="45%" stopColor="currentColor" stopOpacity={0.05} />
               <stop offset="100%" stopColor="currentColor" stopOpacity={0} />
             </linearGradient>
           </defs>
@@ -248,7 +261,9 @@ export function HeroChart({
             type="monotone"
             dataKey="value"
             stroke="currentColor"
-            strokeWidth={1.25}
+            // Distance thins a mark before it dims it, so the hairline drops
+            // with the ink rather than staying a heavy line in a pale colour.
+            strokeWidth={1}
             strokeLinecap="round"
             strokeLinejoin="round"
             fill={`url(#${gradientId})`}
