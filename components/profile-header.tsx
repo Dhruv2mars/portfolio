@@ -120,13 +120,14 @@ export async function ProfileHeader() {
           grid opens a third column and the monogram lands on the wrong side
           of the page. */}
       <div className="flex flex-col sm:col-start-1 sm:row-span-2 sm:row-start-1">
-        {/* No rule over the plate. The panels below draw their hairlines to
-            200vw so the page reads as one ruled sheet; run one across here and
-            it cuts the figure in half at the height of the monogram's crown.
-            The plate is a picture, and a picture is not ruled. The square keeps
-            its right edge, which is the gutter it stands in, not a line through
-            the drawing. */}
-        <div className="mt-auto shrink-0 border-r border-line">
+        {/* No rule across the plate — the panels below draw their hairlines to
+            200vw so the page reads as one ruled sheet, and one run through here
+            would cut the figure in half at the height of the monogram's crown.
+            A picture is not ruled. But the square still has to read as a square:
+            two edges and it is a corner the curve runs out of, so the top is
+            drawn to the box's own width and stops there. Top and right, the two
+            sides that face the drawing; the frame supplies the other two. */}
+        <div className="mt-auto shrink-0 border-t border-r border-line">
           <Avatar />
         </div>
       </div>
