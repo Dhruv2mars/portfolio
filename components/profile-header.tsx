@@ -126,8 +126,15 @@ export async function ProfileHeader() {
             A picture is not ruled. But the square still has to read as a square:
             two edges and it is a corner the curve runs out of, so the top is
             drawn to the box's own width and stops there. Top and right, the two
-            sides that face the drawing; the frame supplies the other two. */}
-        <div className="mt-auto shrink-0 border-t border-r border-line">
+            sides that face the drawing; the frame supplies the other two.
+
+            Opaque, and positioned so it is. The plate runs the full rail and
+            the box stands on its bottom-left, so an unfilled square shows the
+            curve through the four corners the circle does not reach — the mark
+            then reads as a cutout laid over the drawing instead of a plate the
+            drawing runs behind. The fill needs `relative` to land: unpositioned,
+            it would paint under the figure and show nothing. */}
+        <div className="relative mt-auto shrink-0 border-t border-r border-line bg-background">
           <Avatar />
         </div>
       </div>
