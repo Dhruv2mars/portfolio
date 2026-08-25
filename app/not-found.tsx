@@ -37,11 +37,10 @@ export default function NotFound() {
         </PanelHeader>
 
         <figure className="relative">
-          {/* The number is set in the grid's own cells: lit where the site has
-              something, an empty hairline frame everywhere else — which is
-              exactly what the activity grid draws a day it never reached.
-              The column-indexed delay is inherited too, so the plate wipes in
-              left to right rather than appearing all at once. */}
+          {/* The number is set in measured cells: lit where the site has
+              something, an empty hairline frame everywhere else. The
+              column-indexed delay comes with them, so the plate wipes in left
+              to right rather than appearing all at once. */}
           <div className="p-4">
             <div
               role="img"

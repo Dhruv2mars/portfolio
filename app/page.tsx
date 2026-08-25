@@ -1,4 +1,3 @@
-import { ActivitySection } from "@/components/activity-section";
 import { BlogSection, HOME_POST_LIMIT } from "@/components/blog-section";
 import { Overview } from "@/components/overview";
 import { ProfileHeader } from "@/components/profile-header";
@@ -9,7 +8,7 @@ import {
 import { getPublishedPosts } from "@/lib/blog";
 import { cn } from "@/lib/utils";
 
-/** Matches the AI Activity blob's own cache window. */
+/** Matches the token record blob's own cache window. */
 export const revalidate = 3600;
 
 /**
@@ -37,13 +36,11 @@ export default function Home() {
     <div className="[--separator-height:--spacing(8)] **:data-[slot=panel]:scroll-mt-[calc(var(--header-height)+var(--separator-height))]">
       <ProfileHeader />
 
-      {/* The reference bands the hero off from the panels, then runs identity —
-          overview, links, the contribution grid — as one uninterrupted block
-          before the next band. The bands group panels; they do not separate
-          every one of them. */}
+      {/* The reference bands the hero off from the panels before identity
+          opens. The bands group panels; they do not separate every one of
+          them. */}
       <PanelDivider />
       <Overview />
-      <ActivitySection />
 
       <PanelDivider />
       <ProjectsSection limit={HOME_PROJECT_LIMIT} />
