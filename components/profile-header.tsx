@@ -1,5 +1,9 @@
 import Image from "next/image";
 import { FlipSentences } from "@/components/flip-sentences";
+import {
+  HandwrittenArrow,
+  HandwrittenNote,
+} from "@/components/handwritten-note";
 import { HeroChart } from "@/components/hero-chart";
 import { PronounceName } from "@/components/pronounce-name";
 import { formatActivityDate } from "@/lib/activity-grid";
@@ -85,6 +89,16 @@ export async function ProfileHeader() {
 
   return (
     <div className="screen-line-bottom relative grid grid-cols-[auto_1fr] grid-rows-[1fr_auto] overflow-y-clip border-x border-line">
+      {/* The plate carries no axis title — the numbers up its left edge are
+          bare, which is right inside the frame and leaves the drawing unnamed.
+          The note says what is being counted, from the gutter, in the same
+          hand the "say hi" note is written in, and only where there is a
+          gutter to hold it. */}
+      <HandwrittenNote className="top-32 left-full ml-4 hidden w-28 flex-col items-start text-left pointer-fine:xl:flex">
+        <span className="translate-x-[14px] rotate-6">token usage</span>
+        <HandwrittenArrow className="mt-0.5 -translate-x-2 -translate-y-[9px] rotate-[136deg]" />
+      </HandwrittenNote>
+
       {/* Nothing bleeds out of here. The reference lets its hero texture run
           past the rail and off the screen; ours does not. A pattern outside
           the frame turns the top of the page into wallpaper, and the only
