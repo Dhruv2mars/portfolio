@@ -17,20 +17,26 @@ const TRACKING = 1;
 const SPRING = { stiffness: 150, damping: 25 } as const;
 
 /**
- * Five-row orthogonal glyphs. The cells are only a layout source. At render
- * time, adjacent cells share edges, so the SVG draws one clean outline instead
- * of a stack of rounded rectangles.
+ * Five-row orthogonal glyphs, cut lowercase. The cells are only a layout
+ * source. At render time, adjacent cells share edges, so the SVG draws one
+ * clean outline instead of a stack of rounded rectangles.
+ *
+ * Row one is the ascender line and rows two to five are the x-height, so `d`
+ * and `h` stand a row above everything else — which is the whole of what makes
+ * a word read as lowercase rather than as small capitals. The `2` is cut as an
+ * old-style figure, sitting on the x-height with the letters, because a lining
+ * figure in the middle of a lowercase word is a capital by another name.
  */
 const GLYPHS: Readonly<Record<string, readonly string[]>> = {
-  a: [".###.", "#...#", "#####", "#...#", "#...#"],
-  d: ["####.", "#...#", "#...#", "#...#", "####."],
-  h: ["#...#", "#...#", "#####", "#...#", "#...#"],
-  m: ["#...#", "##.##", "#.#.#", "#...#", "#...#"],
-  r: ["####.", "#...#", "####.", "#..#.", "#...#"],
-  s: [".####", "#....", ".###.", "....#", "####."],
-  u: ["#...#", "#...#", "#...#", "#...#", ".###."],
-  v: ["#...#", "#...#", "#...#", ".#.#.", "..#.."],
-  "2": [".###.", "#...#", "....#", "...#.", "#####"],
+  a: [".....", ".####", "#...#", "#...#", ".####"],
+  d: ["....#", ".####", "#...#", "#...#", ".####"],
+  h: ["#....", "#####", "#...#", "#...#", "#...#"],
+  m: [".....", "#####", "#.#.#", "#.#.#", "#.#.#"],
+  r: [".....", "#.###", "##...", "#....", "#...."],
+  s: [".....", ".####", "##...", "...##", "####."],
+  u: [".....", "#...#", "#...#", "#...#", ".####"],
+  v: [".....", "#...#", "#...#", ".#.#.", "..#.."],
+  "2": [".....", ".###.", "#...#", ".##..", "#####"],
 };
 
 type Cell = { x: number; y: number };
@@ -133,7 +139,11 @@ export function SiteWordmark({
         onMouseMove={handleMouseMove}
         onMouseLeave={() => ratio.set(0.5)}
       >
-        <div className="flex w-full translate-y-[37.5%] items-center justify-center">
+        {/* The mark half-bleeds off the bottom of the page. Lowercase sits a
+            row lower in the cell grid than the capitals did, so the bleed is
+            pulled back to a quarter — otherwise the x-height letters go under
+            the edge and only the two ascenders are left standing. */}
+        <div className="flex w-full translate-y-[25%] items-center justify-center">
           <svg
             aria-hidden
             className="mx-auto block h-auto w-full max-w-[1410px]"
