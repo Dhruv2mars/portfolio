@@ -77,6 +77,15 @@ plate either: the panels below rule the page edge to edge, and one run across he
 figure in half at the height of the monogram. The curve arrives as a left-to-right wipe because the
 record accumulates in that order.
 
+**The figure is a range at a distance, standing on a floor.** That is the target, and it decides the
+cosmetics. A crisp hairline reads as a drawn contour; a range seen across a valley is a silhouette
+whose top edge happens to be a line, so the stroke goes under a pixel, the wash under it carries the
+mass, and a half-pixel of blur takes the cusps off the peaks. The blur is the only honest way to
+soften them: `monotone` is what guarantees the curve never invents a peak, so the geometry is never
+touched and only its edge is hazed. The labels stand in the same air at a quarter of that. Under it
+all, a ground wash rises from the plate's bottom edge and thins out before the ridge meets it — the
+month row lands on that floor, which is the nearest thing in the picture.
+
 **The figure sits at a distance.** It is behind the name and behind the monogram, and it is drawn
 that way: the ink is mixed toward the background rather than faded with alpha, so contrast collapses
 toward the colour of the air the way distance actually works and the line walks toward near-black in

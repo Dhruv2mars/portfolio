@@ -186,6 +186,29 @@ export function HeroChart({
       // colour, so the fill follows the line rather than drifting off it.
       className={cn(
         "size-full text-[color-mix(in_oklab,var(--foreground)_52%,var(--background))]",
+        // The haze, and the reason the ridge stops reading as a drawn line.
+        //
+        // `monotone` clamps the derivative at every extremum, so each peak
+        // arrives as a cusp — a point rather than a ridge — and a crisp 1px
+        // contour reads as a contour. Neither is fixed by colour. The
+        // interpolation cannot change: it is what guarantees the curve never
+        // invents a peak (§3), so the geometry stays exactly what was measured
+        // and only its edge is softened. Half a pixel is enough — the cusps
+        // round off, the hairline stops being a hairline, and nothing moves.
+        "[&_.recharts-area]:blur-[0.5px]",
+        // The labels stand in the same air. A quarter of a pixel is under the
+        // threshold where 10px mono goes mushy but over the one where it reads
+        // as sitting on the glass in front of the drawing.
+        "[&_text]:blur-[0.25px]",
+        // The floor. One-point perspective needs a ground plane or the range
+        // is a shape on a field rather than a thing at a distance: the wash
+        // rises from the plate's bottom edge, thins out well before the ridge
+        // meets it, and never resolves into an edge of its own. It is painted
+        // on the plate rather than in the chart so the drawing stands on it,
+        // and the month row lands inside it — the labels are on the floor,
+        // which is the nearest thing in the picture and the only part of it
+        // the reader is standing on.
+        "bg-[linear-gradient(to_top,color-mix(in_oklab,var(--foreground)_6%,transparent),transparent_28%)]",
         className,
       )}
       // The record accumulates left to right, so it arrives that way. A wipe
@@ -228,9 +251,15 @@ export function HeroChart({
                   rather than as a filled shape with an edge of its own. Pulled
                   down with the line it hangs from: a shadow that held its
                   weight while the line receded would read as haze in front of
-                  the drawing instead of distance behind it. */}
-              <stop offset="0%" stopColor="currentColor" stopOpacity={0.14} />
-              <stop offset="45%" stopColor="currentColor" stopOpacity={0.05} />
+                  the drawing instead of distance behind it.
+
+                  Carrying more of it than a chart's area would, because the
+                  range is the mass and not the outline: a distant ridge is a
+                  silhouette whose top edge happens to be a line, and the wash
+                  thinning toward the floor is the air between it and the
+                  reader rather than a shape with a bottom. */}
+              <stop offset="0%" stopColor="currentColor" stopOpacity={0.2} />
+              <stop offset="55%" stopColor="currentColor" stopOpacity={0.07} />
               <stop offset="100%" stopColor="currentColor" stopOpacity={0} />
             </linearGradient>
           </defs>
@@ -261,9 +290,11 @@ export function HeroChart({
             type="monotone"
             dataKey="value"
             stroke="currentColor"
-            // Distance thins a mark before it dims it, so the hairline drops
-            // with the ink rather than staying a heavy line in a pale colour.
-            strokeWidth={1}
+            // Under a pixel, so the ridgeline is the top edge of the mass
+            // rather than a rule drawn along it. Taken to zero the silhouette
+            // loses its crest and the peaks go soft in the wrong way — the
+            // range needs an edge, just not a stroke.
+            strokeWidth={0.75}
             strokeLinecap="round"
             strokeLinejoin="round"
             fill={`url(#${gradientId})`}
