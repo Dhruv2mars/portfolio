@@ -9,11 +9,12 @@ import {
 /**
  * The masthead curve: this calendar year, January 1 to today, one line.
  *
- * The grid below it answers "did anything happen on this day". This answers
- * "how much, and which way is it going" — the same measurements, read as a
- * shape instead of as 365 squares. Nothing here is invented: the smoothing is
- * mass-conserving and monotone, so the curve cannot show a peak that was not
- * worked or dip below a day that was zero.
+ * A grid of 365 squares answers "did anything happen on this day", and for
+ * this record the answer is nearly always yes. This answers "how much, and
+ * which way is it going" — the same measurements, read as a shape. Nothing
+ * here is invented: the smoothing is mass-conserving and monotone, so the
+ * curve cannot show a peak that was not worked or dip below a day that was
+ * zero.
  */
 
 /**

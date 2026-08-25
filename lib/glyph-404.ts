@@ -1,9 +1,8 @@
 /**
- * Numerals drawn as bitmaps, in the same square the activity grid spends a day
- * on. Ten by fourteen with two-cell strokes is the smallest that still reads
- * as type rather than as scatter once the cells are small enough to look like
- * the grid they borrow from. Only the digits `404` needs exist here; anything
- * else is a typo, not a feature.
+ * Numerals drawn as bitmaps on a square cell, the same way the wordmark cuts
+ * its letters. Ten by fourteen with two-cell strokes is the smallest that
+ * still reads as type rather than as scatter at this cell size. Only the
+ * digits `404` needs exist here; anything else is a typo, not a feature.
  */
 const DIGITS: Record<string, readonly string[]> = {
   "0": [

@@ -26,5 +26,7 @@ not to differ from it for its own sake.
 - Three things survive the rebuild for reasons unrelated to design and must not be re-derived:
   the `/writings → /blog` 301, the feed/sitemap/robots routes, and the `rehype-sanitize` MDX
   hardening from the earlier security work.
-- The AI Activity heatmap is kept and redesigned. It occupies the slot the reference gives its GitHub
-  contribution graph, and is the one dense dataset this site has that the reference does not.
+- ~~The AI Activity heatmap is kept and redesigned. It occupies the slot the reference gives its
+  GitHub contribution graph, and is the one dense dataset this site has that the reference does
+  not.~~ **Superseded by ADR-0007**: the grid is removed and the same read model is drawn as the
+  hero figure. The dataset stays; the shape does not.
