@@ -17,7 +17,6 @@ export const site = {
     "agentic engineer",
     "prototyper",
     "tooling for coding agents",
-    "local-first by default",
   ] as const,
   /**
    * How the name sounds. `audio` is the answer — a recording of the name being
