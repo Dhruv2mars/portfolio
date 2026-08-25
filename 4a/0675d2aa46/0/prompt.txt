@@ -1,0 +1,13 @@
+great, now our hero (the whole graph and stuff), make its opacity/fade such that it feels as if its far away, in distance.
+
+---
+
+the line of the graph feels too sharp, it should be smooth. is it the color or the style of it thats making it that way? just talking about the cosmetic changes here, nothing else. i want the feel that this graph is the mountain ranges in the far distance. thats the feel i am trying to target. see if u can achieve it. and the texts (numbers, months) also get the same treatment, so they are also part of this, where as an whole it should feel like the mountains far away, then there is the floor, like the 1 point perspective. u get what i mean right?
+
+---
+
+remove the token activity section along with that arrow keys walk....
+
+---
+
+remove the token activity section along with that arrow keys walk....
