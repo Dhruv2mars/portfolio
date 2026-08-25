@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "@/components/icons";
+import { glossaryComponents } from "@/components/glossary";
 import { CustomMDX } from "@/components/mdx";
 import {
   Panel,
@@ -12,13 +13,12 @@ import {
 } from "@/components/panel";
 import { PostActions } from "@/components/post-actions";
 import { PostNeighbours } from "@/components/post-neighbours";
-import { TocInline } from "@/components/toc-inline";
 import { getPostBySlug, getPublishedPosts } from "@/lib/blog";
+import { splitGlossary } from "@/lib/glossary";
 import { findNeighbours, formatPostDate, postMarkdown } from "@/lib/posts";
 import { ogImagePath } from "@/lib/discovery";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { site } from "@/lib/site";
-import { tableOfContents } from "@/lib/toc";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -63,6 +63,11 @@ export default async function PostPage({ params }: PageProps) {
   if (!post) notFound();
 
   const url = `${site.url}/blog/${post.slug}`;
+
+  // The definitions come out of the body and go back beside the terms they
+  // define. `postMarkdown` is handed the source, not this, so what a model
+  // gets is still the whole post.
+  const { body, terms } = splitGlossary(post.content);
 
   // The index is newest-first, so the neighbours come from the same order the
   // Visitor saw on the way in.
@@ -131,11 +136,16 @@ export default async function PostPage({ params }: PageProps) {
       </div>
 
       <Panel>
+        {/* The one title on the site closed by a hairline on both sides, so
+            it is the one that has to be given a band to sit in rather than
+            being set flush against the rule above it. */}
         <PanelHeader>
-          <PanelTitle as="h1">{post.title}</PanelTitle>
-          <PanelDescription>
-            <p className="text-balance">{post.summary}</p>
-            <p className="typeset-timescale mt-2 flex flex-wrap items-center gap-x-2 font-mono tabular-nums">
+          <PanelTitle as="h1" className="py-6">
+            {post.title}
+          </PanelTitle>
+          <PanelDescription className="py-5">
+            <p className="typeset-description text-balance">{post.summary}</p>
+            <p className="typeset-timescale mt-3 flex flex-wrap items-center gap-x-2 font-mono tabular-nums">
               <time dateTime={post.publishedAt}>
                 {formatPostDate(post.publishedAt)}
               </time>
@@ -145,10 +155,8 @@ export default async function PostPage({ params }: PageProps) {
           </PanelDescription>
         </PanelHeader>
 
-        <TocInline entries={tableOfContents(post.content)} />
-
-        <PanelContent className="typeset prose">
-          <CustomMDX source={post.content} />
+        <PanelContent className="typeset prose py-8">
+          <CustomMDX source={body} components={glossaryComponents(terms)} />
         </PanelContent>
       </Panel>
 

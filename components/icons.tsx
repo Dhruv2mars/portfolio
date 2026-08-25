@@ -183,6 +183,19 @@ export function CloseIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** The mark beside a term the post defines. Drawn, not the ⓘ glyph, so it
+ *  sits on the same 16px grid as every other icon rather than on the serif's
+ *  idea of a circled letter. */
+export function InfoIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <circle cx="8" cy="8" r="6.25" />
+      <path d="M8 7.25v4" />
+      <path d="M8 4.75h.01" />
+    </Icon>
+  );
+}
+
 export function CopyIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <Icon {...props}>

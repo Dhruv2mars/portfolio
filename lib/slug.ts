@@ -1,9 +1,9 @@
 /**
- * The id a heading gets, and the anchor a table of contents points at.
+ * The id a heading gets, and the anchor a glossary mark points at.
  *
- * One function, imported by both the MDX renderer and the contents list, so
- * the two cannot drift — a TOC whose links 404 into the middle of the page is
- * worse than no TOC.
+ * One function, imported by both the MDX renderer and the glossary split, so
+ * the two cannot drift — a mark that resolves to nothing is a definition the
+ * author wrote and the page silently dropped.
  */
 export function slugify(str: unknown): string {
   return String(str)

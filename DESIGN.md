@@ -143,9 +143,14 @@ Post as Markdown, hand it to a model, share it, and step to the Post either side
 bail on modifier keys and on any field that has focus). The arrows are labelled **Newer** and
 **Older**, never Previous/Next — in a reverse-chronological list those words are a coin toss.
 
-The contents list sits at the front of the Post rather than floating in the margin: this frame is
-one railed column and has no margin. It is drawn only when there are at least two headings, and it
-does not track the reading position — it is an index, not chrome.
+There is no contents list. A Post is one railed column with no margin to float an index in, and an
+index set at the front is a screenful the Visitor has to scroll past to reach the first sentence.
+
+A word the Post defines is defined where it is first used. The source keeps its `## Definitions`
+section — that is what `raw.md` serves and what a model reading the Post gets — but the page lifts
+it out and puts each definition behind an info mark beside its term. The definition is in the
+document either way: closed, it is the mark's own description, so it is read aloud on focus rather
+than being a section at the end nobody reaches.
 
 ## 5. Type, colour, motion
 
@@ -183,7 +188,8 @@ menu. No perpetual animation. No page-level fade on route change. No dashboard g
 8. Lighthouse: performance ≥95, accessibility 100, best practices 100, SEO 100. CLS = 0.
 9. `/writings` still permanent-redirects to `/blog` (Next emits 308, which
     preserves the method); `/feed.xml` still validates.
-10. Every link in a Post's contents list resolves to a heading id that the MDX
-    renderer actually emitted — one `slugify`, in `lib/slug.ts`, imported by
-    both.
+10. Every term in a Post's `## Definitions` section is marked at its first use
+    in the body, and every mark resolves to a term — one `slugify`, in
+    `lib/slug.ts`, on both sides. The build fails otherwise, so a definition
+    can never be written and then dropped.
 11. `/blog/[slug]/raw.md` serves `text/markdown` and contains no frontmatter.

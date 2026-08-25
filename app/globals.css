@@ -565,10 +565,13 @@
 --------------------------------------------------------------------------- */
 
 .prose {
-  /* One step up from the interface size. The serif runs to ~76 characters at
-     16px in this frame, which is past the line a reader can return from
-     without losing their place; the extra pixel pulls it back to ~72. */
-  --typeset-size: 1.0625rem;
+  /* Set to the frame rather than to a nominal step: the rail is 734px of text
+     and the serif ran ~86 characters across it at 17px, well past the line a
+     reader can return from without losing their place. 19px brings it back to
+     ~75, which is why the body of a post is the largest type on the site. */
+  --typeset-size: 1.1875rem;
+  --typeset-leading: 1.7;
+  --typeset-flow: 1.15em;
   font-family: var(--font-serif);
   color: var(--foreground);
 }
@@ -667,30 +670,92 @@
   position: absolute;
 }
 
-/* Reference marks (ⓘ) sit quiet beside the term they gloss; the definition
-   they jump to lights up once so you land on the right line. */
-.prose a[href^="#"]:not(.anchor) {
-  color: var(--muted-foreground);
-  text-decoration: none;
-  font-size: 0.8em;
-  vertical-align: 0.35em;
-  margin-left: 0.1em;
-  transition: color 150ms ease;
+/* ---------------------------------------------------------------------------
+   Glossary marks. The definition stands beside the term the post first uses
+   it on, not in a section at the end — a reader who has to leave the sentence
+   to find out what a word means has already lost the sentence.
+--------------------------------------------------------------------------- */
+
+.glossary {
+  position: relative;
+  display: inline-block;
+  /* The mark and its panel are one thing; a line break between them would put
+     the panel under a word the mark is not next to. */
+  white-space: nowrap;
 }
-.prose a[href^="#"]:not(.anchor):hover {
+
+.prose .glossary-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.95em;
+  height: 0.95em;
+  margin-left: 0.15em;
+  vertical-align: 0.12em;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: color 150ms var(--ease-out-quint);
+}
+.prose .glossary-mark svg {
+  width: 100%;
+  height: 100%;
+}
+.prose .glossary-mark:hover,
+.prose .glossary-mark[aria-expanded="true"] {
   color: var(--foreground);
 }
-@keyframes prose-target {
+
+.glossary-panel {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 50%;
+  z-index: 40;
+  translate: -50% 0;
+  display: block;
+  width: max-content;
+  max-width: min(22rem, calc(100vw - 2rem));
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  /* The same lift the Menu popover is given, written out because this one is
+     styled in CSS rather than in classes. */
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  white-space: normal;
+  text-wrap: pretty;
+  animation: glossary-in 140ms var(--ease-out-quint) both;
+}
+
+.glossary-term {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  /* Set in the micro-label's mono, but not uppercased: the term is the
+     author's word, and the author writes in lowercase. */
+  color: var(--muted-foreground);
+}
+
+.glossary-definition {
+  display: block;
+}
+
+@keyframes glossary-in {
   from {
-    background-color: var(--accent-muted);
+    opacity: 0;
+    transform: translateY(-2px);
   }
   to {
-    background-color: transparent;
+    opacity: 1;
+    transform: none;
   }
-}
-.prose h2:target,
-.prose h3:target {
-  animation: prose-target 1.2s ease-out;
 }
 
 /* sugar-high — four roles, no rainbow */

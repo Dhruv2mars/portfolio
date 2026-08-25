@@ -7,7 +7,7 @@ import React from "react";
 import { isSafeHref } from "@/lib/mdx-links";
 import { slugify } from "@/lib/slug";
 
-function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+export function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   const href = props.href ?? "";
 
   if (!isSafeHref(href)) {
