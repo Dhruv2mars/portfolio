@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "e5cff18f1897",
+  "strategy": "manual-commit",
+  "branch": "feat/dai-idiom-rebuild",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "DESIGN.md",
+    "components/hero-chart.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/e5/cff18f1897/0/metadata.json",
+      "transcript": "/e5/cff18f1897/0/full.jsonl",
+      "compact_transcript": "/e5/cff18f1897/0/transcript.jsonl",
+      "content_hash": "/e5/cff18f1897/0/content_hash.txt",
+      "prompt": "/e5/cff18f1897/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 604,
+    "cache_creation_tokens": 1070091,
+    "cache_read_tokens": 24969099,
+    "output_tokens": 216991,
+    "api_call_count": 306
+  }
+}
