@@ -1,0 +1,51 @@
+great, now our hero (the whole graph and stuff), make its opacity/fade such that it feels as if its far away, in distance.
+
+---
+
+the line of the graph feels too sharp, it should be smooth. is it the color or the style of it thats making it that way? just talking about the cosmetic changes here, nothing else. i want the feel that this graph is the mountain ranges in the far distance. thats the feel i am trying to target. see if u can achieve it. and the texts (numbers, months) also get the same treatment, so they are also part of this, where as an whole it should feel like the mountains far away, then there is the floor, like the 1 point perspective. u get what i mean right?
+
+---
+
+remove the token activity section along with that arrow keys walk....
+
+---
+
+remove the token activity section along with that arrow keys walk....
+
+---
+
+on the blog page, there is no need for on this page. and that definations are not part of the blog content, its basically should be there as a popup of info icon which should be next to those terms where they have been mentioned first time. also look at the whole gpt 5.6 blog, the complete page, it looks so out of place, like the structure and layout and formatting of it isnt looking right. the spacing, etc are bad. fix them. dont change anything from the content, just the way it is presented.
+
+---
+
+on the blog page, there is no need for on this page. and that definations are not part of the blog content, its basically should be there as a popup of info icon which should be next to those terms where they have been mentioned first time. also look at the whole gpt 5.6 blog, the complete page, it looks so out of place, like the structure and layout and formatting of it isnt looking right. the spacing, etc are bad. fix them. dont change anything from the content, just the way it is presented.
+
+---
+
+in the animation text, remove the local first line. keep the rest. 
+
+and in the blog, keep all text (content part), lowercase. thats my style of writing. 
+
+for the hero section, add a "say hi" like arrow-ed text on the right of the hero, saying token usage, and the arrow pointing towards the left at the graph. 
+
+change the dhruv2mars footer graphics text, from uppercase right now, to full lowercase
+
+---
+
+in the animation text, remove the local first line. keep the rest. 
+
+and in the blog, keep all text (content part), lowercase. thats my style of writing. 
+
+for the hero section, add a "say hi" like arrow-ed text on the right of the hero, saying token usage, and the arrow pointing towards the left at the graph. 
+
+change the dhruv2mars footer graphics text, from uppercase right now, to full lowercase
+
+---
+
+in the animation text, remove the local first line. keep the rest. 
+
+and in the blog, keep all text (content part), lowercase. thats my style of writing. 
+
+for the hero section, add a "say hi" like arrow-ed text on the right of the hero, saying token usage, and the arrow pointing towards the left at the graph. 
+
+change the dhruv2mars footer graphics text, from uppercase right now, to full lowercase
