@@ -12,9 +12,10 @@ export type AiActivitySource = "tokscale" | "blob" | "fallback";
  *
  * Inside this window an absent day is a measured zero, not a hole: the meter
  * reads every local session on the machine, so a day it never mentions is a
- * day nothing ran. The one genuinely unknown day is today, which the nightly
- * sync has not reached yet — and today's zero is drawn as a zero, which is
- * what it is.
+ * day nothing ran. That holds only up to the end of the record — past it, an
+ * absent day is unknown rather than quiet, and filling it with zero would be
+ * an invented number. Callers pick `end`; the hero passes the last measured
+ * day (`lastMeasuredDate` in `lib/hero-series.ts`) rather than today.
  */
 export function buildDailySeries(
   days: readonly DailyTokens[],

@@ -110,16 +110,48 @@ describe("buildHeroSeries", () => {
     at("2026-08-21"),
   );
 
-  test("opens on January 1 and closes on today", () => {
+  test("opens on January 1 and closes on the last measured day", () => {
     expect(series.from).toBe("2026-01-01");
-    expect(series.to).toBe("2026-08-21");
+    // Today is the 21st, but the record stops on the 20th. Drawing the 21st
+    // as a zero would be a number nobody measured.
+    expect(series.to).toBe("2026-08-20");
     expect(series.points[0]!.date).toBe("2026-01-01");
-    expect(series.points.at(-1)!.date).toBe("2026-08-21");
+    expect(series.points.at(-1)!.date).toBe("2026-08-20");
   });
 
   test("every calendar day in the window has a point", () => {
-    expect(series.points.length).toBe(233);
-    expect(series.xDomain).toEqual([0, 232]);
+    expect(series.points.length).toBe(232);
+    expect(series.xDomain).toEqual([0, 231]);
+  });
+
+  test("a stale payload is not drawn as a run of zero days", () => {
+    // A fixture checked in a week ago has no opinion about the last week.
+    const stale = buildHeroSeries(
+      payload([
+        { date: "2026-02-01", tokens: 100_000_000 },
+        { date: "2026-02-10", tokens: 200_000_000 },
+      ]),
+      at("2026-03-01"),
+    );
+    expect(stale.to).toBe("2026-02-10");
+    expect(stale.points.at(-1)!.raw).toBe(200_000_000);
+    // The tail is the record's own tail, not a smoothed slide into a zero
+    // fortnight that the meter never reported.
+    expect(stale.points.at(-1)!.value).toBeGreaterThan(0);
+  });
+
+  test("a measured zero inside the record is still drawn", () => {
+    // Days the meter reported as zero are inside the record and stay in the
+    // window; only days past its end are cropped.
+    const quiet = buildHeroSeries(
+      payload([
+        { date: "2026-01-05", tokens: 50_000_000 },
+        { date: "2026-01-20", tokens: 0 },
+      ]),
+      at("2026-01-31"),
+    );
+    expect(quiet.to).toBe("2026-01-20");
+    expect(quiet.points).toHaveLength(20);
   });
 
   test("days outside this year are not counted", () => {
@@ -171,12 +203,15 @@ describe("buildHeroSeries", () => {
     expect(series.smoothingDays).toBe(HERO_SMOOTHING_DAYS);
   });
 
-  test("a year with no record still draws a frame", () => {
+  test("a year with no record draws a frame, not a flat year of zeros", () => {
     const empty = buildHeroSeries(
       payload([{ date: "2025-06-01", tokens: 10 }]),
       at("2026-01-10"),
     );
-    expect(empty.points.length).toBe(10);
+    // Nothing has been measured this year, so the window is the one day it
+    // opens on rather than ten days of invented zeros.
+    expect(empty.to).toBe("2026-01-01");
+    expect(empty.points.length).toBe(1);
     expect(empty.total).toBe(0);
     expect(empty.ticks).toEqual([]);
     expect(empty.yDomain[1]).toBeGreaterThan(0);

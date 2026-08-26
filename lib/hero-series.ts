@@ -1,4 +1,4 @@
-import { monthAbbreviation } from "@/lib/activity-grid";
+import { monthAbbreviation } from "@/lib/figure";
 import { buildDailySeries, type DailyTokens } from "@/lib/ai-activity";
 import {
   type AiActivityPayload,
@@ -12,9 +12,9 @@ import {
  * A grid of 365 squares answers "did anything happen on this day", and for
  * this record the answer is nearly always yes. This answers "how much, and
  * which way is it going" — the same measurements, read as a shape. Nothing
- * here is invented: the smoothing is mass-conserving and monotone, so the
- * curve cannot show a peak that was not worked or dip below a day that was
- * zero.
+ * here is invented: the window stops at the last day the payload measured, and
+ * the smoothing is mass-conserving and monotone, so the curve cannot show a
+ * peak that was not worked or dip below a day that was zero.
  */
 
 /**
@@ -180,11 +180,35 @@ export function monthTicks(points: readonly HeroPoint[]): HeroMonthTick[] {
 }
 
 /**
+ * The last day the payload actually measured, clamped into the window.
+ *
+ * `buildDailySeries` fills an absent day with zero, which is right for a day
+ * inside the record — a day with no tokens is a day that was measured and was
+ * quiet. It is wrong for a day past the end of the record: a fixture checked
+ * in a week ago has no opinion about the last seven days, and drawing them as
+ * zero invents a collapse that never happened, then drags the real tail down
+ * with it through the smoothing window. So the right edge is the record's, not
+ * the calendar's. `to` travels with the series and is what the figure's
+ * description reads aloud, so the words and the drawing stop on the same day.
+ */
+function lastMeasuredDate(
+  days: AiActivityPayload["days"],
+  from: string,
+  today: string,
+): string {
+  let last = from;
+  for (const day of days) {
+    if (day.date > last && day.date <= today) last = day.date;
+  }
+  return last;
+}
+
+/**
  * Build the year-to-date curve from a published payload.
  *
- * The window is fixed by the calendar, not by the record: it opens on January 1
- * whether or not anything ran that week, so the figure is the same shape
- * tomorrow as it is today and one quiet fortnight cannot crop it.
+ * The window opens on January 1 whether or not anything ran that week, so one
+ * quiet fortnight cannot crop the figure. It closes on the last measured day
+ * rather than on today, because past that point there is no record to draw.
  */
 export function buildHeroSeries(
   payload: AiActivityPayload,
@@ -195,7 +219,9 @@ export function buildHeroSeries(
   const year = Number(today.slice(0, 4));
   const from = `${today.slice(0, 4)}-01-01`;
 
-  const daily: DailyTokens[] = buildDailySeries(payload.days, from, today);
+  const to = lastMeasuredDate(payload.days, from, today);
+
+  const daily: DailyTokens[] = buildDailySeries(payload.days, from, to);
   const smoothed = smoothTriangular(
     daily.map((day) => day.tokens),
     HERO_SMOOTHING_DAYS,
@@ -223,7 +249,7 @@ export function buildHeroSeries(
     yDomain: [0, max],
     year,
     from,
-    to: today,
+    to,
     total: daily.reduce((sum, day) => sum + day.tokens, 0),
     peak: { date: peak.date, tokens: peak.tokens },
     smoothingDays: HERO_SMOOTHING_DAYS,
