@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "df858e52fffc",
+  "strategy": "manual-commit",
+  "branch": "chore/truth-pass",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "lib/ai-activity.ts",
+    "lib/hero-series.test.ts",
+    "lib/hero-series.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/df/858e52fffc/0/metadata.json",
+      "transcript": "/df/858e52fffc/0/full.jsonl",
+      "compact_transcript": "/df/858e52fffc/0/transcript.jsonl",
+      "content_hash": "/df/858e52fffc/0/content_hash.txt",
+      "prompt": "/df/858e52fffc/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 282,
+    "cache_creation_tokens": 371900,
+    "cache_read_tokens": 10717768,
+    "output_tokens": 76177,
+    "api_call_count": 145
+  }
+}
