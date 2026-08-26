@@ -1,0 +1,53 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "34a11ccd88ec",
+  "session_id": "ses_fc482fa8bffe1JwWS4MJBIceFE",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-26T16:17:32.115985Z",
+  "branch": "fix/restore-and-dither-signature",
+  "checkpoints_count": 3,
+  "save_step_count": 1,
+  "files_touched": [
+    "CONTEXT.md",
+    "DESIGN.md",
+    "components/profile-header.tsx",
+    "lib/projects.test.ts",
+    "lib/projects.ts",
+    "public/projects/block.svg"
+  ],
+  "agent": "OpenCode",
+  "model": "x-preview-f-free",
+  "turn_id": "68a5c87a3230",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 75822,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 361856,
+    "output_tokens": 1311,
+    "api_call_count": 19
+  },
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-26T16:17:32.101979Z",
+    "agent_lines": 65,
+    "agent_removed": 58,
+    "human_added": 0,
+    "human_modified": 1,
+    "human_removed": 0,
+    "total_committed": 66,
+    "total_lines_changed": 124,
+    "agent_percentage": 99.19354838709677,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    }
+  ]
+}
