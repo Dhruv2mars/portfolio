@@ -1,0 +1,21 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "bfbac1467288",
+  "strategy": "manual-commit",
+  "branch": "fix/restore-and-dither-signature",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "tools/dither.js",
+    "tools/gen-dots.mjs",
+    "tools/wordmark-studio.html"
+  ],
+  "sessions": [
+    {
+      "metadata": "/bf/bac1467288/0/metadata.json",
+      "transcript": "/bf/bac1467288/0/full.jsonl",
+      "compact_transcript": "/bf/bac1467288/0/transcript.jsonl",
+      "content_hash": "/bf/bac1467288/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
