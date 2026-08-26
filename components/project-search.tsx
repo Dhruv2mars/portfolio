@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { PanelHeader, PanelTitle, PanelTitleSup } from "@/components/panel";
 import { ProjectRow } from "@/components/project-row";
 import { SearchField, SearchStatus } from "@/components/search-field";
 import { useMirroredQuery } from "@/components/use-mirrored-query";
@@ -14,6 +15,13 @@ import { searchProjects, type Project } from "@/lib/projects";
  * because the thing a Visitor actually arrives wanting is usually a language
  * or a kind ("rust", "cli"), which is a word to type rather than a row to find
  * by eye.
+ *
+ * The `h1` is here rather than on the page because the count riding on it
+ * counts the rows underneath it, and filtering is what changes that number. A
+ * heading reading "Projects 8" above two visible rows is the page contradicting
+ * itself in the one place a Visitor looks to find out how much there is.
+ * `initialQuery` is read on the server, so the first paint already carries the
+ * filtered count — the number never starts wrong and then corrects itself.
  */
 export function ProjectSearch({
   projects,
@@ -30,6 +38,13 @@ export function ProjectSearch({
 
   return (
     <>
+      <PanelHeader>
+        <PanelTitle as="h1">
+          Projects
+          <PanelTitleSup className="tabular-nums">{shown.length}</PanelTitleSup>
+        </PanelTitle>
+      </PanelHeader>
+
       <SearchField
         value={query}
         onChange={updateQuery}

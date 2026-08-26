@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Panel, PanelHeader, PanelTitle, PanelTitleSup } from "@/components/panel";
+import { Panel } from "@/components/panel";
 import { ProjectSearch } from "@/components/project-search";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { getProjects } from "@/lib/projects";
@@ -54,16 +54,10 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
 
+      {/* The heading lives inside `ProjectSearch` because the number beside it
+          counts the rows below it, and only the filter knows how many those
+          are. See the note there. */}
       <Panel id="projects">
-        <PanelHeader>
-          <PanelTitle as="h1">
-            Projects
-            <PanelTitleSup className="tabular-nums">
-              {projects.length}
-            </PanelTitleSup>
-          </PanelTitle>
-        </PanelHeader>
-
         <ProjectSearch projects={projects} initialQuery={initialQuery} />
       </Panel>
     </div>

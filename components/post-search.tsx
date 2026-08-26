@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { PanelHeader, PanelTitle, PanelTitleSup } from "@/components/panel";
 import { PostItem } from "@/components/post-item";
 import { SearchField, SearchStatus } from "@/components/search-field";
 import { useMirroredQuery } from "@/components/use-mirrored-query";
@@ -11,6 +12,10 @@ import { searchPosts, type PostSummary } from "@/lib/posts";
  *
  * The list is not virtualised and does not need to be: it is filtering an
  * array that was already sent, in memory, with no request behind it.
+ *
+ * The `h1` is here for the same reason it is in `ProjectSearch`: the count
+ * beside it describes the rows below it, so the thing that filters them is the
+ * thing that has to render it.
  */
 export function PostSearch({
   posts,
@@ -24,6 +29,13 @@ export function PostSearch({
 
   return (
     <>
+      <PanelHeader>
+        <PanelTitle as="h1">
+          Blog
+          <PanelTitleSup className="tabular-nums">{shown.length}</PanelTitleSup>
+        </PanelTitle>
+      </PanelHeader>
+
       <SearchField
         value={query}
         onChange={updateQuery}
