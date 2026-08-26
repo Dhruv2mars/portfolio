@@ -1,0 +1,19 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "f8589076c260",
+  "strategy": "manual-commit",
+  "branch": "fix/site-bugs",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "components/panel.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/f8/589076c260/0/metadata.json",
+      "transcript": "/f8/589076c260/0/full.jsonl",
+      "compact_transcript": "/f8/589076c260/0/transcript.jsonl",
+      "content_hash": "/f8/589076c260/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
