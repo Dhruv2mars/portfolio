@@ -47,20 +47,20 @@ describe("searchPosts", () => {
     ]);
   });
 
-  test("matches the summary, not just the title", () => {
-    expect(searchPosts(POSTS, "billion").map((p) => p.slug)).toEqual([
-      "gpt-5-6-review",
-    ]);
+  test("does not match the summary, which the row stopped drawing", () => {
+    // The word is in the summary and nowhere a Visitor can see it, so a row
+    // returned for it would show nothing of why it matched.
+    expect(searchPosts(POSTS, "billion")).toEqual([]);
   });
 
-  test("matches a tag, which is the word a reader is most likely to type", () => {
-    expect(searchPosts(POSTS, "tooling").map((p) => p.slug)).toEqual([
-      "repro-harness",
-    ]);
+  test("does not match a tag, because a row never draws one", () => {
+    // A hit whose row shows nothing of why it matched reads as a bug. Tags
+    // go out as structured-data keywords instead.
+    expect(searchPosts(POSTS, "tooling")).toEqual([]);
   });
 
   test("ignores spaces on both sides, so a fast typist still lands", () => {
-    expect(searchPosts(POSTS, "codingagents").map((p) => p.slug)).toEqual([
+    expect(searchPosts(POSTS, "reproharness").map((p) => p.slug)).toEqual([
       "repro-harness",
     ]);
     expect(searchPosts(POSTS, "  repro harness ").map((p) => p.slug)).toEqual([

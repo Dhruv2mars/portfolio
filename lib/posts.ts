@@ -13,7 +13,15 @@ import { filterByQuery } from "@/lib/search";
 export type PostFrontmatter = {
   title: string;
   publishedAt: string;
+  /**
+   * When the Post was last materially changed, if it ever was. Absent means
+   * it still says what it said on the day it went up — which is the honest
+   * default, and why `dateModified` falls back to `publishedAt` rather than
+   * to the file's mtime, a number that moves when a typo is fixed.
+   */
+  updatedAt?: string;
   summary: string;
+  /** Subject terms. Not drawn and not searched — see `searchPosts`. */
   tags?: string[];
   draft?: boolean;
   image?: string;
@@ -41,18 +49,21 @@ export function formatPostDate(date: string): string {
 }
 
 /**
- * Title, summary and tags. Not the body — a filter that matched body text
- * would return a Post whose row shows nothing of why it matched, which reads
- * as a bug even when it is a hit.
+ * The title — the only prose a row draws.
+ *
+ * A filter that matched text the row never shows returns a Post with nothing
+ * on it to say why it matched, which reads as a bug even when it is a hit.
+ * That rules out the body, the tags, and — since the row stopped drawing it —
+ * the summary. Both still leave the building: the summary as the Post's
+ * description in metadata, feeds and social cards, the tags as `keywords` in
+ * its structured data, where a machine reads them and a Visitor is never
+ * puzzled by them.
  */
-export function searchPosts<
-  T extends Pick<PostSummary, "title" | "summary" | "tags">,
->(posts: readonly T[], query: string): T[] {
-  return filterByQuery(posts, query, (post) => [
-    post.title,
-    post.summary,
-    ...(post.tags ?? []),
-  ]);
+export function searchPosts<T extends Pick<PostSummary, "title">>(
+  posts: readonly T[],
+  query: string,
+): T[] {
+  return filterByQuery(posts, query, (post) => [post.title]);
 }
 
 export function findNeighbours<T extends { slug: string }>(

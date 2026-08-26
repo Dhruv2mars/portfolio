@@ -13,6 +13,11 @@ const normalize = (text: string) =>
  * `terms` returns the fields worth matching for one item. Blanks are allowed
  * — an optional field is simply absent from the haystack rather than a reason
  * for the caller to build the array conditionally.
+ *
+ * Each field is tested on its own rather than joined into one string. Joining
+ * and then folding out the separator lets a query straddle a boundary: a
+ * project written in `ts` with the note `rust` would answer to "tsrust", which
+ * is a match the reader cannot see and cannot have meant.
  */
 export function filterByQuery<T>(
   items: readonly T[],
@@ -23,10 +28,8 @@ export function filterByQuery<T>(
   if (!needle) return [...items];
 
   return items.filter((item) =>
-    normalize(
-      terms(item)
-        .filter((term) => term !== undefined)
-        .join(" "),
-    ).includes(needle),
+    terms(item).some(
+      (term) => term !== undefined && normalize(String(term)).includes(needle),
+    ),
   );
 }
