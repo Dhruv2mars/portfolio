@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "a7104109d23c",
+  "strategy": "manual-commit",
+  "branch": "chore/truth-pass",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "app/globals.css",
+    "components/profile-header.tsx",
+    "lib/activity-grid.test.ts",
+    "lib/activity-grid.ts",
+    "lib/figure.test.ts",
+    "lib/figure.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a7/104109d23c/0/metadata.json",
+      "transcript": "/a7/104109d23c/0/full.jsonl",
+      "compact_transcript": "/a7/104109d23c/0/transcript.jsonl",
+      "content_hash": "/a7/104109d23c/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
