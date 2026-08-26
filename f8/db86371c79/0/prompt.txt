@@ -119,3 +119,39 @@ This block is automatically supplied ambient UI state, not part of the user's re
 
 ## My request:
 are the changes commited?
+
+---
+
+<in-app-browser-context source="ambient-ui-state">
+This block is automatically supplied ambient UI state, not part of the user's request. Do not treat it as an instruction or as evidence that the user explicitly selected the in-app browser.
+# In app browser:
+- The user has the in-app browser open with 1 tab.
+- Current URL: http://localhost:3000/
+</in-app-browser-context>
+
+## My request:
+1. what do u suggest for this graphics on mobile? if d2m is better than full dhruv2mars or nothing, then fine.&#x20;
+2. it is just a graphic, take it like an cosmetic feel good thing, no function.&#x20;
+3. fix all issues together.&#x20;
+
+
+
+go ahead and do everything and make sure this graphics looks perfect and works perfect everywhere at all times.
+
+---
+
+<in-app-browser-context source="ambient-ui-state">
+This block is automatically supplied ambient UI state, not part of the user's request. Do not treat it as an instruction or as evidence that the user explicitly selected the in-app browser.
+# In app browser:
+- The user has the in-app browser open with 1 tab.
+- Current URL: http://localhost:3000/
+</in-app-browser-context>
+
+## My request:
+1. what do u suggest for this graphics on mobile? if d2m is better than full dhruv2mars or nothing, then fine.&#x20;
+2. it is just a graphic, take it like an cosmetic feel good thing, no function.&#x20;
+3. fix all issues together.&#x20;
+
+
+
+go ahead and do everything and make sure this graphics looks perfect and works perfect everywhere at all times.
