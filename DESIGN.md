@@ -40,7 +40,8 @@ Motion does springs, `next-themes` does the no-flash theme boot. A dropdown does
 /blog/[slug]         Post
 /blog/[slug]/raw.md  the Post as source, for a reader or a model
 /feed.xml            RSS                    ← survives from the old build
-/writings            301 → /blog            ← survives from the old build
+/writings            308 → /blog            ← survives from the old build
+/writings/:slug      308 → /blog/:slug       ← survives from the old build
 /og                  dynamic OG images
 /sitemap.xml /robots.txt
 404
@@ -62,8 +63,11 @@ changed what a reader does next.
 
 **The plate carries the record, not an ornament.** The masthead's figure plate held an isometric
 drawing that meant nothing; it now holds the record itself, drawn as one
-curve. The window is fixed by the calendar — January 1 to today, so the figure is the same shape
-tomorrow as it is now and one quiet fortnight cannot crop it. The series is smoothed on a 15-day
+curve. The window opens on the calendar — January 1 — so one quiet fortnight cannot crop it, and it
+closes on the last day the record actually measured rather than on today. A day the meter reported
+as zero is inside the record and is drawn; a day past the end of the payload was never measured, and
+filling it with a zero would draw a collapse that never happened and drag the real tail down with it
+through the smoothing window. A stale source shortens the figure; it never flattens it. The series is smoothed on a 15-day
 triangular window, stated in the figure's description and never hidden — the caption is pared to
 `Fig. 1.` because the year is legible off the month row and a plate does not need to narrate itself,
 but a smoothed curve that says nowhere that it is smoothed is the one lie a chart can tell quietly.
@@ -101,10 +105,14 @@ against the panel idiom: it is the first thing seen, it is a picture before it i
 rules that keep the panels below it quiet are the wrong rules for it. §6's prohibitions are written
 for the page under the masthead.
 
-**The avatar slot is a designed absence.** No portrait exists yet. Reserve the exact final footprint
-and render a bordered placeholder that carries the same cursor-tracking light interaction a real
-photo would. Empty shape, live behaviour. Dropping in a portrait later must be a one-line change with
-zero layout shift. It must never read as a broken image.
+**The avatar slot is filled.** The portrait is checked in at `public/avatar/sunny.png`, square, and
+named once in `lib/site.ts` — that field is the whole interface, and setting it back to `null` falls
+through to a monogram at the identical footprint, so the slot cannot shift the layout in either
+state. The frame is a bordered square with the same hairline as every other plate on the page. It
+carries no cursor-tracking light: an earlier draft reserved that interaction for a portrait that did
+not exist yet, and once a real photograph landed in the slot the effect was decoration on a face.
+The portrait is loaded eagerly with explicit dimensions because it is above the fold on every route,
+and a masthead that reflows when a face arrives is the failure this rule exists to prevent.
 
 ## 4. Projects
 
@@ -121,22 +129,43 @@ Eight, curated, in this order. Tier 1 is the agentic thesis; Tier 2 earns its pl
 08  openutm-v0  Cross-platform UTM alternative
 ```
 
-Rows, not cards — mark, name, one line, and language, standing, and year as pills. The whole row is
-one door to the thing itself; a Project whose live address is not its repository gets a second small
-door to the source. Hover reveals the destination host. A Project's own mark is checked into
-`public/projects` and drawn as a mask in the row's ink; a Project without one gets the glyph for its
-kind. No thumbnails, no detail pages, no screenshots.
+Rows, not cards — mark, name, and two doors. A Project's own mark is checked into `public/projects`
+and drawn as a mask in the row's ink; a Project without one gets the glyph for its kind. No
+thumbnails, no detail pages, no screenshots.
 
-Nothing on a row is disclosed. An index of eight rows that shows eight names and eight identical
-years is not an index, and a search field that matches hidden text is a trick.
+**A row is a name and two doors.** The name is a button that opens the record in place; the arrow
+beside it is a link that leaves for the thing itself — its live address where it has one, its
+repository otherwise. They are separate controls on purpose: a row that both expands and navigates
+makes the reader guess which one a click bought, and one of the two answers is a lost page. The row
+lights as one surface on hover because it is one thing, and the arrow darkens on its own so the
+reader can see which door is under the pointer. The destination host is not revealed on hover — it
+is spoken by the link's accessible name, which a pointer-only reveal would have hidden from every
+reader who is not using a pointer.
 
-`pi-queue` shows **"published on npm"** as a fact and never a download counter — the real number is
-too small to help. Revisit if relunar gains traction.
+**The row discloses.** Opened, it shows the Project's line of description and its language,
+standing, and year as pills. Eight rows showing eight names and eight identical years is not an
+index, so the year rides inside the record rather than on the closed row. The disclosure animates
+`0fr → 1fr` on a grid row rather than to a measured pixel height, because the record can be one line
+or three and a height the row had to measure first is a height that is wrong for one frame.
+
+**Search matches the record, not just the name.** `searchProjects` tests name, description, kind,
+note, and year — everything the row can show once opened, plus the kind that decides its glyph. A
+search field that matches text a reader can never surface would be a trick; every field it matches
+is reachable by opening the row it returns.
+
+`pi-queue` and `relunar` both show **"published on npm"** as a fact and never a download counter —
+the real numbers are too small to help. Revisit if either gains traction.
 
 ## 4b. Blog
 
-Rows, not cards: date, title, one line, reading time. A card grid with no images is a list wearing a
-costume.
+Rows, not cards: title, date, reading time. A card grid with no images is a list wearing a costume.
+
+No summary line on a row, and none under a Post's title either. The summary is written, and it is
+carried — it is the description in metadata, in the feed and on a social card, which is where a
+one-line précis of a piece is actually read. On the page it was a third register competing with the
+title above it and the prose below it, and at the width of a full-bleed row it said less than the
+title already had. So a row is a name and two facts, matching a Project row. The filter follows the
+row: it matches the title and nothing else (`searchPosts`).
 
 A Post page is a document you can do something with. Above the title: back to the index, copy the
 Post as Markdown, hand it to a model, share it, and step to the Post either side (`←` / `→`, which
@@ -178,16 +207,27 @@ menu. No perpetual animation. No page-level fade on route change. No dashboard g
 
 ## 7. Acceptance tests
 
+Tests 1, 9, 10, and 11 are enforced by `bun test` and `bun run build`; the rest are manual checks run
+against a preview deploy. A test with no runner is a promise, not a gate — the split is written down
+here so nobody reads this list as green.
+
+**Automated.**
+
 1. `curl` of `/` contains the real token record behind Fig. 1; console shows no hydration mismatch.
-2. At 1440×900 the masthead — Fig. 1 plate, monogram, name and role — is visible without scrolling.
+**Manual.**
+
+2. At 1440×900 the masthead — Fig. 1 plate, portrait, name and role — is visible without scrolling.
 3. Zero horizontal scroll at 390, 768, 1024, 1280, 1440, 2560.
 4. Every interactive target ≥24×24 at 390, with no exceptions claimed.
 5. Both themes pass their stated contrast ratios.
 6. Two screenshots taken 5s apart are pixel-identical (no perpetual motion).
 7. No section renders with zero real items — including Blog, which stays hidden at zero Posts.
 8. Lighthouse: performance ≥95, accessibility 100, best practices 100, SEO 100. CLS = 0.
-9. `/writings` still permanent-redirects to `/blog` (Next emits 308, which
-    preserves the method); `/feed.xml` still validates.
+**Automated.**
+
+9. `/writings` and `/writings/:slug` still permanent-redirect to `/blog` and
+    `/blog/:slug` (Next emits 308, which preserves the method); `/feed.xml`
+    still validates.
 10. Every term in a Post's `## Definitions` section is marked at its first use
     in the body, and every mark resolves to a term — one `slugify`, in
     `lib/slug.ts`, on both sides. The build fails otherwise, so a definition
