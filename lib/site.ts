@@ -39,12 +39,8 @@ export const site = {
   description:
     "I build tooling for coding agents — repro harnesses, queues, local-first inference — and ship with them every day.",
   url: "https://dhruv2mars.com",
-  /**
-   * No portrait exists yet. The profile header reserves this slot and renders
-   * a monogram at the same size; setting this to an image path is the only
-   * change needed to fill it, with no layout shift.
-   */
-  avatar: "/avatar/sunny.webp" as string | null,
+  /** High-resolution source frame for the current Codex pet. */
+  avatar: "/avatar/sunny.png" as string | null,
   socials: [
     { label: "X", href: "https://x.com/Dhruv2mars" },
     { label: "GitHub", href: "https://github.com/Dhruv2mars" },
