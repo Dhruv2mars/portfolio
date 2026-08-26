@@ -18,7 +18,12 @@ export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
         <Link
           href="/"
           aria-label="Home"
-          className="flex items-center pl-2 text-foreground"
+          // `min-h-6` rather than an `extend-touch-target` pseudo: §7's fourth
+          // test measures the box and says "with no exceptions claimed", and
+          // the wordmark is the one control on a phone that has to be hit
+          // without looking. A 24px floor under an 18px line changes nothing
+          // visually — the bar centres its children either way.
+          className="flex min-h-6 items-center pl-2 text-foreground"
         >
           {/* The wordmark alone. A glyph beside it would be a second mark
               competing with the one the hero already draws. */}
