@@ -66,7 +66,7 @@ has a dock to float over and the desktop does not. The footer reserves exactly t
 fade lands on its own spacer and never on the last thing a Visitor was reading.
 
 The footer is a signature: the year and the legal name, the three places the work lives plus the
-feed, and the mark drawn large in the site's own alphabet. The name and the mark differ on purpose —
+feed, and the mark beneath them in the site's own alphabet. The name and the mark differ on purpose —
 a copyright line names who holds it, and the signature under it is what that person is called.
 
 `rehype-sanitize` on all MDX and escaped JSON-LD embedding survive from the old build unchanged.
@@ -129,13 +129,13 @@ for the page under the masthead.
 **The avatar slot is filled.** The portrait is checked in at `public/avatar/sunny.png` and named
 once in `lib/site.ts` — that field is the whole interface, and setting it back to `null` falls
 through to a monogram at the identical footprint, so the slot cannot shift the layout in either
-state. The slot is a square plate ruled on the two sides that face the drawing, with the same
-hairline as every other plate on the page, and the portrait fills it corner to corner. Square rather
-than round: the plate stands on the masthead's bottom rule, and a circle meets that rule at a single
-tangent point, leaving the line to die out either side of the mark. A square lands on it flat and the
-rule reads as one continuous run under the whole block. The plate is opaque rather than open, so the
-hero curve stops at its edge and the mark reads as a plate the figure runs behind rather than a
-cutout laid over it. It carries no cursor-tracking light: an earlier draft reserved that interaction for a portrait that did
+state. The slot is a square box holding a round-cropped portrait. The box draws three of its own
+sides in the same hairline as every other plate on the page — top, right and bottom, each to the
+box's own width and no further — and the frame supplies the fourth. Three rather than two, because
+two edges leave a corner the eye falls out of and the box stops reading as a complete square; the
+bottom rule is the one that closes it. The box is opaque rather than open, because the four corners
+a circle does not reach would otherwise show the hero curve running through them and the mark would
+read as a cutout laid over the figure instead of a plate the figure runs behind. It carries no cursor-tracking light: an earlier draft reserved that interaction for a portrait that did
 not exist yet, and once a real photograph landed in the slot the effect was decoration on a face.
 The portrait is loaded eagerly with explicit dimensions because it is above the fold on every route,
 and a masthead that reflows when a face arrives is the failure this rule exists to prevent.

@@ -21,16 +21,10 @@ function initials(name: string): string {
     .join("");
 }
 
-/**
- * 128px on phones, 160px on desktop.
- *
- * Square, not round. The plate stands on the masthead's bottom rule; a circle
- * touches that rule at one point and the line dies out either side of the mark,
- * while a square lands on it flat and the rule runs unbroken under the block.
- */
+/** 128px on phones, 160px on desktop. */
 function Avatar() {
   return (
-    <div className="relative m-0.5 size-32 overflow-hidden rounded-xl border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
+    <div className="relative m-0.5 size-32 overflow-hidden rounded-full border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
       {site.avatar ? (
         <span className="absolute top-[91.25%] left-[53.75%] aspect-[181/362] w-[90%] -translate-x-1/2 -translate-y-1/2">
           <Image
@@ -145,25 +139,26 @@ export async function ProfileHeader() {
         {/* No rule across the plate — the panels below draw their hairlines to
             200vw so the page reads as one ruled sheet, and one run through here
             would cut the figure in half at the height of the monogram's crown.
-            A picture is not ruled. But the square still has to read as a square:
-            two edges and it is a corner the curve runs out of, so the top is
-            drawn to the box's own width and stops there. Top and right, the two
-            sides that face the drawing; the frame supplies the other two.
+            A picture is not ruled. But the box still has to read as a
+            complete square, so it draws three of its own sides — top, right and
+            bottom — each to the box's own width and no further; the frame
+            supplies the fourth. Two edges alone leave a corner the eye falls
+            out of, and the bottom rule is the one that closes it.
 
             Opaque, and positioned so it is. The plate runs the full rail and
-            the box stands on its bottom-left, so an unfilled box would show the
-            curve running through it and the mark would read as a cutout laid
-            over the drawing instead of a plate the drawing runs behind. The
-            fill needs `relative` to land: unpositioned, it would paint under
-            the figure and show nothing. */}
-        <div className="relative mt-auto shrink-0 border-t border-r border-line bg-background">
+            the box stands on its bottom-left, so an unfilled square shows the
+            curve through the four corners the circle does not reach — the mark
+            then reads as a cutout laid over the drawing instead of a plate the
+            drawing runs behind. The fill needs `relative` to land: unpositioned,
+            it would paint under the figure and show nothing. */}
+        <div className="relative mt-auto shrink-0 border-t border-r border-b border-line bg-background">
           <Avatar />
         </div>
       </div>
 
       <div className="flex flex-col sm:col-start-2 sm:row-start-2">
         <div className="z-1 mt-auto border-t border-line">
-          <h1 className="-translate-y-px flex items-center gap-2 pl-4 text-[2rem]/none font-medium tracking-tight">
+          <h1 className="-translate-y-px flex min-h-10 items-center gap-2 py-1 pl-4 text-[2rem]/none font-medium tracking-tight">
             {site.name}
             {/* Inside the heading, not beside it: the button is about this
                 name, and a name and the way to hear it are one object. */}
