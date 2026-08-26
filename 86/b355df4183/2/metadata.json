@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "86b355df4183",
+  "session_id": "01a03d2a-5b35-7340-b343-26f8e21e9fd5",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-26T08:44:53.504795Z",
+  "branch": "fix/idiom-spacing-rhythm",
+  "checkpoints_count": 2,
+  "save_step_count": 1,
+  "files_touched": [
+    "components/profile-header.tsx"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-sol",
+  "turn_id": "bc9b63dc19e8",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 300941,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 10952320,
+    "output_tokens": 28064,
+    "api_call_count": 90
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-26T08:44:53.348725Z",
+    "agent_lines": 0,
+    "agent_removed": 1,
+    "human_added": 16,
+    "human_modified": 2,
+    "human_removed": 0,
+    "total_committed": 17,
+    "total_lines_changed": 34,
+    "agent_percentage": 2.941176470588235,
+    "metric_version": 2
+  }
+}
