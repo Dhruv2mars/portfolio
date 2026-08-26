@@ -13,6 +13,11 @@ import { cn } from "@/lib/utils";
  * opened it, and a click anywhere else dismisses it. Items are found in the
  * DOM rather than registered through context, which keeps a `MenuItem` an
  * ordinary button and a `MenuLink` an ordinary anchor.
+ *
+ * The contract includes a roving tabindex, which is why every item carries
+ * `tabIndex={-1}`. Tab is how a reader leaves a menu, not how they walk it —
+ * and with items left tabbable, Tab moved focus into a panel that the same
+ * keystroke was closing, so focus landed on a node that no longer existed.
  */
 export function Menu({
   label,
@@ -90,9 +95,12 @@ export function Menu({
           event.preventDefault();
           items().at(-1)?.focus();
         } else if (event.key === "Tab") {
-          // Tab means the Visitor is done here; the menu should not be a place
-          // they have to walk out of item by item.
-          setOpen(false);
+          // Tab means the Visitor is done here. Focus goes back to the trigger
+          // rather than onward: the panel unmounts on this same keystroke, so
+          // letting the browser pick the next target lands it on a node that
+          // is about to be removed, and the reader loses their place entirely.
+          event.preventDefault();
+          close(true);
         }
       }}
       // A menu that stays open after picking something reads as a failed
@@ -133,6 +141,7 @@ export function Menu({
         <div
           role="menu"
           aria-label={label}
+          aria-orientation="vertical"
           className="absolute top-full right-0 z-50 mt-1 min-w-48 rounded-lg border border-line bg-popover p-1 text-popover-foreground shadow-lg"
         >
           {children}
@@ -150,7 +159,13 @@ export function MenuItem({
   ...props
 }: React.ComponentProps<"button">) {
   return (
-    <button role="menuitem" type="button" className={cn(ITEM, className)} {...props} />
+    <button
+      role="menuitem"
+      type="button"
+      tabIndex={-1}
+      className={cn(ITEM, className)}
+      {...props}
+    />
   );
 }
 
@@ -158,6 +173,7 @@ export function MenuLink({ className, ...props }: React.ComponentProps<"a">) {
   return (
     <a
       role="menuitem"
+      tabIndex={-1}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(ITEM, className)}
