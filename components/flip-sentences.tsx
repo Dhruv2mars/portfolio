@@ -17,6 +17,15 @@ import { cn } from "@/lib/utils";
  * background. Under `prefers-reduced-motion` there is no rotation at all — the
  * first line stands, because a caption that changes itself every three seconds
  * is the exact thing that setting is asking us not to do.
+ *
+ * And it stops for good once it has been all the way round. A loop that never
+ * ends is the one thing §6 forbids outright, and it is also the wrong shape
+ * for what this line is doing: the rotation exists to widen the role past a
+ * job title, which is a thing you say once. So the sentences run a single
+ * pass and the canonical one — `site.tagline`, the line that metadata and
+ * structured data carry, where nothing can rotate — is where the hero comes
+ * to rest. After that the masthead is a still picture, which is what every
+ * screenshot of it should be.
  */
 
 const INTERVAL_MS = 3000;
@@ -46,8 +55,12 @@ export function FlipSentences({
   const inView = useInView(ref);
   const reduced = useReducedMotion();
   const [index, setIndex] = useState(0);
+  // Set once the pass has returned to the first sentence. State rather than a
+  // ref because it has to re-run the effect that owns the timer, and it is
+  // never unset: a second lap is the perpetual loop this exists to prevent.
+  const [settled, setSettled] = useState(false);
 
-  const play = inView && !reduced && sentences.length > 1;
+  const play = inView && !reduced && !settled && sentences.length > 1;
 
   useEffect(() => {
     if (!play) return;
@@ -56,10 +69,16 @@ export function FlipSentences({
     // from flickering through four states the moment the Visitor comes back.
     let timer = 0;
     const start = () => {
-      timer = window.setInterval(
-        () => setIndex((i) => (i + 1) % sentences.length),
-        INTERVAL_MS,
-      );
+      timer = window.setInterval(() => {
+        setIndex((i) => {
+          const next = (i + 1) % sentences.length;
+          // Back at the top: the pass is done. Flip the flag rather than
+          // clearing here, so the effect's own cleanup is what stops the
+          // timer and there is exactly one place that owns it.
+          if (next === 0) setSettled(true);
+          return next;
+        });
+      }, INTERVAL_MS);
     };
     const stop = () => window.clearInterval(timer);
     const onVisibility = () => {

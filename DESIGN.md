@@ -222,7 +222,9 @@ here so nobody reads this list as green.
 3. Zero horizontal scroll at 390, 768, 1024, 1280, 1440, 2560.
 4. Every interactive target ≥24×24 at 390, with no exceptions claimed.
 5. Both themes pass their stated contrast ratios.
-6. Two screenshots taken 5s apart are pixel-identical (no perpetual motion).
+6. Two screenshots taken 5s apart are pixel-identical once the hero has settled — the role line
+    runs a single pass through `flipSentences` and rests on the canonical one, so the masthead is
+    still from roughly ten seconds after load onward. Nothing on the page loops.
 7. No section renders with zero real items — including Blog, which stays hidden at zero Posts.
 8. Lighthouse: performance ≥95, accessibility 100, best practices 100, SEO 100. CLS = 0.
 **Automated.**
