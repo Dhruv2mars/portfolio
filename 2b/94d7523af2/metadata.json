@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "2b94d7523af2",
+  "strategy": "manual-commit",
+  "branch": "fix/minimal-blog-rows",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/blog/[slug]/page.tsx",
+    "components/post-item.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2b/94d7523af2/0/metadata.json",
+      "transcript": "/2b/94d7523af2/0/full.jsonl",
+      "compact_transcript": "/2b/94d7523af2/0/transcript.jsonl",
+      "content_hash": "/2b/94d7523af2/0/content_hash.txt",
+      "prompt": "/2b/94d7523af2/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 43942,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 335616,
+    "output_tokens": 2121,
+    "api_call_count": 9
+  }
+}

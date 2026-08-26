@@ -1,0 +1,5 @@
+gpt-5.6 is like a bull that keeps hitting the wall until the wall breaks. the surprising part is how efficient it is while doing that.
+
+this is the line/section of the blog. where, on the homepage, it is present below the blog title, and it is also in the blog page, like a subheading. i dont need this.&#x20;
+
+the blog section on home page should be just like how minimal and simple the projects section is, it should just be the title and the date,readtime section, thats it. and within the blog, after the title, it should just be the date and read time section before the actual content starts.
