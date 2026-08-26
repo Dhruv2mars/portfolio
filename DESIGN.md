@@ -94,8 +94,10 @@ month row lands on that floor, which is the nearest thing in the picture.
 **The figure sits at a distance.** It is behind the name and behind the monogram, and it is drawn
 that way: the ink is mixed toward the background rather than faded with alpha, so contrast collapses
 toward the colour of the air the way distance actually works and the line walks toward near-black in
-dark and near-white in light instead of merely thinning. The curve holds roughly 4.6:1 against its
-background; the name above it holds 19:1, and that ordering is the point. The scale and month labels
+dark and near-white in light instead of merely thinning. Measured off the rendered page, the curve
+holds 4.8:1 against its background in light and 7.6:1 in dark — one mix ratio, two ratios, because
+WCAG contrast is not linear in the perceptual lightness `oklab` interpolates. The name above it
+holds 19:1 in both, and that ordering is the point. The scale and month labels
 step back too, but a shorter step — recede the reading as far as the drawing and the plate stops
 being a record and becomes a texture. None of this is AA text: the plate is one `role="img"` and the
 description carries the reading in words.
@@ -220,7 +222,9 @@ here so nobody reads this list as green.
 3. Zero horizontal scroll at 390, 768, 1024, 1280, 1440, 2560.
 4. Every interactive target ≥24×24 at 390, with no exceptions claimed.
 5. Both themes pass their stated contrast ratios.
-6. Two screenshots taken 5s apart are pixel-identical (no perpetual motion).
+6. Two screenshots taken 5s apart are pixel-identical once the hero has settled — the role line
+    runs a single pass through `flipSentences` and rests on the canonical one, so the masthead is
+    still from roughly ten seconds after load onward. Nothing on the page loops.
 7. No section renders with zero real items — including Blog, which stays hidden at zero Posts.
 8. Lighthouse: performance ≥95, accessibility 100, best practices 100, SEO 100. CLS = 0.
 **Automated.**

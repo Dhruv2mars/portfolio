@@ -24,7 +24,7 @@ export const FALLBACK_SCHEME: ColorScheme = "dark";
  * These must track `--background` in `app/globals.css`.
  */
 export const SCHEME_BACKGROUND = {
-  light: "#ffffff",
+  light: "#fafafa",
   dark: "#09090b",
 } as const satisfies Record<ColorScheme, string>;
 
