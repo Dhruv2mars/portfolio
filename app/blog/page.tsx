@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Panel, PanelHeader, PanelTitle, PanelTitleSup } from "@/components/panel";
+import { Panel } from "@/components/panel";
 import { PostSearch } from "@/components/post-search";
 import { getPublishedPosts } from "@/lib/blog";
 import { serializeJsonLd } from "@/lib/json-ld";
@@ -67,15 +67,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           its heading *is* the tagline; ours says the word the nav promised and
           then gets out of the way of the posts. */}
       <Panel id="blog">
-        <PanelHeader>
-          <PanelTitle as="h1">
-            Blog
-            <PanelTitleSup className="tabular-nums">
-              {posts.length}
-            </PanelTitleSup>
-          </PanelTitle>
-        </PanelHeader>
-
         <PostSearch posts={summaries} initialQuery={initialQuery} />
       </Panel>
     </>
