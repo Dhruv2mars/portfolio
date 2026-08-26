@@ -1,0 +1,29 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "946a333433db",
+  "strategy": "manual-commit",
+  "branch": "chore/truth-pass",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "app/projects/page.tsx",
+    "components/post-search.tsx",
+    "components/project-search.tsx",
+    "components/use-mirrored-query.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/94/6a333433db/0/metadata.json",
+      "transcript": "/94/6a333433db/0/full.jsonl",
+      "compact_transcript": "/94/6a333433db/0/transcript.jsonl",
+      "content_hash": "/94/6a333433db/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 2,
+    "cache_creation_tokens": 1297,
+    "cache_read_tokens": 80153,
+    "output_tokens": 986,
+    "api_call_count": 1
+  }
+}
