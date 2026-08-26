@@ -8,7 +8,7 @@ import {
   PanelTitle,
   PanelTitleSup,
 } from "@/components/panel";
-import { LEVEL_ALPHA } from "@/lib/activity-grid";
+import { LEVEL_ALPHA } from "@/lib/figure";
 import { glyphField } from "@/lib/glyph-404";
 
 const FIELD = glyphField("404");
@@ -16,10 +16,15 @@ const FIELD = glyphField("404");
 /**
  * The 404 boundary owns its own title; without this an unmatched URL wears the
  * home page's, in the tab and in every share card.
+ *
+ * No `robots` here. Next already emits `<meta name="robots" content="noindex">`
+ * on this boundary, and declaring a second one only put two of the tag in the
+ * built HTML. The directive it added was `nofollow`, which is wrong anyway:
+ * every link on this page points back into the site, and those are the links a
+ * crawler that landed here should follow.
  */
 export const metadata: Metadata = {
   title: "Page not found",
-  robots: { index: false, follow: false },
 };
 
 export default function NotFound() {
@@ -52,7 +57,7 @@ export default function NotFound() {
                 <div
                   key={index}
                   aria-hidden
-                  className="activity-cell"
+                  className="glyph-cell"
                   data-recorded={lit ? undefined : "false"}
                   style={
                     {
