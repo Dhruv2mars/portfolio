@@ -12,9 +12,8 @@ import { formatPostDate, type PostSummary } from "@/lib/posts";
  * and at one Post it is a card beside a hole.
  *
  * So the picture is optional and the row is not. When a cover exists it leads
- * the row as a 16:9 plate; when it does not, the row is a title, a sentence and
- * two facts, which is the same shape a Project row has. That is the site's
- * idiom — things on rules, full width — and it reads the same at one Post as at
+ * the row as a 16:9 plate; when it does not, the row is a title and two facts,
+ * matching the restraint of a Project row. It reads the same at one Post as at
  * fifty.
  */
 export function PostItem({
@@ -48,7 +47,7 @@ export function PostItem({
           </div>
         ) : null}
 
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
           <Heading className="leading-snug font-medium text-balance">
             <Link href={`/blog/${post.slug}`}>
               <span aria-hidden className="absolute inset-0" />
@@ -56,14 +55,10 @@ export function PostItem({
             </Link>
           </Heading>
 
-          <p className="typeset typeset-description text-muted-foreground">
-            {post.summary}
-          </p>
-
           {/* Date and length, in the same mono the rest of the site measures
               things in. A `dl` because they are facts about the Post, not two
               more pieces of its prose. */}
-          <dl className="mt-1 flex items-center gap-2 font-mono text-xs text-muted-foreground/80 tabular-nums">
+          <dl className="flex items-center gap-2 font-mono text-xs text-muted-foreground/80 tabular-nums">
             <dt className="sr-only">Published on</dt>
             <dd>
               <time dateTime={post.publishedAt}>
