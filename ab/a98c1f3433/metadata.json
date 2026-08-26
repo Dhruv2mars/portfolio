@@ -1,0 +1,21 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "aba98c1f3433",
+  "strategy": "manual-commit",
+  "branch": "fix/idiom-spacing-rhythm",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "components/theme-provider.tsx",
+    "lib/theme.test.ts",
+    "lib/theme.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ab/a98c1f3433/0/metadata.json",
+      "transcript": "/ab/a98c1f3433/0/full.jsonl",
+      "compact_transcript": "/ab/a98c1f3433/0/transcript.jsonl",
+      "content_hash": "/ab/a98c1f3433/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
