@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wordmark studio — dithered footer signature</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #08090a;
+        --panel: #101214;
+        --line: #23262a;
+        --ink: #e8eaed;
+        --muted: #8b9198;
+      }
+      [data-theme="light"] {
+        color-scheme: light;
+        --bg: #fbfbfa;
+        --panel: #ffffff;
+        --line: #e4e4e2;
+        --ink: #17181a;
+        --muted: #6b7076;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--ink);
+        font: 13px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 300px;
+      }
+      @media (max-width: 860px) { body { grid-template-columns: minmax(0, 1fr); } }
+      main { display: flex; flex-direction: column; gap: 20px; padding: 24px; min-width: 0; }
+      h1 { font-size: 14px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+      p { color: var(--muted); margin: 0; max-width: 62ch; }
+      .stage {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        overflow: hidden;
+      }
+      canvas { display: block; width: 100%; }
+      .stage.tight { padding: 0 16px; }
+      aside {
+        border-left: 1px solid var(--line);
+        background: var(--panel);
+        padding: 20px 18px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-height: 100vh;
+        overflow-y: auto;
+      }
+      @media (max-width: 860px) { aside { border-left: 0; border-top: 1px solid var(--line); max-height: none; } }
+      fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+      legend {
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 0 0 8px;
+      }
+      label { display: flex; flex-direction: column; gap: 5px; }
+      .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+      .row b { font-weight: 500; }
+      .row span { color: var(--muted); font-variant-numeric: tabular-nums; }
+      input[type="range"] { width: 100%; accent-color: var(--ink); }
+      input[type="text"], select {
+        background: var(--bg);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 6px 8px;
+        font: inherit;
+      }
+      .check { flex-direction: row; align-items: center; gap: 8px; }
+      button {
+        background: var(--bg);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 8px 10px;
+        font: inherit;
+        cursor: pointer;
+        text-align: left;
+      }
+      button:hover { border-color: var(--muted); }
+      .count { color: var(--muted); font-variant-numeric: tabular-nums; }
+      .hint { font-size: 12px; color: var(--muted); }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+      .toast {
+        position: fixed;
+        bottom: 16px;
+        left: 16px;
+        background: var(--ink);
+        color: var(--bg);
+        padding: 8px 12px;
+        border-radius: 4px;
+        opacity: 0;
+        transition: opacity 160ms;
+        pointer-events: none;
+      }
+      .toast.on { opacity: 1; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div>
+        <h1>Wordmark studio</h1>
+        <p>
+          Move the sliders until the dithered mark matches the drawn one, then export. The top stage
+          is the shipped size at the width you give it; the bottom stage is the same dots blown up so
+          you can see the grain. Both react to the cursor exactly as the footer does.
+        </p>
+      </div>
+
+      <div class="stage tight"><canvas id="ship" title="shipped size"></canvas></div>
+      <div class="stage"><canvas id="zoom" title="detail"></canvas></div>
+
+      <p class="hint">
+        Export writes the whole of <code>lib/wordmark-dots.ts</code>. To make the checked-in file
+        reproducible from the repository, paste the preset back into <code>DEFAULTS</code> in
+        <code>tools/dither.js</code> and run <code>bun tools/gen-dots.mjs > lib/wordmark-dots.ts</code>.
+      </p>
+    </main>
+
+    <aside>
+      <fieldset>
+        <legend>Lettering</legend>
+        <label>
+          <div class="row"><b>Text</b></div>
+          <input type="text" id="text" />
+        </label>
+      </fieldset>
+
+      <fieldset id="sliders"><legend>Grain</legend></fieldset>
+
+      <fieldset>
+        <legend>Pattern</legend>
+        <label>
+          <select id="pattern"></select>
+        </label>
+        <label class="check"><input type="checkbox" id="stagger" /> Offset every other row</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Cursor</legend>
+        <div id="cursor-sliders" style="display: flex; flex-direction: column; gap: 12px"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Export</legend>
+        <div class="count"><span id="count">0</span> dots</div>
+        <button id="copy-ts">Copy lib/wordmark-dots.ts</button>
+        <button id="copy-json">Copy coordinates as JSON</button>
+        <button id="copy-preset">Copy preset</button>
+        <button id="download">Download dots.json</button>
+        <button id="reset">Reset to shipped preset</button>
+        <button id="theme">Flip light / dark</button>
+      </fieldset>
+    </aside>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="dither.js"></script>
+    <script>
+      const SLIDERS = [
+        { key: "stroke", label: "Stroke weight", min: 4, max: 40, step: 0.5 },
+        { key: "softness", label: "Edge softness", min: 0.5, max: 14, step: 0.5 },
+        { key: "spacing", label: "Grid spacing", min: 1.5, max: 12, step: 0.5 },
+        { key: "jitter", label: "Jitter", min: 0, max: 4, step: 0.1 },
+        { key: "density", label: "Density", min: 0.1, max: 1, step: 0.01 },
+        { key: "gamma", label: "Gamma", min: 0.2, max: 3, step: 0.05 },
+        { key: "dot", label: "Dot size", min: 0.5, max: 8, step: 0.1 },
+      ];
+      const CURSOR_SLIDERS = [
+        { key: "repelRadius", label: "Circle radius", min: 10, max: 320, step: 2 },
+        { key: "repelStrength", label: "Push at centre", min: 0, max: 120, step: 1 },
+      ];
+
+      const preset = { ...Dither.DEFAULTS };
+      let result = Dither.build(preset);
+
+      const els = {};
+      function mountSliders(host, specs) {
+        for (const spec of specs) {
+          const label = document.createElement("label");
+          label.innerHTML =
+            `<div class="row"><b>${spec.label}</b><span></span></div>` +
+            `<input type="range" min="${spec.min}" max="${spec.max}" step="${spec.step}">`;
+          const input = label.querySelector("input");
+          const value = label.querySelector("span");
+          input.value = preset[spec.key];
+          value.textContent = preset[spec.key];
+          input.addEventListener("input", () => {
+            preset[spec.key] = Number(input.value);
+            value.textContent = input.value;
+            rebuild();
+          });
+          els[spec.key] = { input, value };
+          host.appendChild(label);
+        }
+      }
+      mountSliders(document.getElementById("sliders"), SLIDERS);
+      mountSliders(document.getElementById("cursor-sliders"), CURSOR_SLIDERS);
+
+      const textInput = document.getElementById("text");
+      textInput.value = preset.text;
+      textInput.addEventListener("input", () => {
+        preset.text = textInput.value;
+        rebuild();
+      });
+
+      const patternSelect = document.getElementById("pattern");
+      for (const name of Dither.PATTERNS) {
+        const option = document.createElement("option");
+        option.value = option.textContent = name;
+        patternSelect.appendChild(option);
+      }
+      patternSelect.value = preset.pattern;
+      patternSelect.addEventListener("change", () => {
+        preset.pattern = patternSelect.value;
+        rebuild();
+      });
+
+      const staggerBox = document.getElementById("stagger");
+      staggerBox.checked = preset.stagger;
+      staggerBox.addEventListener("change", () => {
+        preset.stagger = staggerBox.checked;
+        rebuild();
+      });
+
+      /* Two views of one dot set. Each keeps its own eased positions so the
+         cursor pushes both stages at once and neither snaps. */
+      function makeStage(canvas, heightFor) {
+        const ctx = canvas.getContext("2d");
+        let rest = new Float32Array(0);
+        let cur = new Float32Array(0);
+        let scale = 1;
+        let dpr = 1;
+        let client = null;
+        let raf = 0;
+
+        function measure() {
+          dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const cssWidth = canvas.parentElement.clientWidth - 2;
+          const cssHeight = heightFor(cssWidth);
+          canvas.style.height = cssHeight + "px";
+          canvas.width = Math.round(cssWidth * dpr);
+          canvas.height = Math.round(cssHeight * dpr);
+
+          const box = result.box;
+          scale = Math.min(canvas.width / box.width, canvas.height / box.height);
+          const ox = (canvas.width - box.width * scale) / 2;
+          const oy = (canvas.height - box.height * scale) / 2;
+          rest = new Float32Array(result.dots.length);
+          for (let i = 0; i < result.dots.length; i += 2) {
+            rest[i] = ox + result.dots[i] * scale;
+            rest[i + 1] = oy + result.dots[i + 1] * scale;
+          }
+          cur = Float32Array.from(rest);
+          draw();
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = getComputedStyle(document.body).color;
+          const size = Math.max(1, preset.dot * scale);
+          const half = size / 2;
+          for (let i = 0; i < cur.length; i += 2) ctx.fillRect(cur[i] - half, cur[i + 1] - half, size, size);
+        }
+
+        function frame() {
+          const rect = canvas.getBoundingClientRect();
+          const p = client
+            ? { x: (client.x - rect.left) * dpr, y: (client.y - rect.top) * dpr }
+            : null;
+          const radius = preset.repelRadius * scale;
+          const strength = preset.repelStrength * scale;
+          let moving = false;
+
+          for (let i = 0; i < rest.length; i += 2) {
+            let tx = rest[i];
+            let ty = rest[i + 1];
+            if (p && radius > 0) {
+              const dx = tx - p.x;
+              const dy = ty - p.y;
+              const d = Math.hypot(dx, dy);
+              if (d < radius) {
+                const t = 1 - d / radius;
+                const push = strength * t * t * t;
+                if (d > 0.001) {
+                  tx += (dx / d) * push;
+                  ty += (dy / d) * push;
+                } else ty -= push;
+              }
+            }
+            cur[i] += (tx - cur[i]) * 0.22;
+            cur[i + 1] += (ty - cur[i + 1]) * 0.22;
+            if (!moving && (Math.abs(cur[i] - tx) > 0.05 || Math.abs(cur[i + 1] - ty) > 0.05)) moving = true;
+          }
+
+          draw();
+          raf = moving ? requestAnimationFrame(frame) : 0;
+        }
+
+        function kick() {
+          if (!raf) raf = requestAnimationFrame(frame);
+        }
+
+        window.addEventListener("pointermove", (event) => {
+          client = { x: event.clientX, y: event.clientY };
+          kick();
+        });
+        document.addEventListener("pointerleave", () => {
+          client = null;
+          kick();
+        });
+        new ResizeObserver(measure).observe(canvas.parentElement);
+
+        return { measure, draw };
+      }
+
+      const stages = [
+        makeStage(document.getElementById("ship"), (w) => Math.min(80, (w * 148) / 1410)),
+        makeStage(document.getElementById("zoom"), (w) => Math.round((w * 148) / 1410)),
+      ];
+
+      function rebuild() {
+        result = Dither.build(preset);
+        document.getElementById("count").textContent = result.dots.length / 2;
+        for (const stage of stages) stage.measure();
+      }
+      rebuild();
+
+      function toast(message) {
+        const node = document.getElementById("toast");
+        node.textContent = message;
+        node.classList.add("on");
+        clearTimeout(node.dataset.timer);
+        node.dataset.timer = setTimeout(() => node.classList.remove("on"), 1400);
+      }
+      async function copy(text, message) {
+        try {
+          await navigator.clipboard.writeText(text);
+          toast(message);
+        } catch {
+          window.prompt("Copy failed — take it from here:", text);
+        }
+      }
+
+      document.getElementById("copy-ts").addEventListener("click", () =>
+        copy(Dither.toModule(result), "lib/wordmark-dots.ts copied"),
+      );
+      document.getElementById("copy-json").addEventListener("click", () =>
+        copy(JSON.stringify(result.dots), "coordinates copied"),
+      );
+      document.getElementById("copy-preset").addEventListener("click", () =>
+        copy(JSON.stringify(result.preset, null, 2), "preset copied"),
+      );
+      document.getElementById("download").addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify({ box: result.box, preset: result.preset, dots: result.dots })], {
+          type: "application/json",
+        });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "dots.json";
+        link.click();
+        URL.revokeObjectURL(link.href);
+      });
+      document.getElementById("reset").addEventListener("click", () => {
+        Object.assign(preset, Dither.DEFAULTS);
+        textInput.value = preset.text;
+        patternSelect.value = preset.pattern;
+        staggerBox.checked = preset.stagger;
+        for (const key of Object.keys(els)) {
+          els[key].input.value = preset[key];
+          els[key].value.textContent = preset[key];
+        }
+        rebuild();
+      });
+      document.getElementById("theme").addEventListener("click", () => {
+        const light = document.documentElement.dataset.theme === "light";
+        document.documentElement.dataset.theme = light ? "dark" : "light";
+        for (const stage of stages) stage.draw();
+      });
+    </script>
+  </body>
+</html>

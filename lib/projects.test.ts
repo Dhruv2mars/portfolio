@@ -12,6 +12,16 @@ describe("Projects are curated, not enumerated", () => {
     expect(new Set(PROJECT_NAMES).size).toBe(PROJECT_NAMES.length);
   });
 
+  test("the second tier carries the current shipped projects", () => {
+    expect(PROJECT_NAMES.slice(4)).toEqual([
+      "mdv",
+      "weathercast",
+      "superchant",
+      "jvcode-cli",
+    ]);
+    expect(PROJECT_NAMES).not.toContain("mdv-ts");
+  });
+
   test("every Project has a real destination and a description", () => {
     for (const project of getProjects()) {
       expect(() => new URL(project.url)).not.toThrow();
@@ -21,6 +31,12 @@ describe("Projects are curated, not enumerated", () => {
       }
       expect(project.description.length).toBeGreaterThan(20);
       expect(project.language.length).toBeGreaterThan(0);
+    }
+  });
+
+  test("project sub-lines stay lowercase", () => {
+    for (const project of getProjects()) {
+      expect(project.description).toBe(project.description.toLowerCase());
     }
   });
 
@@ -54,7 +70,9 @@ describe("searchProjects", () => {
   });
 
   test("matches the description, not only the name", () => {
-    expect(searchProjects(all, "webgpu").map((p) => p.name)).toEqual(["block"]);
+    expect(searchProjects(all, "nowcasting").map((p) => p.name)).toEqual([
+      "weathercast",
+    ]);
   });
 
   test("a hyphen in the name need not be typed", () => {

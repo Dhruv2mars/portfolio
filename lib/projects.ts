@@ -49,7 +49,7 @@ const PROJECTS: readonly Project[] = [
   {
     name: "relunar",
     description:
-      "CLI-first repro harness for coding agents — deterministic sandboxes, issue reads, and reports.",
+      "cli-first repro harness for coding agents — deterministic sandboxes, issue reads, and reports.",
     url: "https://github.com/Dhruv2mars/relunar",
     live: "https://relunar.com",
     language: "TypeScript",
@@ -61,7 +61,7 @@ const PROJECTS: readonly Project[] = [
   {
     name: "pi-queue",
     description:
-      "FIFO message queue and steering for pi. Queue follow-ups while the agent is still working.",
+      "fifo message queue and steering for pi. queue follow-ups while the agent is still working.",
     url: "https://github.com/Dhruv2mars/pi-queue",
     live: "https://www.npmjs.com/package/@dhruv2mars/pi-queue",
     language: "TypeScript",
@@ -72,7 +72,7 @@ const PROJECTS: readonly Project[] = [
   {
     name: "offdex",
     description:
-      "Local-first Codex experience across phone, web, and a native bridge.",
+      "local-first codex experience across phone, web, and a native bridge.",
     url: "https://github.com/Dhruv2mars/offdex",
     language: "TypeScript",
     year: 2026,
@@ -82,7 +82,7 @@ const PROJECTS: readonly Project[] = [
   {
     name: "gunmetal",
     description:
-      "Local OpenAI-compatible API routing inference through subscriptions you already pay for.",
+      "local openai-compatible api routing inference through subscriptions you already pay for.",
     url: "https://github.com/Dhruv2mars/gunmetal",
     live: "https://gunmetalapp.vercel.app",
     language: "Rust",
@@ -91,42 +91,44 @@ const PROJECTS: readonly Project[] = [
     logo: { src: "/projects/gunmetal.svg", mono: true },
   },
   {
-    name: "mdv-ts",
+    name: "mdv",
     description:
-      "Terminal markdown editor and viewer — live editing, formatted preview, OpenTUI rendering.",
-    url: "https://github.com/Dhruv2mars/mdv-ts",
-    language: "TypeScript",
-    year: 2026,
-    kind: "editor",
-  },
-  {
-    name: "block",
-    description:
-      "WebGPU grid explorer for generating and curating logo marks, built on TypeGPU.",
-    url: "https://github.com/Dhruv2mars/block",
-    live: "https://block-five-zeta.vercel.app",
-    language: "TypeScript",
-    year: 2026,
-    kind: "canvas",
-    logo: { src: "/projects/block.svg" },
-  },
-  {
-    name: "codexchat",
-    description:
-      "Native chat client that runs inference against your existing ChatGPT subscription.",
-    url: "https://github.com/Dhruv2mars/codexchat",
+      "terminal markdown editor and viewer for writing on one side and previewing formatted output on the other.",
+    url: "https://github.com/Dhruv2mars/mdv",
+    live: "https://www.npmjs.com/package/@dhruv2mars/mdv",
     language: "Rust",
     year: 2026,
-    kind: "chat",
+    kind: "editor",
+    note: "published on npm",
   },
   {
-    name: "openutm-v0",
+    name: "weathercast",
     description:
-      "Cross-platform, open source alternative to UTM for running virtual machines.",
-    url: "https://github.com/Dhruv2mars/openutm-v0",
+      "rain-only nowcasting app for ios, android, and web, with timing, intensity, confidence, and freshness.",
+    url: "https://github.com/Dhruv2mars/weathercast",
     language: "TypeScript",
     year: 2026,
-    kind: "vm",
+    kind: "app",
+  },
+  {
+    name: "superchant",
+    description:
+      "distraction-free android mala that counts mantras with volume buttons and keeps every session on-device.",
+    url: "https://github.com/Dhruv2mars/superchant",
+    language: "Kotlin",
+    year: 2026,
+    kind: "app",
+  },
+  {
+    name: "jvcode-cli",
+    description:
+      "standalone automatic file history for ordinary folders, recording append-only events and file bytes in sqlite.",
+    url: "https://github.com/Dhruv2mars/jvcode-cli",
+    live: "https://www.npmjs.com/package/jvcode-cli",
+    language: "TypeScript",
+    year: 2026,
+    kind: "cli",
+    note: "published on npm",
   },
 ];
 

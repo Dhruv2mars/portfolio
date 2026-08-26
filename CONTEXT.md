@@ -36,7 +36,7 @@ _Avoid_: Landing page, multi-page site, hub, dashboard
 The top block — the hero figure, avatar slot, name (with a button that says it out loud), and the
 tagline said more than one way. The figure is the AI Activity read model drawn faint and far back
 behind the block, like a range at a distance; the block reads first and the figure is what it stands
-on. The avatar slot is a square plate holding the portrait, named once in `lib/site.ts`;
+on. The avatar slot is a square box holding a round-cropped portrait, named once in `lib/site.ts`;
 clearing that field falls back to a monogram at the identical footprint, so the slot never shifts the
 layout in either state.
 The social links and the where/when of the author sit below it in the Overview, not in the Masthead

@@ -71,10 +71,7 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <SiteWordmark
-        text={site.handle.toLowerCase()}
-        className="text-foreground"
-      />
+      <SiteWordmark />
 
       <div aria-hidden className="h-(--fade-bottom-height)" />
 
