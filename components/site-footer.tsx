@@ -51,8 +51,14 @@ export function SiteFooter() {
                 </a>
               );
             })}
+            {/* Same treatment as the socials beside it, and the same the
+                command palette gives this entry (`external: true` in
+                `lib/palette.ts`): a raw XML document replacing the page is a
+                dead end with no way back. */}
             <a
               href={site.rssPath}
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="RSS feed"
               title="RSS feed — paste this address into a feed reader"
               className="flex size-8 items-center justify-center transition-colors hover:text-foreground"
