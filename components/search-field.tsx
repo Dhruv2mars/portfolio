@@ -54,7 +54,7 @@ export function SearchField({
             type="button"
             onClick={() => onChange("")}
             aria-label="Clear search"
-            className="absolute right-1.5 flex size-6 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="absolute right-1.5 flex size-6 items-center justify-center rounded-sm text-muted-foreground transition-[color] duration-150 ease-out hover:text-foreground"
           >
             <CloseIcon className="size-4" />
           </button>

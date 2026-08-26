@@ -35,7 +35,7 @@ export function PostItem({
             {/* Grey until the pointer is on it: colour is the reward for
                 choosing this one, not a thing six rows shout at once. */}
             <Image
-              className="aspect-1200/630 rounded-lg grayscale transition-[filter] duration-300 ease-out group-hover/post:grayscale-0"
+              className="aspect-1200/630 rounded-lg grayscale transition-[filter] duration-180 ease-out group-hover/post:grayscale-0"
               src={post.image}
               alt=""
               width={1200}

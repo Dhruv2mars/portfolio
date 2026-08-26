@@ -45,7 +45,7 @@ export function SiteFooter() {
                   rel="noopener noreferrer"
                   aria-label={social.label}
                   title={social.label}
-                  className="flex size-8 items-center justify-center transition-colors hover:text-foreground"
+                  className="flex size-8 items-center justify-center transition-[color] duration-150 ease-out hover:text-foreground"
                 >
                   <Glyph className="size-4" />
                 </a>
@@ -61,7 +61,7 @@ export function SiteFooter() {
               rel="noopener noreferrer"
               aria-label="RSS feed"
               title="RSS feed — paste this address into a feed reader"
-              className="flex size-8 items-center justify-center transition-colors hover:text-foreground"
+                  className="flex size-8 items-center justify-center transition-[color] duration-150 ease-out hover:text-foreground"
             >
               <Rss className="size-4" />
             </a>
