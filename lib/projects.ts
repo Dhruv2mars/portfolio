@@ -3,7 +3,7 @@ import { filterByQuery } from "@/lib/search";
 /**
  * What kind of thing the project *is*, which is what its gutter glyph draws.
  * Kept here as a plain string union so this module stays free of React —
- * `components/projects-section.tsx` owns the kind→glyph map.
+ * `components/project-row.tsx` owns the kind→glyph map.
  */
 export type ProjectKind =
   | "cli"

@@ -64,8 +64,7 @@ export async function fetchPublishedAiActivityPayload(): Promise<AiActivityPaylo
 }
 
 /**
- * Load published (or fallback) history. Today’s live projection is applied
- * client-side so ISR cache does not freeze the day-fraction.
+ * Load the token history that the hero figure draws.
  *
  * Source order is tokscale → blob → fixture, freshest first. The Worker is the
  * meter's own read route and holds today; the blob is last night's copy of the

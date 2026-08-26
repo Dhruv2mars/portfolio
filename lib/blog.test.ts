@@ -2,7 +2,6 @@ import { describe, expect, test } from "bun:test";
 import {
   estimateReadingTimeMinutes,
   parsePostSource,
-  selectLatestPublished,
   selectPublishedPosts,
   tryParsePostSource,
   type PostRecord,
@@ -32,13 +31,12 @@ describe("Blog read model", () => {
     expect(published.map((p) => p.slug)).toEqual(["shipped"]);
   });
 
-  test("empty published set yields no latest Posts", () => {
+  test("empty published set yields nothing", () => {
     const posts = [post({ slug: "wip", draft: true })];
     expect(selectPublishedPosts(posts)).toEqual([]);
-    expect(selectLatestPublished(posts, 3)).toEqual([]);
   });
 
-  test("latest published strip is newest-first and capped", () => {
+  test("the published set is newest-first", () => {
     const posts = [
       post({ slug: "a", publishedAt: "2026-01-01" }),
       post({ slug: "c", publishedAt: "2026-03-01" }),
@@ -46,9 +44,10 @@ describe("Blog read model", () => {
       post({ slug: "draft", draft: true, publishedAt: "2026-04-01" }),
     ];
 
-    expect(selectLatestPublished(posts, 2).map((p) => p.slug)).toEqual([
+    expect(selectPublishedPosts(posts).map((p) => p.slug)).toEqual([
       "c",
       "b",
+      "a",
     ]);
   });
 
