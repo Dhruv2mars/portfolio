@@ -1,0 +1,122 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "86b355df4183",
+  "session_id": "01a03d1d-d4a2-7ff1-a3f5-91c448052dcf",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-26T08:44:39.36048Z",
+  "branch": "fix/idiom-spacing-rhythm",
+  "checkpoints_count": 8,
+  "save_step_count": 4,
+  "files_touched": [
+    "components/profile-header.tsx"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-luna",
+  "turn_id": "9db58c795a74",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 171677,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 1369600,
+    "output_tokens": 18013,
+    "api_call_count": 33
+  },
+  "session_metrics": {
+    "turn_count": 8
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-26T08:44:39.336761Z",
+    "agent_lines": 2,
+    "agent_removed": 4,
+    "human_added": 16,
+    "human_modified": 2,
+    "human_removed": 0,
+    "total_committed": 20,
+    "total_lines_changed": 39,
+    "agent_percentage": 15.384615384615385,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 871,
+      "user_lines_removed": 1,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".impeccable/critique/2026-08-26T00-58-39Z__components-site-wordmark-tsx.md": 104,
+        ".opencode/plugins/entire.ts": 216,
+        "next-env.d.ts": 2
+      },
+      "user_removed_per_file": {
+        "next-env.d.ts": 1
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 106,
+      "agent_lines_removed": 1,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 106,
+      "agent_lines_removed": 1,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3,
+      "agent_lines_removed": 3,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}
