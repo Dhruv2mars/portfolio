@@ -1,66 +1,74 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Reveal } from "@/components/reveal";
-import { formatPostDate, getPublishedPosts } from "@/lib/blog";
+import { notFound } from "next/navigation";
+import { Panel } from "@/components/panel";
+import { PostSearch } from "@/components/post-search";
+import { getPublishedPosts } from "@/lib/blog";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description: "Product thinking in writing.",
-  openGraph: {
+/**
+ * With nothing published the route 404s, so it must not advertise itself as a
+ * Blog — naming a page the Visitor cannot reach is a lie told by the tab.
+ */
+export function generateMetadata(): Metadata {
+  if (getPublishedPosts().length === 0) return { title: "Nothing lives here" };
+  return {
     title: "Blog",
-    description: "Product thinking in writing.",
-  },
+    alternates: { canonical: `${site.url}/blog` },
+  };
+}
+
+type BlogPageProps = {
+  searchParams?: Promise<{ q?: string | string[] }>;
 };
 
-export default function BlogPage() {
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  // Nothing empty is ever shown to a Visitor (CONTEXT.md → Blog / Post).
   const posts = getPublishedPosts();
+  if (posts.length === 0) notFound();
+
+  const params = await searchParams;
+  const initialQuery = Array.isArray(params?.q)
+    ? (params.q[0] ?? "")
+    : (params?.q ?? "");
+
+  // The body is the one thing a row never draws, and the rows are drawn in the
+  // browser here — so it is dropped before the list crosses over rather than
+  // shipped down and ignored.
+  const summaries = posts.map(({ content: _content, ...summary }) => summary);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${site.url}/blog`,
+    name: "Blog",
+    url: `${site.url}/blog`,
+    author: { "@type": "Person", name: site.name, url: site.url },
+    blogPost: posts.map((post) => ({
+      "@type": "BlogPosting",
+      "@id": `${site.url}/blog/${post.slug}`,
+      headline: post.title,
+      description: post.summary,
+      url: `${site.url}/blog/${post.slug}`,
+      datePublished: post.publishedAt,
+    })),
+  };
 
   return (
-    <section className="pt-16 pb-20 sm:pt-20" aria-labelledby="blog-heading">
-      <Reveal>
-        <p className="eyebrow mb-4">Index</p>
-        <h1 id="blog-heading" className="page-title">
-          Blog
-        </h1>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
 
-        {posts.length === 0 ? (
-          <div className="mt-10 rounded-2xl border border-dashed border-border-strong bg-surface/40 px-5 py-10 sm:px-8">
-            <p className="text-[15px] font-medium tracking-[-0.01em] text-foreground">
-              Coming soon
-            </p>
-            <p className="body-copy mt-3 max-w-[30rem]">
-              The pipeline is live — MDX, RSS, and SEO are wired. Posts land
-              here when they&apos;re ready.
-            </p>
-          </div>
-        ) : (
-          <ul
-            className="mt-10 divide-y divide-border/70"
-            aria-labelledby="blog-heading"
-          >
-            {posts.map((post) => (
-              <li key={post.slug}>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="row-interactive block py-4 no-underline"
-                >
-                  <span className="text-[1.0625rem] font-medium tracking-[-0.015em] text-foreground">
-                    {post.title}
-                  </span>
-                  <p className="meta-copy mt-1.5">
-                    {formatPostDate(post.publishedAt)}
-                    <span aria-hidden> · </span>
-                    {post.readingTimeMinutes} min read
-                  </p>
-                  <p className="mt-2 max-w-[36rem] text-[14px] leading-6 text-muted text-pretty">
-                    {post.summary}
-                  </p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Reveal>
-    </section>
+      {/* One panel, not a heading floating above a list: the index is a single
+          thing on the page, and the site draws single things inside rails.
+          There is no tagline under the title — the reference needs one because
+          its heading *is* the tagline; ours says the word the nav promised and
+          then gets out of the way of the posts. */}
+      <Panel id="blog">
+        <PostSearch posts={summaries} initialQuery={initialQuery} />
+      </Panel>
+    </>
   );
 }

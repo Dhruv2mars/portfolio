@@ -1,208 +1,57 @@
-import {
-  AI_ACTIVITY_TIMEZONE,
-  calendarDateInTimeZone,
-  type AiActivityPayload,
-  shiftYmd,
-} from "@/lib/ai-activity-payload";
+import { shiftYmd } from "@/lib/ai-activity-payload";
 
 export type DailyTokens = {
   date: string;
   tokens: number;
 };
 
-export type Intensity = 0 | 1 | 2 | 3 | 4;
-
-export type ActivityDay = DailyTokens & {
-  intensity: Intensity;
-  /** Synthetic “live” projection for the current local day. */
-  live?: boolean;
-};
-
-export type AiActivity = {
-  days: ActivityDay[];
-  lifetimeTokens: number;
-  /** ISO timestamp of the nightly payload, when known. */
-  generatedAt: string | null;
-  timezone: string;
-};
-
-export type AiActivitySource = "blob" | "fallback";
-
-/** GitHub-like 5-level scale relative to the densest day in the series. */
-export function intensityFromTokens(
-  tokens: number,
-  maxTokens: number,
-): Intensity {
-  if (tokens <= 0 || maxTokens <= 0) return 0;
-  const ratio = tokens / maxTokens;
-  if (ratio <= 0.25) return 1;
-  if (ratio <= 0.5) return 2;
-  if (ratio <= 0.75) return 3;
-  return 4;
-}
+export type AiActivitySource = "tokscale" | "blob" | "fallback";
 
 /**
- * Expand a sparse daily series into consecutive calendar days (0-filled gaps)
- * ending on `endDate`, keeping at most `windowDays` cells.
+ * Expand a sparse series into consecutive calendar days from `start` to `end`.
+ *
+ * Inside this window an absent day is a measured zero, not a hole: the meter
+ * reads every local session on the machine, so a day it never mentions is a
+ * day nothing ran. That holds only up to the end of the record — past it, an
+ * absent day is unknown rather than quiet, and filling it with zero would be
+ * an invented number. Callers pick `end`; the hero passes the last measured
+ * day (`lastMeasuredDate` in `lib/hero-series.ts`) rather than today.
  */
-export function fillSparseDailySeries(
+export function buildDailySeries(
   days: readonly DailyTokens[],
-  endDate: string,
-  windowDays = 365,
+  start: string,
+  end: string,
 ): DailyTokens[] {
-  const byDate = new Map(days.map((d) => [d.date, d.tokens]));
-  const startDate = shiftYmd(endDate, -(windowDays - 1));
-  const filled: DailyTokens[] = [];
-  for (
-    let cursor = startDate;
-    cursor <= endDate;
-    cursor = shiftYmd(cursor, 1)
-  ) {
-    filled.push({ date: cursor, tokens: byDate.get(cursor) ?? 0 });
+  const byDate = new Map(days.map((day) => [day.date, day.tokens]));
+  const series: DailyTokens[] = [];
+  for (let cursor = start; cursor <= end; cursor = shiftYmd(cursor, 1)) {
+    series.push({ date: cursor, tokens: byDate.get(cursor) ?? 0 });
   }
-  return filled;
+  return series;
 }
 
-export function buildAiActivity(
-  series: readonly DailyTokens[],
-  options?: {
-    liveDate?: string;
-    generatedAt?: string | null;
-    timezone?: string;
-    /** Authoritative lifetime from the payload (preferred over series sum). */
-    lifetimeTokens?: number;
-  },
-): AiActivity {
-  const max = Math.max(0, ...series.map((d) => d.tokens));
-  const liveDate = options?.liveDate;
-
-  const days: ActivityDay[] = series.map((day) => ({
-    ...day,
-    intensity: intensityFromTokens(day.tokens, max),
-    live: liveDate === day.date ? true : undefined,
-  }));
-
-  const seriesSum = series.reduce((sum, day) => sum + day.tokens, 0);
-  const lifetimeTokens =
-    options?.lifetimeTokens !== undefined
-      ? options.lifetimeTokens
-      : seriesSum;
-
-  return {
-    days,
-    lifetimeTokens,
-    generatedAt: options?.generatedAt ?? null,
-    timezone: options?.timezone ?? AI_ACTIVITY_TIMEZONE,
-  };
-}
-
-/**
- * Fraction of the local calendar day elapsed [0, 1].
- */
-export function dayFractionElapsed(now: Date, timeZone: string): number {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone,
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hourCycle: "h23",
-  }).formatToParts(now);
-  const hour = Number(parts.find((p) => p.type === "hour")?.value ?? 0);
-  const minute = Number(parts.find((p) => p.type === "minute")?.value ?? 0);
-  const second = Number(parts.find((p) => p.type === "second")?.value ?? 0);
-  const elapsed = hour * 3600 + minute * 60 + second;
-  return Math.min(1, Math.max(0, elapsed / 86_400));
-}
-
-/**
- * Conservative full-day baseline: minimum of the last up-to-7 days
- * before `beforeDate` that have tokens > 0.
- */
-export function sevenDayMinBaseline(
-  days: readonly { date: string; tokens: number }[],
-  beforeDate: string,
-): number {
-  const prior = days
-    .filter((d) => d.date < beforeDate && d.tokens > 0)
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(-7);
-  if (prior.length === 0) return 0;
-  return Math.min(...prior.map((d) => d.tokens));
-}
-
-/** Projected tokens “so far today” from the 7-day min baseline. */
-export function projectTodayTokens(
-  days: readonly { date: string; tokens: number }[],
-  now: Date,
-  timeZone: string,
-): { date: string; tokens: number; baseline: number } {
-  const today = calendarDateInTimeZone(now, timeZone);
-  const baseline = sevenDayMinBaseline(days, today);
-  const tokens = Math.round(baseline * dayFractionElapsed(now, timeZone));
-  return { date: today, tokens, baseline };
-}
-
-/** Cacheable history through the payload’s last published day (no live today). */
-export function materializeHistory(payload: AiActivityPayload): AiActivity {
-  const timeZone = payload.timezone || AI_ACTIVITY_TIMEZONE;
-  const history = [...payload.days].sort((a, b) =>
-    a.date.localeCompare(b.date),
-  );
-  const endHistory = history.at(-1)!.date;
-
-  return buildAiActivity(fillSparseDailySeries(history, endHistory, 364), {
-    generatedAt: payload.generatedAt,
-    timezone: timeZone,
-    lifetimeTokens: payload.lifetimeTokens,
-  });
-}
-
-/**
- * Append the live today cell. Projection is ≤ recent positive days, so
- * existing intensities stay valid without a full rebuild.
- * Lifetime stays the published nightly total (excludes synthetic today).
- */
-export function withLiveToday(history: AiActivity, now = new Date()): AiActivity {
-  const projection = projectTodayTokens(
-    history.days,
-    now,
-    history.timezone,
-  );
-  // Avoid duplicating the last published day if clocks briefly disagree.
-  if (projection.date <= (history.days.at(-1)?.date ?? "")) {
-    return history;
-  }
-  const max = Math.max(0, ...history.days.map((d) => d.tokens));
-
-  return {
-    days: [
-      ...history.days,
-      {
-        date: projection.date,
-        tokens: projection.tokens,
-        intensity: intensityFromTokens(projection.tokens, max),
-        live: true,
-      },
-    ],
-    lifetimeTokens: history.lifetimeTokens,
-    generatedAt: history.generatedAt,
-    timezone: history.timezone,
-  };
-}
-
-export function materializeAiActivity(
-  payload: AiActivityPayload,
-  now = new Date(),
-  options?: { includeLiveToday?: boolean },
-): AiActivity {
-  const history = materializeHistory(payload);
-  if (options?.includeLiveToday === false) return history;
-  return withLiveToday(history, now);
-}
-
+/** Exact count. Used where a number is a number: alt text, tests, scripts. */
 export function formatTokenCount(tokens: number): string {
   return new Intl.NumberFormat("en-US").format(tokens);
 }
 
-export const LIVE_COUNT_START_RATIO = 0.8;
-export const LIVE_COUNT_DURATION_MS = 90_000;
+/**
+ * The number as it is read aloud: `10.4B`, `512M`, `84.2K`. Ten billion is
+ * eleven digits, and eleven digits is a serial number, not a quantity — the
+ * page wants the magnitude, and the magnitude is the first three characters.
+ */
+export function formatCompactTokens(tokens: number): string {
+  const value = Math.max(0, Math.round(tokens));
+  for (const [limit, suffix] of [
+    [1e12, "T"],
+    [1e9, "B"],
+    [1e6, "M"],
+    [1e3, "K"],
+  ] as const) {
+    if (value >= limit) {
+      const scaled = value / limit;
+      return `${scaled >= 100 ? Math.round(scaled) : Number(scaled.toFixed(1))}${suffix}`;
+    }
+  }
+  return String(value);
+}

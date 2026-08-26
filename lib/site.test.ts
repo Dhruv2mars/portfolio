@@ -1,26 +1,22 @@
 import { describe, expect, test } from "bun:test";
-import { site } from "./site";
+import { profileUrls, site } from "@/lib/site";
 
-describe("site intro", () => {
-  test("names Dhruv Sharma and keeps positioning short", () => {
-    expect(site.name).toBe("Dhruv Sharma");
-    expect(site.positioning.split(/\s+/).length).toBeLessThanOrEqual(28);
-    expect(site.positioning.toLowerCase()).not.toContain("prototype junkie");
-    expect(site.positioning.toLowerCase()).not.toContain("feedback addict");
+describe("site identity", () => {
+  test("the canonical URL is absolute and unslashed", () => {
+    expect(site.url).toBe("https://dhruv2mars.com");
+    expect(site.url.endsWith("/")).toBe(false);
   });
 
-  test("exposes an avatar for the intro and header", () => {
-    expect(site.avatar).toMatch(/^https:\/\//);
-  });
-
-  test("exposes social destinations for X, GitHub, LinkedIn, and email", () => {
-    const labels = site.socials.map((s) => s.label);
-    expect(labels).toContain("X");
-    expect(labels).toContain("GitHub");
-    expect(labels).toContain("LinkedIn");
-    expect(labels).toContain("Email");
-    for (const social of site.socials) {
-      expect(social.href.length).toBeGreaterThan(0);
+  test("structured-data profiles exclude the mailto link", () => {
+    const urls = profileUrls();
+    expect(urls.some((url) => url.startsWith("mailto:"))).toBe(false);
+    expect(urls.length).toBe(site.socials.length - 1);
+    for (const url of urls) {
+      expect(() => new URL(url)).not.toThrow();
     }
+  });
+
+  test("the masthead uses the current Codex pet portrait", () => {
+    expect(site.avatar).toBe("/avatar/sunny.png");
   });
 });

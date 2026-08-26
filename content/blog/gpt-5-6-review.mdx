@@ -1,0 +1,67 @@
+---
+title: gpt-5.6 review: after burning 3.5b tokens
+publishedAt: 2026-08-19
+summary: gpt-5.6 is like a bull that keeps hitting the wall until the wall breaks. the surprising part is how efficient it is while doing that.
+tags: gpt-5.6, codex, models
+draft: false
+---
+
+## tl;dr
+
+gpt-5.6 is like a bull that keeps hitting the wall until the wall breaks. the surprising part is how efficient it is while doing that.
+
+i am very late to the party, but nevertheless, here are my thoughts on the gpt-5.6 family.
+
+first of all, i would like to point out just how efficient these models are. i am on the $20 plan, and i still got so much usage out of it. credit goes to tibo for the multiple resets as well. imo, this is the best $20 plan out there.
+
+now, let's talk about what actually changed.
+
+## what changed from gpt-5.5
+
+gpt-5.5 was really bad at long-horizon tasks, which has improved a ton here. compaction also got better, which means 5.6 can go for hours without human intervention. atp there is almost no use for /goal in codex. with 5.5, it felt useful because the model had the tendency to stop in the middle of a task. with 5.6, that happens far less often. frontend design has improved as well, but it is still way behind the competition.
+
+and some things haven't changed at all: it still writes too much code, too many tests, and loves to overcomplicate everything.
+
+with that out of the way, here is how i see all three models.
+
+## gpt-5.6 sol: the best overall
+
+gpt-5.6 sol is the best overall model in the family. it has that big-model energy [ⓘ](#bigsmall-model-energy) and the best figure-out ability [ⓘ](#figure-out-ability). the biggest thing i noticed is how good it is for long-horizon work. it just doesn't stop until the goal is reached. it is also the model that loves to spawn subagents.
+
+my most-used model was sol low. it is capable and fast, and for most of my work, it was enough. at times, when it missed something or i needed more reasoning, i would switch to medium reasoning. if you have no budget limitations, sol high is probably the best version of sol. xhigh and max just don't make much sense to me. the price-to-performance ratio gets bad very quickly.
+
+## gpt-5.6 terra: the awkward middle child
+
+gpt-5.6 terra is in a weird spot. it's like the awkward middle child of the family. it doesn't have the performance or figure-out ability of sol, and it isn't cheap like luna. at the start, i used terra high and terra medium a lot. but eventually switched almost completely to sol low.
+
+terra also doesn't like to spawn subagents as frequently as sol does. it isn't great for long-horizon work either. it has more of that gpt-5.5 feel where it will work for some time and then stop, waiting for me to intervene. low and medium reasoning levels are just not smart enough. xhigh and max don't make sense from a price-to-performance perspective. terra high is somewhat comparable to sol low, but sol still has more figure-out ability and that big-model energy. and even after the updated pricing, terra got overshadowed by luna from the other side.
+
+## gpt-5.6 luna: the underdog
+
+gpt-5.6 luna is the most interesting model in the family. it is the underdog. the best part about luna is its price-to-performance ratio. it is so cheap, and that's its power. it is the smallest model, so naturally it has the most small-model energy and the least figure-out ability out of all three. but it is extremely capable when given a direct, scoped task. and that's exactly why i think it is the best model to use as a subagent.
+
+luna low and medium are just not smart enough, but can be used for tasks like session naming, commit messages, etc. high, xhigh, and max are the real deal. surprisingly, luna max even scored higher than sol low on some benchmarks. and after the 80% price cut on luna, these higher reasoning levels became even more useful.
+
+there is another thing here that i think is misunderstood about reasoning levels. from what i have seen with openai models, selecting a higher reasoning level doesn't necessarily mean the model will always spend significantly more tokens. if the task isn't that complex, the model doesn't automatically sit there thinking forever just because max reasoning is selected. the important thing is that the reasoning ceiling is higher. the model has permission to spend more reasoning tokens when the task actually requires it. it doesn't necessarily mean it will spend that entire budget every single time. that's why, even while using luna max, i still got way more usage than i expected.
+
+behavior-wise, luna is also very different from sol. it doesn't like spawning subagents at all. it is great for browser-use, computer-use and scheduled automation tasks. but it is not great for long-horizon work. if you leave it running on something too open-ended for too long, it has a tendency to go off on a different tangent. that's why luna makes the most sense to me as a cheap, highly capable worker that is given a clearly scoped task.
+
+## what's still bad
+
+as much as i like the 5.6 family, there are still some very obvious problems. it loves to overcomplicate things. it writes too much code. it writes too many tests. frontend design is still not great. the subagent implementation in codex is bad.
+
+## verdict
+
+the 5.6 family becomes significantly better when paired with another model that complements its quirks: something better at design, reviewing, and cleaning up the code after (fable/opus).
+
+---
+
+## definitions
+
+### figure-out ability
+
+a model's ability to take ambiguous tasks and figure things out on its own. ex: fable and qwen27b on extreme ends of the spectrum.
+
+### big/small model energy
+
+how much training data and knowledge the model has, where it already knows more. ex: fable and qwen27b on extreme ends of the spectrum.

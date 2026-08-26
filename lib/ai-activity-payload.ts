@@ -6,7 +6,10 @@ export type AiActivityPayload = {
   version: 1;
   generatedAt: string;
   timezone: string;
-  /** Complete days only (through yesterday in `timezone`). */
+  /**
+   * Ascending by date, in `timezone`. The tokscale source includes today, so
+   * the last entry is a day still in progress and will grow before it settles.
+   */
   days: { date: string; tokens: number }[];
   lifetimeTokens: number;
 };
@@ -109,6 +112,26 @@ export function shiftYmd(date: string, deltaDays: number): string {
   const utcNoon = new Date(Date.UTC(y!, m! - 1, d!, 12, 0, 0));
   utcNoon.setUTCDate(utcNoon.getUTCDate() + deltaDays);
   return calendarDateInTimeZone(utcNoon, "UTC");
+}
+
+/** First day of the month a date falls in. */
+/** Day of week (0 = Sunday) for a YYYY-MM-DD calendar date. */
+export function weekdayIndex(date: string): number {
+  const [y, m, d] = date.split("-").map(Number);
+  return new Date(Date.UTC(y!, m! - 1, d!, 12)).getUTCDay();
+}
+
+export function startOfMonth(date: string): string {
+  return `${date.slice(0, 7)}-01`;
+}
+
+/** Same day-of-month `deltaMonths` away, clamped to the 1st. */
+export function shiftMonth(date: string, deltaMonths: number): string {
+  const [y, m] = date.split("-").map(Number);
+  const total = y! * 12 + (m! - 1) + deltaMonths;
+  const year = Math.floor(total / 12);
+  const month = total - year * 12 + 1;
+  return `${String(year).padStart(4, "0")}-${String(month).padStart(2, "0")}-01`;
 }
 
 /** Previous calendar day (YYYY-MM-DD) in a timezone. */

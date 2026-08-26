@@ -1,38 +1,58 @@
-import { HomeIntro } from "@/components/home-intro";
-import { HomeAiActivity } from "@/components/home-ai-activity";
-import { HomeSelectedProjects } from "@/components/home-selected-projects";
-import { HomeBlog } from "@/components/home-blog";
-import { composeHomeContentSections } from "@/lib/home";
-import { getSelectedProjects } from "@/lib/projects";
+import { BlogSection, HOME_POST_LIMIT } from "@/components/blog-section";
+import { Overview } from "@/components/overview";
+import { ProfileHeader } from "@/components/profile-header";
+import {
+  HOME_PROJECT_LIMIT,
+  ProjectsSection,
+} from "@/components/projects-section";
 import { getPublishedPosts } from "@/lib/blog";
+import { cn } from "@/lib/utils";
 
-/** Pick up nightly Blob publishes without a redeploy. */
+/** Matches the token record blob's own cache window. */
 export const revalidate = 3600;
 
-export default function HomePage() {
-  const sections = composeHomeContentSections({
-    selectedProjectCount: getSelectedProjects().length,
-    publishedPostCount: getPublishedPosts().length,
-  });
+/**
+ * The hatched band between panels. It is load-bearing: it is what makes the
+ * page read as one continuous sheet with cut-outs rather than as stacked cards.
+ */
+function PanelDivider({ className }: { className?: string }) {
+  return (
+    <div
+      aria-hidden
+      className={cn(
+        "stripe-divider h-(--separator-height) w-full border-x border-line",
+        className,
+      )}
+    />
+  );
+}
+
+export default function Home() {
+  // Nothing empty is ever shown: with no Post published there is no Blog
+  // panel, the same rule the nav and `/blog` itself follow.
+  const hasPosts = getPublishedPosts().length > 0;
 
   return (
-    <div className="pb-16 sm:pb-20">
-      {sections.map((section) => {
-        switch (section) {
-          case "intro":
-            return <HomeIntro key={section} />;
-          case "ai-activity":
-            return <HomeAiActivity key={section} />;
-          case "selected-projects":
-            return <HomeSelectedProjects key={section} />;
-          case "blog":
-            return <HomeBlog key={section} />;
-          default: {
-            const _exhaustive: never = section;
-            return _exhaustive;
-          }
-        }
-      })}
+    <div className="[--separator-height:--spacing(8)] **:data-[slot=panel]:scroll-mt-[calc(var(--header-height)+var(--separator-height))]">
+      <ProfileHeader />
+
+      {/* The reference bands the hero off from the panels before identity
+          opens. The bands group panels; they do not separate every one of
+          them. */}
+      <PanelDivider />
+      <Overview />
+
+      <PanelDivider />
+      <ProjectsSection limit={HOME_PROJECT_LIMIT} />
+
+      {hasPosts ? (
+        <>
+          <PanelDivider />
+          <BlogSection limit={HOME_POST_LIMIT} />
+        </>
+      ) : null}
+      {/* No trailing divider. Bands go *between* panels; the footer opens with
+          its own, and two adjacent bands read as a double border. */}
     </div>
   );
 }

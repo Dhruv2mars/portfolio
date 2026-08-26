@@ -23,3 +23,12 @@ bun.lockb
 *.tsbuildinfo
 
 .vercel
+
+# critique artifacts (screenshots, progress page)
+.critique/
+
+# macOS
+.DS_Store
+
+# impeccable critique artifacts
+.impeccable/

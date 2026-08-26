@@ -1,4 +1,5 @@
 import { createHash, timingSafeEqual } from "node:crypto";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import {
   parseAiActivityPayload,
@@ -41,6 +42,10 @@ export async function POST(req: Request) {
 
   try {
     const { url } = await publishAiActivityPayload(payload);
+    // Home is ISR on a one-hour window, so without this the figure keeps
+    // drawing last night's blob for up to an hour after tonight's has landed.
+    // A publish that the page does not pick up is a sync that did not happen.
+    revalidatePath("/");
     return NextResponse.json({
       ok: true,
       url,

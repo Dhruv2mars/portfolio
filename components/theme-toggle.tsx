@@ -3,66 +3,49 @@
 import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "@/components/icons";
+import { nextTheme, type ColorScheme } from "@/lib/theme";
 
-const emptySubscribe = () => () => {};
+/** Never fires — the snapshot difference alone reports "hydrated". */
+const noSubscribe = () => () => {};
 
-/** Quiet theme control — dark default, system-aware, persisted override. */
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(
-    emptySubscribe,
+    noSubscribe,
     () => true,
     () => false,
   );
-  const isDark = resolvedTheme === "dark";
+
+  const current: ColorScheme = resolvedTheme === "light" ? "light" : "dark";
+  const target = nextTheme(current);
+
+  function toggle() {
+    const apply = () => setTheme(target);
+    const doc = document as Document & {
+      startViewTransition?: (cb: () => void) => void;
+    };
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (doc.startViewTransition && !reduced) {
+      doc.startViewTransition(apply);
+    } else {
+      apply();
+    }
+  }
 
   return (
     <button
       type="button"
-      disabled={!mounted}
-      className="inline-flex size-8 items-center justify-center rounded-full text-muted transition-[color,background-color,transform] duration-150 ease-[var(--ease-out-quad)] hover:bg-surface-hover hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.92] disabled:pointer-events-none"
-      aria-label={
-        !mounted
-          ? "Theme"
-          : isDark
-            ? "Switch to light theme"
-            : "Switch to dark theme"
-      }
-      onClick={() => {
-        if (!mounted) return;
-        setTheme(isDark ? "light" : "dark");
-      }}
+      onClick={toggle}
+      aria-label={mounted ? `Switch to ${target} theme` : "Switch theme"}
+      className="flex size-8 touch-manipulation items-center justify-center rounded-lg text-muted-foreground transition-[background-color,color,transform] hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
     >
-      <span className="relative size-4">
-        {mounted ? (
-          <>
-            <Sun
-              size={15}
-              weight="bold"
-              aria-hidden
-              className={[
-                "absolute inset-0 m-auto transition-[opacity,transform] duration-300 ease-[var(--ease-out-expo)]",
-                isDark
-                  ? "rotate-0 scale-100 opacity-100"
-                  : "-rotate-90 scale-50 opacity-0",
-              ].join(" ")}
-            />
-            <Moon
-              size={15}
-              weight="bold"
-              aria-hidden
-              className={[
-                "absolute inset-0 m-auto transition-[opacity,transform] duration-300 ease-[var(--ease-out-expo)]",
-                isDark
-                  ? "rotate-90 scale-50 opacity-0"
-                  : "rotate-0 scale-100 opacity-100",
-              ].join(" ")}
-            />
-          </>
-        ) : (
-          <span className="absolute inset-0 rounded-sm bg-border" aria-hidden />
-        )}
-      </span>
+      {/* The glyph names the theme you are in, not the one you would get.
+          A control that shows its own destination reads as a status light the
+          first time and a lie the second; every toolkit worth copying — and
+          the reference — shows the current scheme and puts the action in the
+          label. Only one is ever visible, so the control never shifts. */}
+      <Moon className={`size-4.5 ${mounted && current === "dark" ? "block" : "hidden"}`} />
+      <Sun className={`size-4.5 ${mounted && current === "dark" ? "hidden" : "block"}`} />
     </button>
   );
 }

@@ -1,4 +1,4 @@
-# AI Activity (nightly tokscale → Vercel Blob)
+# AI Activity (nightly tokscale → Vercel Blob → hero figure)
 
 ## What it does
 
@@ -6,7 +6,9 @@
 2. Syncs Cursor into tokscale (best-effort), exports combined daily totals **through yesterday** (`Asia/Kolkata`)
 3. `POST /api/ai-activity/ingest` with a shared secret → overwrites `ai-activity/latest.json` in Vercel Blob
 4. Site reads Blob (falls back to `data/ai-activity.fallback.json`)
-5. **Today** on the heatmap is a conservative live estimate: `min(last ≤7 positive days) × day fraction`, with a ~90s count-up on hover
+5. Home draws it as the hero figure — this calendar year to date, one line, smoothed on a 15-day triangular kernel (`lib/hero-series.ts`)
+
+**Today** is not estimated. The curve runs to the last day that was ingested and stops; nothing stands in for the hours since. The heatmap that used to project it is gone — see ADR-0007.
 
 No git push. No hourly jobs.
 

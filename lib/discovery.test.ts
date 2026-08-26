@@ -19,6 +19,7 @@ describe("discovery contracts", () => {
       siteName: "Dhruv Sharma",
       description: "AI-pilled Design Engineer.",
       posts: [],
+      feedPath: "/feed.xml",
     });
     expect(empty).toContain("<rss");
     expect(empty).toContain("<channel>");
@@ -29,6 +30,7 @@ describe("discovery contracts", () => {
       siteName: "Dhruv Sharma",
       description: "AI-pilled Design Engineer.",
       posts: [samplePost],
+      feedPath: "/feed.xml",
     });
     expect(withPost).toContain("<item>");
     expect(withPost).toContain("https://dhruv2mars.com/blog/judgment");
@@ -40,6 +42,7 @@ describe("discovery contracts", () => {
       siteName: "Dhruv Sharma",
       description: "AI-pilled Design Engineer.",
       posts: [{ ...samplePost, slug: "ai&design" }],
+      feedPath: "/feed.xml",
     });
     expect(ampersandSlug).toContain(
       "https://dhruv2mars.com/blog/ai%26design",
@@ -47,7 +50,42 @@ describe("discovery contracts", () => {
     expect(ampersandSlug).not.toContain("/blog/ai&design");
   });
 
-  test("sitemap lists Home, Blog, Projects, and published Posts", () => {
+  // The three declarations a hand-rolled feed usually forgets, and that a
+  // reader uses to poll cheaply and to know where to poll.
+  test("the feed points at itself, dates itself and declares its language", () => {
+    const xml = buildRssXml({
+      siteUrl: "https://dhruv2mars.com",
+      siteName: "Dhruv Sharma",
+      description: "AI-pilled Design Engineer.",
+      posts: [samplePost],
+      feedPath: "/feed.xml",
+    });
+    expect(xml).toContain('xmlns:atom="http://www.w3.org/2005/Atom"');
+    expect(xml).toContain(
+      '<atom:link href="https://dhruv2mars.com/feed.xml" rel="self" type="application/rss+xml" />',
+    );
+    expect(xml).toContain("<language>en</language>");
+    expect(xml).toContain(
+      `<lastBuildDate>${new Date("2026-06-01").toUTCString()}</lastBuildDate>`,
+    );
+    expect(xml).toContain('<guid isPermaLink="true">');
+  });
+
+  test("an empty feed still dates itself, from the clock it was handed", () => {
+    const xml = buildRssXml({
+      siteUrl: "https://dhruv2mars.com",
+      siteName: "Dhruv Sharma",
+      description: "AI-pilled Design Engineer.",
+      posts: [],
+      feedPath: "/feed.xml",
+      now: new Date("2026-08-20T00:00:00Z"),
+    });
+    expect(xml).toContain(
+      "<lastBuildDate>Thu, 20 Aug 2026 00:00:00 GMT</lastBuildDate>",
+    );
+  });
+
+  test("sitemap lists Home, Blog, and published Posts", () => {
     const entries = buildSitemapEntries({
       siteUrl: "https://dhruv2mars.com",
       posts: [samplePost],
@@ -55,26 +93,26 @@ describe("discovery contracts", () => {
     const urls = entries.map((e) => e.url);
     expect(urls).toContain("https://dhruv2mars.com");
     expect(urls).toContain("https://dhruv2mars.com/blog");
-    expect(urls).toContain("https://dhruv2mars.com/projects");
     expect(urls).toContain("https://dhruv2mars.com/blog/judgment");
+    expect(urls).toContain("https://dhruv2mars.com/projects");
 
     const encoded = buildSitemapEntries({
       siteUrl: "https://dhruv2mars.com",
       posts: [{ ...samplePost, slug: "ai&design" }],
+      feedPath: "/feed.xml",
     });
     expect(encoded.map((e) => e.url)).toContain(
       "https://dhruv2mars.com/blog/ai%26design",
     );
   });
 
-  test("sitemap with zero Posts still lists core routes", () => {
+  test("sitemap omits Blog entirely until a Post is published", () => {
     const entries = buildSitemapEntries({
       siteUrl: "https://dhruv2mars.com",
       posts: [],
     });
     expect(entries.map((e) => e.url)).toEqual([
       "https://dhruv2mars.com",
-      "https://dhruv2mars.com/blog",
       "https://dhruv2mars.com/projects",
     ]);
   });

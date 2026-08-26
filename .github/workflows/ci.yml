@@ -1,0 +1,40 @@
+# The gate DESIGN.md §7 says exists. Tests 1, 9, 10 and 11 are enforced by
+# `bun test` and `bun run build`; without a runner they were a promise, and a
+# promise is not a gate.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      # `--frozen-lockfile`: a lockfile that drifts in CI is a build that
+      # passes on a dependency set nobody committed.
+      - run: bun install --frozen-lockfile
+
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun test
+
+      # Last, because it is the slowest and because the glossary check
+      # (test 10) fails here rather than in `bun test`.
+      - run: bun run build
+        env:
+          # No Blob token in CI, so the store falls through to the checked-in
+          # fixture. That is the fallback path shipping, so exercising it here
+          # is the point rather than a gap.
+          NEXT_PUBLIC_SITE_URL: https://dhruv2mars.com

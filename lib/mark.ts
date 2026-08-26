@@ -1,0 +1,35 @@
+/**
+ * The short mark as a standalone SVG, for the two places React cannot reach:
+ * the home-screen icon and the share card, both rasterised at build time by
+ * satori, which can mount neither `ShortMark` nor inherit `currentColor`.
+ *
+ * `d2m` reduced to outlines — Geist, tracked the way the heading face is set —
+ * so the mark is the same letterforms everywhere rather than whatever face the
+ * renderer happens to reach for. Semibold rather than the medium the panel
+ * uses: this is the mark at its smallest, and the extra weight is the part
+ * that survives the raster.
+ *
+ * `app/icon.svg` carries the same outline inline, because a favicon is a
+ * static file with no module system behind it. `lib/mark.test.ts` holds the
+ * two copies to each other.
+ */
+
+/** Outlines of `d2m`, sitting on the type baseline at 100 units to the em. */
+export const MARK_PATH =
+  "M26 1.20Q19.20 1.20 14.25-2.20Q9.30-5.60 6.60-11.85Q3.90-18.10 3.90-26.70Q3.90-35.20 6.65-41.50Q9.40-47.80 14.35-51.20Q19.30-54.60 26-54.60Q31.60-54.60 35.85-52.30Q40.10-50 42.30-45.80L42.30-71L55.10-71L55.10 0L42.90 0L42.60-7.90Q40.40-3.60 36-1.20Q31.60 1.20 26 1.20M29.90-9.20Q35.80-9.20 39.05-13.75Q42.30-18.30 42.30-26.70Q42.30-35.20 39.10-39.70Q35.90-44.20 29.90-44.20Q24.10-44.20 20.65-39.55Q17.20-34.90 17.20-26.70Q17.20-18.70 20.65-13.95Q24.10-9.20 29.90-9.20M118 0L65.50 0Q65.50-8.60 67.90-15.05Q70.30-21.50 76-26.85Q81.70-32.20 91.40-37.30Q96.20-39.90 99.10-41.90Q102-43.90 103.30-46.05Q104.60-48.20 104.60-51.20Q104.60-55.70 101.70-58.50Q98.80-61.30 93.10-61.30Q87-61.30 83.45-57.85Q79.90-54.40 79.10-48L65.70-48.80Q66.70-59.90 73.80-66.25Q80.90-72.60 93.10-72.60Q104.90-72.60 111.45-66.75Q118-60.90 118-51.40Q118-46 116.15-42.10Q114.30-38.20 110.15-34.95Q106-31.70 99-28Q90.20-23.30 85.80-18.95Q81.40-14.60 81.10-11.30L118-11.30L118 0M141.10 0L128.30 0L128.30-53.40L139.90-53.40L140.20-44.50Q142.20-49.30 146.05-51.95Q149.90-54.60 154.90-54.60Q160.80-54.60 164.75-51.70Q168.70-48.80 170.40-43.60Q172.20-49 176.15-51.80Q180.10-54.60 185.70-54.60Q194-54.60 198.75-49.40Q203.50-44.20 203.50-34.30L203.50 0L190.70 0L190.70-31Q190.70-44.20 181.60-44.20Q177-44.20 174.40-40.65Q171.80-37.10 171.80-30.60L171.80 0L159.90 0L159.90-30.60Q159.90-37.10 157.90-40.65Q155.90-44.20 151-44.20Q146.40-44.20 143.75-40.60Q141.10-37 141.10-30.60";
+
+/** Tight to the outlines, so a caller can size the mark by its own ratio. */
+export const MARK_VIEW_BOX = "3.9 -72.6 199.6 73.8";
+
+/** Width ÷ height, for sizing an `<img>` that has no CSS to lay it out. */
+export const MARK_RATIO = 199.6 / 73.8;
+
+/** The mark, drawn in one flat colour, on a transparent ground. */
+export function markSvg(color: string): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${MARK_VIEW_BOX}"><path d="${MARK_PATH}" fill="${color}"/></svg>`;
+}
+
+/** The same, as something an `<img>` can take — satori accepts no other form. */
+export function markDataUri(color: string): string {
+  return `data:image/svg+xml;utf8,${encodeURIComponent(markSvg(color))}`;
+}

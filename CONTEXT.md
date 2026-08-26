@@ -1,53 +1,71 @@
 # Portfolio
 
-Dhruv Sharma’s personal site (dhruv2mars.com): a brand and proof surface for engineers, recruiters, and hiring managers.
+Dhruv Sharma's personal site (dhruv2mars.com): a proof surface for engineers, recruiters, and hiring
+managers evaluating whether he is exceptional at his job.
 
 ## Language
 
 **Portfolio**:
-The site as a whole — a personal brand / proof surface whose job is to make a visitor believe Dhruv is exceptional at his job.
-_Avoid_: Product site, marketing site, blog-only, side project dump
+The site as a whole. Its job is to make a Visitor believe the work is real and the craft is high.
+_Avoid_: Product site, marketing site, blog, side-project dump
 
 **Visitor**:
-An engineer, recruiter, or hiring engineer evaluating Dhruv’s credibility.
+An engineer, recruiter, or hiring engineer evaluating credibility. Assumed to be skimming, on a
+laptop, in under sixty seconds.
 _Avoid_: User, customer, reader (unless specifically reading a Post)
 
-**AI-pilled**:
-Default identity as “the AI person” — builds and thinks with AI/agents as the primary way of working, not as a side interest.
-_Avoid_: AI-curious, uses ChatGPT, ML researcher (unless a Post is specifically about that)
+**Agentic Engineer**:
+The positioning, and the site's tagline. Someone who builds tooling *for* coding agents and builds
+*with* them as the default way of working — harnesses, extensions, local-first inference plumbing.
+Proven by the Projects and by the token record drawn on Home, never asserted in a slogan.
+_Avoid_: AI enthusiast, prompt engineer, ML researcher, "uses AI to code"
 
-**Design Engineer**:
-Someone who ships interface craft at a high bar — design and frontend are the same job, not separate handoffs. The Portfolio itself is evidence of this.
-_Avoid_: Frontend developer, UI designer, “I also do design”
-
-**Product thinking**:
-Clear judgment about what to build, why, and where it fits — shown primarily through writing, not slogans.
-_Avoid_: Product manager, strategist, “visionary”
-
-**Editorial surface**:
-The Portfolio’s visual and UX north star — Vercel-style articles/blog craft (typography, spacing, quiet chrome), not a console and not a campaign landing page. Dark is the primary theme; a polished light theme is also available. Motion stays quiet and intentional (theme transition, hovers, heatmap tooltip) — craft through restraint, not spectacle.
-_Avoid_: Dashboard-first, marketing-campaign, “SaaS admin UI”, dark-only, scroll-jacking, particle heroes
-
-**AI Activity**:
-A GitHub-contribution-style heatmap of Dhruv’s AI usage on Home under the profile/intro. Year grid of day cells (intensity by tokens), hover tooltip (date + tokens), quiet legend, plus a single lifetime-tokens summary. Data syncs nightly to Blob with a fixture fallback; today’s cell is a live estimate.
-_Avoid_: Analytics dashboard, Observability, “stats section”, copying a specific product’s chrome
+**Proof**:
+Something real, third-party-verifiable, and linkable — a shipped repo, a published package, a live
+demo, a dataset. The organising rule of the whole site: a section exists only when Proof fills it.
+_Avoid_: Aspiration, roadmap, "coming soon", placeholder content, invented metrics
 
 **Home**:
-The landing surface. Section order: profile/intro → AI Activity → selected Projects → latest Posts (only if at least one Post is published) → footer. Primary nav destination. The intro is a short editorial block (avatar + name + brief positioning + social icon chips) — not the old bio, and not omitted. Footer is minimal (name/©, socials, RSS); no mega-footer.
-_Avoid_: Landing page, dashboard, feed, slogan stacks, long About essay on Home, empty Blog teaser on Home
+The densest surface, and the one that has to work in sixty seconds. A single scroll: Masthead →
+Overview → Projects → Blog → footer, with the last two showing a sample and a door to the full
+index. `/projects` and `/blog` hold the whole of what Home samples; nothing else has a
+sub-route.
+_Avoid_: Landing page, multi-page site, hub, dashboard
 
-**Blog**:
-The writing index and articles — where Product thinking is proven. Nav label and routes are **Blog**: `/blog` and `/blog/[slug]` (legacy `/writings` redirects permanently). RSS at `/feed.xml` (head/footer discovery, not primary nav). At first ship there may be zero published Posts — the surface still exists with a quiet empty/coming-soon state; MDX pipeline, RSS, and SEO stay wired for when Posts land.
-_Avoid_: Articles, Journal, Newsletter, `/blog` as a second alias, fake sample essays presented as real
+**Masthead**:
+The top block — the hero figure, avatar slot, name (with a button that says it out loud), and the
+tagline said more than one way. The figure is the AI Activity read model drawn faint and far back
+behind the block, like a range at a distance; the block reads first and the figure is what it stands
+on. The avatar slot is a square box holding a round-cropped portrait, named once in `lib/site.ts`;
+clearing that field falls back to a monogram at the identical footprint, so the slot never shifts the
+layout in either state.
+The social links and the where/when of the author sit below it in the Overview, not in the Masthead
+itself.
+_Avoid_: Hero, banner, About section, long bio
 
-**Post**:
-One piece of writing under Blog. MDX body with frontmatter: title, published date, summary, optional tags; slug from the file path. Drafts exist but never ship publicly. Reading time may be derived; no view counters, reactions, or multi-author in v1.
-_Avoid_: Article, essay, blog post (in UI copy prefer Post/Blog)
+**AI Activity**:
+Dhruv's daily AI token usage, and the site's density anchor. Real data, synced nightly; a fixture
+fallback is labelled as such. It is a dataset, not a section: it is drawn as the Masthead's hero
+figure — this calendar year to date, one smoothed line — rather than as a year of squares of its own
+(ADR-0007). It is the one dataset here that the Reference does not have.
+_Avoid_: Analytics, dashboard, stats section, observability
 
-**Projects**:
-The project index — shipped work as proof. Presented as an editorial, text-only list; links outbound to repo or demo. Each Project has name, one-line description, url, optional year, and optional selected flag for Home. No thumbnails, cards, tag chips, or project detail pages in v1.
-_Avoid_: Work, Portfolio items, Case studies (unless a specific Post is a case study), template marketplace grid
+**Project**:
+One shipped piece of work, linking out to its repo or live demo. Curated, not enumerated — the
+GitHub account has ~45 repos and the Portfolio shows eight. Presence on the site is an editorial
+judgment about Proof, not a mirror of the account.
+_Avoid_: Case study, work item, portfolio piece, repo list
 
-**Primary nav**:
-Exactly three items: Home, Blog, Projects. RSS exists as a feed URL, not a nav item. Header is a floating pill (avatar + nav + quiet theme control); the theme control defaults to dark and persists a manual override.
-_Avoid_: About, Contact, Activity, Uses as top-level nav (unless later promoted deliberately)
+**Blog / Post**:
+The writing surface. `/blog` and `/blog/[slug]`, MDX, with RSS at `/feed.xml` and each Post also
+served as source at `/blog/[slug]/raw.md`. The index is rows and a filter; a Post carries a toolbar
+(copy, hand to a model, share, the Post either side), a glossary mark beside each defined term at
+its first use, and its neighbours at the end. The Blog section, its nav entry and the route itself stay hidden while zero Posts are
+published — nothing empty is ever shown to a Visitor.
+_Avoid_: Articles, Journal, Newsletter, empty states, test posts presented as writing
+
+**Reference**:
+chanhdai.com (`ncdai/chanhdai.com`, formerly dai.is-a.dev) — the design idiom the Portfolio is built in, chosen deliberately as the bar to be
+measured against. Its *design language* is adopted; its *information architecture* is not, because
+it is sized to proof this site does not have.
+_Avoid_: Inspiration, clone, template, "based on"

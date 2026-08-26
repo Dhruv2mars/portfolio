@@ -1,72 +1,59 @@
-"use client";
-
 import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { motion, useReducedMotion } from "motion/react";
-import { FOCUSABLE_CHROME } from "@/lib/a11y";
-import { PRIMARY_NAV } from "@/lib/nav";
-import { site } from "@/lib/site";
+import { PaletteTrigger } from "@/components/command-palette";
+import { Separator } from "@/components/separator";
+import { SiteHeaderMark } from "@/components/site-header-mark";
+import { SiteNav } from "@/components/site-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { FOCUSABLE_CHROME } from "@/lib/a11y";
+import { navItems } from "@/lib/nav";
 
-export function SiteHeader() {
-  const pathname = usePathname();
-  const reduce = useReducedMotion();
+export function SiteHeader({ hasPosts }: { hasPosts: boolean }) {
+  const items = navItems(hasPosts);
 
   return (
-    <motion.header
-      className="pointer-events-none sticky top-4 z-30 flex justify-center px-4"
-      initial={reduce ? false : { opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-    >
-      <div className="header-pill pointer-events-auto flex items-center gap-1 rounded-full p-1.5">
+    <header className="sticky top-0 z-50 max-w-screen overflow-x-clip bg-background px-2">
+      {/* `after:z-1 after:bg-border` lifts the bottom hairline above the
+          content scrolling beneath it and darkens it to a real edge. */}
+      <div className="screen-line-top screen-line-bottom mx-auto flex h-(--header-height) items-center gap-2 border-r border-line pr-2 after:z-1 after:bg-border sm:gap-4 md:max-w-3xl">
         <Link
           href="/"
-          aria-label={`${site.name} — Home`}
-          className="group flex min-h-8 items-center gap-2 rounded-full pr-1 pl-1.5 no-underline"
+          aria-label="Home"
+          // `min-h-6` rather than an `extend-touch-target` pseudo: §7's fourth
+          // test measures the box and says "with no exceptions claimed", and
+          // the wordmark is the one control on a phone that has to be hit
+          // without looking. A 24px floor under an 18px line changes nothing
+          // visually — the bar centres its children either way.
+          className="flex min-h-6 items-center pl-2 text-foreground"
         >
-          <Image
-            src={site.avatar}
-            alt=""
-            width={22}
-            height={22}
-            className="size-[22px] rounded-full ring-1 ring-border transition-transform duration-200 ease-[var(--ease-spring)] group-hover:scale-105"
-          />
-          <span className="hidden text-[13px] font-medium tracking-[-0.01em] text-foreground transition-opacity duration-150 group-hover:opacity-70 min-[400px]:inline">
-            {site.handle}
-          </span>
+          {/* The wordmark alone. A glyph beside it would be a second mark
+              competing with the one the hero already draws. */}
+          <SiteHeaderMark />
         </Link>
 
-        <div className="mx-1 h-4 w-px bg-border" aria-hidden />
+        <div className="flex-1" />
 
+        {/* Below `sm` the bar collapses to mark plus controls: the same
+            routes are a thumb's reach away in the dock, and keeping them here
+            cost the theme toggle its right gutter. */}
         <nav
           aria-label={FOCUSABLE_CHROME.primaryNavLabel}
-          className="flex items-center gap-0.5"
+          className="flex items-center gap-4 max-sm:hidden"
         >
-          {PRIMARY_NAV.map((item) => {
-            const active =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href);
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                data-active={active}
-                className="nav-item"
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+          <SiteNav items={items} variant="header" />
         </nav>
 
-        <div className="mx-1 h-4 w-px bg-border" aria-hidden />
-        <ThemeToggle />
+        {/* The header trigger names a shortcut, so it goes where the nav
+            goes. Below `sm` the palette puts up a thumb-reachable dock
+            instead — see `MobileDock`. GitHub is not here: it is already a
+            glyph in the links row, and a link that appears twice on one
+            screen is one link too many. */}
+        <div className="flex items-center max-sm:*:data-[slot=command-menu-trigger]:hidden">
+          <Separator orientation="vertical" className="mr-2 h-5 max-sm:hidden" />
+          <PaletteTrigger />
+          <Separator orientation="vertical" className="mx-2 h-5" />
+          <ThemeToggle />
+        </div>
       </div>
-    </motion.header>
+    </header>
   );
 }

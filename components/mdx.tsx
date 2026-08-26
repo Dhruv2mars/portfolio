@@ -5,8 +5,9 @@ import rehypeSanitize from "rehype-sanitize";
 import { highlight } from "sugar-high";
 import React from "react";
 import { isSafeHref } from "@/lib/mdx-links";
+import { slugify } from "@/lib/slug";
 
-function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+export function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   const href = props.href ?? "";
 
   if (!isSafeHref(href)) {
@@ -53,16 +54,6 @@ function textFromChildren(children: React.ReactNode): string {
       return "";
     })
     .join("");
-}
-
-function slugify(str: unknown): string {
-  return String(str)
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/&/g, "-and-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-");
 }
 
 function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {

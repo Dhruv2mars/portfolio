@@ -1,20 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export type PostFrontmatter = {
-  title: string;
-  publishedAt: string;
-  summary: string;
-  tags?: string[];
-  draft?: boolean;
-  image?: string;
-};
+import type { PostRecord } from "@/lib/posts";
 
-export type PostRecord = PostFrontmatter & {
-  slug: string;
-  content: string;
-  readingTimeMinutes: number;
-};
+/** The shape lives in `lib/posts`, which has no filesystem in it. */
+export type { PostFrontmatter, PostRecord, PostSummary } from "@/lib/posts";
 
 const POSTS_DIR = path.join(process.cwd(), "content", "blog");
 
@@ -110,6 +100,7 @@ export function tryParsePostSource(
     slug,
     title,
     publishedAt,
+    updatedAt: fields.updatedAt || undefined,
     summary,
     tags: parseTags(fields.tags),
     draft,
@@ -141,26 +132,37 @@ export function selectPublishedPosts(
     );
 }
 
-export function selectLatestPublished(
-  posts: readonly PostRecord[],
-  limit: number,
-): PostRecord[] {
-  return selectPublishedPosts(posts).slice(0, limit);
-}
-
 function listMdxFiles(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
 }
 
-/** All Posts from disk (including complete drafts; skips incomplete drafts). */
-export function getAllPosts(): PostRecord[] {
+function readAllPosts(): PostRecord[] {
   return listMdxFiles(POSTS_DIR).flatMap((file) => {
     const slug = path.basename(file, path.extname(file));
     const raw = fs.readFileSync(path.join(POSTS_DIR, file), "utf-8");
     const post = tryParsePostSource(slug, raw);
     return post ? [post] : [];
   });
+}
+
+/**
+ * Every Post read once per process, not once per call.
+ *
+ * The corpus is checked into the repo, so in a built server it cannot change
+ * while the process lives — but a single request can ask for it several times
+ * over (the index, the pager either side of a Post, the feed), and each of
+ * those was a fresh `readdir` plus a `readFile` and a parse per file. In dev
+ * the cache is skipped, because there the files do change and a stale Post is
+ * a worse bug than a re-read.
+ */
+let cachedPosts: PostRecord[] | undefined;
+
+/** All Posts from disk (including complete drafts; skips incomplete drafts). */
+export function getAllPosts(): PostRecord[] {
+  if (process.env.NODE_ENV === "development") return readAllPosts();
+  cachedPosts ??= readAllPosts();
+  return cachedPosts;
 }
 
 export function getPublishedPosts(): PostRecord[] {
@@ -171,17 +173,4 @@ export function getPostBySlug(slug: string): PostRecord | undefined {
   const post = getAllPosts().find((p) => p.slug === slug);
   if (!post || post.draft) return undefined;
   return post;
-}
-
-export function getLatestPublishedPosts(limit = 3): PostRecord[] {
-  return selectLatestPublished(getAllPosts(), limit);
-}
-
-export function formatPostDate(date: string): string {
-  const value = date.includes("T") ? date : `${date}T00:00:00`;
-  return new Date(value).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
 }
