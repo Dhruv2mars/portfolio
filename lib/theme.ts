@@ -3,11 +3,12 @@ export type ColorScheme = "light" | "dark";
 export type ThemePreference = ColorScheme | "system";
 
 /**
- * The site follows the operating system until the Visitor says otherwise. A
- * manual choice always wins and is persisted. Runtime applies this via
- * `next-themes`; this module is the contract.
+ * The site opens in dark until the Visitor says otherwise. A manual choice is
+ * persisted, and an explicitly stored `system` preference can still follow the
+ * operating system. Runtime applies this via `next-themes`; this module is the
+ * contract.
  */
-export const DEFAULT_THEME: ThemePreference = "system";
+export const DEFAULT_THEME: ThemePreference = "dark";
 
 /** Used only where the OS expresses no preference at all. */
 export const FALLBACK_SCHEME: ColorScheme = "dark";

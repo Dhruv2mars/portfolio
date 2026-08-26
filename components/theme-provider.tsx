@@ -7,8 +7,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
     <NextThemeProvider
       attribute="class"
-      // Follow the OS by default; `enableSystem` resolves it, and a media query
-      // that reports nothing lands on FALLBACK_SCHEME via `resolveTheme`.
+      // Start dark by default. `enableSystem` remains available for an
+      // explicitly stored `system` preference, while an absent preference uses
+      // DEFAULT_THEME.
       defaultTheme={DEFAULT_THEME}
       enableSystem
       disableTransitionOnChange={false}
