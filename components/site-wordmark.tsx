@@ -23,9 +23,8 @@ const SPRING = { stiffness: 150, damping: 25 } as const;
  *
  * Row one is the ascender line and rows two to five are the x-height, so `d`
  * and `h` stand a row above everything else — which is the whole of what makes
- * a word read as lowercase rather than as small capitals. The `2` is cut as an
- * old-style figure, sitting on the x-height with the letters, because a lining
- * figure in the middle of a lowercase word is a capital by another name.
+ * a word read as lowercase rather than as small capitals. The `2` uses all
+ * five rows: its diagonal must stay legible at footer scale.
  */
 const GLYPHS: Readonly<Record<string, readonly string[]>> = {
   a: [".....", ".####", "#...#", "#...#", ".####"],
@@ -36,7 +35,7 @@ const GLYPHS: Readonly<Record<string, readonly string[]>> = {
   s: [".....", ".####", "##...", "...##", "####."],
   u: [".....", "#...#", "#...#", "#...#", ".####"],
   v: [".....", "#...#", "#...#", ".#.#.", "..#.."],
-  "2": [".....", ".###.", "#...#", ".##..", "#####"],
+  "2": ["#####", "....#", "#####", "#....", "#####"],
 };
 
 type Cell = { x: number; y: number };
