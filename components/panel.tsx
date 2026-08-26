@@ -61,6 +61,7 @@ export function PanelTitle({
 /** The count or unit that rides above the baseline of a title. */
 export function PanelTitleSup({
   className,
+  children,
   ...props
 }: React.ComponentProps<"sup">) {
   return (
@@ -70,7 +71,15 @@ export function PanelTitleSup({
         className,
       )}
       {...props}
-    />
+    >
+      {/* An accessible name is the element's text nodes run together, and
+          `ml-1` is a margin — margins are not text. Without something between
+          them a screen reader reads the heading as "Projects8", "Blog3",
+          "Nothing lives here404". This space is the separator; it is hidden
+          rather than rendered so the optical gap stays the margin's job. */}
+      <span className="sr-only"> </span>
+      {children}
+    </sup>
   );
 }
 
