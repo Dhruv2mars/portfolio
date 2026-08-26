@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "d6ae9dcfbcc4",
+  "strategy": "manual-commit",
+  "branch": "chore/truth-pass",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "app/api/ai-activity/ingest/route.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d6/ae9dcfbcc4/0/metadata.json",
+      "transcript": "/d6/ae9dcfbcc4/0/full.jsonl",
+      "compact_transcript": "/d6/ae9dcfbcc4/0/transcript.jsonl",
+      "content_hash": "/d6/ae9dcfbcc4/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
