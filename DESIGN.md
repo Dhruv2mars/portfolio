@@ -69,6 +69,18 @@ The footer is a signature: the year and the legal name, the three places the wor
 feed, and the mark beneath them in the site's own alphabet. The name and the mark differ on purpose —
 a copyright line names who holds it, and the signature under it is what that person is called.
 
+**The signature is dithered, and it is small.** The mark is a field of a few thousand square dots on
+a canvas, not a drawn stroke, and it is fitted to a box that stops growing at three and a half rems
+of height — a signature sits under the page, so it is the last thing that should be the largest. An
+invisible circle rides the cursor: a dot inside it is pushed straight out from the pointer by an
+amount falling off as the cube of the distance, so the push is at full strength under the cursor and
+effectively nothing at the rim, and the field has no edge for the eye to catch. Under
+`prefers-reduced-motion` it renders once and listens to nothing. The dots are coordinates, checked in
+at `lib/wordmark-dots.ts`; the letterforms are tuned against the drawn original with sliders in
+`tools/wordmark-studio.html` and re-exported, never guessed at in code. `bun tools/gen-dots.mjs`
+reproduces the checked-in file from the same engine the sliders drive, so the art is derivable from
+the repository and not from a session that has since ended.
+
 `rehype-sanitize` on all MDX and escaped JSON-LD embedding survive from the old build unchanged.
 Regressing either is a security bug, not a style change.
 

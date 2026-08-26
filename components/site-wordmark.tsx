@@ -1,128 +1,196 @@
-const VIEWBOX_WIDTH = 1410;
-const VIEWBOX_HEIGHT = 148;
-const GLYPH_GAP = 44;
+"use client";
 
-type Glyph = {
-  width: number;
-  path: string;
-};
+import { useEffect, useRef } from "react";
+
+import { WORDMARK, WORDMARK_DOTS } from "@/lib/wordmark-dots";
+
+/** How much of the remaining distance a dot closes each frame. */
+const EASE = 0.22;
+/** Below this, a dot has arrived and the loop is allowed to stop. */
+const SETTLED = 0.05;
 
 /**
- * A custom monoline alphabet for the footer signature. Each letter owns its
- * width and contour, so the lockup is spaced optically instead of stretching
- * a bitmap grid across the canvas.
+ * The footer signature, dithered.
+ *
+ * The mark is not drawn here — it is a run of coordinates baked by
+ * `tools/wordmark-studio.html` and checked in at `lib/wordmark-dots.ts`, so the
+ * letterforms are tuned with sliders against the drawn original rather than
+ * guessed at in code. This file only places those dots and moves them.
+ *
+ * An invisible circle follows the cursor. A dot inside it is pushed straight
+ * out along the line from the cursor, by an amount that falls off as the cube
+ * of the distance: full strength under the pointer, almost nothing at the rim,
+ * so the field has no visible edge for the eye to catch on. Squares rather than
+ * circles, because a dither is made of pixels — and because a few thousand
+ * `fillRect` calls a frame cost a third of what the same number of arcs do.
+ *
+ * It is a signature, not information: `aria-hidden`, and inert under
+ * `prefers-reduced-motion`, where it renders once and never listens.
  */
-const GLYPHS: Readonly<Record<string, Glyph>> = {
-  a: {
-    width: 96,
-    path: "M82 48V126M82 72C74 54 61 47 46 47C26 47 14 63 14 87C14 111 26 126 46 126C62 126 75 117 82 102",
-  },
-  d: {
-    width: 100,
-    path: "M84 12V126M84 52H42C24 52 14 65 14 89C14 113 25 126 44 126H84",
-  },
-  h: {
-    width: 92,
-    path: "M14 12V126M14 64C26 50 40 46 54 49C70 52 78 64 78 82V126",
-  },
-  m: {
-    width: 140,
-    path: "M14 48V126M14 72C24 54 38 47 52 49C68 51 76 64 76 82V126M76 72C86 54 100 47 114 49C128 51 134 64 134 82V126",
-  },
-  r: {
-    width: 78,
-    path: "M14 48V126M14 72C24 54 38 47 64 50",
-  },
-  s: {
-    width: 92,
-    path: "M80 58C71 49 59 45 45 45C27 45 16 54 16 67C16 79 26 85 47 90C68 95 80 101 80 112C80 122 67 128 49 128C32 128 20 123 12 114",
-  },
-  u: {
-    width: 94,
-    path: "M14 48V94C14 115 26 126 46 126C66 126 80 114 80 94V48",
-  },
-  v: {
-    width: 92,
-    path: "M12 48L46 126L80 48",
-  },
-  "2": {
-    width: 96,
-    path: "M14 68C16 50 30 42 49 42C69 42 82 52 82 68C82 82 72 92 58 101L16 126H84",
-  },
-};
+export function SiteWordmark({ className }: { className?: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-function layout(text: string) {
-  const glyphs: Array<Glyph & { char: string; x: number }> = [];
-  let cursor = 0;
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
 
-  for (const char of text) {
-    const glyph = GLYPHS[char];
-    if (!glyph) continue;
+    const count = WORDMARK_DOTS.length;
+    const rest = new Float32Array(count);
+    const current = new Float32Array(count);
 
-    glyphs.push({ ...glyph, char, x: cursor });
-    cursor += glyph.width + GLYPH_GAP;
-  }
+    let dot = 1;
+    let radius = 0;
+    let strength = 0;
+    let dpr = 1;
+    let ink = "";
+    let client: { x: number; y: number } | null = null;
+    let frameId = 0;
 
-  const width = Math.max(cursor - GLYPH_GAP, 0);
-  const offset = Math.max((VIEWBOX_WIDTH - width) / 2, 0);
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = ink;
+      const half = dot / 2;
+      for (let i = 0; i < count; i += 2) {
+        ctx.fillRect(current[i] - half, current[i + 1] - half, dot, dot);
+      }
+    };
 
-  return { glyphs, offset };
-}
+    /* The dots are stored in the studio's box, so every measurement is one
+       uniform scale: fit the box inside the canvas and centre it. On a phone
+       the width binds and the mark gets shorter; on a wide screen the height
+       binds and it stops growing, which is what keeps it quiet. */
+    const measure = () => {
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
 
-export function SiteWordmark({
-  text,
-  className,
-}: {
-  text: string;
-  className?: string;
-}) {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+
+      const scale = Math.min(
+        canvas.width / WORDMARK.box.width,
+        canvas.height / WORDMARK.box.height,
+      );
+      const offsetX = (canvas.width - WORDMARK.box.width * scale) / 2;
+      const offsetY = (canvas.height - WORDMARK.box.height * scale) / 2;
+
+      for (let i = 0; i < count; i += 2) {
+        rest[i] = offsetX + WORDMARK_DOTS[i] * scale;
+        rest[i + 1] = offsetY + WORDMARK_DOTS[i + 1] * scale;
+      }
+      current.set(rest);
+
+      dot = Math.max(1, WORDMARK.dot * scale);
+      radius = WORDMARK.repelRadius * scale;
+      strength = WORDMARK.repelStrength * scale;
+      ink = getComputedStyle(canvas).color;
+      draw();
+    };
+
+    const step = () => {
+      const rect = canvas.getBoundingClientRect();
+      const pointer = client
+        ? { x: (client.x - rect.left) * dpr, y: (client.y - rect.top) * dpr }
+        : null;
+      let moving = false;
+
+      for (let i = 0; i < count; i += 2) {
+        let targetX = rest[i];
+        let targetY = rest[i + 1];
+
+        if (pointer) {
+          const dx = targetX - pointer.x;
+          const dy = targetY - pointer.y;
+          const distance = Math.hypot(dx, dy);
+          if (distance < radius) {
+            const falloff = 1 - distance / radius;
+            const push = strength * falloff * falloff * falloff;
+            // Directly under the cursor there is no outward direction to take,
+            // so send it up rather than divide by nothing.
+            if (distance > 0.001) {
+              targetX += (dx / distance) * push;
+              targetY += (dy / distance) * push;
+            } else {
+              targetY -= push;
+            }
+          }
+        }
+
+        current[i] += (targetX - current[i]) * EASE;
+        current[i + 1] += (targetY - current[i + 1]) * EASE;
+
+        if (
+          !moving &&
+          (Math.abs(current[i] - targetX) > SETTLED ||
+            Math.abs(current[i + 1] - targetY) > SETTLED)
+        ) {
+          moving = true;
+        }
+      }
+
+      draw();
+      // A still cursor lets every dot arrive, and the loop ends. The next
+      // pointer event restarts it, so an idle footer costs nothing.
+      frameId = moving ? requestAnimationFrame(step) : 0;
+    };
+
+    const kick = () => {
+      if (!frameId) frameId = requestAnimationFrame(step);
+    };
+
+    measure();
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(canvas);
+
+    // The theme swaps a class on the root, and `ink` was resolved from it.
+    const theme = new MutationObserver(() => {
+      ink = getComputedStyle(canvas).color;
+      draw();
+    });
+    theme.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "style", "data-theme"],
+    });
+
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onPointerMove = (event: PointerEvent) => {
+      if (still.matches) return;
+      client = { x: event.clientX, y: event.clientY };
+      kick();
+    };
+    const onPointerOut = () => {
+      client = null;
+      kick();
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    document.addEventListener("pointerleave", onPointerOut);
+    window.addEventListener("blur", onPointerOut);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      observer.disconnect();
+      theme.disconnect();
+      window.removeEventListener("pointermove", onPointerMove);
+      document.removeEventListener("pointerleave", onPointerOut);
+      window.removeEventListener("blur", onPointerOut);
+    };
+  }, []);
+
   return (
     <div
       className={`screen-line-bottom after:z-1 after:bg-foreground/15 ${className ?? ""}`}
     >
-      <div className="flex w-full items-center justify-center px-4 py-5 md:px-6 md:py-6">
-        <WordmarkSvg
-          text={text}
-          className="mx-auto block h-auto w-full max-w-[1410px]"
+      <div className="flex w-full items-center justify-center px-4 py-4 md:px-6 md:py-5">
+        <canvas
+          ref={canvasRef}
+          aria-hidden="true"
+          data-wordmark={WORDMARK.text}
+          className="block h-10 w-full max-w-[1410px] text-foreground/45 sm:h-12 md:h-14"
         />
       </div>
     </div>
-  );
-}
-
-function WordmarkSvg({
-  text,
-  className,
-}: {
-  text: string;
-  className: string;
-}) {
-  const { glyphs, offset } = layout(text);
-
-  return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      data-wordmark={text}
-      viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g
-        stroke="var(--foreground)"
-        strokeOpacity="0.42"
-        strokeWidth="13"
-        strokeLinecap="square"
-        strokeLinejoin="round"
-      >
-        {glyphs.map((glyph) => (
-          <path
-            key={`${glyph.char}-${glyph.x}`}
-            d={glyph.path}
-            transform={`translate(${offset + glyph.x} 0)`}
-          />
-        ))}
-      </g>
-    </svg>
   );
 }
