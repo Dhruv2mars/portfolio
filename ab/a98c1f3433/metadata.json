@@ -3,7 +3,7 @@
   "checkpoint_id": "aba98c1f3433",
   "strategy": "manual-commit",
   "branch": "fix/idiom-spacing-rhythm",
-  "checkpoints_count": 1,
+  "checkpoints_count": 3,
   "files_touched": [
     "components/theme-provider.tsx",
     "lib/theme.test.ts",
@@ -16,6 +16,20 @@
       "compact_transcript": "/ab/a98c1f3433/0/transcript.jsonl",
       "content_hash": "/ab/a98c1f3433/0/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/ab/a98c1f3433/1/metadata.json",
+      "transcript": "/ab/a98c1f3433/1/full.jsonl",
+      "compact_transcript": "/ab/a98c1f3433/1/transcript.jsonl",
+      "content_hash": "/ab/a98c1f3433/1/content_hash.txt",
+      "prompt": "/ab/a98c1f3433/1/prompt.txt"
     }
-  ]
+  ],
+  "token_usage": {
+    "input_tokens": 1247277,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 38984448,
+    "output_tokens": 100732,
+    "api_call_count": 310
+  }
 }
