@@ -414,12 +414,13 @@
 }
 
 /* ---------------------------------------------------------------------------
-   The measured cell. A square block on a 2px gutter, no corner rounding, with
-   intensity carried by the neutral foreground at five opacities — it was the
-   unit the year grid was built from, and Figure 404 is what still draws it.
+   Figure 404's cell. A square block, no corner rounding, with intensity
+   carried by the neutral foreground at five opacities. It was the unit the
+   year grid was built from; ADR-0007 removed the grid and the numeral is the
+   only thing that still draws it, so it is named for that now.
 --------------------------------------------------------------------------- */
 
-.activity-cell {
+.glyph-cell {
   background: color-mix(
     in oklab,
     var(--muted-foreground) var(--level, 10%),
@@ -433,7 +434,7 @@
 }
 
 /* An empty frame rather than a fill: the unlit cells of the numeral. */
-.activity-cell[data-recorded="false"] {
+.glyph-cell[data-recorded="false"] {
   background: transparent;
   box-shadow: inset 0 0 0 1px
     color-mix(in oklab, var(--muted-foreground) 16%, transparent);
@@ -862,11 +863,16 @@
     animation-duration: 0.001ms !important;
     animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
+    /* Movement goes, colour stays — so this whitelists the properties that
+       are not movement rather than saying `transition: none`. A blanket kill
+       would take the hover tint with it, and the hover tint is precisely the
+       feedback this block exists to preserve (DESIGN.md §5). Everything left
+       out — transform, rotate, translate, grid rows, height — snaps. */
+    transition-property:
+      color, background-color, border-color, outline-color, text-decoration-color,
+      fill, stroke, box-shadow, opacity, filter !important;
   }
-  .project-details {
-    transition: none;
-  }
-  .activity-cell,
+  .glyph-cell,
   .palette-panel,
   .palette-backdrop {
     animation: none !important;

@@ -6,7 +6,7 @@ import {
 } from "@/components/handwritten-note";
 import { HeroChart } from "@/components/hero-chart";
 import { PronounceName } from "@/components/pronounce-name";
-import { formatActivityDate } from "@/lib/activity-grid";
+import { formatFigureDate } from "@/lib/figure";
 import { formatCompactTokens, formatTokenCount } from "@/lib/ai-activity";
 import { getAiActivityPayload } from "@/lib/ai-activity-store";
 import { buildHeroSeries, type HeroSeries } from "@/lib/hero-series";
@@ -71,9 +71,9 @@ function Avatar() {
 function heroDescription(series: HeroSeries): string {
   return [
     `${site.name}'s AI token use in ${series.year}, January 1 to`,
-    `${formatActivityDate(series.to)}:`,
+    `${formatFigureDate(series.to)}:`,
     `${formatTokenCount(series.total)} tokens,`,
-    `busiest day ${formatActivityDate(series.peak.date)}`,
+    `busiest day ${formatFigureDate(series.peak.date)}`,
     `at ${formatCompactTokens(series.peak.tokens)}.`,
     `Drawn as a ${series.smoothingDays}-day mean.`,
   ].join(" ");
