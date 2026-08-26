@@ -1,0 +1,92 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "ae0e81e90f1b",
+  "session_id": "01a03d2a-5b35-7340-b343-26f8e21e9fd5",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-26T08:38:25.395407Z",
+  "branch": "fix/idiom-spacing-rhythm",
+  "checkpoints_count": 2,
+  "save_step_count": 1,
+  "files_touched": [
+    "DESIGN.md",
+    "components/profile-header.tsx",
+    "lib/projects.test.ts",
+    "lib/projects.ts"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-sol",
+  "turn_id": "bc9b63dc19e8",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 225630,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 7580800,
+    "output_tokens": 19335,
+    "api_call_count": 57
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-26T08:38:25.262692Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 29,
+    "human_removed": 49,
+    "total_committed": 0,
+    "total_lines_changed": 78,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 814,
+      "user_lines_removed": 29,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216,
+        "DESIGN.md": 4,
+        "components/profile-header.tsx": 1,
+        "lib/projects.test.ts": 19,
+        "lib/projects.ts": 25
+      },
+      "user_removed_per_file": {
+        "DESIGN.md": 4,
+        "components/profile-header.tsx": 1,
+        "lib/projects.test.ts": 1,
+        "lib/projects.ts": 23
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 49,
+      "agent_lines_removed": 29,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}
