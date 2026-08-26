@@ -26,6 +26,10 @@ export function SiteFooter() {
         {/* One closing line: the copyright reads left, the glyphs read right,
             and on a phone they stack centred rather than squeezing. */}
         <div className="screen-line-bottom flex flex-col items-center justify-center gap-x-4 gap-y-3 px-4 py-3 text-sm text-muted-foreground sm:flex-row sm:justify-between">
+          {/* The legal name here, the mark in the wordmark below. They are
+              not a contradiction: a copyright line names the person who holds
+              it, and the signature underneath is what that person is called.
+              The two say the same thing at different registers. */}
           <span>
             &copy; {new Date().getFullYear()} {site.name}.
           </span>
