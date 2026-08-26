@@ -18,6 +18,7 @@ import { paletteItems } from "@/lib/palette";
 import { ogImagePath } from "@/lib/discovery";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { profileUrls, site } from "@/lib/site";
+import { SCHEME_BACKGROUND } from "@/lib/theme";
 import "./globals.css";
 
 /** Long-form prose only. Structure and UI stay on the sans. */
@@ -77,8 +78,8 @@ export const viewport: Viewport = {
      page has opted out of the safe-area letterbox first. */
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: SCHEME_BACKGROUND.dark },
+    { media: "(prefers-color-scheme: light)", color: SCHEME_BACKGROUND.light },
   ],
 };
 

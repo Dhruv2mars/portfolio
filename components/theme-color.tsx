@@ -2,9 +2,7 @@
 
 import { useEffect } from "react";
 import { useTheme } from "next-themes";
-
-/** The two values the metadata export already declares, keyed by scheme. */
-const THEME_COLOR = { light: "#ffffff", dark: "#09090b" } as const;
+import { SCHEME_BACKGROUND } from "@/lib/theme";
 
 /**
  * Keeps the browser's own chrome — the iOS status bar, the Android address bar
@@ -31,7 +29,8 @@ export function ThemeColor() {
       meta.name = "theme-color";
       document.head.prepend(meta);
     }
-    meta.content = THEME_COLOR[resolvedTheme === "light" ? "light" : "dark"];
+    meta.content =
+      SCHEME_BACKGROUND[resolvedTheme === "light" ? "light" : "dark"];
   }, [resolvedTheme]);
 
   return null;

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
+import { FALLBACK_SCHEME, SCHEME_BACKGROUND } from "@/lib/theme";
 
 /**
  * Enough for a home-screen install to look like the site rather than like a
@@ -14,8 +15,12 @@ export default function manifest(): MetadataRoute.Manifest {
     description: site.description,
     start_url: "/",
     display: "browser",
-    background_color: "#ffffff",
-    theme_color: "#ffffff",
+    // A manifest holds one colour, not a pair — it is read before any page
+    // runs, so there is nothing to ask. It gets the scheme the site falls back
+    // to, which is dark; white here made an installed dark-first site open on
+    // a white splash.
+    background_color: SCHEME_BACKGROUND[FALLBACK_SCHEME],
+    theme_color: SCHEME_BACKGROUND[FALLBACK_SCHEME],
     icons: [
       { src: "/icon.svg", sizes: "any", type: "image/svg+xml" },
       { src: "/apple-icon", sizes: "180x180", type: "image/png" },
