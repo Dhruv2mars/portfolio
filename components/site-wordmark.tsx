@@ -1,20 +1,12 @@
 "use client";
 
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from "motion/react";
-import { useId, type MouseEvent as ReactMouseEvent } from "react";
+import { useId } from "react";
 
 /** The same plate-scale canvas as the reference footer graphic. */
 const VIEWBOX_WIDTH = 1410;
 const VIEWBOX_HEIGHT = 258;
 const CELL_HEIGHT = 48;
 const TRACKING = 1;
-const SPRING = { stiffness: 150, damping: 25 } as const;
 
 /**
  * Five-row orthogonal glyphs, cut lowercase. The cells are only a layout
@@ -24,7 +16,7 @@ const SPRING = { stiffness: 150, damping: 25 } as const;
  * Row one is the ascender line and rows two to five are the x-height, so `d`
  * and `h` stand a row above everything else — which is the whole of what makes
  * a word read as lowercase rather than as small capitals. The `2` uses all
- * five rows: its diagonal must stay legible at footer scale.
+ * five rows, with the same open contour rhythm as the letters.
  */
 const GLYPHS: Readonly<Record<string, readonly string[]>> = {
   a: [".....", ".####", "#...#", "#...#", ".####"],
@@ -35,7 +27,7 @@ const GLYPHS: Readonly<Record<string, readonly string[]>> = {
   s: [".....", ".####", "##...", "...##", "####."],
   u: [".....", "#...#", "#...#", "#...#", ".####"],
   v: [".....", "#...#", "#...#", ".#.#.", "..#.."],
-  "2": ["#####", "....#", "#####", "#....", "#####"],
+  "2": [".###.", "#...#", "...#.", "..#..", "#####"],
 };
 
 type Cell = { x: number; y: number };
@@ -104,85 +96,89 @@ function buildPaths(cells: Cell[], columns: number) {
 
 export function SiteWordmark({
   text,
+  mobileText,
   className,
 }: {
   text: string;
+  mobileText?: string;
   className?: string;
 }) {
   const id = useId().replace(/[^a-zA-Z0-9-]/g, "");
-  const gradientId = `${id}-gradient`;
-  const reduced = useReducedMotion();
-  const ratio = useMotionValue(0.5);
-  const gradientX1 = useSpring(
-    useTransform(ratio, [0, 1], [0, VIEWBOX_WIDTH]),
-    SPRING,
-  );
-  const { cells, columns } = layout(text);
-  const paths = buildPaths(cells, columns);
-
-  const handleMouseMove = (event: ReactMouseEvent<HTMLDivElement>) => {
-    if (reduced) return;
-
-    const rect = event.currentTarget.getBoundingClientRect();
-    if (rect.width === 0) return;
-
-    ratio.set((event.clientX - rect.left) / rect.width);
-  };
 
   return (
     <div
       className={`screen-line-bottom after:z-1 after:bg-foreground/15 ${className ?? ""}`}
     >
-      <div
-        className="overflow-hidden"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={() => ratio.set(0.5)}
-      >
-        {/* The mark half-bleeds off the bottom of the page. Lowercase sits a
-            row lower in the cell grid than the capitals did, so the bleed is
-            pulled back to a quarter — otherwise the x-height letters go under
-            the edge and only the two ascenders are left standing. */}
-        <div className="flex w-full translate-y-[25%] items-center justify-center">
-          <svg
-            aria-hidden
+      <div className="flex w-full items-center justify-center">
+        {mobileText ? (
+          <>
+            <WordmarkSvg
+              text={mobileText}
+              gradientId={`${id}-mobile-gradient`}
+              className="mx-auto block h-auto w-full md:hidden"
+            />
+            <WordmarkSvg
+              text={text}
+              gradientId={`${id}-desktop-gradient`}
+              className="mx-auto hidden h-auto w-full max-w-[1410px] md:block"
+            />
+          </>
+        ) : (
+          <WordmarkSvg
+            text={text}
+            gradientId={`${id}-gradient`}
             className="mx-auto block h-auto w-full max-w-[1410px]"
-            viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d={paths.fill}
-              fill={`url(#${gradientId})`}
-              fillRule="nonzero"
-            />
-            <path
-              d={paths.outline}
-              className="stroke-foreground/10"
-              strokeWidth="2"
-              strokeLinecap="square"
-              strokeLinejoin="miter"
-              vectorEffect="non-scaling-stroke"
-            />
-            <defs>
-              <motion.linearGradient
-                id={gradientId}
-                x1={gradientX1}
-                y1="1"
-                x2="705"
-                y2="257"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop
-                  offset="0.625"
-                  stopColor="var(--foreground)"
-                  stopOpacity="0"
-                />
-                <stop offset="1" stopColor="var(--foreground)" />
-              </motion.linearGradient>
-            </defs>
-          </svg>
-        </div>
+          />
+        )}
       </div>
     </div>
+  );
+}
+
+function WordmarkSvg({
+  text,
+  gradientId,
+  className,
+}: {
+  text: string;
+  gradientId: string;
+  className: string;
+}) {
+  const { cells, columns } = layout(text);
+  const paths = buildPaths(cells, columns);
+
+  return (
+    <svg
+      aria-hidden
+      className={className}
+      data-wordmark={text}
+      viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d={paths.fill} fill={`url(#${gradientId})`} fillRule="nonzero" />
+      <path
+        d={paths.outline}
+        className="stroke-foreground/25"
+        strokeWidth="2"
+        strokeLinecap="square"
+        strokeLinejoin="miter"
+        vectorEffect="non-scaling-stroke"
+      />
+      <defs>
+        <linearGradient
+          id={gradientId}
+          x1="705"
+          y1="1"
+          x2="705"
+          y2={VIEWBOX_HEIGHT}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stopColor="var(--foreground)" stopOpacity="0.03" />
+          <stop offset="0.62" stopColor="var(--foreground)" stopOpacity="0.1" />
+          <stop offset="1" stopColor="var(--foreground)" stopOpacity="0.24" />
+        </linearGradient>
+      </defs>
+    </svg>
   );
 }

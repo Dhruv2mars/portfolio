@@ -32,10 +32,9 @@ export function SiteFooter() {
             &copy; {new Date().getFullYear()} {site.handle.toLowerCase()}.
           </span>
 
-          {/* Four glyphs on one gutter. The rules that used to stand between
-              them were 16px of hairline at 12px intervals — texture, at this
-              size, not structure. */}
-          <nav aria-label="Elsewhere" className="flex items-center gap-4">
+          {/* Four glyphs on one gutter. Icons stay 16px; links get a 32px box
+              so touch does not depend on landing on the ink itself. */}
+          <nav aria-label="Elsewhere" className="flex items-center gap-2 sm:gap-3">
             {FOOTER_SOCIALS.map((social) => {
               const Glyph = SOCIAL_ICONS[social.label];
               return (
@@ -46,7 +45,7 @@ export function SiteFooter() {
                   rel="noopener noreferrer"
                   aria-label={social.label}
                   title={social.label}
-                  className="flex items-center transition-colors hover:text-foreground"
+                  className="flex size-8 items-center justify-center transition-colors hover:text-foreground"
                 >
                   <Glyph className="size-4" />
                 </a>
@@ -56,7 +55,7 @@ export function SiteFooter() {
               href={site.rssPath}
               aria-label="RSS feed"
               title="RSS feed — paste this address into a feed reader"
-              className="flex items-center transition-colors hover:text-foreground"
+              className="flex size-8 items-center justify-center transition-colors hover:text-foreground"
             >
               <Rss className="size-4" />
             </a>
@@ -65,7 +64,11 @@ export function SiteFooter() {
 
       </div>
 
-      <SiteWordmark text={site.handle.toLowerCase()} className="text-foreground" />
+      <SiteWordmark
+        text={site.handle.toLowerCase()}
+        mobileText="d2m"
+        className="text-foreground"
+      />
 
       <div aria-hidden className="h-(--fade-bottom-height)" />
 
