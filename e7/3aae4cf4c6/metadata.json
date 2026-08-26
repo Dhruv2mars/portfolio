@@ -3,7 +3,7 @@
   "checkpoint_id": "e73aae4cf4c6",
   "strategy": "manual-commit",
   "branch": "fix/proof-polish",
-  "checkpoints_count": 1,
+  "checkpoints_count": 3,
   "files_touched": [
     "components/command-palette.tsx"
   ],
@@ -14,6 +14,20 @@
       "compact_transcript": "/e7/3aae4cf4c6/0/transcript.jsonl",
       "content_hash": "/e7/3aae4cf4c6/0/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/e7/3aae4cf4c6/1/metadata.json",
+      "transcript": "/e7/3aae4cf4c6/1/full.jsonl",
+      "compact_transcript": "/e7/3aae4cf4c6/1/transcript.jsonl",
+      "content_hash": "/e7/3aae4cf4c6/1/content_hash.txt",
+      "prompt": ""
     }
-  ]
+  ],
+  "token_usage": {
+    "input_tokens": 54,
+    "cache_creation_tokens": 37619,
+    "cache_read_tokens": 2520277,
+    "output_tokens": 20200,
+    "api_call_count": 27
+  }
 }
