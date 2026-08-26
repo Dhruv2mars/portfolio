@@ -1,0 +1,33 @@
+the icon, with the avatar. its a square, but it doesnt have the line on the bottom, why is that?
+
+---
+
+the icon, with the avatar. its a square, but it doesnt have the line on the bottom, why is that?
+
+---
+
+but i want that line, it should look like an complete square
+
+---
+
+but i want that line, it should look like an complete square
+
+---
+
+but i want that line, it should look like an complete square
+
+---
+
+in the projects list:
+project section on home, replace mdv-ts with mdv
+in projects page, replace the last 4 with different ones.
+
+---
+
+in the projects list:
+project section on home, replace mdv-ts with mdv
+in projects page, replace the last 4 with different ones.
+
+---
+
+for projects sub-line it has to be all lowercase. as u know thats my writing style.
