@@ -6,8 +6,8 @@ import {
   resolveTheme,
 } from "@/lib/theme";
 
-test("dark is used by default and system resolution remains available", () => {
-  expect(DEFAULT_THEME).toBe("dark");
+test("the OS is followed when nothing is stored", () => {
+  expect(DEFAULT_THEME).toBe("system");
   expect(resolveTheme(null, "light")).toBe("light");
   expect(resolveTheme("system", "light")).toBe("light");
   expect(resolveTheme("system", "dark")).toBe("dark");

@@ -45,7 +45,7 @@ function Tile({
     <Link
       href={`/blog/${post.slug}`}
       className={cn(
-        "flex flex-col gap-1 p-4 transition-[background-color] duration-150 ease-out hover:bg-accent/50",
+        "flex flex-col gap-1 p-4 transition-colors hover:bg-accent/50",
         !newer && "sm:items-end sm:text-right",
       )}
     >

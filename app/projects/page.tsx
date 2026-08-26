@@ -48,7 +48,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
   };
 
   return (
-    <div>
+    <div className="[--separator-height:--spacing(8)]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}

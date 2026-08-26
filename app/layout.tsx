@@ -171,12 +171,13 @@ export default function RootLayout({
 
               <SiteFooter />
 
-              {/* The bottom edge of the sheet. Sixty-four pixels of the page
-                dissolving into the background, masked so the fade itself
-                fades out rather than ending on a line, plus a solid strip
-                under the home indicator. It is what keeps the last row of
-                content from butting into the edge of the glass — and on a
-                phone it is what the floating palette dock sits on. */}
+              {/* The bottom edge of the sheet. On phones, ninety-six pixels of
+                the page dissolves into the background; wider viewports use a
+                quieter sixty-four. The fade is masked so it disappears rather
+                than ending on a line, plus a solid strip under the home
+                indicator. It keeps the last row from butting into the edge of
+                the glass — and on a phone it is what the floating palette dock
+                sits on. */}
               <div aria-hidden className="fade-bottom">
                 <div className="fade-bottom-gradient" />
                 <div className="fade-bottom-rest" />

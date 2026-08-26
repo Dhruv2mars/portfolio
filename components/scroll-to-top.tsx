@@ -62,7 +62,7 @@ export function ScrollToTop() {
           .matches;
         window.scrollTo({ top: 0, behavior: still ? "auto" : "smooth" });
       }}
-      className="fixed right-4 bottom-[calc(var(--bottom)+env(safe-area-inset-bottom,0px))] z-50 inline-flex size-8 shrink-0 touch-manipulation items-center justify-center rounded-lg bg-secondary text-secondary-foreground shadow-[inset_0_0_1px] shadow-foreground/20 transition-[background-color,opacity,transform] duration-180 ease-out select-none active:scale-[0.98] [--bottom:0.5rem] hover:bg-secondary/80 data-[scroll-direction=down]:opacity-30 data-[scroll-direction=down]:hover:opacity-100 data-[scroll-direction=up]:opacity-100 data-[visible=false]:pointer-events-none data-[visible=false]:opacity-0 sm:[--bottom:1rem] lg:right-8 lg:[--bottom:2rem] [&_svg]:pointer-events-none [&_svg]:shrink-0"
+      className="fixed right-4 bottom-[calc(var(--bottom)+env(safe-area-inset-bottom,0px))] z-50 inline-flex size-8 shrink-0 touch-manipulation items-center justify-center rounded-lg bg-secondary text-secondary-foreground shadow-[inset_0_0_1px] shadow-foreground/20 transition-[background-color,opacity] duration-300 select-none active:scale-[0.98] [--bottom:0.5rem] hover:bg-secondary/80 data-[scroll-direction=down]:opacity-30 data-[scroll-direction=down]:hover:opacity-100 data-[scroll-direction=up]:opacity-100 data-[visible=false]:pointer-events-none data-[visible=false]:opacity-0 sm:[--bottom:1rem] lg:right-8 lg:[--bottom:2rem] [&_svg]:pointer-events-none [&_svg]:shrink-0"
     >
       <ArrowUp className="size-4" />
     </button>

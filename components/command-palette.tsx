@@ -15,6 +15,7 @@ import { useTheme } from "next-themes";
 import { ArrowUpRight, SearchIcon } from "@/components/icons";
 import { ShortMark } from "@/components/short-mark";
 import { nextTheme, type ColorScheme } from "@/lib/theme";
+import { usePresence } from "@/lib/use-presence";
 import { cn } from "@/lib/utils";
 
 export type CommandItem = {
@@ -75,6 +76,12 @@ export function CommandPaletteProvider({
     () => items.filter((item) => matches(item, query)),
     [items, query],
   );
+
+  // The dialog is held on screen for the length of its exit after `open` goes
+  // false, so the query and the highlight are reset on the way *in* rather than
+  // on the way out — clearing them at close would empty the list under the
+  // cursor for the tenth of a second the dialog spends leaving.
+  const dialog = usePresence(open, 100);
 
   const openFrom = useCallback((from: HTMLElement | null) => {
     restoreTo.current = from;
@@ -145,7 +152,7 @@ export function CommandPaletteProvider({
       ?.scrollIntoView({ block: "nearest" });
   }, [active, open]);
 
-  if (!open) {
+  if (!dialog.present) {
     return (
       <PaletteContext.Provider value={openFrom}>
         {children}
@@ -163,6 +170,11 @@ export function CommandPaletteProvider({
     <PaletteContext.Provider value={openFrom}>
       {children}
       <div
+        data-state={dialog.state}
+        /* On the way out it is a picture of a dialog: `inert` takes the whole
+           overlay off the hit-testing map and out of the tab order for the
+           tenth of a second it spends leaving. */
+        inert={!open}
         className="palette-backdrop fixed inset-0 z-50 flex items-center justify-center px-4 max-sm:items-start max-sm:pt-16"
         onMouseDown={(event) => {
           if (event.target === event.currentTarget) close();
@@ -172,6 +184,7 @@ export function CommandPaletteProvider({
           role="dialog"
           aria-modal="true"
           aria-label="Command palette"
+          data-state={dialog.state}
           className="palette-panel flex w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-popover px-1 shadow-lg ring-1 ring-foreground/10 dark:ring-foreground/20"
           onKeyDown={(event) => {
             if (event.key === "Escape") {
@@ -372,7 +385,7 @@ export function PaletteTrigger({ dock }: { dock?: boolean }) {
       aria-keyshortcuts="Meta+K Control+K"
       data-slot="command-menu-trigger"
       className={cn(
-        "flex h-8 shrink-0 touch-manipulation items-center rounded-lg text-sm font-medium text-muted-foreground transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.98]",
+        "flex h-8 shrink-0 touch-manipulation items-center rounded-lg text-sm font-medium text-muted-foreground transition-[background-color,color,transform] active:scale-[0.98]",
         dock
           ? "min-w-20 gap-2"
           : "gap-1.5 px-1.5 hover:bg-accent hover:text-foreground dark:hover:bg-accent/50",

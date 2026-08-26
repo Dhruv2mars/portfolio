@@ -37,7 +37,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={mounted ? `Switch to ${target} theme` : "Switch theme"}
-      className="flex size-8 touch-manipulation items-center justify-center rounded-lg text-muted-foreground transition-[background-color,color,transform] duration-150 ease-out hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
+      className="flex size-8 touch-manipulation items-center justify-center rounded-lg text-muted-foreground transition-[background-color,color,transform] hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
     >
       {/* The glyph names the theme you are in, not the one you would get.
           A control that shows its own destination reads as a status light the

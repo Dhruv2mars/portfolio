@@ -48,7 +48,7 @@ function ProjectMark({ project }: { project: Project }) {
     return (
       <span
         aria-hidden
-        className="mx-4 size-6 shrink-0 bg-muted-foreground transition-[background-color] duration-150 ease-out select-none group-hover/project:bg-foreground"
+        className="mx-4 size-6 shrink-0 bg-muted-foreground transition-colors duration-150 ease-out select-none group-hover/project:bg-foreground"
         style={{
           maskImage: `url(${project.logo.src})`,
           maskSize: "contain",

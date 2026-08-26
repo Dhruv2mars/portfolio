@@ -106,7 +106,7 @@ export default async function PostPage({ params }: PageProps) {
   ];
 
   return (
-    <article>
+    <article className="[--separator-height:--spacing(8)]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
@@ -120,7 +120,7 @@ export default async function PostPage({ params }: PageProps) {
       <div className="screen-line-bottom flex items-center justify-between gap-2 border-x border-line py-2 pr-2 pl-4">
         <Link
           href="/blog"
-          className="link-underline extend-touch-target inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-[color] duration-150 ease-out hover:text-foreground"
+          className="link-underline extend-touch-target inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="size-3.5" />
           Blog
@@ -144,7 +144,7 @@ export default async function PostPage({ params }: PageProps) {
           <PanelTitle as="h1" className="py-6">
             {post.title}
           </PanelTitle>
-          <PanelDescription className="py-4">
+          <PanelDescription className="py-5">
             <p className="typeset-timescale flex flex-wrap items-center gap-x-2 font-mono tabular-nums">
               <time dateTime={post.publishedAt}>
                 {formatPostDate(post.publishedAt)}

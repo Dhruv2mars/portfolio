@@ -28,8 +28,8 @@ export function SiteNav({
           aria-current={isCurrentRoute(item.href, pathname) ? "page" : undefined}
           className={cn(
             variant === "header"
-              ? "text-sm font-medium tracking-wide text-muted-foreground transition-[color] duration-150 ease-out hover:text-foreground aria-[current=page]:text-foreground"
-              : "flex h-8 items-center rounded-lg px-2 text-sm text-muted-foreground transition-[background-color,color] duration-150 ease-out hover:bg-accent hover:text-foreground aria-[current=page]:bg-accent aria-[current=page]:text-foreground",
+              ? "text-sm font-medium tracking-wide text-muted-foreground transition-[color] hover:text-foreground aria-[current=page]:text-foreground"
+              : "flex h-8 items-center rounded-lg px-2 text-sm text-muted-foreground transition-[background-color,color] hover:bg-accent hover:text-foreground aria-[current=page]:bg-accent aria-[current=page]:text-foreground",
           )}
         >
           {item.label}

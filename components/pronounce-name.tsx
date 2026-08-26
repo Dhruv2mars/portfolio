@@ -109,7 +109,7 @@ export function PronounceName() {
       data-speaking={speaking || undefined}
       title={`${site.name} ${site.pronunciation.phonetic}`}
       aria-label={`Hear how ${site.name} is pronounced`}
-      className="relative flex size-6 shrink-0 touch-manipulation items-center justify-center rounded-md text-muted-foreground transition-[background-color,color,transform] duration-150 ease-out hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
+      className="relative flex size-6 shrink-0 touch-manipulation items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
     >
       {/* The tap target a finger needs, without the box a cursor would see. */}
       <span
