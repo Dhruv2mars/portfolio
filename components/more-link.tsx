@@ -18,7 +18,7 @@ export function MoreLink({
   children: ReactNode;
 }) {
   return (
-    <div className="screen-line-top flex justify-center py-4">
+    <div className="screen-line-top flex justify-center py-3">
       <Link
         href={href}
         className="inline-flex h-8 shrink-0 touch-manipulation items-center gap-2 rounded-lg bg-secondary pr-2.5 pl-3 text-sm font-medium text-secondary-foreground shadow-[inset_0_0_1px] shadow-foreground/20 transition-[background-color,transform] duration-150 ease-out select-none hover:bg-secondary/80 active:scale-[0.98]"

@@ -106,7 +106,7 @@ export default async function PostPage({ params }: PageProps) {
   ];
 
   return (
-    <article className="[--separator-height:--spacing(8)]">
+    <article>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
@@ -144,7 +144,7 @@ export default async function PostPage({ params }: PageProps) {
           <PanelTitle as="h1" className="py-6">
             {post.title}
           </PanelTitle>
-          <PanelDescription className="py-5">
+          <PanelDescription className="py-4">
             <p className="typeset-timescale flex flex-wrap items-center gap-x-2 font-mono tabular-nums">
               <time dateTime={post.publishedAt}>
                 {formatPostDate(post.publishedAt)}

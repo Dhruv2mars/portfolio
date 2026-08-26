@@ -157,7 +157,7 @@ export async function ProfileHeader() {
 
       <div className="flex flex-col sm:col-start-2 sm:row-start-2">
         <div className="z-1 mt-auto border-t border-line">
-          <h1 className="-translate-y-px flex items-center gap-2 pl-4 text-[2rem]/none font-medium tracking-tight">
+          <h1 className="-translate-y-px flex min-h-10 items-center gap-2 py-1 pl-4 text-[2rem]/none font-medium tracking-tight">
             {site.name}
             {/* Inside the heading, not beside it: the button is about this
                 name, and a name and the way to hear it are one object. */}

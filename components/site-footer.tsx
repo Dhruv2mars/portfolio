@@ -20,7 +20,7 @@ export function SiteFooter() {
     <footer className="max-w-screen overflow-x-clip px-2">
       <div className="mx-auto border-x border-line md:max-w-3xl">
         <div className="screen-line-top screen-line-bottom">
-          <div className="stripe-divider h-12" />
+          <div className="stripe-divider h-8" />
         </div>
 
         {/* One closing line: the copyright reads left, the glyphs read right,

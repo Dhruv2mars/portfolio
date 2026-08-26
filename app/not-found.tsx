@@ -82,7 +82,7 @@ export default function NotFound() {
                 the reference's own 36px pill at its own measurements. */}
             <Link
               href="/"
-              className="inline-flex h-9 shrink-0 touch-manipulation items-center justify-center gap-1.5 rounded-lg border border-line bg-foreground/[0.045] px-3 text-sm font-medium whitespace-nowrap text-foreground transition-all hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
+              className="inline-flex h-9 shrink-0 touch-manipulation items-center justify-center gap-1.5 rounded-lg border border-line bg-foreground/[0.045] px-3 text-sm font-medium whitespace-nowrap text-foreground transition-[background-color,color,transform] hover:bg-accent hover:text-foreground active:scale-[0.98] dark:hover:bg-accent/50"
             >
               <ArrowLeft className="size-3.5" />
               Back home

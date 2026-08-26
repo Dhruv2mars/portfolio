@@ -20,7 +20,7 @@ function PanelDivider({ className }: { className?: string }) {
     <div
       aria-hidden
       className={cn(
-        "stripe-divider h-(--separator-height) w-full border-x border-line",
+        "stripe-divider h-(--section-gap) w-full border-x border-line",
         className,
       )}
     />
@@ -33,7 +33,7 @@ export default function Home() {
   const hasPosts = getPublishedPosts().length > 0;
 
   return (
-    <div className="[--separator-height:--spacing(8)] **:data-[slot=panel]:scroll-mt-[calc(var(--header-height)+var(--separator-height))]">
+    <div className="**:data-[slot=panel]:scroll-mt-[calc(var(--header-height)+var(--section-gap))]">
       <ProfileHeader />
 
       {/* The reference bands the hero off from the panels before identity

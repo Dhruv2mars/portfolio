@@ -59,7 +59,8 @@
   --selection-foreground: oklch(0.985 0 0);
 
   --header-height: --spacing(14);
-  --fade-bottom-height: --spacing(24);
+  --section-gap: --spacing(6);
+  --fade-bottom-height: --spacing(16);
 }
 
 .dark {
@@ -519,7 +520,7 @@
 
 /* ---------------------------------------------------------------------------
    The bottom edge of the sheet. Fixed, so it is the last thing every scroll
-   runs into: the page dissolves into the background over six rems, and the
+   runs into: the page dissolves into the background over four rems, and the
    gradient is itself masked from the top so the fade has no visible start.
    The strip below it is opaque background padded by the home indicator, which
    is what the floating palette dock rests on.
@@ -571,7 +572,7 @@
      reader can return from without losing their place. 19px brings it back to
      ~75, which is why the body of a post is the largest type on the site. */
   --typeset-size: 1.1875rem;
-  --typeset-leading: 1.7;
+  --typeset-leading: 1.62;
   --typeset-flow: 1.15em;
   font-family: var(--font-serif);
   color: var(--foreground);
@@ -586,12 +587,12 @@
 .prose h2 {
   font-size: 1.5rem;
   line-height: 1.3;
-  margin-top: 2.5em;
+  margin-top: 2.25em;
 }
 .prose h3 {
   font-size: 1.25rem;
   line-height: 1.35;
-  margin-top: 2em;
+  margin-top: 1.75em;
 }
 .prose h2 + *,
 .prose h3 + * {

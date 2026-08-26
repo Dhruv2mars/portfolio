@@ -171,7 +171,7 @@ export default function RootLayout({
 
               <SiteFooter />
 
-              {/* The bottom edge of the sheet. Ninety-six pixels of the page
+              {/* The bottom edge of the sheet. Sixty-four pixels of the page
                 dissolving into the background, masked so the fade itself
                 fades out rather than ending on a line, plus a solid strip
                 under the home indicator. It is what keeps the last row of
