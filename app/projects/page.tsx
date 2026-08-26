@@ -18,8 +18,17 @@ export const metadata: Metadata = {
  * The two are the same kind of page — a Visitor who has used one should not
  * have to learn the other.
  */
-export default function ProjectsPage() {
+type ProjectsPageProps = {
+  searchParams?: Promise<{ q?: string | string[] }>;
+};
+
+export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const projects = [...getProjects()];
+
+  const params = await searchParams;
+  const initialQuery = Array.isArray(params?.q)
+    ? (params.q[0] ?? "")
+    : (params?.q ?? "");
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -55,7 +64,7 @@ export default function ProjectsPage() {
           </PanelTitle>
         </PanelHeader>
 
-        <ProjectSearch projects={projects} />
+        <ProjectSearch projects={projects} initialQuery={initialQuery} />
       </Panel>
     </div>
   );

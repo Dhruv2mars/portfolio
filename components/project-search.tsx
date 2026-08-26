@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { ProjectRow } from "@/components/project-row";
 import { SearchField, SearchStatus } from "@/components/search-field";
+import { useMirroredQuery } from "@/components/use-mirrored-query";
 import { searchProjects, type Project } from "@/lib/projects";
 
 /**
@@ -14,8 +15,14 @@ import { searchProjects, type Project } from "@/lib/projects";
  * or a kind ("rust", "cli"), which is a word to type rather than a row to find
  * by eye.
  */
-export function ProjectSearch({ projects }: { projects: Project[] }) {
-  const [query, setQuery] = useState("");
+export function ProjectSearch({
+  projects,
+  initialQuery = "",
+}: {
+  projects: Project[];
+  initialQuery?: string;
+}) {
+  const [query, updateQuery] = useMirroredQuery(initialQuery);
   const shown = useMemo(
     () => searchProjects(projects, query),
     [projects, query],
@@ -25,7 +32,7 @@ export function ProjectSearch({ projects }: { projects: Project[] }) {
     <>
       <SearchField
         value={query}
-        onChange={setQuery}
+        onChange={updateQuery}
         label="Search projects"
         placeholder="Search projects…"
       />
