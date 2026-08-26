@@ -21,10 +21,16 @@ function initials(name: string): string {
     .join("");
 }
 
-/** 128px on phones, 160px on desktop. */
+/**
+ * 128px on phones, 160px on desktop.
+ *
+ * Square, not round. The plate stands on the masthead's bottom rule; a circle
+ * touches that rule at one point and the line dies out either side of the mark,
+ * while a square lands on it flat and the rule runs unbroken under the block.
+ */
 function Avatar() {
   return (
-    <div className="relative m-0.5 size-32 overflow-hidden rounded-full border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
+    <div className="relative m-0.5 size-32 overflow-hidden rounded-xl border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
       {site.avatar ? (
         <span className="absolute top-[91.25%] left-[53.75%] aspect-[181/362] w-[90%] -translate-x-1/2 -translate-y-1/2">
           <Image
@@ -145,11 +151,11 @@ export async function ProfileHeader() {
             sides that face the drawing; the frame supplies the other two.
 
             Opaque, and positioned so it is. The plate runs the full rail and
-            the box stands on its bottom-left, so an unfilled square shows the
-            curve through the four corners the circle does not reach — the mark
-            then reads as a cutout laid over the drawing instead of a plate the
-            drawing runs behind. The fill needs `relative` to land: unpositioned,
-            it would paint under the figure and show nothing. */}
+            the box stands on its bottom-left, so an unfilled box would show the
+            curve running through it and the mark would read as a cutout laid
+            over the drawing instead of a plate the drawing runs behind. The
+            fill needs `relative` to land: unpositioned, it would paint under
+            the figure and show nothing. */}
         <div className="relative mt-auto shrink-0 border-t border-r border-line bg-background">
           <Avatar />
         </div>
