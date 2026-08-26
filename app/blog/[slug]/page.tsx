@@ -144,8 +144,7 @@ export default async function PostPage({ params }: PageProps) {
             {post.title}
           </PanelTitle>
           <PanelDescription className="py-5">
-            <p className="typeset-description text-balance">{post.summary}</p>
-            <p className="typeset-timescale mt-3 flex flex-wrap items-center gap-x-2 font-mono tabular-nums">
+            <p className="typeset-timescale flex flex-wrap items-center gap-x-2 font-mono tabular-nums">
               <time dateTime={post.publishedAt}>
                 {formatPostDate(post.publishedAt)}
               </time>
