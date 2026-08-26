@@ -17,6 +17,6 @@ describe("site identity", () => {
   });
 
   test("the masthead uses the current Codex pet portrait", () => {
-    expect(site.avatar).toBe("/avatar/sunny.webp");
+    expect(site.avatar).toBe("/avatar/sunny.png");
   });
 });
