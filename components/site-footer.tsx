@@ -20,16 +20,14 @@ export function SiteFooter() {
     <footer className="max-w-screen overflow-x-clip px-2">
       <div className="mx-auto border-x border-line md:max-w-3xl">
         <div className="screen-line-top screen-line-bottom">
-          <div className="stripe-divider h-12" />
+          <div className="stripe-divider h-8" />
         </div>
 
         {/* One closing line: the copyright reads left, the glyphs read right,
             and on a phone they stack centred rather than squeezing. */}
-        <div className="screen-line-top screen-line-bottom flex flex-col items-center justify-center gap-x-4 gap-y-3 px-4 py-3 text-sm text-muted-foreground sm:flex-row sm:justify-between">
-          {/* The mark, not the legal name: the wordmark below signs the page
-              and this line should agree with it. */}
+        <div className="screen-line-bottom flex flex-col items-center justify-center gap-x-4 gap-y-3 px-4 py-3 text-sm text-muted-foreground sm:flex-row sm:justify-between">
           <span>
-            &copy; {new Date().getFullYear()} {site.handle.toLowerCase()}.
+            &copy; {new Date().getFullYear()} {site.name}.
           </span>
 
           {/* Four glyphs on one gutter. Icons stay 16px; links get a 32px box
@@ -45,7 +43,7 @@ export function SiteFooter() {
                   rel="noopener noreferrer"
                   aria-label={social.label}
                   title={social.label}
-                  className="flex size-8 items-center justify-center transition-colors hover:text-foreground"
+                  className="flex size-8 touch-manipulation items-center justify-center transition-[color,transform] duration-150 [transition-timing-function:var(--ease-out-quint)] hover:text-foreground active:scale-[0.97]"
                 >
                   <Glyph className="size-4" />
                 </a>
@@ -61,18 +59,16 @@ export function SiteFooter() {
               rel="noopener noreferrer"
               aria-label="RSS feed"
               title="RSS feed — paste this address into a feed reader"
-              className="flex size-8 items-center justify-center transition-colors hover:text-foreground"
+              className="flex size-8 touch-manipulation items-center justify-center transition-[color,transform] duration-150 [transition-timing-function:var(--ease-out-quint)] hover:text-foreground active:scale-[0.97]"
             >
               <Rss className="size-4" />
             </a>
           </nav>
         </div>
-
       </div>
 
       <SiteWordmark
         text={site.handle.toLowerCase()}
-        mobileText="d2m"
         className="text-foreground"
       />
 

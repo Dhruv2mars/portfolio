@@ -62,6 +62,13 @@
   --fade-bottom-height: --spacing(24);
 }
 
+/* The phone dock needs a deeper landing; desktop has no dock to float over. */
+@media (min-width: 640px) {
+  :root {
+    --fade-bottom-height: --spacing(16);
+  }
+}
+
 .dark {
   color-scheme: dark;
 
@@ -519,8 +526,9 @@
 
 /* ---------------------------------------------------------------------------
    The bottom edge of the sheet. Fixed, so it is the last thing every scroll
-   runs into: the page dissolves into the background over six rems, and the
-   gradient is itself masked from the top so the fade has no visible start.
+   runs into: the page dissolves into the background over four rems on wide
+   viewports and six on phones, and the gradient is masked from the top so the
+   fade has no visible start.
    The strip below it is opaque background padded by the home indicator, which
    is what the floating palette dock rests on.
 --------------------------------------------------------------------------- */
