@@ -1,0 +1,32 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "34a11ccd88ec",
+  "session_id": "01a03d2a-5b35-7340-b343-26f8e21e9fd5",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-26T16:17:31.002367Z",
+  "branch": "fix/restore-and-dither-signature",
+  "checkpoints_count": 2,
+  "save_step_count": 1,
+  "files_touched": [
+    "lib/projects.test.ts",
+    "lib/projects.ts"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-sol",
+  "turn_id": "c6fd1951a025",
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-26T16:17:31.001337Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 34,
+    "human_modified": 24,
+    "human_removed": 0,
+    "total_committed": 34,
+    "total_lines_changed": 84,
+    "agent_percentage": 0,
+    "metric_version": 2
+  }
+}

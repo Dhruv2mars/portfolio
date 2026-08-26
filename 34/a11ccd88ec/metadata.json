@@ -3,7 +3,7 @@
   "checkpoint_id": "34a11ccd88ec",
   "strategy": "manual-commit",
   "branch": "fix/restore-and-dither-signature",
-  "checkpoints_count": 8,
+  "checkpoints_count": 10,
   "files_touched": [
     "lib/projects.test.ts",
     "lib/projects.ts"
@@ -11,6 +11,10 @@
   "sessions": [
     {
       "metadata": "/34/a11ccd88ec/0/metadata.json",
+      "prompt": ""
+    },
+    {
+      "metadata": "/34/a11ccd88ec/1/metadata.json",
       "prompt": ""
     }
   ]
