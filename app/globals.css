@@ -15,7 +15,14 @@
 :root {
   color-scheme: light;
 
-  --background: oklch(1 0 0);
+  /* Near-white, not paper-white. Pure white leaves `--card`, `--popover` and
+     the hairlines nowhere to go: a raised panel and the page it sits on were
+     the same value, so the frame read as flat. Backing the sheet off to
+     zinc-50 gives the white surfaces above it somewhere to be raised to, and
+     mirrors dark, where `--card` sits above `--background` rather than on it.
+     `lib/theme.ts` carries the same number for the three consumers that
+     cannot read a custom property. */
+  --background: oklch(0.985 0 0); /* zinc-50 */
   --foreground: oklch(0.141 0.005 285.823); /* zinc-950 */
 
   --primary: oklch(0.141 0.005 285.823);
@@ -47,7 +54,7 @@
   --destructive: oklch(0.577 0.245 27.325);
   --link: oklch(0.488 0.243 264.376); /* blue-700 */
 
-  --surface: oklch(0.985 0 0);
+  --surface: oklch(0.967 0.001 286.375); /* zinc-100 — recessed from the sheet */
   --surface-foreground: oklch(0.141 0.005 285.823);
 
   --code: var(--background);

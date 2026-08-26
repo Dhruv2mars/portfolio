@@ -94,8 +94,10 @@ month row lands on that floor, which is the nearest thing in the picture.
 **The figure sits at a distance.** It is behind the name and behind the monogram, and it is drawn
 that way: the ink is mixed toward the background rather than faded with alpha, so contrast collapses
 toward the colour of the air the way distance actually works and the line walks toward near-black in
-dark and near-white in light instead of merely thinning. The curve holds roughly 4.6:1 against its
-background; the name above it holds 19:1, and that ordering is the point. The scale and month labels
+dark and near-white in light instead of merely thinning. Measured off the rendered page, the curve
+holds 4.8:1 against its background in light and 7.6:1 in dark — one mix ratio, two ratios, because
+WCAG contrast is not linear in the perceptual lightness `oklab` interpolates. The name above it
+holds 19:1 in both, and that ordering is the point. The scale and month labels
 step back too, but a shorter step — recede the reading as far as the drawing and the plate stops
 being a record and becomes a texture. None of this is AA text: the plate is one `role="img"` and the
 description carries the reading in words.
