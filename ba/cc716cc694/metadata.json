@@ -3,13 +3,17 @@
   "checkpoint_id": "bacc716cc694",
   "strategy": "manual-commit",
   "branch": "chore/truth-pass",
-  "checkpoints_count": 2,
+  "checkpoints_count": 10,
   "files_touched": [
     "next-env.d.ts"
   ],
   "sessions": [
     {
       "metadata": "/ba/cc716cc694/0/metadata.json",
+      "prompt": ""
+    },
+    {
+      "metadata": "/ba/cc716cc694/1/metadata.json",
       "prompt": ""
     }
   ]
