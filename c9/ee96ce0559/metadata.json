@@ -1,0 +1,22 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "c9ee96ce0559",
+  "strategy": "manual-commit",
+  "branch": "fix/site-bugs",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/blog/page.tsx",
+    "app/projects/page.tsx",
+    "components/post-search.tsx",
+    "components/project-search.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/c9/ee96ce0559/0/metadata.json",
+      "transcript": "/c9/ee96ce0559/0/full.jsonl",
+      "compact_transcript": "/c9/ee96ce0559/0/transcript.jsonl",
+      "content_hash": "/c9/ee96ce0559/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
