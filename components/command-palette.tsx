@@ -311,7 +311,17 @@ export function CommandPaletteProvider({
 
           {/* The legend. It names what Enter will actually do to the row under
               the cursor — open a page, leave for another site, or throw a
-              switch — rather than promising one of the three. */}
+              switch — rather than promising one of the three.
+
+              Move, open, close, in that order: the three things a keyboard can
+              do here, read left to right in the order they happen. Escape was
+              missing from it, which made the palette a dialog with no stated
+              way out — the one key every dialog owes its reader. It is bound
+              (see the input's `keydown`); the legend simply never said so.
+
+              The whole run is keyboard grammar, so it is hidden below `sm`
+              along with the arrows: a phone closes this by tapping the
+              backdrop and has no Escape to press. */}
           <div className="flex h-10 shrink-0 items-center justify-between gap-2 px-3 text-xs font-medium">
             <ShortMark className="text-muted-foreground" />
             <span className="flex items-center gap-3 text-muted-foreground">
@@ -324,6 +334,10 @@ export function CommandPaletteProvider({
                   {enterLabel(results[active])}
                 </span>
                 <Key>↵</Key>
+              </span>
+              <span className="flex items-center gap-2 max-sm:hidden">
+                <span>Close</span>
+                <Key>Esc</Key>
               </span>
             </span>
           </div>
