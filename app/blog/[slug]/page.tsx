@@ -82,10 +82,11 @@ export default async function PostPage({ params }: PageProps) {
       headline: post.title,
       description: post.summary,
       datePublished: post.publishedAt,
-      dateModified: post.publishedAt,
+      dateModified: post.updatedAt ?? post.publishedAt,
       url,
       image: `${site.url}${post.image ?? ogImagePath(post.title)}`,
       author: { "@type": "Person", name: site.name, url: site.url },
+      ...(post.tags?.length ? { keywords: post.tags } : {}),
       isPartOf: { "@type": "Blog", "@id": `${site.url}/blog` },
     },
     {
