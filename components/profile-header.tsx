@@ -26,14 +26,16 @@ function Avatar() {
   return (
     <div className="relative m-0.5 size-32 overflow-hidden rounded-full border border-line bg-muted ring-1 ring-border/50 select-none sm:size-40">
       {site.avatar ? (
-        <Image
-          src={site.avatar}
-          alt={`${site.name}, profile portrait`}
-          fill
-          sizes="(min-width: 640px) 160px, 128px"
-          priority
-          className="object-cover object-[center_18%]"
-        />
+        <span className="absolute top-[91.25%] left-[53.75%] aspect-[181/362] w-[90%] -translate-x-1/2 -translate-y-1/2">
+          <Image
+            src={site.avatar}
+            alt={`${site.name}, profile portrait`}
+            fill
+            sizes="(min-width: 640px) 144px, 115px"
+            priority
+            className="object-contain"
+          />
+        </span>
       ) : (
         <span
           role="img"
