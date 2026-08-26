@@ -32,7 +32,7 @@ function Avatar() {
           fill
           sizes="(min-width: 640px) 160px, 128px"
           priority
-          className="object-contain"
+          className="object-cover object-[center_18%]"
         />
       ) : (
         <span
