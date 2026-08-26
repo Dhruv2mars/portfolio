@@ -1,0 +1,19 @@
+see the current portfolio implementation, and tell me, what all is wrong/inconsistent/incomplete. and make a list of all of it
+
+---
+
+see the current portfolio implementation, and tell me, what all is wrong/inconsistent/incomplete. and make a list of all of it
+
+---
+
+a. the current implementation of whatever is done is the truth, make sure all docs follow that. 
+b. what to do about it?
+c. fix it. 
+d. clean it up. use codebase architecture skill to make sure that the codebase is clutter-free without breaking/changing anything in implementation or the way things look/work. 
+e. do whatever is absolutely necessary. 
+
+once done, shell out to gpt-5.6-luna in codex at xhigh reasoning which will use computer-use to critic and review the whole site and give feedback. spawn multiple different subagents using workflows (haiku at high reasoning) which will shell out to codex to review and critic multiple parts of the site in parallel. one final critic agent which will do the overall complete site. based on all of it, tell me whats the feedback u got.
+
+---
+
+why did u stop, continue till everything is done as told!
