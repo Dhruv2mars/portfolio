@@ -1,0 +1,17 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "34a11ccd88ec",
+  "strategy": "manual-commit",
+  "branch": "fix/restore-and-dither-signature",
+  "checkpoints_count": 8,
+  "files_touched": [
+    "lib/projects.test.ts",
+    "lib/projects.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/34/a11ccd88ec/0/metadata.json",
+      "prompt": ""
+    }
+  ]
+}
