@@ -356,37 +356,6 @@
 /* The header mark changes form at a scroll threshold, so its container snaps
    to the new width while the two already-rendered labels crossfade briefly.
    Width never animates: the bar stays responsive while the mark remains calm. */
-.site-header-mark {
-  position: relative;
-  display: inline-block;
-  width: 6.25rem;
-  height: 1em;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.site-header-mark[data-compact] {
-  width: 2.25rem;
-}
-
-.site-header-mark > span {
-  position: absolute;
-  inset: 0;
-  transition: opacity 120ms var(--ease-out-quint);
-}
-
-.site-header-mark > span[data-mark="short"] {
-  opacity: 0;
-}
-
-.site-header-mark[data-compact] > span[data-mark="full"] {
-  opacity: 0;
-}
-
-.site-header-mark[data-compact] > span[data-mark="short"] {
-  opacity: 1;
-}
-
 /* ---------------------------------------------------------------------------
    Typeset — the two long-form measures. `--typeset-flow` is the vertical
    rhythm between blocks, expressed in the block's own em so it scales with
@@ -858,8 +827,5 @@
     animation: none !important;
     opacity: 1;
     transform: none;
-  }
-  .site-header-mark > span {
-    transition-duration: 0.001ms;
   }
 }
