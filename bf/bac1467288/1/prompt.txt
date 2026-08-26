@@ -1,0 +1,21 @@
+bro, there were changes that were made, which u forgot, like the line below the avatar, and changing the projects list. those were commited as well, so make sure that it is there. and finally, this pr 36 should be the last one remaining and everything else either on main or within this, making things simpler and cleaner. make sure everything is clean and streamligned
+
+---
+
+firstly, i think that everything is restored, so pr 36 is almost ready for merge. but before that, one final step:
+- dithered logo graphics for dhruv2mars in footer. using canvas with a lot of tiny dots. There’s an invisible circle around the cursor. Any dot inside it gets pushed outward with a cubic falloff so it’s gentle on the edges, and strong at the center. u have to change the footer dhruv2mars graphics, making its size (height) smaller, which will make it less prominent. 
+"To ensure the dithered logo is as close to the original, build me a tool where I can tweak the look of it and export the coordinates of each dot. This way I don’t have to ask an LLM to blindly try and recreate it, but just fine-tune with sliders instead."
+
+make the above. 
+
+- once that is done, make sure git is clean and everything is perfect. ready for merge
+
+---
+
+firstly, i think that everything is restored, so pr 36 is almost ready for merge. but before that, one final step:
+- dithered logo graphics for dhruv2mars in footer. using canvas with a lot of tiny dots. There’s an invisible circle around the cursor. Any dot inside it gets pushed outward with a cubic falloff so it’s gentle on the edges, and strong at the center. u have to change the footer dhruv2mars graphics, making its size (height) smaller, which will make it less prominent. 
+"To ensure the dithered logo is as close to the original, build me a tool where I can tweak the look of it and export the coordinates of each dot. This way I don’t have to ask an LLM to blindly try and recreate it, but just fine-tune with sliders instead."
+
+make the above. 
+
+- once that is done, make sure git is clean and everything is perfect. ready for merge
