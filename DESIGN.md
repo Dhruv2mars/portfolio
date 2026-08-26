@@ -130,10 +130,12 @@ for the page under the masthead.
 once in `lib/site.ts` — that field is the whole interface, and setting it back to `null` falls
 through to a monogram at the identical footprint, so the slot cannot shift the layout in either
 state. The slot is a square plate ruled on the two sides that face the drawing, with the same
-hairline as every other plate on the page; the portrait inside it is cropped to a circle. The plate
-is opaque rather than open, because the four corners a circle does not reach would otherwise show
-the hero curve running through them and the mark would read as a cutout laid over the figure instead
-of a plate the figure runs behind. It carries no cursor-tracking light: an earlier draft reserved that interaction for a portrait that did
+hairline as every other plate on the page, and the portrait fills it corner to corner. Square rather
+than round: the plate stands on the masthead's bottom rule, and a circle meets that rule at a single
+tangent point, leaving the line to die out either side of the mark. A square lands on it flat and the
+rule reads as one continuous run under the whole block. The plate is opaque rather than open, so the
+hero curve stops at its edge and the mark reads as a plate the figure runs behind rather than a
+cutout laid over it. It carries no cursor-tracking light: an earlier draft reserved that interaction for a portrait that did
 not exist yet, and once a real photograph landed in the slot the effect was decoration on a face.
 The portrait is loaded eagerly with explicit dimensions because it is above the fold on every route,
 and a masthead that reflows when a face arrives is the failure this rule exists to prevent.
