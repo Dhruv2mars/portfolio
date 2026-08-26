@@ -51,13 +51,32 @@ Motion does springs, `next-themes` does the no-flash theme boot. A dropdown does
 field, one kind of row. A Visitor who has used either has learned both. Home shows the head of each
 list and a door to the rest.
 
+The count on that `h1` is the number of rows under it, not the size of the corpus — the filter is
+what renders it, because the filter is the only thing that knows. A heading reading "Projects 8"
+above two visible rows would be the page contradicting itself in the one place a Visitor looks to
+find out how much there is. It is rendered on the server from `?q`, so the first paint already
+carries the filtered number rather than starting wrong and correcting itself.
+
+**Chrome is the same on every route.** A header that keeps the mark and, above `sm`, the nav and the
+palette trigger; below `sm` a floating dock that carries the nav and the trigger down to where a
+thumb already is, mounted after the content so it comes last in the tab order — a control painted at
+the bottom of the viewport should not sit two stops in. Under both, a fixed fade dissolves the sheet
+into the background at the bottom edge: six rems deep on a phone, four above `sm`, because the phone
+has a dock to float over and the desktop does not. The footer reserves exactly that depth, so the
+fade lands on its own spacer and never on the last thing a Visitor was reading.
+
+The footer is a signature: the year and the legal name, the three places the work lives plus the
+feed, and the mark drawn large in the site's own alphabet. The name and the mark differ on purpose —
+a copyright line names who holds it, and the signature under it is what that person is called.
+
 `rehype-sanitize` on all MDX and escaped JSON-LD embedding survive from the old build unchanged.
 Regressing either is a security bug, not a style change.
 
 ## 3. Masthead
 
 One block, no hero. Avatar slot · name, with a button that pronounces it · the tagline, flipping
-through the several ways it is true. The social links live in the Overview panel below, where they
+once through the several ways it is true and then resting on the canonical one — widening a role
+past a job title is a thing you say once, and §6 has no room for a masthead that never stops. The social links live in the Overview panel below, where they
 are the panel's whole content: a location and a clock were tried there and removed, because neither
 changed what a reader does next.
 
@@ -107,11 +126,14 @@ against the panel idiom: it is the first thing seen, it is a picture before it i
 rules that keep the panels below it quiet are the wrong rules for it. §6's prohibitions are written
 for the page under the masthead.
 
-**The avatar slot is filled.** The portrait is checked in at `public/avatar/sunny.png`, square, and
-named once in `lib/site.ts` — that field is the whole interface, and setting it back to `null` falls
+**The avatar slot is filled.** The portrait is checked in at `public/avatar/sunny.png` and named
+once in `lib/site.ts` — that field is the whole interface, and setting it back to `null` falls
 through to a monogram at the identical footprint, so the slot cannot shift the layout in either
-state. The frame is a bordered square with the same hairline as every other plate on the page. It
-carries no cursor-tracking light: an earlier draft reserved that interaction for a portrait that did
+state. The slot is a square plate ruled on the two sides that face the drawing, with the same
+hairline as every other plate on the page; the portrait inside it is cropped to a circle. The plate
+is opaque rather than open, because the four corners a circle does not reach would otherwise show
+the hero curve running through them and the mark would read as a cutout laid over the figure instead
+of a plate the figure runs behind. It carries no cursor-tracking light: an earlier draft reserved that interaction for a portrait that did
 not exist yet, and once a real photograph landed in the slot the effect was decoration on a face.
 The portrait is loaded eagerly with explicit dimensions because it is above the fold on every route,
 and a masthead that reflows when a face arrives is the failure this rule exists to prevent.
