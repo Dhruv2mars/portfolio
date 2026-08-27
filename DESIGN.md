@@ -93,9 +93,12 @@ effectively nothing at the rim, and the field has no edge for the eye to catch. 
 coordinates checked in at `lib/wordmark-dots.ts`; nothing at runtime re-letters them, and nothing in
 the app knows what a letter is. They come from `tools/wordmark-studio.html`, which opens straight off
 the filesystem: it sets any text in any typeface — installed, uploaded as a file, or fetched from
-Google Fonts — rasterises it, reads the alpha channel, and dithers the coverage. Because the shape
-comes from a rasteriser rather than from outlines written out by hand, no alphabet lives in code and
-any face is usable. The first preview is the footer's signature section drawn at true size for a
+Google Fonts — rasterises it, reads the alpha channel, and dithers the coverage. The dither takes a
+coverage field rather than an alphabet, so the ink need not be type at all: load a drawing instead —
+SVG, PNG, JPEG, WebP — and it goes through the same pipeline, coverage read from the alpha channel
+when the file has one and from brightness when it does not. That is the route for lettering that was
+drawn rather than typed. Because the shape always comes from a rasteriser rather than from outlines
+written out by hand, no alphabet lives in code and any face, or none, is usable. The first preview is the footer's signature section drawn at true size for a
 chosen device — the same width, the same height, the same crop at the page edge — so the call on how
 big and how wide the mark should sit is made against the real rectangle rather than a proxy. The
 studio and the site share one painter, `tools/dither.js`, so the pixel snapping and the ink

@@ -15,6 +15,8 @@
         --accent: #7cc4ff;
       }
       * { box-sizing: border-box; }
+      /* `label` and `.pair` set display, which outranks the UA rule for [hidden]. */
+      [hidden] { display: none !important; }
       body {
         margin: 0;
         min-height: 100vh;
@@ -130,7 +132,9 @@
       <div>
         <h1>Wordmark studio</h1>
         <p>
-          Set any text in any typeface, dither it, and export the coordinates. The first stage is the
+          Dither a mark and export the coordinates. The ink can be text set in any typeface, or a
+          drawing you load — a wordmark from Figma or Illustrator, exported as SVG or PNG, gets read
+          the same way, so the mark need not be a typeface at all. The first stage is the
           footer's signature section drawn at true size for the device you pick — the same width, the
           same height, the same crop at the bottom edge — so what you judge there is what ships. The
           second stage shows the whole box including the part that falls off the page. Both react to
@@ -152,9 +156,10 @@
       <div class="stage"><canvas id="zoom" title="the whole box, page edge marked"></canvas></div>
 
       <p class="hint">
-        Export writes the whole of <code>lib/wordmark-dots.ts</code>. The mark is baked from a
-        rasterised typeface, so nothing at runtime can re-letter it — the preset in the file's header
-        is what you paste back here to pick the work up again.
+        Export writes the whole of <code>lib/wordmark-dots.ts</code>. The mark is baked to
+        coordinates, so nothing at runtime can re-letter or re-draw it — the preset in the file's
+        header is what you paste back here to pick the work up again. A preset names the artwork it
+        came from but cannot carry it, so load the image again first.
       </p>
     </main>
 
@@ -162,20 +167,35 @@
       <fieldset>
         <legend>Lettering</legend>
         <label>
+          <div class="row"><b>Ink comes from</b></div>
+          <select id="source">
+            <option value="text">text set in a typeface</option>
+            <option value="artwork">artwork — a drawn mark</option>
+          </select>
+        </label>
+        <div class="pair" id="artworkRow" hidden>
+          <button id="pickArt" type="button">Load artwork…</button>
+          <select id="artworkInk" title="which end of an opaque image is the mark">
+            <option value="dark">dark is ink</option>
+            <option value="light">light is ink</option>
+          </select>
+        </div>
+        <input type="file" id="artFile" accept="image/png,image/svg+xml,image/jpeg,image/webp" hidden />
+        <label id="textRow">
           <div class="row"><b>Text</b></div>
           <input type="text" id="text" />
         </label>
-        <label>
+        <label id="familyRow">
           <div class="row"><b>Typeface</b></div>
           <input type="text" id="family" list="families" placeholder="family name" />
           <datalist id="families"></datalist>
         </label>
-        <div class="pair">
+        <div class="pair" id="faceRow">
           <button id="pickLocal" type="button">Installed fonts…</button>
           <button id="pickFile" type="button">Load a file…</button>
         </div>
         <input type="file" id="fontFile" accept=".ttf,.otf,.woff,.woff2,font/*" hidden />
-        <label>
+        <label id="googleRow">
           <div class="row"><b>Google Fonts</b></div>
           <div class="pair">
             <input type="text" id="googleName" placeholder="e.g. Archivo" />
@@ -183,23 +203,23 @@
           </div>
         </label>
         <div class="warn" id="fontWarn"></div>
-        <label>
+        <label id="weightRow">
           <div class="row"><b>Weight</b><span id="weightOut"></span></div>
           <input type="range" id="weight" min="100" max="900" step="50" />
         </label>
-        <label>
+        <label id="trackingRow">
           <div class="row"><b>Tracking</b><span id="trackingOut"></span></div>
           <input type="range" id="tracking" min="-0.15" max="0.4" step="0.005" />
         </label>
-        <label>
+        <label id="wordSpacingRow">
           <div class="row"><b>Word spacing</b><span id="wordSpacingOut"></span></div>
           <input type="range" id="wordSpacing" min="-0.2" max="1" step="0.01" />
         </label>
-        <label>
+        <label id="caseRow">
           <div class="row"><b>Case</b></div>
           <select id="transform"></select>
         </label>
-        <label class="check"><input type="checkbox" id="italic" /> italic</label>
+        <label class="check" id="italicRow"><input type="checkbox" id="italic" /> italic</label>
       </fieldset>
 
       <fieldset>
@@ -317,6 +337,9 @@
         el("fontWarn").textContent = message || "";
       };
 
+      /** The loaded drawing, when the mark is art rather than type. */
+      let artwork = null;
+
       const shaped = () => {
         if (preset.transform === "lowercase") return preset.text.toLowerCase();
         if (preset.transform === "uppercase") return preset.text.toUpperCase();
@@ -329,6 +352,7 @@
          then again at that size — the tight bounding box of the result is the
          lockup, and everything downstream is a fraction of it. */
       function raster() {
+        if (preset.source === "artwork") return rasterArtwork();
         const text = shaped();
         if (!text.trim()) {
           alpha = null;
@@ -363,6 +387,81 @@
         alpha = new Uint8Array(mask.width * mask.height);
         for (let i = 0; i < alpha.length; i++) alpha[i] = data[i * 4 + 3];
         bbox = tighten();
+      }
+
+      /* The same job as `raster`, from a picture instead of a string.
+         Transparent artwork carries its own coverage in the alpha channel; a
+         flat JPEG or an opaque PNG has none, so the ink is read off brightness
+         and `artworkInk` says which end of it is the mark. Either way what
+         comes out is one byte of coverage per pixel, which is all the dither
+         ever wanted. */
+      function rasterArtwork() {
+        if (!artwork || !artwork.naturalWidth) {
+          alpha = null;
+          return;
+        }
+
+        const scale = MASK_HEIGHT / artwork.naturalHeight;
+        const pad = 8;
+        mask.width = Math.max(1, Math.round(artwork.naturalWidth * scale)) + pad * 2;
+        mask.height = MASK_HEIGHT + pad * 2;
+        maskCtx.clearRect(0, 0, mask.width, mask.height);
+        maskCtx.drawImage(artwork, pad, pad, mask.width - pad * 2, mask.height - pad * 2);
+
+        const data = maskCtx.getImageData(0, 0, mask.width, mask.height).data;
+        alpha = new Uint8Array(mask.width * mask.height);
+
+        /* Ask the drawn area only. The pad ring around it is transparent by
+           construction, and counting it would say every flat JPEG has an alpha
+           channel — which reads its white background as solid ink. */
+        let transparent = false;
+        for (let y = pad; y < mask.height - pad && !transparent; y++) {
+          const row = y * mask.width;
+          for (let x = pad; x < mask.width - pad; x++) {
+            if (data[(row + x) * 4 + 3] < 250) { transparent = true; break; }
+          }
+        }
+        for (let i = 0; i < alpha.length; i++) {
+          const o = i * 4;
+          if (transparent) {
+            alpha[i] = data[o + 3];
+            continue;
+          }
+          const lum = (data[o] * 0.299 + data[o + 1] * 0.587 + data[o + 2] * 0.114) | 0;
+          alpha[i] = preset.artworkInk === "light" ? lum : 255 - lum;
+        }
+
+        /* Reading ink off brightness makes the pad ring around an opaque image
+           look like ink, and the antialiased row where the picture meets it
+           looks like half of it — a rectangle traced around the whole mark.
+           Nothing outside the picture is part of the mark, so cut it. */
+        if (!transparent) {
+          const inset = pad + 1;
+          for (let y = 0; y < mask.height; y++) {
+            const row = y * mask.width;
+            const outside = y < inset || y >= mask.height - inset;
+            for (let x = 0; x < mask.width; x++) {
+              if (outside || x < inset || x >= mask.width - inset) alpha[row + x] = 0;
+            }
+          }
+        }
+        bbox = tighten();
+      }
+
+      function pickArtwork(file) {
+        const url = URL.createObjectURL(file);
+        const image = new Image();
+        image.onload = () => {
+          artwork = image;
+          preset.source = "artwork";
+          preset.artworkName = file.name;
+          el("source").value = "artwork";
+          lettering();
+          warn(`Dithering ${file.name} — ${image.naturalWidth} × ${image.naturalHeight}.`);
+          rebuild();
+        };
+        image.onerror = () => warn(`That image would not open: ${file.name}`);
+        image.src = url;
       }
 
       function applyFont(size) {
@@ -451,7 +550,9 @@
         raster();
         if (!alpha || !bbox) {
           dots = [];
-          el("count").textContent = "nothing to draw — check the text and the typeface";
+          el("count").textContent = preset.source === "artwork"
+            ? "nothing to draw — load an image, or try the other end of `dark is ink`"
+            : "nothing to draw — check the text and the typeface";
           render();
           return;
         }
@@ -643,6 +744,7 @@
         ["repelStrength", (v) => `${v} units`],
       ];
       const CHECKS = ["italic", "stagger"];
+      const SELECTS = ["source", "artworkInk"];
       const TEXTS = ["text", "family"];
 
       const DEVICES = [
@@ -666,8 +768,23 @@
         for (const id of TEXTS) el(id).value = preset[id];
         el("pattern").value = preset.pattern;
         el("transform").value = preset.transform;
+        for (const id of SELECTS) el(id).value = preset[id];
+        lettering();
         el("deviceWidth").value = preset.deviceWidth;
         el("device").value = String(preset.deviceWidth);
+      }
+
+      /* Only one source is live at a time, and half these controls mean nothing
+         to the other one. Hide rather than disable: a greyed-out typeface field
+         still reads as something you forgot to set. */
+      function lettering() {
+        const art = preset.source === "artwork";
+        el("artworkRow").hidden = !art;
+        for (const id of ["textRow", "familyRow", "faceRow", "googleRow",
+                          "weightRow", "trackingRow", "wordSpacingRow",
+                          "caseRow", "italicRow"]) {
+          el(id).hidden = art;
+        }
       }
 
       function wire() {
@@ -687,6 +804,13 @@
         for (const id of TEXTS) {
           el(id).addEventListener("input", (event) => {
             preset[id] = event.target.value;
+            rebuild();
+          });
+        }
+        for (const id of SELECTS) {
+          el(id).addEventListener("change", (event) => {
+            preset[id] = event.target.value;
+            lettering();
             rebuild();
           });
         }
@@ -928,6 +1052,10 @@
         wire();
 
         el("pickLocal").addEventListener("click", pickLocal);
+        el("pickArt").addEventListener("click", () => el("artFile").click());
+        el("artFile").addEventListener("change", (event) => {
+          if (event.target.files[0]) pickArtwork(event.target.files[0]);
+        });
         el("pickFile").addEventListener("click", () => el("fontFile").click());
         el("fontFile").addEventListener("change", (event) => {
           if (event.target.files[0]) pickFile(event.target.files[0]);
