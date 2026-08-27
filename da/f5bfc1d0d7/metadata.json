@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "daf5bfc1d0d7",
+  "strategy": "manual-commit",
+  "branch": "feat/heavy-footer-signature",
+  "checkpoints_count": 1,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/da/f5bfc1d0d7/0/metadata.json",
+      "transcript": "/da/f5bfc1d0d7/0/full.jsonl",
+      "compact_transcript": "/da/f5bfc1d0d7/0/transcript.jsonl",
+      "content_hash": "/da/f5bfc1d0d7/0/content_hash.txt",
+      "prompt": "/da/f5bfc1d0d7/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1162,
+    "cache_creation_tokens": 1728466,
+    "cache_read_tokens": 47121070,
+    "output_tokens": 399387,
+    "api_call_count": 598
+  }
+}
