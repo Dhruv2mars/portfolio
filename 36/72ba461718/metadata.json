@@ -1,0 +1,19 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "3672ba461718",
+  "strategy": "manual-commit",
+  "branch": "feat/heavy-footer-signature",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "tools/wordmark-studio.html"
+  ],
+  "sessions": [
+    {
+      "metadata": "/36/72ba461718/0/metadata.json",
+      "transcript": "/36/72ba461718/0/full.jsonl",
+      "compact_transcript": "/36/72ba461718/0/transcript.jsonl",
+      "content_hash": "/36/72ba461718/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
