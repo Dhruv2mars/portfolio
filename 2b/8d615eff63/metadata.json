@@ -1,0 +1,37 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "2b8d615eff63",
+  "strategy": "manual-commit",
+  "branch": "feat/heavy-footer-signature",
+  "checkpoints_count": 21,
+  "files_touched": [
+    "DESIGN.md",
+    "app/globals.css",
+    "app/layout.tsx",
+    "components/mobile-dock.tsx",
+    "components/scroll-to-top.tsx",
+    "components/site-footer.tsx",
+    "components/site-wordmark.tsx",
+    "lib/wordmark-dots.test.ts",
+    "lib/wordmark-dots.ts",
+    "tools/dither.js",
+    "tools/gen-dots.mjs",
+    "tools/wordmark-studio.html"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2b/8d615eff63/0/metadata.json",
+      "transcript": "/2b/8d615eff63/0/full.jsonl",
+      "compact_transcript": "/2b/8d615eff63/0/transcript.jsonl",
+      "content_hash": "/2b/8d615eff63/0/content_hash.txt",
+      "prompt": "/2b/8d615eff63/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 2
+  }
+}
