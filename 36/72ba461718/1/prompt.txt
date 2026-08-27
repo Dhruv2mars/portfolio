@@ -1,0 +1,8 @@
+open it for me, and then i will do my part
+
+---
+
+{"text":"dhruv2mars","family":"American Typewriter","weight":900,"italic":false,"tracking":0.025,"wordSpacing":-0.2,"transform":"lowercase","boxWidth":1560,"sideBearing":0.25,"topAir":0,"cut":0.28,"spacing":5.5,"stagger":true,"jitter":1.5,"gamma":1.55,"density":1.6,"pattern":"noise","dot":1.5,"ink":0.4,"repelRadius":320,"repelStrength":50,"deviceWidth":1440}
+
+
+i have done most of the stuff, but major thing is to choose the font and font style, that is make or break. i havent been able to find anything that looks great. especially, since i have seen chan's graphics as well, these look nothing compared to those.
