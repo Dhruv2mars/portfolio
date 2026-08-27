@@ -24,6 +24,14 @@ const SETTLED = 0.05;
  * circles, because a dither is made of pixels — and because a few thousand
  * `fillRect` calls a frame cost a third of what the same number of arcs do.
  *
+ * It runs the full width of the viewport while everything above it is held to
+ * a three-quarter-column, and the bottom sixth of the lettering is below the
+ * last pixel of the page. Both are deliberate: the mark is the only thing on
+ * the site that ignores the frame, and a name that runs off the edge reads as
+ * a signature rather than as one more row of content. The canvas is sized by
+ * aspect ratio, so the crop is the same fraction at every viewport instead of
+ * drifting with the height.
+ *
  * It is a signature, not information: `aria-hidden`, and inert under
  * `prefers-reduced-motion`, where it renders once and never listens.
  */
@@ -57,9 +65,9 @@ export function SiteWordmark({ className }: { className?: string }) {
     };
 
     /* The dots are stored in the studio's box, so every measurement is one
-       uniform scale: fit the box inside the canvas and centre it. On a phone
-       the width binds and the mark gets shorter; on a wide screen the height
-       binds and it stops growing, which is what keeps it quiet. */
+       uniform scale. The canvas is only tall enough for the kept fraction of
+       that box, and the lettering is pinned to its top — so the last sixth
+       lands past the bottom edge and is never drawn. */
     const measure = () => {
       const rect = canvas.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
@@ -70,10 +78,10 @@ export function SiteWordmark({ className }: { className?: string }) {
 
       const scale = Math.min(
         canvas.width / WORDMARK.box.width,
-        canvas.height / WORDMARK.box.height,
+        canvas.height / (WORDMARK.box.height * WORDMARK.visible),
       );
       const offsetX = (canvas.width - WORDMARK.box.width * scale) / 2;
-      const offsetY = (canvas.height - WORDMARK.box.height * scale) / 2;
+      const offsetY = 0;
 
       for (let i = 0; i < count; i += 2) {
         rest[i] = offsetX + WORDMARK_DOTS[i] * scale;
@@ -180,17 +188,20 @@ export function SiteWordmark({ className }: { className?: string }) {
   }, []);
 
   return (
-    <div
-      className={`screen-line-bottom after:z-1 after:bg-foreground/15 ${className ?? ""}`}
-    >
-      <div className="flex w-full items-center justify-center px-4 py-4 md:px-6 md:py-5">
-        <canvas
-          ref={canvasRef}
-          aria-hidden="true"
-          data-wordmark={WORDMARK.text}
-          className="block h-10 w-full max-w-[1410px] text-foreground/45 sm:h-12 md:h-14"
-        />
-      </div>
+    /* Out past the frame's two-pixel gutter, so the mark touches the glass.
+       The deep top pad below `sm` is the dock's landing: it floats there now
+       that there is no fade under it, and this is the only band on the page
+       where it covers nothing. */
+    <div className={`-mx-2 pt-20 sm:pt-8 ${className ?? ""}`}>
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        data-wordmark={WORDMARK.text}
+        className="block w-full text-foreground/45"
+        style={{
+          aspectRatio: `${WORDMARK.box.width} / ${WORDMARK.box.height * WORDMARK.visible}`,
+        }}
+      />
     </div>
   );
 }

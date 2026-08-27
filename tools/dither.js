@@ -12,39 +12,84 @@
   if (typeof module === "object" && module.exports) module.exports = api;
   else root.Dither = api;
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
-  const BOX = { width: 1410, height: 148 };
-  const GLYPH_GAP = 44;
-
   /**
-   * The site's own alphabet, monoline. Each letter owns its width and contour
-   * so the lockup is spaced optically rather than stretched across a grid.
+   * Two cuts of the same ten letters. `heavy` is what the footer ships: a fat
+   * geometric monoline whose mass is what makes a dither read at all — thin
+   * strokes dissolve into loose grit, thick ones pack into a solid slab. Each
+   * face carries its own box, so the lockup's proportions travel with it and
+   * the letters run edge to edge with no side margin to trim.
+   *
+   * Metrics, in box units: ink spans y 7 (ascender) to 136 (baseline); the
+   * x-height starts at 45. Every letter owns its width and contour, so the
+   * lockup is spaced optically rather than stretched across a grid.
    */
-  const GLYPHS = {
-    a: {
-      width: 96,
-      path: "M82 48V126M82 72C74 54 61 47 46 47C26 47 14 63 14 87C14 111 26 126 46 126C62 126 75 117 82 102",
+  const FACES = {
+    heavy: {
+      box: { width: 1298, height: 148 },
+      gap: 26,
+      stroke: 26,
+      glyphs: {
+        a: {
+          width: 112,
+          path: "M99 58V123M99 74C91 63 77 58 60 58C34 58 13 71 13 90C13 109 34 123 60 123C78 123 92 115 99 105",
+        },
+        d: {
+          width: 112,
+          path: "M99 20V123M99 58H52C30 58 13 72 13 90C13 108 30 123 52 123H99",
+        },
+        h: { width: 108, path: "M13 20V123M13 75C21 63 35 58 51 58C76 58 95 71 95 91V123" },
+        m: {
+          width: 164,
+          path: "M13 58V123M13 74C20 63 32 58 45 58C65 58 79 70 79 89V123M79 74C86 63 98 58 111 58C132 58 151 70 151 89V123",
+        },
+        r: { width: 76, path: "M13 58V123M13 79C21 64 35 58 63 58" },
+        s: {
+          width: 100,
+          weight: 0.8,
+          path: "M87 69C79 59 68 54 54 54C33 54 19 60 19 71C19 82 32 87 53 91C74 95 87 101 87 111C87 122 72 127 53 127C33 127 19 121 13 113",
+        },
+        u: { width: 108, path: "M13 58V90C13 109 29 123 54 123C79 123 95 109 95 90V58" },
+        v: { width: 104, path: "M13 58L52 123L91 58" },
+        "2": {
+          width: 104,
+          path: "M13 73C15 63 29 58 52 58C76 58 91 67 91 81C91 94 81 103 64 113L13 123H91",
+        },
+      },
     },
-    d: {
-      width: 100,
-      path: "M84 12V126M84 52H42C24 52 14 65 14 89C14 113 25 126 44 126H84",
-    },
-    h: { width: 92, path: "M14 12V126M14 64C26 50 40 46 54 49C70 52 78 64 78 82V126" },
-    m: {
-      width: 140,
-      path: "M14 48V126M14 72C24 54 38 47 52 49C68 51 76 64 76 82V126M76 72C86 54 100 47 114 49C128 51 134 64 134 82V126",
-    },
-    r: { width: 78, path: "M14 48V126M14 72C24 54 38 47 64 50" },
-    s: {
-      width: 92,
-      path: "M80 58C71 49 59 45 45 45C27 45 16 54 16 67C16 79 26 85 47 90C68 95 80 101 80 112C80 122 67 128 49 128C32 128 20 123 12 114",
-    },
-    u: { width: 94, path: "M14 48V94C14 115 26 126 46 126C66 126 80 114 80 94V48" },
-    v: { width: 92, path: "M12 48L46 126L80 48" },
-    "2": {
-      width: 96,
-      path: "M14 68C16 50 30 42 49 42C69 42 82 52 82 68C82 82 72 92 58 101L16 126H84",
+    monoline: {
+      box: { width: 1410, height: 148 },
+      gap: 44,
+      stroke: 15,
+      glyphs: {
+        a: {
+          width: 96,
+          path: "M82 48V126M82 72C74 54 61 47 46 47C26 47 14 63 14 87C14 111 26 126 46 126C62 126 75 117 82 102",
+        },
+        d: {
+          width: 100,
+          path: "M84 12V126M84 52H42C24 52 14 65 14 89C14 113 25 126 44 126H84",
+        },
+        h: { width: 92, path: "M14 12V126M14 64C26 50 40 46 54 49C70 52 78 64 78 82V126" },
+        m: {
+          width: 140,
+          path: "M14 48V126M14 72C24 54 38 47 52 49C68 51 76 64 76 82V126M76 72C86 54 100 47 114 49C128 51 134 64 134 82V126",
+        },
+        r: { width: 78, path: "M14 48V126M14 72C24 54 38 47 64 50" },
+        s: {
+          width: 92,
+          path: "M80 58C71 49 59 45 45 45C27 45 16 54 16 67C16 79 26 85 47 90C68 95 80 101 80 112C80 122 67 128 49 128C32 128 20 123 12 114",
+        },
+        u: { width: 94, path: "M14 48V94C14 115 26 126 46 126C66 126 80 114 80 94V48" },
+        v: { width: 92, path: "M12 48L46 126L80 48" },
+        "2": {
+          width: 96,
+          path: "M14 68C16 50 30 42 49 42C69 42 82 52 82 68C82 82 72 92 58 101L16 126H84",
+        },
+      },
     },
   };
+
+  const FACE_NAMES = Object.keys(FACES);
 
   /**
    * The studio's opening position, and the preset `gen-dots.mjs` uses when it
@@ -53,7 +98,8 @@
    */
   const DEFAULTS = {
     text: "dhruv2mars",
-    stroke: 15,
+    face: "heavy",
+    stroke: 26,
     softness: 3,
     spacing: 3,
     stagger: true,
@@ -62,8 +108,9 @@
     density: 0.88,
     pattern: "bayer8",
     dot: 2,
-    repelRadius: 155,
-    repelStrength: 44,
+    repelRadius: 120,
+    repelStrength: 34,
+    visible: 0.85,
   };
 
   const PATTERNS = ["bayer2", "bayer4", "bayer8", "noise", "solid"];
@@ -155,30 +202,36 @@
     return lines;
   }
 
-  /** Lay the text out centred in the box and flatten it to line segments. */
-  function segments(text, steps = 20) {
+  /** Lay the text out centred in its face's box and flatten it to segments. */
+  function segments(text, faceName = DEFAULTS.face, steps = 20) {
+    const face = FACES[faceName] || FACES[DEFAULTS.face];
     let cursor = 0;
     const chars = [];
     for (const char of text) {
-      const glyph = GLYPHS[char];
+      const glyph = face.glyphs[char];
       if (!glyph) continue;
       chars.push({ glyph, x: cursor });
-      cursor += glyph.width + GLYPH_GAP;
+      cursor += glyph.width + face.gap;
     }
 
-    const offset = Math.max((BOX.width - Math.max(cursor - GLYPH_GAP, 0)) / 2, 0);
+    const offset = Math.max((face.box.width - Math.max(cursor - face.gap, 0)) / 2, 0);
     const out = [];
     for (const { glyph, x } of chars) {
       for (const line of flatten(glyph.path, offset + x, steps)) {
         for (let i = 0; i + 3 < line.length; i += 2) {
-          out.push([line[i], line[i + 1], line[i + 2], line[i + 3]]);
+          out.push([line[i], line[i + 1], line[i + 2], line[i + 3], glyph.weight ?? 1]);
         }
       }
     }
     return out;
   }
 
-  function distanceToSegments(segs, px, py) {
+  /**
+   * Distance from a point to the nearest stroke *edge*, negative inside. Each
+   * segment carries its glyph's weight, so one letter can be cut lighter than
+   * its neighbours without a second pass.
+   */
+  function signedDistance(segs, px, py, half) {
     let best = Infinity;
     for (let i = 0; i < segs.length; i++) {
       const s = segs[i];
@@ -192,10 +245,10 @@
       else if (t > 1) t = 1;
       const dx = wx - vx * t;
       const dy = wy - vy * t;
-      const d = dx * dx + dy * dy;
+      const d = Math.sqrt(dx * dx + dy * dy) - half * s[4];
       if (d < best) best = d;
     }
-    return Math.sqrt(best);
+    return best;
   }
 
   /**
@@ -205,26 +258,28 @@
    */
   function build(options) {
     const p = { ...DEFAULTS, ...(options || {}) };
-    const segs = segments(p.text);
+    const face = FACES[p.face] || FACES[DEFAULTS.face];
+    const box = face.box;
+    const segs = segments(p.text, p.face);
     const half = p.stroke / 2;
     const soft = Math.max(p.softness, 0.001);
     const matrix = BAYER[p.pattern];
     const dots = [];
 
-    const rows = Math.ceil(BOX.height / p.spacing);
-    const cols = Math.ceil(BOX.width / p.spacing);
+    const rows = Math.ceil(box.height / p.spacing);
+    const cols = Math.ceil(box.width / p.spacing);
 
     for (let iy = 0; iy <= rows; iy++) {
       const stagger = p.stagger && iy % 2 === 1 ? p.spacing / 2 : 0;
       for (let ix = 0; ix <= cols; ix++) {
         const gx = ix * p.spacing + stagger;
         const gy = iy * p.spacing;
-        if (gx > BOX.width || gy > BOX.height) continue;
+        if (gx > box.width || gy > box.height) continue;
 
-        const d = distanceToSegments(segs, gx, gy);
-        if (d > half + soft) continue;
+        const d = signedDistance(segs, gx, gy, half);
+        if (d > soft) continue;
 
-        let cover = (half + soft - d) / (2 * soft);
+        let cover = (soft - d) / (2 * soft);
         cover = cover < 0 ? 0 : cover > 1 ? 1 : cover;
         cover = Math.pow(cover, p.gamma) * p.density;
 
@@ -241,12 +296,12 @@
         const jy = p.jitter ? (hash(ix, iy, 2) - 0.5) * 2 * p.jitter : 0;
         const x = Math.round(gx + jx);
         const y = Math.round(gy + jy);
-        if (x < 0 || y < 0 || x > BOX.width || y > BOX.height) continue;
+        if (x < 0 || y < 0 || x > box.width || y > box.height) continue;
         dots.push(x, y);
       }
     }
 
-    return { box: BOX, preset: p, dots };
+    return { box, preset: p, dots };
   }
 
   /** The exact file the site imports, so the studio's output is paste-ready. */
@@ -270,6 +325,8 @@ export const WORDMARK = {
   box: { width: ${result.box.width}, height: ${result.box.height} },
   /** Dot edge, in box units. Squares, because a dither is made of pixels. */
   dot: ${p.dot},
+  /** The fraction of the box the page shows; the rest falls off the bottom. */
+  visible: ${p.visible},
   /** The invisible circle around the cursor, in box units. */
   repelRadius: ${p.repelRadius},
   /** Peak outward push at the very centre of that circle, in box units. */
@@ -283,5 +340,5 @@ ${lines.join("\n")}
 `;
   }
 
-  return { BOX, GLYPHS, DEFAULTS, PATTERNS, segments, build, toModule };
+  return { FACES, FACE_NAMES, DEFAULTS, PATTERNS, segments, build, toModule };
 });

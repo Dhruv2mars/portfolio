@@ -46,6 +46,21 @@ test("the lettering is centred and fills its box", () => {
   expect(Math.abs(minX - (WORDMARK.box.width - maxX))).toBeLessThan(24);
 });
 
+test("the crop takes lettering, not empty box", () => {
+  const edge = WORDMARK.box.height * WORDMARK.visible;
+  let below = 0;
+  for (let i = 1; i < WORDMARK_DOTS.length; i += 2) {
+    if (WORDMARK_DOTS[i] > edge) below += 1;
+  }
+
+  // The point of the crop is that the letters run off the page. A mark drawn
+  // with room to spare under the baseline would clear this line and the
+  // signature would just sit above the edge like everything else.
+  expect(WORDMARK.visible).toBeGreaterThan(0.5);
+  expect(WORDMARK.visible).toBeLessThan(1);
+  expect(below).toBeGreaterThan(WORDMARK_DOTS.length / 2 / 100);
+});
+
 test("the cursor field is a real circle with a real push", () => {
   expect(WORDMARK.repelRadius).toBeGreaterThan(0);
   expect(WORDMARK.repelStrength).toBeGreaterThan(0);

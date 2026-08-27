@@ -24,7 +24,10 @@ if (argv.includes("--preview")) {
     const y = Math.min(rows - 1, Math.floor((result.dots[i + 1] / result.box.height) * rows));
     grid[y][x] = "#";
   }
-  console.error(grid.map((r) => r.join("")).join("\n"));
+  const cut = Math.round(result.preset.visible * rows);
+  const out = grid.map((r) => r.join(""));
+  out.splice(cut, 0, "-".repeat(cols) + "  <- page edge");
+  console.error(out.join("\n"));
   console.error(`\n${result.dots.length / 2} dots · ${JSON.stringify(result.preset)}`);
 } else {
   process.stdout.write(Dither.toModule(result));

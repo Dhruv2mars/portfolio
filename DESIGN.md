@@ -60,19 +60,25 @@ carries the filtered number rather than starting wrong and correcting itself.
 **Chrome is the same on every route.** A header that keeps the mark and, above `sm`, the nav and the
 palette trigger; below `sm` a floating dock that carries the nav and the trigger down to where a
 thumb already is, mounted after the content so it comes last in the tab order — a control painted at
-the bottom of the viewport should not sit two stops in. Under both, a fixed fade dissolves the sheet
-into the background at the bottom edge: six rems deep on a phone, four above `sm`, because the phone
-has a dock to float over and the desktop does not. The footer reserves exactly that depth, so the
-fade lands on its own spacer and never on the last thing a Visitor was reading.
+the bottom of the viewport should not sit two stops in. Nothing dissolves the bottom edge: the page
+ends on the signature, and a gradient over a mark that is already running off the page would read as
+a mistake. The dock and the way back up both float three and a half rems clear of that edge below
+`sm`, landing in the band of the footer where they cover nothing.
 
 The footer is a signature: the year and the legal name, the three places the work lives plus the
 feed, and the mark beneath them in the site's own alphabet. The name and the mark differ on purpose —
 a copyright line names who holds it, and the signature under it is what that person is called.
 
-**The signature is dithered, and it is small.** The mark is a field of a few thousand square dots on
-a canvas, not a drawn stroke, and it is fitted to a box that stops growing at three and a half rems
-of height — a signature sits under the page, so it is the last thing that should be the largest. An
-invisible circle rides the cursor: a dot inside it is pushed straight out from the pointer by an
+**The signature is dithered, and it runs off the page.** The mark is a field of a few thousand
+square dots on a canvas, not a drawn stroke. It is the only thing on the site that leaves the column:
+the frame holds every other row to three-quarters of a column, and the signature spans the whole
+viewport, in a heavy geometric cut of the site's alphabet whose strokes are twice the weight of the
+lettering anywhere else. Mass is the point — a dither reads by how densely it packs, and a thin
+stroke breaks into loose grit where a thick one holds together as a slab. The canvas is sized by
+aspect ratio and shows the top eighty-five percent of that box, so the bottom of the lettering is
+below the last pixel of the page at every viewport rather than drifting with the height. A name cut
+by the edge of the sheet reads as a signature; a name sitting neatly above it reads as one more row.
+An invisible circle rides the cursor: a dot inside it is pushed straight out from the pointer by an
 amount falling off as the cube of the distance, so the push is at full strength under the cursor and
 effectively nothing at the rim, and the field has no edge for the eye to catch. Under
 `prefers-reduced-motion` it renders once and listens to nothing. The dots are coordinates, checked in

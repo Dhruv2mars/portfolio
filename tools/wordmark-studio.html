@@ -145,6 +145,10 @@
         <label>
           <select id="pattern"></select>
         </label>
+        <label>
+          <span>Letterform</span>
+          <select id="face"></select>
+        </label>
         <label class="check"><input type="checkbox" id="stagger" /> Offset every other row</label>
       </fieldset>
 
@@ -177,6 +181,7 @@
         { key: "density", label: "Density", min: 0.1, max: 1, step: 0.01 },
         { key: "gamma", label: "Gamma", min: 0.2, max: 3, step: 0.05 },
         { key: "dot", label: "Dot size", min: 0.5, max: 8, step: 0.1 },
+        { key: "visible", label: "Kept above the page edge", min: 0.5, max: 1, step: 0.01 },
       ];
       const CURSOR_SLIDERS = [
         { key: "repelRadius", label: "Circle radius", min: 10, max: 320, step: 2 },
@@ -228,6 +233,24 @@
         rebuild();
       });
 
+      const faceSelect = document.getElementById("face");
+      for (const name of Dither.FACE_NAMES) {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        faceSelect.appendChild(option);
+      }
+      faceSelect.value = preset.face;
+      faceSelect.addEventListener("change", () => {
+        preset.face = faceSelect.value;
+        /* Each cut has its own natural weight; carrying the old one across
+           would show the new letterform at the wrong colour. */
+        preset.stroke = Dither.FACES[preset.face].stroke;
+        els.stroke.input.value = preset.stroke;
+        els.stroke.value.textContent = preset.stroke;
+        rebuild();
+      });
+
       const staggerBox = document.getElementById("stagger");
       staggerBox.checked = preset.stagger;
       staggerBox.addEventListener("change", () => {
@@ -237,7 +260,7 @@
 
       /* Two views of one dot set. Each keeps its own eased positions so the
          cursor pushes both stages at once and neither snaps. */
-      function makeStage(canvas, heightFor) {
+      function makeStage(canvas, heightFor, crop) {
         const ctx = canvas.getContext("2d");
         let rest = new Float32Array(0);
         let cur = new Float32Array(0);
@@ -245,6 +268,7 @@
         let dpr = 1;
         let client = null;
         let raf = 0;
+        let edge = 0;
 
         function measure() {
           dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -255,9 +279,11 @@
           canvas.height = Math.round(cssHeight * dpr);
 
           const box = result.box;
-          scale = Math.min(canvas.width / box.width, canvas.height / box.height);
+          const fit = crop ? box.height * preset.visible : box.height;
+          scale = Math.min(canvas.width / box.width, canvas.height / fit);
           const ox = (canvas.width - box.width * scale) / 2;
-          const oy = (canvas.height - box.height * scale) / 2;
+          const oy = crop ? 0 : (canvas.height - box.height * scale) / 2;
+          edge = oy + box.height * preset.visible * scale;
           rest = new Float32Array(result.dots.length);
           for (let i = 0; i < result.dots.length; i += 2) {
             rest[i] = ox + result.dots[i] * scale;
@@ -273,6 +299,18 @@
           const size = Math.max(1, preset.dot * scale);
           const half = size / 2;
           for (let i = 0; i < cur.length; i += 2) ctx.fillRect(cur[i] - half, cur[i + 1] - half, size, size);
+          if (!crop) {
+            /* Where the bottom of the page will cut the mark. */
+            ctx.save();
+            ctx.strokeStyle = "#e5484d";
+            ctx.setLineDash([6 * dpr, 6 * dpr]);
+            ctx.lineWidth = dpr;
+            ctx.beginPath();
+            ctx.moveTo(0, edge);
+            ctx.lineTo(canvas.width, edge);
+            ctx.stroke();
+            ctx.restore();
+          }
         }
 
         function frame() {
@@ -327,8 +365,12 @@
       }
 
       const stages = [
-        makeStage(document.getElementById("ship"), (w) => Math.min(80, (w * 148) / 1410)),
-        makeStage(document.getElementById("zoom"), (w) => Math.round((w * 148) / 1410)),
+        makeStage(
+          document.getElementById("ship"),
+          (w) => Math.min(150, (w * result.box.height * preset.visible) / result.box.width),
+          true,
+        ),
+        makeStage(document.getElementById("zoom"), (w) => Math.round((w * result.box.height) / result.box.width), false),
       ];
 
       function rebuild() {
@@ -377,6 +419,7 @@
         Object.assign(preset, Dither.DEFAULTS);
         textInput.value = preset.text;
         patternSelect.value = preset.pattern;
+        faceSelect.value = preset.face;
         staggerBox.checked = preset.stagger;
         for (const key of Object.keys(els)) {
           els[key].input.value = preset[key];
