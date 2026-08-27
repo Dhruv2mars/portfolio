@@ -3,7 +3,7 @@
   "checkpoint_id": "dbb61b099288",
   "strategy": "manual-commit",
   "branch": "feat/heavy-footer-signature",
-  "checkpoints_count": 1,
+  "checkpoints_count": 2,
   "files_touched": [
     "tools/gen-dots.mjs",
     "tools/wordmark-studio.html"
@@ -15,6 +15,20 @@
       "compact_transcript": "/db/b61b099288/0/transcript.jsonl",
       "content_hash": "/db/b61b099288/0/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/db/b61b099288/1/metadata.json",
+      "transcript": "/db/b61b099288/1/full.jsonl",
+      "compact_transcript": "/db/b61b099288/1/transcript.jsonl",
+      "content_hash": "/db/b61b099288/1/content_hash.txt",
+      "prompt": "/db/b61b099288/1/prompt.txt"
     }
-  ]
+  ],
+  "token_usage": {
+    "input_tokens": 1162,
+    "cache_creation_tokens": 1728466,
+    "cache_read_tokens": 47121070,
+    "output_tokens": 399387,
+    "api_call_count": 598
+  }
 }
