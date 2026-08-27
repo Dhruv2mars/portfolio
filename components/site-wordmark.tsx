@@ -6,8 +6,6 @@ import { WORDMARK, WORDMARK_DOTS } from "@/lib/wordmark-dots";
 
 /** How much of the remaining distance a dot closes each frame. */
 const EASE = 0.22;
-/** The signature's weight against the page, applied per dot rather than in CSS. */
-const INK = 0.45;
 /** Below this, a dot has arrived and the loop is allowed to stop. */
 const SETTLED = 0.05;
 
@@ -50,7 +48,7 @@ export function SiteWordmark({ className }: { className?: string }) {
     const current = new Float32Array(count);
 
     let side = 1;
-    let alpha = INK;
+    let alpha: number = WORDMARK.ink;
     let radius = 0;
     let strength = 0;
     let dpr = 1;
@@ -105,7 +103,7 @@ export function SiteWordmark({ className }: { className?: string }) {
          cost and the mark keeps its weight at every size. */
       const exact = Math.max(1, WORDMARK.dot * scale);
       side = Math.max(1, Math.round(exact));
-      alpha = Math.min(1, (INK * (exact * exact)) / (side * side));
+      alpha = Math.min(1, (WORDMARK.ink * (exact * exact)) / (side * side));
       radius = WORDMARK.repelRadius * scale;
       strength = WORDMARK.repelStrength * scale;
       ink = getComputedStyle(canvas).color;

@@ -87,11 +87,21 @@ where a dot is barely one pixel wide, that smear is the entire signature.
 An invisible circle rides the cursor: a dot inside it is pushed straight out from the pointer by an
 amount falling off as the cube of the distance, so the push is at full strength under the cursor and
 effectively nothing at the rim, and the field has no edge for the eye to catch. Under
-`prefers-reduced-motion` it renders once and listens to nothing. The dots are coordinates, checked in
-at `lib/wordmark-dots.ts`; the letterforms are tuned against the drawn original with sliders in
-`tools/wordmark-studio.html` and re-exported, never guessed at in code. `bun tools/gen-dots.mjs`
-reproduces the checked-in file from the same engine the sliders drive, so the art is derivable from
-the repository and not from a session that has since ended.
+`prefers-reduced-motion` it renders once and listens to nothing.
+
+**The art is baked, and the studio is the only way to change it.** The dots are a fixed run of
+coordinates checked in at `lib/wordmark-dots.ts`; nothing at runtime re-letters them, and nothing in
+the app knows what a letter is. They come from `tools/wordmark-studio.html`, which opens straight off
+the filesystem: it sets any text in any typeface — installed, uploaded as a file, or fetched from
+Google Fonts — rasterises it, reads the alpha channel, and dithers the coverage. Because the shape
+comes from a rasteriser rather than from outlines written out by hand, no alphabet lives in code and
+any face is usable. The first preview is the footer's signature section drawn at true size for a
+chosen device — the same width, the same height, the same crop at the page edge — so the call on how
+big and how wide the mark should sit is made against the real rectangle rather than a proxy. The
+studio and the site share one painter, `tools/dither.js`, so the pixel snapping and the ink
+compensation are the same code in both and the preview cannot drift from what ships. Every export
+carries its own preset in the file header, which is what you paste back into the studio to pick the
+work up again.
 
 `rehype-sanitize` on all MDX and escaped JSON-LD embedding survive from the old build unchanged.
 Regressing either is a security bug, not a style change.
