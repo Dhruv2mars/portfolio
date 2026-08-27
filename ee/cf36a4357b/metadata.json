@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "eecf36a4357b",
+  "strategy": "manual-commit",
+  "branch": "feat/heavy-footer-signature",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "tools/dither.js"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ee/cf36a4357b/0/metadata.json",
+      "transcript": "/ee/cf36a4357b/0/full.jsonl",
+      "compact_transcript": "/ee/cf36a4357b/0/transcript.jsonl",
+      "content_hash": "/ee/cf36a4357b/0/content_hash.txt",
+      "prompt": "/ee/cf36a4357b/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1164,
+    "cache_creation_tokens": 1729436,
+    "cache_read_tokens": 47177266,
+    "output_tokens": 399886,
+    "api_call_count": 599
+  }
+}
