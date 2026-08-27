@@ -1,0 +1,88 @@
+{
+  "cli_version": "0.10.2",
+  "checkpoint_id": "a13c10e381e2",
+  "session_id": "9125f42f-c118-4c04-84b1-e473db0ff852",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-27T01:25:37.708111Z",
+  "branch": "feat/heavy-footer-signature",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "app/globals.css",
+    "app/layout.tsx",
+    "components/mobile-dock.tsx",
+    "components/scroll-to-top.tsx"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5",
+  "turn_id": "60555720d3c1",
+  "checkpoint_transcript_start": 2514,
+  "transcript_lines_at_start": 2514,
+  "compact_transcript_start": 509,
+  "token_usage": {
+    "input_tokens": 128,
+    "cache_creation_tokens": 212388,
+    "cache_read_tokens": 5300614,
+    "output_tokens": 52774,
+    "api_call_count": 69
+  },
+  "session_metrics": {
+    "turn_count": 10
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-27T01:25:36.714941Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 51,
+    "total_committed": 0,
+    "total_lines_changed": 51,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 1470,
+      "user_lines_removed": 429,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216,
+        "DESIGN.md": 14,
+        "app/layout.tsx": 1,
+        "components/mobile-dock.tsx": 5,
+        "components/scroll-to-top.tsx": 1,
+        "components/site-footer.tsx": 1,
+        "components/site-wordmark.tsx": 27,
+        "lib/wordmark-dots.test.ts": 15,
+        "lib/wordmark-dots.ts": 482,
+        "tools/dither.js": 107,
+        "tools/gen-dots.mjs": 4,
+        "tools/wordmark-studio.html": 48
+      },
+      "user_removed_per_file": {
+        "DESIGN.md": 8,
+        "app/globals.css": 36,
+        "app/layout.tsx": 13,
+        "components/mobile-dock.tsx": 1,
+        "components/scroll-to-top.tsx": 1,
+        "components/site-footer.tsx": 4,
+        "components/site-wordmark.tsx": 16,
+        "lib/wordmark-dots.ts": 294,
+        "tools/dither.js": 50,
+        "tools/gen-dots.mjs": 1,
+        "tools/wordmark-studio.html": 5
+      }
+    }
+  ]
+}

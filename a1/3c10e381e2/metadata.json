@@ -3,7 +3,7 @@
   "checkpoint_id": "a13c10e381e2",
   "strategy": "manual-commit",
   "branch": "feat/heavy-footer-signature",
-  "checkpoints_count": 1,
+  "checkpoints_count": 3,
   "files_touched": [
     "app/globals.css",
     "app/layout.tsx",
@@ -17,6 +17,20 @@
       "compact_transcript": "/a1/3c10e381e2/0/transcript.jsonl",
       "content_hash": "/a1/3c10e381e2/0/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/a1/3c10e381e2/1/metadata.json",
+      "transcript": "/a1/3c10e381e2/1/full.jsonl",
+      "compact_transcript": "/a1/3c10e381e2/1/transcript.jsonl",
+      "content_hash": "/a1/3c10e381e2/1/content_hash.txt",
+      "prompt": "/a1/3c10e381e2/1/prompt.txt"
     }
-  ]
+  ],
+  "token_usage": {
+    "input_tokens": 128,
+    "cache_creation_tokens": 212388,
+    "cache_read_tokens": 5300614,
+    "output_tokens": 52774,
+    "api_call_count": 69
+  }
 }

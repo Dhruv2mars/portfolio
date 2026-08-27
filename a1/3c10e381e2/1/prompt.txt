@@ -1,0 +1,29 @@
+great. push to main now. once that is done, i have something else as well. basically, current dhruv2mars graphic is ok but not great. i have the idea, but before that i want u to push to main. then below is what we need to work on:
+
+- instead of this normal text font dhruv2mars, it should be smthing else, it currently looks generic. also, remove that bottom bar, that strip on the extreme bottom of page, which is below the dhruv2mars graphics. remove that, and place dhruv2mars graphic in such a way where 15% of its bottom is outside the viewport, like hidden of sorts. and the font style and size should be such. where, without increasing the height of the whole graphics section, dhruv2mars becomes larger, where it distincts itself from the rest of page, with its width, etc.
+
+---
+
+great. push to main now. once that is done, i have something else as well. basically, current dhruv2mars graphic is ok but not great. i have the idea, but before that i want u to push to main. then below is what we need to work on:
+
+- instead of this normal text font dhruv2mars, it should be smthing else, it currently looks generic. also, remove that bottom bar, that strip on the extreme bottom of page, which is below the dhruv2mars graphics. remove that, and place dhruv2mars graphic in such a way where 15% of its bottom is outside the viewport, like hidden of sorts. and the font style and size should be such. where, without increasing the height of the whole graphics section, dhruv2mars becomes larger, where it distincts itself from the rest of page, with its width, etc.
+
+---
+
+firstly push the preview to release. then clean the git. and then we can focus on the footer signature
+
+---
+
+firstly push the preview to release. then clean the git. and then we can focus on the footer signature
+
+---
+
+firstly push the preview to release. then clean the git. and then we can focus on the footer signature
+
+---
+
+firstly push the preview to release. then clean the git. and then we can focus on the footer signature
+
+---
+
+firstly push the preview to release. then clean the git. and then we can focus on the footer signature
