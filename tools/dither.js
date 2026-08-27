@@ -16,8 +16,12 @@
    * Two cuts of the same ten letters. `heavy` is what the footer ships: a fat
    * geometric monoline whose mass is what makes a dither read at all — thin
    * strokes dissolve into loose grit, thick ones pack into a solid slab. Each
-   * face carries its own box, so the lockup's proportions travel with it and
-   * the letters run edge to edge with no side margin to trim.
+   * face carries its own box, so the lockup's proportions travel with it.
+   *
+   * The heavy box is 48 units wider than its letters, which `segments` splits
+   * into a 24-unit bearing on each side. The mark still crosses the whole
+   * viewport, but the `d` and the `s` no longer sit on the glass — hard against
+   * the edge they read as trimmed rather than as running off it.
    *
    * Metrics, in box units: ink spans y 7 (ascender) to 136 (baseline); the
    * x-height starts at 45. Every letter owns its width and contour, so the
@@ -25,7 +29,7 @@
    */
   const FACES = {
     heavy: {
-      box: { width: 1298, height: 148 },
+      box: { width: 1346, height: 148 },
       gap: 26,
       stroke: 26,
       glyphs: {

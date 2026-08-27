@@ -62,8 +62,9 @@ palette trigger; below `sm` a floating dock that carries the nav and the trigger
 thumb already is, mounted after the content so it comes last in the tab order — a control painted at
 the bottom of the viewport should not sit two stops in. Nothing dissolves the bottom edge: the page
 ends on the signature, and a gradient over a mark that is already running off the page would read as
-a mistake. The dock and the way back up both float three and a half rems clear of that edge below
-`sm`, landing in the band of the footer where they cover nothing.
+a mistake. The dock and the way back up both ride `--signature-clear` above that edge instead —
+the mark spans the viewport, so its height is a fraction of the viewport width, and one number
+derived from that keeps every floating control off the name at every size.
 
 The footer is a signature: the year and the legal name, the three places the work lives plus the
 feed, and the mark beneath them in the site's own alphabet. The name and the mark differ on purpose —
@@ -78,6 +79,11 @@ stroke breaks into loose grit where a thick one holds together as a slab. The ca
 aspect ratio and shows the top eighty-five percent of that box, so the bottom of the lettering is
 below the last pixel of the page at every viewport rather than drifting with the height. A name cut
 by the edge of the sheet reads as a signature; a name sitting neatly above it reads as one more row.
+It is cut at the bottom only: the box carries a small bearing on each side, because letters held
+hard against the glass read as trimmed by accident rather than as running off on purpose. Every dot
+lands on a whole device pixel and takes back in opacity what rounding its side cost, so the grain
+stays sharp at any size — a fractional square is antialiased across two columns, and on a phone,
+where a dot is barely one pixel wide, that smear is the entire signature.
 An invisible circle rides the cursor: a dot inside it is pushed straight out from the pointer by an
 amount falling off as the cube of the distance, so the push is at full strength under the cursor and
 effectively nothing at the rim, and the field has no edge for the eye to catch. Under

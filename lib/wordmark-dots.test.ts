@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { expect, test } from "bun:test";
 
 import { site } from "@/lib/site";
@@ -67,4 +69,28 @@ test("the cursor field is a real circle with a real push", () => {
   // A push that outruns its own circle would fling dots past the edge of the
   // field and let them re-enter it, which reads as a flicker.
   expect(WORDMARK.repelStrength).toBeLessThan(WORDMARK.repelRadius);
+});
+
+test("--signature-clear still clears the signature", () => {
+  // The dock and the way back up sit at `--signature-clear` above the last
+  // pixel of the page, and the mark runs the full width of the viewport — so
+  // the number in globals.css is a fraction of `vw` derived from the box here.
+  // Regenerating the art at a new box would silently drop a control onto it.
+  const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+  const vw = css.match(/--signature-clear:\s*calc\(([\d.]+)vw/)?.[1];
+  expect(vw).toBeDefined();
+
+  const kept = (WORDMARK.box.height * WORDMARK.visible) / WORDMARK.box.width;
+  expect(Number(vw) / 100).toBeCloseTo(kept, 4);
+});
+
+test("the mark has side bearing, so it reads as running off rather than trimmed", () => {
+  let left = Infinity;
+  let right = -Infinity;
+  for (let i = 0; i < WORDMARK_DOTS.length; i += 2) {
+    if (WORDMARK_DOTS[i] < left) left = WORDMARK_DOTS[i];
+    if (WORDMARK_DOTS[i] > right) right = WORDMARK_DOTS[i];
+  }
+  expect(left).toBeGreaterThan(WORDMARK.box.width * 0.005);
+  expect(right).toBeLessThan(WORDMARK.box.width * 0.995);
 });

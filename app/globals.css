@@ -66,6 +66,14 @@
   --selection-foreground: oklch(0.985 0 0);
 
   --header-height: --spacing(14);
+
+  /* How far a floating control has to sit above the last pixel of the page to
+     stay off the footer signature. The signature runs the full width of the
+     viewport, so its height is a fixed fraction of that width — the kept part
+     of the wordmark box, 148 * 0.85 / 1346 — and one rem of air on top. Both
+     the dock and the way back up read this, so nothing ever lands on the name
+     at any viewport. `lib/wordmark-dots.ts` holds the numbers it derives from. */
+  --signature-clear: calc(9.346vw + --spacing(4));
 }
 
 .dark {

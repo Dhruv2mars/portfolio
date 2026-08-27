@@ -6,6 +6,8 @@ import { WORDMARK, WORDMARK_DOTS } from "@/lib/wordmark-dots";
 
 /** How much of the remaining distance a dot closes each frame. */
 const EASE = 0.22;
+/** The signature's weight against the page, applied per dot rather than in CSS. */
+const INK = 0.45;
 /** Below this, a dot has arrived and the loop is allowed to stop. */
 const SETTLED = 0.05;
 
@@ -47,7 +49,8 @@ export function SiteWordmark({ className }: { className?: string }) {
     const rest = new Float32Array(count);
     const current = new Float32Array(count);
 
-    let dot = 1;
+    let side = 1;
+    let alpha = INK;
     let radius = 0;
     let strength = 0;
     let dpr = 1;
@@ -58,9 +61,15 @@ export function SiteWordmark({ className }: { className?: string }) {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = ink;
-      const half = dot / 2;
+      ctx.globalAlpha = alpha;
+      const half = side / 2;
       for (let i = 0; i < count; i += 2) {
-        ctx.fillRect(current[i] - half, current[i + 1] - half, dot, dot);
+        ctx.fillRect(
+          Math.round(current[i] - half),
+          Math.round(current[i + 1] - half),
+          side,
+          side,
+        );
       }
     };
 
@@ -89,7 +98,14 @@ export function SiteWordmark({ className }: { className?: string }) {
       }
       current.set(rest);
 
-      dot = Math.max(1, WORDMARK.dot * scale);
+      /* Whole device pixels, always. A fractional `fillRect` is antialiased
+         across two columns and the mark turns to smear — on a phone, where a
+         dot is barely one pixel wide, that smear is the whole signature.
+         Rounding the side loses ink, so the alpha is raised by the area it
+         cost and the mark keeps its weight at every size. */
+      const exact = Math.max(1, WORDMARK.dot * scale);
+      side = Math.max(1, Math.round(exact));
+      alpha = Math.min(1, (INK * (exact * exact)) / (side * side));
       radius = WORDMARK.repelRadius * scale;
       strength = WORDMARK.repelStrength * scale;
       ink = getComputedStyle(canvas).color;
@@ -197,7 +213,7 @@ export function SiteWordmark({ className }: { className?: string }) {
         ref={canvasRef}
         aria-hidden="true"
         data-wordmark={WORDMARK.text}
-        className="block w-full text-foreground/45"
+        className="block w-full text-foreground"
         style={{
           aspectRatio: `${WORDMARK.box.width} / ${WORDMARK.box.height * WORDMARK.visible}`,
         }}
