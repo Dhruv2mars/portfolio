@@ -769,26 +769,82 @@
         reader.readAsArrayBuffer(file);
       }
 
+      /* Google Fonts rejects an axis range the family does not have — asking a
+         static face for `wght@100..900` is a 400, and a variable one only
+         answers to its own range. There is no way to know that range without
+         asking, so ask in order and keep the first spec that comes back. */
+      const AXES = [
+        "ital,wght@0,100..900;1,100..900",
+        "wght@100..900",
+        "ital,wght@0,200..900;1,200..900",
+        "wght@200..900",
+        "ital,wght@0,300..900;1,300..900",
+        "wght@300..900",
+        "ital,wght@0,400..900;1,400..900",
+        "wght@400..900",
+        "ital,wght@0,300..700;1,300..700",
+        "wght@300..700",
+        "ital,wght@0,400;1,400",
+        "",
+      ];
+
+      /** How wide the word sets right now, used to prove a face actually took. */
+      function probeWidth(family) {
+        const probe = document.createElement("canvas").getContext("2d");
+        probe.font = `${preset.weight} 100px "${family}", monospace`;
+        return probe.measureText(preset.text || "dhruv2mars").width;
+      }
+
       async function fetchGoogle(name) {
         if (!name.trim()) return;
         const family = name.trim();
-        const href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family).replace(/%20/g, "+")}:ital,wght@0,100..900;1,100..900&display=swap`;
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = href;
-        document.head.appendChild(link);
+        const encoded = encodeURIComponent(family).replace(/%20/g, "+");
+        const before = probeWidth(family);
         warn(`Fetching ${family}…`);
-        try {
-          await document.fonts.load(`700 100px "${family}"`);
-          await document.fonts.ready;
-          preset.family = family;
-          el("family").value = family;
-          suggest([family, ...SUGGESTED]);
-          warn(`Loaded ${family}.`);
-          rebuild();
-        } catch (error) {
-          warn(`Google Fonts would not serve ${family}: ${error.message}`);
+
+        /* `fetch` is not available here — the studio runs off the filesystem and
+           a null origin cannot read a cross-origin response. A stylesheet link
+           is not held to that, and it reports a rejected spec by firing
+           `error`, which is the whole signal needed. */
+        let ok = false;
+        for (const axis of AXES) {
+          const href = `https://fonts.googleapis.com/css2?family=${encoded}${axis ? ":" + axis : ""}&display=swap`;
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = href;
+          ok = await new Promise((resolve) => {
+            link.addEventListener("load", () => resolve(true), { once: true });
+            link.addEventListener("error", () => resolve(false), { once: true });
+            document.head.appendChild(link);
+          });
+          if (ok) break;
+          link.remove();
         }
+        if (!ok) {
+          warn(`Google Fonts has no family called ${family}.`);
+          return;
+        }
+
+        try {
+          await document.fonts.load(`${preset.weight} 100px "${family}"`);
+          await document.fonts.ready;
+        } catch (error) {
+          warn(`${family} arrived but would not load: ${error.message}`);
+          return;
+        }
+
+        /* A face that never arrived measures exactly like the fallback did, and
+           the dither would quietly be of some other typeface entirely. */
+        if (probeWidth(family) === before && !document.fonts.check(`${preset.weight} 100px "${family}"`)) {
+          warn(`${family} did not take — the page is still setting the fallback.`);
+          return;
+        }
+
+        preset.family = family;
+        el("family").value = family;
+        suggest([family, ...SUGGESTED]);
+        warn(`Loaded ${family}.`);
+        rebuild();
       }
 
       /* ------------------------------------------------------------------ */
