@@ -66,14 +66,6 @@
   --selection-foreground: oklch(0.985 0 0);
 
   --header-height: --spacing(14);
-  --fade-bottom-height: --spacing(24);
-}
-
-/* The phone dock needs a deeper landing; desktop has no dock to float over. */
-@media (min-width: 640px) {
-  :root {
-    --fade-bottom-height: --spacing(16);
-  }
 }
 
 .dark {
@@ -529,34 +521,6 @@
   [data-slot="pronounce"][data-speaking] [data-wave] {
     animation: none;
   }
-}
-
-/* ---------------------------------------------------------------------------
-   The bottom edge of the sheet. Fixed, so it is the last thing every scroll
-   runs into: the page dissolves into the background over four rems on wide
-   viewports and six on phones, and the gradient is masked from the top so the
-   fade has no visible start.
-   The strip below it is opaque background padded by the home indicator, which
-   is what the floating palette dock rests on.
---------------------------------------------------------------------------- */
-.fade-bottom {
-  position: fixed;
-  inset-inline: 0;
-  bottom: 0;
-  z-index: 50;
-  pointer-events: none;
-}
-
-.fade-bottom-gradient {
-  height: var(--fade-bottom-height);
-  background: linear-gradient(to bottom, transparent, var(--background));
-  mask-image: linear-gradient(to top, var(--background) 25%, transparent);
-  backdrop-filter: blur(1px);
-}
-
-.fade-bottom-rest {
-  background: var(--background);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ---------------------------------------------------------------------------
