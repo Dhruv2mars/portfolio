@@ -44,3 +44,7 @@ Make it twenty-five percent hidden.
 ---
 
 everything perfect. but tell me, does the text color feels right to you in both light and dark modes?
+
+---
+
+fix this inconsistency. make sure everything looks perffect in both modes at every scene \
