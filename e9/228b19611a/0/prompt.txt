@@ -1,0 +1,26 @@
+yours are shit, i will configure and fine tune myself, i just want u to figure out the font. basically, isint that possible where instead of font, we have smthing else, like chan had his own graphics, not exact a font per se.
+
+---
+
+yours are shit, i will configure and fine tune myself, i just want u to figure out the font. basically, isint that possible where instead of font, we have smthing else, like chan had his own graphics, not exact a font per se.
+
+---
+
+{"source":"text","text":"dhruv2mars","artworkName":"","artworkInk":"dark","family":"Inter","weight":700,"italic":false,"tracking":-0.02,"wordSpacing":0,"transform":"none","boxWidth":1400,"sideBearing":0.02,"topAir":0.06,"cut":0.12,"spacing":5.1,"stagger":true,"jitter":4,"gamma":1,"density":0.88,"pattern":"bayer8","dot":1.5,"ink":0.45,"repelRadius":290,"repelStrength":70,"deviceWidth":1440}
+
+
+this is the final version, apply this and make sure it looks perfect in every way. verify. then run dev server to let me know how it turned out.
+
+---
+
+{"source":"text","text":"dhruv2mars","artworkName":"","artworkInk":"dark","family":"Inter","weight":700,"italic":false,"tracking":-0.02,"wordSpacing":0,"transform":"none","boxWidth":1400,"sideBearing":0.02,"topAir":0.06,"cut":0.12,"spacing":5.1,"stagger":true,"jitter":4,"gamma":1,"density":0.88,"pattern":"bayer8","dot":1.5,"ink":0.45,"repelRadius":290,"repelStrength":70,"deviceWidth":1440}
+
+
+this is the final version, apply this and make sure it looks perfect in every way. verify. then run dev server to let me know how it turned out.
+
+---
+
+{"source":"text","text":"dhruv2mars","artworkName":"","artworkInk":"dark","family":"Inter","weight":700,"italic":false,"tracking":-0.02,"wordSpacing":0,"transform":"none","boxWidth":1400,"sideBearing":0.02,"topAir":0.06,"cut":0.12,"spacing":5.1,"stagger":true,"jitter":4,"gamma":1,"density":0.88,"pattern":"bayer8","dot":1.5,"ink":0.45,"repelRadius":290,"repelStrength":70,"deviceWidth":1440}
+
+
+this is the final version, apply this and make sure it looks perfect in every way. verify. then run dev server to let me know how it turned out.
