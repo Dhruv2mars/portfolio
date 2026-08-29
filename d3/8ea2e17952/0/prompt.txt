@@ -52,3 +52,7 @@ fix this inconsistency. make sure everything looks perffect in both modes at eve
 ---
 
 u have made the thing darker in light mode, instead i wanted the dark mode version to match the way light mode was. fix this
+
+---
+
+push to main and make sure the get is clean with everything sorted out
