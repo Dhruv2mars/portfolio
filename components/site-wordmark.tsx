@@ -48,6 +48,7 @@ export function SiteWordmark({ className }: { className?: string }) {
     const current = new Float32Array(count);
 
     let side = 1;
+    let want = 1;
     let alpha: number = WORDMARK.ink;
     let radius = 0;
     let strength = 0;
@@ -69,6 +70,16 @@ export function SiteWordmark({ className }: { className?: string }) {
           side,
         );
       }
+    };
+
+    /* Colour and weight both come from the cascade, so the theme decides both
+       and reading one without the other would leave the mark half-swapped. */
+    const weigh = () => {
+      const style = getComputedStyle(canvas);
+      ink = style.color;
+      const pressed = Number.parseFloat(style.getPropertyValue("--wordmark-ink"));
+      const press = Number.isFinite(pressed) ? pressed : WORDMARK.ink;
+      alpha = (press * (want * want)) / (side * side);
     };
 
     /* The dots are stored in the studio's box, so every measurement is one
@@ -99,14 +110,21 @@ export function SiteWordmark({ className }: { className?: string }) {
       /* Whole device pixels, always. A fractional `fillRect` is antialiased
          across two columns and the mark turns to smear — on a phone, where a
          dot is barely one pixel wide, that smear is the whole signature.
-         Rounding the side loses ink, so the alpha is raised by the area it
-         cost and the mark keeps its weight at every size. */
-      const exact = Math.max(1, WORDMARK.dot * scale);
-      side = Math.max(1, Math.round(exact));
-      alpha = Math.min(1, (WORDMARK.ink * (exact * exact)) / (side * side));
+         The square the dot wants is almost never a whole number of them, and
+         on a phone it is smaller than one. Both are settled the same way: take
+         the next whole pixel up, then hand the difference to the alpha, so the
+         ink laid down is the area asked for at every width rather than the
+         area that happened to be drawable. Up rather than to nearest, because
+         a square rounded down owes an alpha above 1 to make its area back and
+         there is no such alpha — it clamps, and the mark thins at exactly the
+         widths where the rounding was worst. Rounded up the debt is always
+         payable. How hard it presses to begin with is `--wordmark-ink`, which
+         the theme sets — see the note on it in `app/globals.css`. */
+      want = WORDMARK.dot * scale;
+      side = Math.max(1, Math.ceil(want));
       radius = WORDMARK.repelRadius * scale;
       strength = WORDMARK.repelStrength * scale;
-      ink = getComputedStyle(canvas).color;
+      weigh();
       draw();
     };
 
@@ -166,9 +184,10 @@ export function SiteWordmark({ className }: { className?: string }) {
     const observer = new ResizeObserver(measure);
     observer.observe(canvas);
 
-    // The theme swaps a class on the root, and `ink` was resolved from it.
+    // The theme swaps a class on the root, and both the colour and the weight
+    // were resolved from it.
     const theme = new MutationObserver(() => {
-      ink = getComputedStyle(canvas).color;
+      weigh();
       draw();
     });
     theme.observe(document.documentElement, {
