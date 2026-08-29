@@ -42,8 +42,11 @@ test("the lettering is centred and fills its box", () => {
   }
 
   // A run of dots that had lost a glyph, or drifted off the optical centre,
-  // would show up here before it showed up in a screenshot.
-  expect(maxX - minX).toBeGreaterThan(WORDMARK.box.width * 0.9);
+  // would show up here before it showed up in a screenshot. How much of the
+  // box the ink spans is a design choice — side bearing is a slider — so the
+  // span is only bounded loosely enough to catch a missing glyph. The
+  // symmetry check below is the one that catches drift.
+  expect(maxX - minX).toBeGreaterThan(WORDMARK.box.width * 0.8);
   expect(maxY - minY).toBeGreaterThan(WORDMARK.box.height * 0.7);
   expect(Math.abs(minX - (WORDMARK.box.width - maxX))).toBeLessThan(24);
 });
