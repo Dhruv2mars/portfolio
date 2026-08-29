@@ -154,16 +154,22 @@
    * which is that every square lands on a whole device pixel and takes back in
    * opacity what rounding its side cost. A fractional `fillRect` is antialiased
    * across two columns, and at phone sizes that smear is the whole signature.
+   *
+   * Up rather than to nearest: a square rounded down owes an alpha above 1 to
+   * make its area back, and there is no such alpha. And no floor on `want`,
+   * because flooring the side without repaying the area it added over-inks
+   * every width where the dot is under a pixel. Both halves have to match
+   * `site-wordmark.tsx` exactly or the preview is lying about the ship.
    */
   function paint(ctx, dots, options) {
     const { scale, offsetX, offsetY, dot, ink, color } = options;
-    const exact = Math.max(1, dot * scale);
-    const side = Math.max(1, Math.round(exact));
+    const want = dot * scale;
+    const side = Math.max(1, Math.ceil(want));
     const half = side / 2;
 
     ctx.save();
     ctx.fillStyle = color;
-    ctx.globalAlpha = Math.min(1, (ink * (exact * exact)) / (side * side));
+    ctx.globalAlpha = (ink * (want * want)) / (side * side);
     for (let i = 0; i < dots.length; i += 2) {
       ctx.fillRect(
         Math.round(offsetX + dots[i] * scale - half),

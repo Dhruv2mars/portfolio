@@ -107,6 +107,8 @@
         text-align: left;
       }
       button:hover { border-color: var(--muted); }
+      button:disabled { color: var(--muted); cursor: not-allowed; opacity: 0.5; }
+      button:disabled:hover { border-color: var(--line); }
       button.wide { text-align: center; }
       .count { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 12px; }
       .hint { font-size: 12px; color: var(--muted); }
@@ -546,6 +548,15 @@
         return total / (steps * steps * 255);
       }
 
+      /* Export writes over the file the site imports. A run with no dots in it
+         would replace the mark with nothing, so the buttons only work when
+         there is something to export. */
+      function allowExport() {
+        const ok = dots.length > 0;
+        el("download").disabled = !ok;
+        el("copy").disabled = !ok;
+      }
+
       function rebuild() {
         raster();
         if (!alpha || !bbox) {
@@ -553,12 +564,14 @@
           el("count").textContent = preset.source === "artwork"
             ? "nothing to draw — load an image, or try the other end of `dark is ink`"
             : "nothing to draw — check the text and the typeface";
+          allowExport();
           render();
           return;
         }
         layout();
         dots = Dither.ditherField(coverageAt, box, preset);
         el("count").textContent = `${dots.length / 2} dots · box ${box.width} × ${box.height} · ${(visible * 100).toFixed(1)}% above the edge`;
+        allowExport();
         render();
       }
 
