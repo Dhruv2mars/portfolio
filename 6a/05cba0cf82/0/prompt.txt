@@ -48,3 +48,7 @@ everything perfect. but tell me, does the text color feels right to you in both 
 ---
 
 fix this inconsistency. make sure everything looks perffect in both modes at every scene \
+
+---
+
+u have made the thing darker in light mode, instead i wanted the dark mode version to match the way light mode was. fix this
