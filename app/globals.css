@@ -80,17 +80,15 @@
      flat near white, so a sparse field lifting off a dark page shifts it
      several times as far as the same field darkening a light one. Baking one
      number would leave one of the two modes wrong, so the theme owns it and
-     `components/site-wordmark.tsx` reads it. `lib/wordmark-dots.ts` holds the
-     value the studio was tuned at, which is the dark one.
+     `components/site-wordmark.tsx` reads it.
 
-     Dark keeps the studio's 0.45, which is what the mark was tuned against
-     and what it should look like. Light is the one that was wrong: at 0.45 a
-     white page swallowed it. It sits at 1 — opaque black dots, as heavy as
-     this geometry goes — and that is only just enough to read at the same
-     confidence as dark. There is no headroom left above it, so if light ever
-     needs more weight the answer is more or bigger dots, not a bigger
-     number here. */
-  --wordmark-ink: 1;
+     Light is the reference: it keeps the 0.45 the studio was tuned at, which
+     is the weight the mark is meant to have. Dark is the one that has to bend
+     — the same 0.45 on a dark page reads about three times heavier, so it is
+     dimmed until the ink over the strokes measures the same lift off the page
+     that light's does. Change light's number and dark's is stale; they are a
+     pair, not two settings. */
+  --wordmark-ink: 0.45;
 }
 
 .dark {
@@ -135,7 +133,7 @@
   --selection: oklch(0.985 0 0);
   --selection-foreground: oklch(0.141 0.005 285.823);
 
-  --wordmark-ink: 0.45;
+  --wordmark-ink: 0.2;
 }
 
 @theme inline {
