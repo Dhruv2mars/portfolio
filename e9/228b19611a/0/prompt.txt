@@ -24,3 +24,7 @@ this is the final version, apply this and make sure it looks perfect in every wa
 
 
 this is the final version, apply this and make sure it looks perfect in every way. verify. then run dev server to let me know how it turned out.
+
+---
+
+everything perfect, just make it 10% smaller while keeping the ratio same, make it small in the same ratio (h and w).
