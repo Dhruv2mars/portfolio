@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.10.3",
+  "checkpoint_id": "9f27071d27b1",
+  "session_id": "01a03d20-7e4c-7791-b7b1-a1e1ab1a8737",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-29T11:50:09.261871Z",
+  "branch": "feat/heavy-footer-signature",
+  "checkpoints_count": 8,
+  "save_step_count": 1,
+  "files_touched": [
+    "next-env.d.ts"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.6-luna",
+  "turn_id": "79f4e79d825f",
+  "session_metrics": {
+    "turn_count": 8
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-29T11:50:09.260717Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 2173,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 2173,
+    "total_lines_changed": 2348,
+    "agent_percentage": 0,
+    "metric_version": 2
+  }
+}
