@@ -1,0 +1,16 @@
+{
+  "cli_version": "0.10.3",
+  "checkpoint_id": "577418576652",
+  "strategy": "manual-commit",
+  "branch": "feat/heavy-footer-signature",
+  "checkpoints_count": 8,
+  "files_touched": [
+    "next-env.d.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/57/7418576652/0/metadata.json",
+      "prompt": ""
+    }
+  ]
+}
