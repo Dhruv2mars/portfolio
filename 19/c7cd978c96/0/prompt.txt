@@ -32,3 +32,11 @@ everything perfect, just make it 10% smaller while keeping the ratio same, make 
 ---
 
 How much of the bottom did we hide this time? How much percentage we have selected?
+
+---
+
+Make it twenty-five percent hidden.
+
+---
+
+Make it twenty-five percent hidden.
