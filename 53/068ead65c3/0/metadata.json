@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.10.3",
+  "checkpoint_id": "53068ead65c3",
+  "session_id": "9125f42f-c118-4c04-84b1-e473db0ff852",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-29T11:55:29.229496Z",
+  "branch": "feat/heavy-footer-signature",
+  "checkpoints_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-5",
+  "turn_id": "ecbf34676a66",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 1344,
+    "cache_creation_tokens": 2059779,
+    "cache_read_tokens": 53009585,
+    "output_tokens": 444575,
+    "api_call_count": 690
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}
