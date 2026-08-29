@@ -2,71 +2,83 @@
  * The dithering engine behind the footer signature.
  *
  * One file, no DOM: `tools/wordmark-studio.html` loads it with a plain script
- * tag so the studio opens straight off the filesystem, and
- * `tools/gen-dots.mjs` imports it so the checked-in coordinates can be
- * reproduced from the same code the sliders drive. Change the look here or in
- * the studio; never hand-edit `lib/wordmark-dots.ts`.
+ * tag so the studio opens straight off the filesystem. The engine knows
+ * nothing about letters — it takes a coverage field, a function answering "how
+ * much ink is at this point", and decides which cells of a grid survive. The
+ * studio builds that field by rasterising real text in whatever font you hand
+ * it, which is why the alphabet is no longer hard-coded here.
+ *
+ * Tune the look in the studio and export from it. Never hand-edit
+ * `lib/wordmark-dots.ts`.
  */
 (function (root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
   else root.Dither = api;
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
-  const BOX = { width: 1410, height: 148 };
-  const GLYPH_GAP = 44;
-
   /**
-   * The site's own alphabet, monoline. Each letter owns its width and contour
-   * so the lockup is spaced optically rather than stretched across a grid.
+   * How much of the baked weight each theme keeps.
+   *
+   * The same alpha does not weigh the same in both — lightness is steep near
+   * black and flat near white — so light is the reference and dark is dimmed
+   * until the ink over the strokes lifts off its page as far as light's presses
+   * into its own. The site reads these off `--wordmark-ink` in
+   * `app/globals.css`; they live here too so the studio's preview can apply the
+   * same factor, and `lib/wordmark-dots.test.ts` asserts the two agree.
    */
-  const GLYPHS = {
-    a: {
-      width: 96,
-      path: "M82 48V126M82 72C74 54 61 47 46 47C26 47 14 63 14 87C14 111 26 126 46 126C62 126 75 117 82 102",
-    },
-    d: {
-      width: 100,
-      path: "M84 12V126M84 52H42C24 52 14 65 14 89C14 113 25 126 44 126H84",
-    },
-    h: { width: 92, path: "M14 12V126M14 64C26 50 40 46 54 49C70 52 78 64 78 82V126" },
-    m: {
-      width: 140,
-      path: "M14 48V126M14 72C24 54 38 47 52 49C68 51 76 64 76 82V126M76 72C86 54 100 47 114 49C128 51 134 64 134 82V126",
-    },
-    r: { width: 78, path: "M14 48V126M14 72C24 54 38 47 64 50" },
-    s: {
-      width: 92,
-      path: "M80 58C71 49 59 45 45 45C27 45 16 54 16 67C16 79 26 85 47 90C68 95 80 101 80 112C80 122 67 128 49 128C32 128 20 123 12 114",
-    },
-    u: { width: 94, path: "M14 48V94C14 115 26 126 46 126C66 126 80 114 80 94V48" },
-    v: { width: 92, path: "M12 48L46 126L80 48" },
-    "2": {
-      width: 96,
-      path: "M14 68C16 50 30 42 49 42C69 42 82 52 82 68C82 82 72 92 58 101L16 126H84",
-    },
-  };
+  const THEME_INK = { light: 1, dark: 0.444 };
 
   /**
-   * The studio's opening position, and the preset `gen-dots.mjs` uses when it
-   * is given none. Tuned values land back here so the checked-in art stays
-   * reproducible from the repository alone.
+   * Everything the look is made of, and what the studio opens on.
+   *
+   * The box is always `boxWidth` units across, whatever the font, because the
+   * mark always spans the whole viewport. Fixing it means the dither sliders —
+   * spacing, dot, the repulsion field — keep their meaning when you change
+   * typeface, instead of every number needing to be found again.
+   *
+   * `source` decides where the ink comes from. `text` sets the string below in
+   * a real typeface; `artwork` dithers an image you hand it instead, which is
+   * how you use lettering that was drawn rather than typed. `artworkInk` says
+   * which end of an opaque image is the mark — `dark` for black on white.
+   *
+   * `sideBearing`, `topAir` and `cut` are fractions of the lettering's own ink,
+   * not of the box: bearing of the ink width on each side, air of the ink
+   * height above it, and the share of the ink height that falls past the last
+   * pixel of the page. Between them they decide how big and how wide the mark
+   * sits in its section.
    */
   const DEFAULTS = {
+    source: "text",
     text: "dhruv2mars",
-    stroke: 15,
-    softness: 3,
+    artworkName: "",
+    artworkInk: "dark",
+    family: "Inter",
+    weight: 700,
+    italic: false,
+    tracking: -0.02,
+    wordSpacing: 0,
+    transform: "none",
+
+    boxWidth: 1400,
+    sideBearing: 0.02,
+    topAir: 0.06,
+    cut: 0.12,
+
     spacing: 3,
     stagger: true,
     jitter: 1,
     gamma: 1,
     density: 0.88,
     pattern: "bayer8",
+
     dot: 2,
-    repelRadius: 155,
-    repelStrength: 44,
+    ink: 0.45,
+    repelRadius: 120,
+    repelStrength: 34,
   };
 
-  const PATTERNS = ["bayer2", "bayer4", "bayer8", "noise", "solid"];
+  const PATTERNS = ["bayer8", "bayer4", "bayer2", "noise", "solid"];
+  const TRANSFORMS = ["none", "lowercase", "uppercase"];
 
   const BAYER = {
     bayer2: [
@@ -98,170 +110,108 @@
     return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
   }
 
-  /** Absolute M/L/H/V/C only — the alphabet above uses nothing else. */
-  function flatten(path, ox, steps) {
-    const lines = [];
-    let current = null;
-    let x = 0;
-    let y = 0;
-    let sx = 0;
-    let sy = 0;
-
-    const open = () => {
-      current = [];
-      lines.push(current);
-    };
-    const to = (nx, ny) => {
-      current.push(nx, ny);
-      x = nx;
-      y = ny;
-    };
-
-    for (const [, op, rest] of path.matchAll(/([MLHVC])([^MLHVC]*)/g)) {
-      const n = (rest.match(/-?\d*\.?\d+/g) || []).map(Number);
-      if (op === "M") {
-        open();
-        sx = n[0] + ox;
-        sy = n[1];
-        to(sx, sy);
-        for (let i = 2; i + 1 < n.length; i += 2) to(n[i] + ox, n[i + 1]);
-      } else if (op === "L") {
-        for (let i = 0; i + 1 < n.length; i += 2) to(n[i] + ox, n[i + 1]);
-      } else if (op === "H") {
-        for (const v of n) to(v + ox, y);
-      } else if (op === "V") {
-        for (const v of n) to(x, v);
-      } else if (op === "C") {
-        for (let i = 0; i + 5 < n.length; i += 6) {
-          const x0 = x;
-          const y0 = y;
-          const [c1x, c1y, c2x, c2y, ex, ey] = [
-            n[i] + ox, n[i + 1], n[i + 2] + ox, n[i + 3], n[i + 4] + ox, n[i + 5],
-          ];
-          for (let s = 1; s <= steps; s++) {
-            const t = s / steps;
-            const u = 1 - t;
-            to(
-              u * u * u * x0 + 3 * u * u * t * c1x + 3 * u * t * t * c2x + t * t * t * ex,
-              u * u * u * y0 + 3 * u * u * t * c1y + 3 * u * t * t * c2y + t * t * t * ey,
-            );
-          }
-        }
-      }
-    }
-
-    void sx;
-    void sy;
-    return lines;
-  }
-
-  /** Lay the text out centred in the box and flatten it to line segments. */
-  function segments(text, steps = 20) {
-    let cursor = 0;
-    const chars = [];
-    for (const char of text) {
-      const glyph = GLYPHS[char];
-      if (!glyph) continue;
-      chars.push({ glyph, x: cursor });
-      cursor += glyph.width + GLYPH_GAP;
-    }
-
-    const offset = Math.max((BOX.width - Math.max(cursor - GLYPH_GAP, 0)) / 2, 0);
-    const out = [];
-    for (const { glyph, x } of chars) {
-      for (const line of flatten(glyph.path, offset + x, steps)) {
-        for (let i = 0; i + 3 < line.length; i += 2) {
-          out.push([line[i], line[i + 1], line[i + 2], line[i + 3]]);
-        }
-      }
-    }
-    return out;
-  }
-
-  function distanceToSegments(segs, px, py) {
-    let best = Infinity;
-    for (let i = 0; i < segs.length; i++) {
-      const s = segs[i];
-      const vx = s[2] - s[0];
-      const vy = s[3] - s[1];
-      const wx = px - s[0];
-      const wy = py - s[1];
-      const len = vx * vx + vy * vy;
-      let t = len > 0 ? (wx * vx + wy * vy) / len : 0;
-      if (t < 0) t = 0;
-      else if (t > 1) t = 1;
-      const dx = wx - vx * t;
-      const dy = wy - vy * t;
-      const d = dx * dx + dy * dy;
-      if (d < best) best = d;
-    }
-    return Math.sqrt(best);
+  /** The value a cell has to beat to keep its dot. */
+  function threshold(pattern, ix, iy) {
+    if (pattern === "solid") return 0.5;
+    if (pattern === "noise") return hash(ix, iy, 7);
+    const matrix = BAYER[pattern] || BAYER.bayer8;
+    const n = matrix.length;
+    return (matrix[iy % n][ix % n] + 0.5) / (n * n);
   }
 
   /**
-   * Sample the lettering onto a grid and keep the cells the dither pattern
-   * lets through. Coordinates come back as a flat `[x, y, x, y, …]` run in box
-   * units, rounded to whole units — jitter is baked in, not applied later.
+   * Walk a grid over the box and keep the cells the pattern lets through.
+   *
+   * `coverageAt(x, y)` answers with the ink at a point in box units, 0 to 1.
+   * Coordinates come back as a flat `[x, y, x, y, …]` run rounded to whole box
+   * units, with the jitter already baked in rather than applied at runtime —
+   * the site draws exactly these numbers and adds nothing.
    */
-  function build(options) {
+  function ditherField(coverageAt, box, options) {
     const p = { ...DEFAULTS, ...(options || {}) };
-    const segs = segments(p.text);
-    const half = p.stroke / 2;
-    const soft = Math.max(p.softness, 0.001);
-    const matrix = BAYER[p.pattern];
     const dots = [];
-
-    const rows = Math.ceil(BOX.height / p.spacing);
-    const cols = Math.ceil(BOX.width / p.spacing);
+    const rows = Math.ceil(box.height / p.spacing);
+    const cols = Math.ceil(box.width / p.spacing);
 
     for (let iy = 0; iy <= rows; iy++) {
       const stagger = p.stagger && iy % 2 === 1 ? p.spacing / 2 : 0;
       for (let ix = 0; ix <= cols; ix++) {
         const gx = ix * p.spacing + stagger;
         const gy = iy * p.spacing;
-        if (gx > BOX.width || gy > BOX.height) continue;
+        if (gx > box.width || gy > box.height) continue;
 
-        const d = distanceToSegments(segs, gx, gy);
-        if (d > half + soft) continue;
-
-        let cover = (half + soft - d) / (2 * soft);
-        cover = cover < 0 ? 0 : cover > 1 ? 1 : cover;
+        let cover = coverageAt(gx, gy);
+        if (cover <= 0) continue;
+        if (cover > 1) cover = 1;
         cover = Math.pow(cover, p.gamma) * p.density;
-
-        let threshold;
-        if (p.pattern === "solid") threshold = 0.5;
-        else if (p.pattern === "noise") threshold = hash(ix, iy, 7);
-        else {
-          const n = matrix.length;
-          threshold = (matrix[iy % n][ix % n] + 0.5) / (n * n);
-        }
-        if (cover <= threshold) continue;
+        if (cover <= threshold(p.pattern, ix, iy)) continue;
 
         const jx = p.jitter ? (hash(ix, iy, 1) - 0.5) * 2 * p.jitter : 0;
         const jy = p.jitter ? (hash(ix, iy, 2) - 0.5) * 2 * p.jitter : 0;
         const x = Math.round(gx + jx);
         const y = Math.round(gy + jy);
-        if (x < 0 || y < 0 || x > BOX.width || y > BOX.height) continue;
+        if (x < 0 || y < 0 || x > box.width || y > box.height) continue;
         dots.push(x, y);
       }
     }
 
-    return { box: BOX, preset: p, dots };
+    return dots;
   }
 
-  /** The exact file the site imports, so the studio's output is paste-ready. */
+  /**
+   * Paint a baked run of dots the way the site does.
+   *
+   * `components/site-wordmark.tsx` and the studio's preview share this so that
+   * what the sliders show is what ships — including the part that matters most,
+   * which is that every square lands on a whole device pixel and takes back in
+   * opacity what rounding its side cost. A fractional `fillRect` is antialiased
+   * across two columns, and at phone sizes that smear is the whole signature.
+   *
+   * Up rather than to nearest: a square rounded down owes an alpha above 1 to
+   * make its area back, and there is no such alpha. And no floor on `want`,
+   * because flooring the side without repaying the area it added over-inks
+   * every width where the dot is under a pixel. Both halves have to match
+   * `site-wordmark.tsx` exactly or the preview is lying about the ship.
+   */
+  function paint(ctx, dots, options) {
+    const { scale, offsetX, offsetY, dot, ink, color } = options;
+    const want = dot * scale;
+    const side = Math.max(1, Math.ceil(want));
+    const half = side / 2;
+
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.globalAlpha = (ink * (want * want)) / (side * side);
+    for (let i = 0; i < dots.length; i += 2) {
+      ctx.fillRect(
+        Math.round(offsetX + dots[i] * scale - half),
+        Math.round(offsetY + dots[i + 1] * scale - half),
+        side,
+        side,
+      );
+    }
+    ctx.restore();
+  }
+
+  /** The exact file the site imports, so the studio's export is paste-ready. */
   function toModule(result) {
     const p = result.preset;
     const rows = [];
-    for (let i = 0; i < result.dots.length; i += 2) rows.push(`${result.dots[i]},${result.dots[i + 1]}`);
+    for (let i = 0; i < result.dots.length; i += 2) {
+      rows.push(`${result.dots[i]},${result.dots[i + 1]}`);
+    }
 
     const lines = [];
-    for (let i = 0; i < rows.length; i += 12) lines.push(`  ${rows.slice(i, i + 12).join(", ")},`);
+    for (let i = 0; i < rows.length; i += 12) {
+      lines.push(`  ${rows.slice(i, i + 12).join(", ")},`);
+    }
 
-    return `// Generated by tools/gen-dots.mjs — do not edit by hand.
-// Tune the look in tools/wordmark-studio.html, then either paste its export
-// here or reproduce it with:
-//   bun tools/gen-dots.mjs --preset '${JSON.stringify(p)}' > lib/wordmark-dots.ts
+    return `// Generated by tools/wordmark-studio.html — do not edit by hand.
+// The mark is a baked run of coordinates, so there is no code path that
+// re-letters it. To change it, open the studio, load this preset, and export:
+//   ${JSON.stringify(p)}${p.source === "artwork" ? `
+// Drawn from artwork, not from a typeface. The preset names the file but
+// cannot carry it: reload ${JSON.stringify(p.artworkName || "the image")} in the studio first.` : ""}
 
 /** Where the signature's dots live, and how they behave under the cursor. */
 export const WORDMARK = {
@@ -270,6 +220,10 @@ export const WORDMARK = {
   box: { width: ${result.box.width}, height: ${result.box.height} },
   /** Dot edge, in box units. Squares, because a dither is made of pixels. */
   dot: ${p.dot},
+  /** How heavily the mark sits on the page, applied per dot rather than in CSS. */
+  ink: ${p.ink},
+  /** The fraction of the box the page shows; the rest falls off the bottom. */
+  visible: ${result.visible},
   /** The invisible circle around the cursor, in box units. */
   repelRadius: ${p.repelRadius},
   /** Peak outward push at the very centre of that circle, in box units. */
@@ -283,5 +237,5 @@ ${lines.join("\n")}
 `;
   }
 
-  return { BOX, GLYPHS, DEFAULTS, PATTERNS, segments, build, toModule };
+  return { DEFAULTS, THEME_INK, PATTERNS, TRANSFORMS, BAYER, hash, threshold, ditherField, paint, toModule };
 });

@@ -24,6 +24,14 @@ const SETTLED = 0.05;
  * circles, because a dither is made of pixels — and because a few thousand
  * `fillRect` calls a frame cost a third of what the same number of arcs do.
  *
+ * It runs the full width of the viewport while everything above it is held to
+ * a three-quarter-column, and the bottom sixth of the lettering is below the
+ * last pixel of the page. Both are deliberate: the mark is the only thing on
+ * the site that ignores the frame, and a name that runs off the edge reads as
+ * a signature rather than as one more row of content. The canvas is sized by
+ * aspect ratio, so the crop is the same fraction at every viewport instead of
+ * drifting with the height.
+ *
  * It is a signature, not information: `aria-hidden`, and inert under
  * `prefers-reduced-motion`, where it renders once and never listens.
  */
@@ -39,7 +47,9 @@ export function SiteWordmark({ className }: { className?: string }) {
     const rest = new Float32Array(count);
     const current = new Float32Array(count);
 
-    let dot = 1;
+    let side = 1;
+    let want = 1;
+    let alpha: number = WORDMARK.ink;
     let radius = 0;
     let strength = 0;
     let dpr = 1;
@@ -50,16 +60,37 @@ export function SiteWordmark({ className }: { className?: string }) {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = ink;
-      const half = dot / 2;
+      ctx.globalAlpha = alpha;
+      const half = side / 2;
       for (let i = 0; i < count; i += 2) {
-        ctx.fillRect(current[i] - half, current[i + 1] - half, dot, dot);
+        ctx.fillRect(
+          Math.round(current[i] - half),
+          Math.round(current[i + 1] - half),
+          side,
+          side,
+        );
       }
     };
 
+    /* Colour and weight both come from the cascade, so the theme decides both
+       and reading one without the other would leave the mark half-swapped.
+
+       `--wordmark-ink` is a multiplier on the weight the studio baked, not a
+       replacement for it: the preset stays the one place the mark's weight is
+       set, and the theme only says how much of it survives the page it lands
+       on. Light is 1 by definition. See the note in `app/globals.css`. */
+    const weigh = () => {
+      const style = getComputedStyle(canvas);
+      ink = style.color;
+      const themed = Number.parseFloat(style.getPropertyValue("--wordmark-ink"));
+      const press = WORDMARK.ink * (Number.isFinite(themed) ? themed : 1);
+      alpha = (press * (want * want)) / (side * side);
+    };
+
     /* The dots are stored in the studio's box, so every measurement is one
-       uniform scale: fit the box inside the canvas and centre it. On a phone
-       the width binds and the mark gets shorter; on a wide screen the height
-       binds and it stops growing, which is what keeps it quiet. */
+       uniform scale. The canvas is only tall enough for the kept fraction of
+       that box, and the lettering is pinned to its top — so the last sixth
+       lands past the bottom edge and is never drawn. */
     const measure = () => {
       const rect = canvas.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
@@ -70,10 +101,10 @@ export function SiteWordmark({ className }: { className?: string }) {
 
       const scale = Math.min(
         canvas.width / WORDMARK.box.width,
-        canvas.height / WORDMARK.box.height,
+        canvas.height / (WORDMARK.box.height * WORDMARK.visible),
       );
       const offsetX = (canvas.width - WORDMARK.box.width * scale) / 2;
-      const offsetY = (canvas.height - WORDMARK.box.height * scale) / 2;
+      const offsetY = 0;
 
       for (let i = 0; i < count; i += 2) {
         rest[i] = offsetX + WORDMARK_DOTS[i] * scale;
@@ -81,10 +112,24 @@ export function SiteWordmark({ className }: { className?: string }) {
       }
       current.set(rest);
 
-      dot = Math.max(1, WORDMARK.dot * scale);
+      /* Whole device pixels, always. A fractional `fillRect` is antialiased
+         across two columns and the mark turns to smear — on a phone, where a
+         dot is barely one pixel wide, that smear is the whole signature.
+         The square the dot wants is almost never a whole number of them, and
+         on a phone it is smaller than one. Both are settled the same way: take
+         the next whole pixel up, then hand the difference to the alpha, so the
+         ink laid down is the area asked for at every width rather than the
+         area that happened to be drawable. Up rather than to nearest, because
+         a square rounded down owes an alpha above 1 to make its area back and
+         there is no such alpha — it clamps, and the mark thins at exactly the
+         widths where the rounding was worst. Rounded up the debt is always
+         payable. How hard it presses to begin with is `--wordmark-ink`, which
+         the theme sets — see the note on it in `app/globals.css`. */
+      want = WORDMARK.dot * scale;
+      side = Math.max(1, Math.ceil(want));
       radius = WORDMARK.repelRadius * scale;
       strength = WORDMARK.repelStrength * scale;
-      ink = getComputedStyle(canvas).color;
+      weigh();
       draw();
     };
 
@@ -144,9 +189,10 @@ export function SiteWordmark({ className }: { className?: string }) {
     const observer = new ResizeObserver(measure);
     observer.observe(canvas);
 
-    // The theme swaps a class on the root, and `ink` was resolved from it.
+    // The theme swaps a class on the root, and both the colour and the weight
+    // were resolved from it.
     const theme = new MutationObserver(() => {
-      ink = getComputedStyle(canvas).color;
+      weigh();
       draw();
     });
     theme.observe(document.documentElement, {
@@ -180,17 +226,20 @@ export function SiteWordmark({ className }: { className?: string }) {
   }, []);
 
   return (
-    <div
-      className={`screen-line-bottom after:z-1 after:bg-foreground/15 ${className ?? ""}`}
-    >
-      <div className="flex w-full items-center justify-center px-4 py-4 md:px-6 md:py-5">
-        <canvas
-          ref={canvasRef}
-          aria-hidden="true"
-          data-wordmark={WORDMARK.text}
-          className="block h-10 w-full max-w-[1410px] text-foreground/45 sm:h-12 md:h-14"
-        />
-      </div>
+    /* Out past the frame's two-pixel gutter, so the mark touches the glass.
+       The deep top pad below `sm` is the dock's landing: it floats there now
+       that there is no fade under it, and this is the only band on the page
+       where it covers nothing. */
+    <div className={`-mx-2 pt-20 sm:pt-8 ${className ?? ""}`}>
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        data-wordmark={WORDMARK.text}
+        className="block w-full text-foreground"
+        style={{
+          aspectRatio: `${WORDMARK.box.width} / ${WORDMARK.box.height * WORDMARK.visible}`,
+        }}
+      />
     </div>
   );
 }

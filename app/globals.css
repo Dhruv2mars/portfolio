@@ -66,14 +66,27 @@
   --selection-foreground: oklch(0.985 0 0);
 
   --header-height: --spacing(14);
-  --fade-bottom-height: --spacing(24);
-}
 
-/* The phone dock needs a deeper landing; desktop has no dock to float over. */
-@media (min-width: 640px) {
-  :root {
-    --fade-bottom-height: --spacing(16);
-  }
+  /* How far a floating control has to sit above the last pixel of the page to
+     stay off the footer signature. The signature runs the full width of the
+     viewport, so its height is a fixed fraction of that width — the kept part
+     of the wordmark box, 168 * 0.75 / 1400 — and one rem of air on top. Both
+     the dock and the way back up read this, so nothing ever lands on the name
+     at any viewport. `lib/wordmark-dots.ts` holds the numbers it derives from. */
+  --signature-clear: calc(9vw + --spacing(4));
+
+  /* How much of the signature's baked weight survives this theme. The same
+     dots at the same alpha do not weigh the same in both: lightness is steep
+     near black and flat near white, so a sparse field lifting off a dark page
+     shifts it several times as far as the same field darkening a light one.
+
+     It is a multiplier, not a weight — the weight itself stays in the preset
+     the studio baked, so retuning ink there still moves the real mark. Light
+     is the reference at 1. Dark carries the correction; `tools/dither.js`
+     holds the same factor so the studio's dark preview does not lie about
+     what ships, and a test in `lib/wordmark-dots.test.ts` keeps the two
+     honest. */
+  --wordmark-ink: 1;
 }
 
 .dark {
@@ -117,6 +130,8 @@
 
   --selection: oklch(0.985 0 0);
   --selection-foreground: oklch(0.141 0.005 285.823);
+
+  --wordmark-ink: 0.444;
 }
 
 @theme inline {
@@ -529,34 +544,6 @@
   [data-slot="pronounce"][data-speaking] [data-wave] {
     animation: none;
   }
-}
-
-/* ---------------------------------------------------------------------------
-   The bottom edge of the sheet. Fixed, so it is the last thing every scroll
-   runs into: the page dissolves into the background over four rems on wide
-   viewports and six on phones, and the gradient is masked from the top so the
-   fade has no visible start.
-   The strip below it is opaque background padded by the home indicator, which
-   is what the floating palette dock rests on.
---------------------------------------------------------------------------- */
-.fade-bottom {
-  position: fixed;
-  inset-inline: 0;
-  bottom: 0;
-  z-index: 50;
-  pointer-events: none;
-}
-
-.fade-bottom-gradient {
-  height: var(--fade-bottom-height);
-  background: linear-gradient(to bottom, transparent, var(--background));
-  mask-image: linear-gradient(to top, var(--background) 25%, transparent);
-  backdrop-filter: blur(1px);
-}
-
-.fade-bottom-rest {
-  background: var(--background);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ---------------------------------------------------------------------------

@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { expect, test } from "bun:test";
 
 import { site } from "@/lib/site";
@@ -40,10 +42,28 @@ test("the lettering is centred and fills its box", () => {
   }
 
   // A run of dots that had lost a glyph, or drifted off the optical centre,
-  // would show up here before it showed up in a screenshot.
-  expect(maxX - minX).toBeGreaterThan(WORDMARK.box.width * 0.9);
+  // would show up here before it showed up in a screenshot. How much of the
+  // box the ink spans is a design choice — side bearing is a slider — so the
+  // span is only bounded loosely enough to catch a missing glyph. The
+  // symmetry check below is the one that catches drift.
+  expect(maxX - minX).toBeGreaterThan(WORDMARK.box.width * 0.8);
   expect(maxY - minY).toBeGreaterThan(WORDMARK.box.height * 0.7);
   expect(Math.abs(minX - (WORDMARK.box.width - maxX))).toBeLessThan(24);
+});
+
+test("the crop takes lettering, not empty box", () => {
+  const edge = WORDMARK.box.height * WORDMARK.visible;
+  let below = 0;
+  for (let i = 1; i < WORDMARK_DOTS.length; i += 2) {
+    if (WORDMARK_DOTS[i] > edge) below += 1;
+  }
+
+  // The point of the crop is that the letters run off the page. A mark drawn
+  // with room to spare under the baseline would clear this line and the
+  // signature would just sit above the edge like everything else.
+  expect(WORDMARK.visible).toBeGreaterThan(0.5);
+  expect(WORDMARK.visible).toBeLessThan(1);
+  expect(below).toBeGreaterThan(WORDMARK_DOTS.length / 2 / 100);
 });
 
 test("the cursor field is a real circle with a real push", () => {
@@ -52,4 +72,45 @@ test("the cursor field is a real circle with a real push", () => {
   // A push that outruns its own circle would fling dots past the edge of the
   // field and let them re-enter it, which reads as a flicker.
   expect(WORDMARK.repelStrength).toBeLessThan(WORDMARK.repelRadius);
+});
+
+test("--signature-clear still clears the signature", () => {
+  // The dock and the way back up sit at `--signature-clear` above the last
+  // pixel of the page, and the mark runs the full width of the viewport — so
+  // the number in globals.css is a fraction of `vw` derived from the box here.
+  // Regenerating the art at a new box would silently drop a control onto it.
+  const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+  const vw = css.match(/--signature-clear:\s*calc\(([\d.]+)vw/)?.[1];
+  expect(vw).toBeDefined();
+
+  const kept = (WORDMARK.box.height * WORDMARK.visible) / WORDMARK.box.width;
+  expect(Number(vw) / 100).toBeCloseTo(kept, 4);
+});
+
+test("the studio's dark preview is dimmed the same as the shipped one", () => {
+  // The theme dims the baked weight on the way to the page, and the studio has
+  // to apply the same factor or its dark preview shows a mark far heavier than
+  // the one that ships — which is the one thing the studio exists to prevent.
+  // Two files, one number, no import between them: assert they agree.
+  const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+  const dark = css.match(/\.dark\s*\{[\s\S]*?--wordmark-ink:\s*([\d.]+)/)?.[1];
+  const light = css.match(/:root\s*\{[\s\S]*?--wordmark-ink:\s*([\d.]+)/)?.[1];
+  expect(light).toBe("1");
+  expect(dark).toBeDefined();
+
+  const js = readFileSync(new URL("../tools/dither.js", import.meta.url), "utf8");
+  const studio = js.match(/THEME_INK\s*=\s*\{\s*light:\s*([\d.]+),\s*dark:\s*([\d.]+)/);
+  expect(studio?.[1]).toBe(light);
+  expect(studio?.[2]).toBe(dark);
+});
+
+test("the mark has side bearing, so it reads as running off rather than trimmed", () => {
+  let left = Infinity;
+  let right = -Infinity;
+  for (let i = 0; i < WORDMARK_DOTS.length; i += 2) {
+    if (WORDMARK_DOTS[i] < left) left = WORDMARK_DOTS[i];
+    if (WORDMARK_DOTS[i] > right) right = WORDMARK_DOTS[i];
+  }
+  expect(left).toBeGreaterThan(WORDMARK.box.width * 0.005);
+  expect(right).toBeLessThan(WORDMARK.box.width * 0.995);
 });

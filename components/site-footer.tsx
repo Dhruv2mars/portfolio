@@ -71,11 +71,8 @@ export function SiteFooter() {
         </div>
       </div>
 
+      {/* The only thing on the site that leaves the column. */}
       <SiteWordmark />
-
-      <div aria-hidden className="h-(--fade-bottom-height)" />
-
-      <div className="pb-[env(safe-area-inset-bottom,0)]" />
     </footer>
   );
 }

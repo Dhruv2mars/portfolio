@@ -12,16 +12,11 @@
         --line: #23262a;
         --ink: #e8eaed;
         --muted: #8b9198;
-      }
-      [data-theme="light"] {
-        color-scheme: light;
-        --bg: #fbfbfa;
-        --panel: #ffffff;
-        --line: #e4e4e2;
-        --ink: #17181a;
-        --muted: #6b7076;
+        --accent: #7cc4ff;
       }
       * { box-sizing: border-box; }
+      /* `label` and `.pair` set display, which outranks the UA rule for [hidden]. */
+      [hidden] { display: none !important; }
       body {
         margin: 0;
         min-height: 100vh;
@@ -29,35 +24,54 @@
         color: var(--ink);
         font: 13px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 300px;
+        grid-template-columns: minmax(0, 1fr) 320px;
       }
-      @media (max-width: 860px) { body { grid-template-columns: minmax(0, 1fr); } }
-      main { display: flex; flex-direction: column; gap: 20px; padding: 24px; min-width: 0; }
+      @media (max-width: 900px) { body { grid-template-columns: minmax(0, 1fr); } }
+      main { display: flex; flex-direction: column; gap: 18px; padding: 24px; min-width: 0; }
       h1 { font-size: 14px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
-      p { color: var(--muted); margin: 0; max-width: 62ch; }
+      p { color: var(--muted); margin: 0; max-width: 74ch; }
+
+      /* The section stage is the point of the whole tool: a rectangle exactly
+         as wide as the device you pick and exactly as tall as the footer's
+         signature section, so what you judge is what ships. */
+      .device {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+        max-width: 100%;
+        overflow-x: auto;
+      }
+      .device-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+      .device-bar .count { margin-left: auto; }
+      /* The bottom rule is the last pixel of the page: everything below it is
+         the part of the mark the viewport never shows. */
+      .section {
+        border: 1px solid var(--line);
+        border-bottom: 2px solid var(--accent);
+        flex: none;
+      }
+      .section canvas { display: block; }
+
       .stage {
         border: 1px solid var(--line);
         background: var(--panel);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
         overflow: hidden;
       }
-      canvas { display: block; width: 100%; }
-      .stage.tight { padding: 0 16px; }
+      .stage canvas { display: block; width: 100%; }
+
       aside {
         border-left: 1px solid var(--line);
         background: var(--panel);
-        padding: 20px 18px 40px;
+        padding: 20px 18px 48px;
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 16px;
         max-height: 100vh;
         overflow-y: auto;
       }
-      @media (max-width: 860px) { aside { border-left: 0; border-top: 1px solid var(--line); max-height: none; } }
-      fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+      @media (max-width: 900px) { aside { border-left: 0; border-top: 1px solid var(--line); max-height: none; } }
+      fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 11px; }
       legend {
         font-size: 10px;
         letter-spacing: 0.12em;
@@ -70,15 +84,18 @@
       .row b { font-weight: 500; }
       .row span { color: var(--muted); font-variant-numeric: tabular-nums; }
       input[type="range"] { width: 100%; accent-color: var(--ink); }
-      input[type="text"], select {
+      input[type="text"], input[type="number"], select, textarea {
         background: var(--bg);
         color: var(--ink);
         border: 1px solid var(--line);
         border-radius: 4px;
         padding: 6px 8px;
         font: inherit;
+        width: 100%;
       }
+      textarea { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
       .check { flex-direction: row; align-items: center; gap: 8px; }
+      .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
       button {
         background: var(--bg);
         color: var(--ink);
@@ -90,8 +107,12 @@
         text-align: left;
       }
       button:hover { border-color: var(--muted); }
-      .count { color: var(--muted); font-variant-numeric: tabular-nums; }
+      button:disabled { color: var(--muted); cursor: not-allowed; opacity: 0.5; }
+      button:disabled:hover { border-color: var(--line); }
+      button.wide { text-align: center; }
+      .count { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 12px; }
       .hint { font-size: 12px; color: var(--muted); }
+      .warn { color: #ffb86b; font-size: 12px; min-height: 1.2em; }
       code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
       .toast {
         position: fixed;
@@ -113,19 +134,34 @@
       <div>
         <h1>Wordmark studio</h1>
         <p>
-          Move the sliders until the dithered mark matches the drawn one, then export. The top stage
-          is the shipped size at the width you give it; the bottom stage is the same dots blown up so
-          you can see the grain. Both react to the cursor exactly as the footer does.
+          Dither a mark and export the coordinates. The ink can be text set in any typeface, or a
+          drawing you load — a wordmark from Figma or Illustrator, exported as SVG or PNG, gets read
+          the same way, so the mark need not be a typeface at all. The first stage is the
+          footer's signature section drawn at true size for the device you pick — the same width, the
+          same height, the same crop at the bottom edge — so what you judge there is what ships. The
+          second stage shows the whole box including the part that falls off the page. Both react to
+          the cursor exactly as the footer does.
         </p>
       </div>
 
-      <div class="stage tight"><canvas id="ship" title="shipped size"></canvas></div>
-      <div class="stage"><canvas id="zoom" title="detail"></canvas></div>
+      <div class="device">
+        <div class="device-bar">
+          <select id="device" title="viewport width"></select>
+          <input type="number" id="deviceWidth" min="240" max="3840" step="1" style="width: 96px" />
+          <label class="check" style="gap: 6px"><input type="checkbox" id="light" /> light</label>
+          <label class="check" style="gap: 6px"><input type="checkbox" id="fit" checked /> fit to panel</label>
+          <span class="count" id="sectionInfo"></span>
+        </div>
+        <div class="section" id="section"><canvas id="ship"></canvas></div>
+      </div>
+
+      <div class="stage"><canvas id="zoom" title="the whole box, page edge marked"></canvas></div>
 
       <p class="hint">
-        Export writes the whole of <code>lib/wordmark-dots.ts</code>. To make the checked-in file
-        reproducible from the repository, paste the preset back into <code>DEFAULTS</code> in
-        <code>tools/dither.js</code> and run <code>bun tools/gen-dots.mjs > lib/wordmark-dots.ts</code>.
+        Export writes the whole of <code>lib/wordmark-dots.ts</code>. The mark is baked to
+        coordinates, so nothing at runtime can re-letter or re-draw it — the preset in the file's
+        header is what you paste back here to pick the work up again. A preset names the artwork it
+        came from but cannot carry it, so load the image again first.
       </p>
     </main>
 
@@ -133,35 +169,138 @@
       <fieldset>
         <legend>Lettering</legend>
         <label>
+          <div class="row"><b>Ink comes from</b></div>
+          <select id="source">
+            <option value="text">text set in a typeface</option>
+            <option value="artwork">artwork — a drawn mark</option>
+          </select>
+        </label>
+        <div class="pair" id="artworkRow" hidden>
+          <button id="pickArt" type="button">Load artwork…</button>
+          <select id="artworkInk" title="which end of an opaque image is the mark">
+            <option value="dark">dark is ink</option>
+            <option value="light">light is ink</option>
+          </select>
+        </div>
+        <input type="file" id="artFile" accept="image/png,image/svg+xml,image/jpeg,image/webp" hidden />
+        <label id="textRow">
           <div class="row"><b>Text</b></div>
           <input type="text" id="text" />
         </label>
+        <label id="familyRow">
+          <div class="row"><b>Typeface</b></div>
+          <input type="text" id="family" list="families" placeholder="family name" />
+          <datalist id="families"></datalist>
+        </label>
+        <div class="pair" id="faceRow">
+          <button id="pickLocal" type="button">Installed fonts…</button>
+          <button id="pickFile" type="button">Load a file…</button>
+        </div>
+        <input type="file" id="fontFile" accept=".ttf,.otf,.woff,.woff2,font/*" hidden />
+        <label id="googleRow">
+          <div class="row"><b>Google Fonts</b></div>
+          <div class="pair">
+            <input type="text" id="googleName" placeholder="e.g. Archivo" />
+            <button id="googleLoad" type="button">Fetch</button>
+          </div>
+        </label>
+        <div class="warn" id="fontWarn"></div>
+        <label id="weightRow">
+          <div class="row"><b>Weight</b><span id="weightOut"></span></div>
+          <input type="range" id="weight" min="100" max="900" step="50" />
+        </label>
+        <label id="trackingRow">
+          <div class="row"><b>Tracking</b><span id="trackingOut"></span></div>
+          <input type="range" id="tracking" min="-0.15" max="0.4" step="0.005" />
+        </label>
+        <label id="wordSpacingRow">
+          <div class="row"><b>Word spacing</b><span id="wordSpacingOut"></span></div>
+          <input type="range" id="wordSpacing" min="-0.2" max="1" step="0.01" />
+        </label>
+        <label id="caseRow">
+          <div class="row"><b>Case</b></div>
+          <select id="transform"></select>
+        </label>
+        <label class="check" id="italicRow"><input type="checkbox" id="italic" /> italic</label>
       </fieldset>
 
-      <fieldset id="sliders"><legend>Grain</legend></fieldset>
+      <fieldset>
+        <legend>Size in the section</legend>
+        <label>
+          <div class="row"><b>Side bearing</b><span id="sideBearingOut"></span></div>
+          <input type="range" id="sideBearing" min="0" max="0.25" step="0.002" />
+        </label>
+        <label>
+          <div class="row"><b>Air above</b><span id="topAirOut"></span></div>
+          <input type="range" id="topAir" min="0" max="0.6" step="0.005" />
+        </label>
+        <label>
+          <div class="row"><b>Cut by the page edge</b><span id="cutOut"></span></div>
+          <input type="range" id="cut" min="0" max="0.5" step="0.005" />
+        </label>
+        <label>
+          <div class="row"><b>Box width</b><span id="boxWidthOut"></span></div>
+          <input type="range" id="boxWidth" min="600" max="2400" step="20" />
+        </label>
+      </fieldset>
 
       <fieldset>
-        <legend>Pattern</legend>
+        <legend>Dither</legend>
         <label>
+          <div class="row"><b>Pattern</b></div>
           <select id="pattern"></select>
         </label>
-        <label class="check"><input type="checkbox" id="stagger" /> Offset every other row</label>
+        <label>
+          <div class="row"><b>Grid spacing</b><span id="spacingOut"></span></div>
+          <input type="range" id="spacing" min="1.5" max="10" step="0.1" />
+        </label>
+        <label>
+          <div class="row"><b>Jitter</b><span id="jitterOut"></span></div>
+          <input type="range" id="jitter" min="0" max="4" step="0.1" />
+        </label>
+        <label>
+          <div class="row"><b>Density</b><span id="densityOut"></span></div>
+          <input type="range" id="density" min="0.2" max="1.6" step="0.01" />
+        </label>
+        <label>
+          <div class="row"><b>Gamma</b><span id="gammaOut"></span></div>
+          <input type="range" id="gamma" min="0.3" max="3" step="0.05" />
+        </label>
+        <label class="check"><input type="checkbox" id="stagger" /> stagger every other row</label>
       </fieldset>
 
       <fieldset>
-        <legend>Cursor</legend>
-        <div id="cursor-sliders" style="display: flex; flex-direction: column; gap: 12px"></div>
+        <legend>Dots</legend>
+        <label>
+          <div class="row"><b>Dot edge</b><span id="dotOut"></span></div>
+          <input type="range" id="dot" min="1" max="8" step="0.5" />
+        </label>
+        <label>
+          <div class="row"><b>Weight on the page</b><span id="inkOut"></span></div>
+          <input type="range" id="ink" min="0.1" max="1" step="0.01" />
+        </label>
+        <label>
+          <div class="row"><b>Cursor radius</b><span id="repelRadiusOut"></span></div>
+          <input type="range" id="repelRadius" min="0" max="320" step="5" />
+        </label>
+        <label>
+          <div class="row"><b>Cursor push</b><span id="repelStrengthOut"></span></div>
+          <input type="range" id="repelStrength" min="0" max="120" step="1" />
+        </label>
       </fieldset>
 
       <fieldset>
         <legend>Export</legend>
-        <div class="count"><span id="count">0</span> dots</div>
-        <button id="copy-ts">Copy lib/wordmark-dots.ts</button>
-        <button id="copy-json">Copy coordinates as JSON</button>
-        <button id="copy-preset">Copy preset</button>
-        <button id="download">Download dots.json</button>
-        <button id="reset">Reset to shipped preset</button>
-        <button id="theme">Flip light / dark</button>
+        <div class="count" id="count"></div>
+        <button id="download" class="wide" type="button">Download lib/wordmark-dots.ts</button>
+        <button id="copy" class="wide" type="button">Copy the file to the clipboard</button>
+        <button id="copyPreset" class="wide" type="button">Copy the preset</button>
+        <label>
+          <div class="row"><b>Load a preset</b></div>
+          <textarea id="presetIn" rows="3" placeholder='{"text":"dhruv2mars", …}'></textarea>
+        </label>
+        <button id="presetLoad" class="wide" type="button">Apply it</button>
+        <button id="reset" class="wide" type="button">Back to defaults</button>
       </fieldset>
     </aside>
 
@@ -169,226 +308,820 @@
 
     <script src="dither.js"></script>
     <script>
-      const SLIDERS = [
-        { key: "stroke", label: "Stroke weight", min: 4, max: 40, step: 0.5 },
-        { key: "softness", label: "Edge softness", min: 0.5, max: 14, step: 0.5 },
-        { key: "spacing", label: "Grid spacing", min: 1.5, max: 12, step: 0.5 },
-        { key: "jitter", label: "Jitter", min: 0, max: 4, step: 0.1 },
-        { key: "density", label: "Density", min: 0.1, max: 1, step: 0.01 },
-        { key: "gamma", label: "Gamma", min: 0.2, max: 3, step: 0.05 },
-        { key: "dot", label: "Dot size", min: 0.5, max: 8, step: 0.1 },
-      ];
-      const CURSOR_SLIDERS = [
-        { key: "repelRadius", label: "Circle radius", min: 10, max: 320, step: 2 },
-        { key: "repelStrength", label: "Push at centre", min: 0, max: 120, step: 1 },
-      ];
-
       const preset = { ...Dither.DEFAULTS };
-      let result = Dither.build(preset);
 
-      const els = {};
-      function mountSliders(host, specs) {
-        for (const spec of specs) {
-          const label = document.createElement("label");
-          label.innerHTML =
-            `<div class="row"><b>${spec.label}</b><span></span></div>` +
-            `<input type="range" min="${spec.min}" max="${spec.max}" step="${spec.step}">`;
-          const input = label.querySelector("input");
-          const value = label.querySelector("span");
-          input.value = preset[spec.key];
-          value.textContent = preset[spec.key];
-          input.addEventListener("input", () => {
-            preset[spec.key] = Number(input.value);
-            value.textContent = input.value;
-            rebuild();
-          });
-          els[spec.key] = { input, value };
-          host.appendChild(label);
-        }
-      }
-      mountSliders(document.getElementById("sliders"), SLIDERS);
-      mountSliders(document.getElementById("cursor-sliders"), CURSOR_SLIDERS);
+      /* One offscreen canvas rasterises the text; its alpha channel is the
+         coverage field the engine dithers. Going through a real rasteriser
+         rather than hand-drawn outlines is what lets any installed, uploaded or
+         fetched typeface be the signature. */
+      const mask = document.createElement("canvas");
+      const maskCtx = mask.getContext("2d", { willReadFrequently: true });
+      /* Tall enough that a dither cell covers many mask pixels, so coverage is
+         a real average rather than a hit test on one sample. */
+      const MASK_HEIGHT = 640;
 
-      const textInput = document.getElementById("text");
-      textInput.value = preset.text;
-      textInput.addEventListener("input", () => {
-        preset.text = textInput.value;
-        rebuild();
-      });
+      let alpha = null;
+      let bbox = null;
+      let box = { width: 1400, height: 200 };
+      let visible = 1;
+      let inkOrigin = { x: 0, y: 0, pxPerUnit: 1 };
+      let dots = [];
 
-      const patternSelect = document.getElementById("pattern");
-      for (const name of Dither.PATTERNS) {
-        const option = document.createElement("option");
-        option.value = option.textContent = name;
-        patternSelect.appendChild(option);
-      }
-      patternSelect.value = preset.pattern;
-      patternSelect.addEventListener("change", () => {
-        preset.pattern = patternSelect.value;
-        rebuild();
-      });
-
-      const staggerBox = document.getElementById("stagger");
-      staggerBox.checked = preset.stagger;
-      staggerBox.addEventListener("change", () => {
-        preset.stagger = staggerBox.checked;
-        rebuild();
-      });
-
-      /* Two views of one dot set. Each keeps its own eased positions so the
-         cursor pushes both stages at once and neither snaps. */
-      function makeStage(canvas, heightFor) {
-        const ctx = canvas.getContext("2d");
-        let rest = new Float32Array(0);
-        let cur = new Float32Array(0);
-        let scale = 1;
-        let dpr = 1;
-        let client = null;
-        let raf = 0;
-
-        function measure() {
-          dpr = Math.min(window.devicePixelRatio || 1, 2);
-          const cssWidth = canvas.parentElement.clientWidth - 2;
-          const cssHeight = heightFor(cssWidth);
-          canvas.style.height = cssHeight + "px";
-          canvas.width = Math.round(cssWidth * dpr);
-          canvas.height = Math.round(cssHeight * dpr);
-
-          const box = result.box;
-          scale = Math.min(canvas.width / box.width, canvas.height / box.height);
-          const ox = (canvas.width - box.width * scale) / 2;
-          const oy = (canvas.height - box.height * scale) / 2;
-          rest = new Float32Array(result.dots.length);
-          for (let i = 0; i < result.dots.length; i += 2) {
-            rest[i] = ox + result.dots[i] * scale;
-            rest[i + 1] = oy + result.dots[i + 1] * scale;
-          }
-          cur = Float32Array.from(rest);
-          draw();
-        }
-
-        function draw() {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = getComputedStyle(document.body).color;
-          const size = Math.max(1, preset.dot * scale);
-          const half = size / 2;
-          for (let i = 0; i < cur.length; i += 2) ctx.fillRect(cur[i] - half, cur[i + 1] - half, size, size);
-        }
-
-        function frame() {
-          const rect = canvas.getBoundingClientRect();
-          const p = client
-            ? { x: (client.x - rect.left) * dpr, y: (client.y - rect.top) * dpr }
-            : null;
-          const radius = preset.repelRadius * scale;
-          const strength = preset.repelStrength * scale;
-          let moving = false;
-
-          for (let i = 0; i < rest.length; i += 2) {
-            let tx = rest[i];
-            let ty = rest[i + 1];
-            if (p && radius > 0) {
-              const dx = tx - p.x;
-              const dy = ty - p.y;
-              const d = Math.hypot(dx, dy);
-              if (d < radius) {
-                const t = 1 - d / radius;
-                const push = strength * t * t * t;
-                if (d > 0.001) {
-                  tx += (dx / d) * push;
-                  ty += (dy / d) * push;
-                } else ty -= push;
-              }
-            }
-            cur[i] += (tx - cur[i]) * 0.22;
-            cur[i + 1] += (ty - cur[i + 1]) * 0.22;
-            if (!moving && (Math.abs(cur[i] - tx) > 0.05 || Math.abs(cur[i + 1] - ty) > 0.05)) moving = true;
-          }
-
-          draw();
-          raf = moving ? requestAnimationFrame(frame) : 0;
-        }
-
-        function kick() {
-          if (!raf) raf = requestAnimationFrame(frame);
-        }
-
-        window.addEventListener("pointermove", (event) => {
-          client = { x: event.clientX, y: event.clientY };
-          kick();
-        });
-        document.addEventListener("pointerleave", () => {
-          client = null;
-          kick();
-        });
-        new ResizeObserver(measure).observe(canvas.parentElement);
-
-        return { measure, draw };
-      }
-
-      const stages = [
-        makeStage(document.getElementById("ship"), (w) => Math.min(80, (w * 148) / 1410)),
-        makeStage(document.getElementById("zoom"), (w) => Math.round((w * 148) / 1410)),
-      ];
-
-      function rebuild() {
-        result = Dither.build(preset);
-        document.getElementById("count").textContent = result.dots.length / 2;
-        for (const stage of stages) stage.measure();
-      }
-      rebuild();
-
-      function toast(message) {
-        const node = document.getElementById("toast");
+      const el = (id) => document.getElementById(id);
+      const toast = (message) => {
+        const node = el("toast");
         node.textContent = message;
         node.classList.add("on");
-        clearTimeout(node.dataset.timer);
-        node.dataset.timer = setTimeout(() => node.classList.remove("on"), 1400);
+        clearTimeout(toast.timer);
+        toast.timer = setTimeout(() => node.classList.remove("on"), 1400);
+      };
+      const warn = (message) => {
+        el("fontWarn").textContent = message || "";
+      };
+
+      /** The loaded drawing, when the mark is art rather than type. */
+      let artwork = null;
+
+      const shaped = () => {
+        if (preset.transform === "lowercase") return preset.text.toLowerCase();
+        if (preset.transform === "uppercase") return preset.text.toUpperCase();
+        return preset.text;
+      };
+      const fontString = (size) =>
+        `${preset.italic ? "italic " : ""}${preset.weight} ${size}px "${preset.family}", sans-serif`;
+
+      /* Rasterise once to find the em size that lands the ink at MASK_HEIGHT,
+         then again at that size — the tight bounding box of the result is the
+         lockup, and everything downstream is a fraction of it. */
+      function raster() {
+        if (preset.source === "artwork") return rasterArtwork();
+        const text = shaped();
+        if (!text.trim()) {
+          alpha = null;
+          return;
+        }
+
+        const probe = 200;
+        maskCtx.font = fontString(probe);
+        const metrics = measure(text, probe);
+        if (!metrics.height) {
+          alpha = null;
+          return;
+        }
+
+        const size = Math.max(24, Math.min(1400, (probe * MASK_HEIGHT) / metrics.height));
+        const final = measure(text, size);
+        if (!final.width || !final.height) {
+          alpha = null;
+          return;
+        }
+
+        const pad = 8;
+        mask.width = Math.ceil(final.width) + pad * 2;
+        mask.height = Math.ceil(final.height) + pad * 2;
+        applyFont(size);
+        maskCtx.clearRect(0, 0, mask.width, mask.height);
+        maskCtx.fillStyle = "#fff";
+        maskCtx.textBaseline = "alphabetic";
+        maskCtx.fillText(text, pad + final.left, pad + final.ascent);
+
+        const data = maskCtx.getImageData(0, 0, mask.width, mask.height).data;
+        alpha = new Uint8Array(mask.width * mask.height);
+        for (let i = 0; i < alpha.length; i++) alpha[i] = data[i * 4 + 3];
+        bbox = tighten();
       }
+
+      /* The same job as `raster`, from a picture instead of a string.
+         Transparent artwork carries its own coverage in the alpha channel; a
+         flat JPEG or an opaque PNG has none, so the ink is read off brightness
+         and `artworkInk` says which end of it is the mark. Either way what
+         comes out is one byte of coverage per pixel, which is all the dither
+         ever wanted. */
+      function rasterArtwork() {
+        if (!artwork || !artwork.naturalWidth) {
+          alpha = null;
+          return;
+        }
+
+        const scale = MASK_HEIGHT / artwork.naturalHeight;
+        const pad = 8;
+        mask.width = Math.max(1, Math.round(artwork.naturalWidth * scale)) + pad * 2;
+        mask.height = MASK_HEIGHT + pad * 2;
+        maskCtx.clearRect(0, 0, mask.width, mask.height);
+        maskCtx.drawImage(artwork, pad, pad, mask.width - pad * 2, mask.height - pad * 2);
+
+        const data = maskCtx.getImageData(0, 0, mask.width, mask.height).data;
+        alpha = new Uint8Array(mask.width * mask.height);
+
+        /* Ask the drawn area only. The pad ring around it is transparent by
+           construction, and counting it would say every flat JPEG has an alpha
+           channel — which reads its white background as solid ink. */
+        let transparent = false;
+        for (let y = pad; y < mask.height - pad && !transparent; y++) {
+          const row = y * mask.width;
+          for (let x = pad; x < mask.width - pad; x++) {
+            if (data[(row + x) * 4 + 3] < 250) { transparent = true; break; }
+          }
+        }
+        for (let i = 0; i < alpha.length; i++) {
+          const o = i * 4;
+          if (transparent) {
+            alpha[i] = data[o + 3];
+            continue;
+          }
+          const lum = (data[o] * 0.299 + data[o + 1] * 0.587 + data[o + 2] * 0.114) | 0;
+          alpha[i] = preset.artworkInk === "light" ? lum : 255 - lum;
+        }
+
+        /* Reading ink off brightness makes the pad ring around an opaque image
+           look like ink, and the antialiased row where the picture meets it
+           looks like half of it — a rectangle traced around the whole mark.
+           Nothing outside the picture is part of the mark, so cut it. */
+        if (!transparent) {
+          const inset = pad + 1;
+          for (let y = 0; y < mask.height; y++) {
+            const row = y * mask.width;
+            const outside = y < inset || y >= mask.height - inset;
+            for (let x = 0; x < mask.width; x++) {
+              if (outside || x < inset || x >= mask.width - inset) alpha[row + x] = 0;
+            }
+          }
+        }
+        bbox = tighten();
+      }
+
+      function pickArtwork(file) {
+        const url = URL.createObjectURL(file);
+        const image = new Image();
+        image.onload = () => {
+          artwork = image;
+          preset.source = "artwork";
+          preset.artworkName = file.name;
+          el("source").value = "artwork";
+          lettering();
+          warn(`Dithering ${file.name} — ${image.naturalWidth} × ${image.naturalHeight}.`);
+          rebuild();
+        };
+        image.onerror = () => warn(`That image would not open: ${file.name}`);
+        image.src = url;
+      }
+
+      function applyFont(size) {
+        maskCtx.font = fontString(size);
+        // Chrome and Safari 17 honour these; older engines simply ignore them.
+        maskCtx.letterSpacing = `${preset.tracking}em`;
+        maskCtx.wordSpacing = `${preset.wordSpacing}em`;
+      }
+
+      function measure(text, size) {
+        applyFont(size);
+        const m = maskCtx.measureText(text);
+        const left = m.actualBoundingBoxLeft;
+        const right = m.actualBoundingBoxRight;
+        const ascent = m.actualBoundingBoxAscent;
+        const descent = m.actualBoundingBoxDescent;
+        return {
+          width: left + right,
+          height: ascent + descent,
+          left,
+          ascent,
+        };
+      }
+
+      /** The reported bounds are generous; trim to the pixels that carry ink. */
+      function tighten() {
+        let x0 = mask.width;
+        let y0 = mask.height;
+        let x1 = -1;
+        let y1 = -1;
+        for (let y = 0; y < mask.height; y++) {
+          const row = y * mask.width;
+          for (let x = 0; x < mask.width; x++) {
+            if (alpha[row + x] < 8) continue;
+            if (x < x0) x0 = x;
+            if (x > x1) x1 = x;
+            if (y < y0) y0 = y;
+            if (y > y1) y1 = y;
+          }
+        }
+        if (x1 < x0 || y1 < y0) return null;
+        return { x0, y0, width: x1 - x0 + 1, height: y1 - y0 + 1 };
+      }
+
+      /* Where the lockup sits inside the box, and where the page ends. The box
+         is always `boxWidth` units across because the mark always spans the
+         viewport, so the dither sliders keep their meaning across typefaces. */
+      function layout() {
+        if (!bbox) return;
+        const pxPerUnit = (bbox.width * (1 + 2 * preset.sideBearing)) / preset.boxWidth;
+        const height = (bbox.height * (1 + preset.topAir)) / pxPerUnit;
+        box = { width: preset.boxWidth, height: Math.round(height) };
+        inkOrigin = {
+          x: bbox.x0 - (preset.sideBearing * bbox.width),
+          y: bbox.y0 - (preset.topAir * bbox.height),
+          pxPerUnit,
+        };
+        const edge = (preset.topAir * bbox.height + bbox.height * (1 - preset.cut)) / pxPerUnit;
+        visible = Math.min(1, Math.max(0.05, edge / box.height));
+      }
+
+      /** Mean ink over a cell's footprint, in box units. */
+      function coverageAt(x, y) {
+        const px = inkOrigin.x + x * inkOrigin.pxPerUnit;
+        const py = inkOrigin.y + y * inkOrigin.pxPerUnit;
+        const span = preset.spacing * inkOrigin.pxPerUnit;
+        const steps = Math.max(1, Math.min(4, Math.round(span / 2)));
+        const step = span / steps;
+        const start = -span / 2 + step / 2;
+
+        let total = 0;
+        for (let sy = 0; sy < steps; sy++) {
+          const my = Math.round(py + start + sy * step);
+          if (my < 0 || my >= mask.height) continue;
+          const row = my * mask.width;
+          for (let sx = 0; sx < steps; sx++) {
+            const mx = Math.round(px + start + sx * step);
+            if (mx < 0 || mx >= mask.width) continue;
+            total += alpha[row + mx];
+          }
+        }
+        return total / (steps * steps * 255);
+      }
+
+      /* Export writes over the file the site imports. A run with no dots in it
+         would replace the mark with nothing, so the buttons only work when
+         there is something to export. */
+      function allowExport() {
+        const ok = dots.length > 0;
+        el("download").disabled = !ok;
+        el("copy").disabled = !ok;
+      }
+
+      function rebuild() {
+        raster();
+        if (!alpha || !bbox) {
+          dots = [];
+          el("count").textContent = preset.source === "artwork"
+            ? "nothing to draw — load an image, or try the other end of `dark is ink`"
+            : "nothing to draw — check the text and the typeface";
+          allowExport();
+          render();
+          return;
+        }
+        layout();
+        dots = Dither.ditherField(coverageAt, box, preset);
+        el("count").textContent = `${dots.length / 2} dots · box ${box.width} × ${box.height} · ${(visible * 100).toFixed(1)}% above the edge`;
+        allowExport();
+        render();
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Stages                                                              */
+      /* ------------------------------------------------------------------ */
+
+      const PAGE = { light: "#fbfbfa", dark: "#08090a" };
+      const INKC = { light: "#17181a", dark: "#e8eaed" };
+
+      /** The footer pads the mark deeply below `sm` so the dock has somewhere to land. */
+      const topPadFor = (width) => (width < 640 ? 80 : 32);
+
+      function makeStage(canvas, plan) {
+        let pointer = null;
+        let current = null;
+        let frame = 0;
+        let live = null;
+
+        const paint = () => {
+          const p = live;
+          if (!p) return;
+          const ctx = canvas.getContext("2d");
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          if (p.background) {
+            ctx.fillStyle = p.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          }
+          const theme = el("light").checked ? "light" : "dark";
+          Dither.paint(ctx, current || dots, {
+            scale: p.scale,
+            offsetX: p.offsetX,
+            offsetY: p.offsetY,
+            dot: preset.dot,
+            /* The theme dims the baked weight on the way to the page, so a
+               preview that skipped the factor would show a dark mark far
+               heavier than the one that ships. */
+            ink: preset.ink * Dither.THEME_INK[theme],
+            color: INKC[theme],
+          });
+          if (p.edge != null) {
+            ctx.strokeStyle = "#7cc4ff";
+            ctx.setLineDash([6, 5]);
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, p.edge + 0.5);
+            ctx.lineTo(canvas.width, p.edge + 0.5);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+        };
+
+        /* The same cubic falloff the site uses, resolved straight to the rest
+           position rather than eased — the studio wants to answer "how big is
+           the hole", and easing only delays the answer. */
+        const settle = () => {
+          frame = 0;
+          const p = live;
+          if (!p) return;
+          if (!pointer || !preset.repelRadius || !preset.repelStrength) {
+            current = null;
+            paint();
+            return;
+          }
+          const radius = preset.repelRadius * p.scale;
+          const strength = preset.repelStrength * p.scale;
+          current = new Float32Array(dots.length);
+          for (let i = 0; i < dots.length; i += 2) {
+            const x = p.offsetX + dots[i] * p.scale;
+            const y = p.offsetY + dots[i + 1] * p.scale;
+            const dx = x - pointer.x;
+            const dy = y - pointer.y;
+            const d = Math.hypot(dx, dy);
+            let ox = 0;
+            let oy = 0;
+            if (d < radius) {
+              const t = 1 - d / radius;
+              const push = strength * t * t * t;
+              if (d > 0.001) {
+                ox = (dx / d) * push;
+                oy = (dy / d) * push;
+              } else {
+                oy = -push;
+              }
+            }
+            current[i] = (x + ox - p.offsetX) / p.scale;
+            current[i + 1] = (y + oy - p.offsetY) / p.scale;
+          }
+          paint();
+        };
+
+        canvas.addEventListener("pointermove", (event) => {
+          const rect = canvas.getBoundingClientRect();
+          const dpr = canvas.width / rect.width;
+          pointer = { x: (event.clientX - rect.left) * dpr, y: (event.clientY - rect.top) * dpr };
+          if (!frame) frame = requestAnimationFrame(settle);
+        });
+        canvas.addEventListener("pointerleave", () => {
+          pointer = null;
+          if (!frame) frame = requestAnimationFrame(settle);
+        });
+
+        return () => {
+          live = plan(canvas);
+          if (!live) return;
+          pointer = null;
+          current = null;
+          paint();
+        };
+      }
+
+      const dpr = () => Math.min(window.devicePixelRatio || 1, 2);
+
+      /* The shipped section, at true device size: the same width, the same top
+         pad, and the same aspect-driven crop the site computes. */
+      const drawShip = makeStage(el("ship"), (canvas) => {
+        const width = preset.deviceWidth || 1440;
+        const pad = topPadFor(width);
+        const markHeight = (width * box.height * visible) / box.width;
+        const height = pad + markHeight;
+
+        const panel = canvas.parentElement.parentElement.clientWidth || width;
+        const zoom = el("fit").checked ? Math.min(1, panel / width) : 1;
+        const ratio = dpr();
+
+        canvas.style.width = `${width * zoom}px`;
+        canvas.style.height = `${height * zoom}px`;
+        canvas.width = Math.round(width * zoom * ratio);
+        canvas.height = Math.round(height * zoom * ratio);
+
+        el("sectionInfo").textContent =
+          `${Math.round(width)} × ${Math.round(height)} css px · mark ${markHeight.toFixed(1)}px tall · blue rule is the page edge · shown at ${Math.round(zoom * 100)}%`;
+
+        const scale = canvas.width / box.width;
+        return {
+          scale,
+          offsetX: 0,
+          offsetY: pad * zoom * ratio,
+          background: PAGE[el("light").checked ? "light" : "dark"],
+          edge: null,
+        };
+      });
+
+      /* The whole box, including what the page cuts off, with the edge marked. */
+      const drawZoom = makeStage(el("zoom"), (canvas) => {
+        const width = canvas.parentElement.clientWidth;
+        const ratio = dpr();
+        const height = (width * box.height) / box.width;
+        canvas.style.height = `${height}px`;
+        canvas.width = Math.round(width * ratio);
+        canvas.height = Math.round(height * ratio);
+        const scale = canvas.width / box.width;
+        return {
+          scale,
+          offsetX: 0,
+          offsetY: 0,
+          background: PAGE[el("light").checked ? "light" : "dark"],
+          edge: Math.round(box.height * visible * scale),
+        };
+      });
+
+      function render() {
+        drawShip();
+        drawZoom();
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Controls                                                            */
+      /* ------------------------------------------------------------------ */
+
+      const SLIDERS = [
+        ["weight", (v) => v],
+        ["tracking", (v) => `${v > 0 ? "+" : ""}${v.toFixed(3)}em`],
+        ["wordSpacing", (v) => `${v.toFixed(2)}em`],
+        ["sideBearing", (v) => `${(v * 100).toFixed(1)}% of the ink`],
+        ["topAir", (v) => `${(v * 100).toFixed(1)}% of the ink`],
+        ["cut", (v) => `${(v * 100).toFixed(1)}% below the edge`],
+        ["boxWidth", (v) => `${v} units`],
+        ["spacing", (v) => v.toFixed(1)],
+        ["jitter", (v) => v.toFixed(1)],
+        ["density", (v) => v.toFixed(2)],
+        ["gamma", (v) => v.toFixed(2)],
+        ["dot", (v) => v.toFixed(1)],
+        ["ink", (v) => `${(v * 100).toFixed(0)}%`],
+        ["repelRadius", (v) => `${v} units`],
+        ["repelStrength", (v) => `${v} units`],
+      ];
+      const CHECKS = ["italic", "stagger"];
+      const SELECTS = ["source", "artworkInk"];
+      const TEXTS = ["text", "family"];
+
+      const DEVICES = [
+        ["iPhone SE", 375],
+        ["iPhone 15", 393],
+        ["iPhone 15 Pro Max", 430],
+        ["iPad portrait", 768],
+        ["iPad landscape", 1024],
+        ["Laptop", 1440],
+        ["Desktop", 1920],
+        ["Wide", 2560],
+      ];
+
+      function fill() {
+        for (const [id, format] of SLIDERS) {
+          const input = el(id);
+          input.value = preset[id];
+          el(`${id}Out`).textContent = format(Number(input.value));
+        }
+        for (const id of CHECKS) el(id).checked = Boolean(preset[id]);
+        for (const id of TEXTS) el(id).value = preset[id];
+        el("pattern").value = preset.pattern;
+        el("transform").value = preset.transform;
+        for (const id of SELECTS) el(id).value = preset[id];
+        lettering();
+        el("deviceWidth").value = preset.deviceWidth;
+        el("device").value = String(preset.deviceWidth);
+      }
+
+      /* Only one source is live at a time, and half these controls mean nothing
+         to the other one. Hide rather than disable: a greyed-out typeface field
+         still reads as something you forgot to set. */
+      function lettering() {
+        const art = preset.source === "artwork";
+        el("artworkRow").hidden = !art;
+        for (const id of ["textRow", "familyRow", "faceRow", "googleRow",
+                          "weightRow", "trackingRow", "wordSpacingRow",
+                          "caseRow", "italicRow"]) {
+          el(id).hidden = art;
+        }
+      }
+
+      function wire() {
+        for (const [id, format] of SLIDERS) {
+          el(id).addEventListener("input", (event) => {
+            preset[id] = Number(event.target.value);
+            el(`${id}Out`).textContent = format(preset[id]);
+            rebuild();
+          });
+        }
+        for (const id of CHECKS) {
+          el(id).addEventListener("change", (event) => {
+            preset[id] = event.target.checked;
+            rebuild();
+          });
+        }
+        for (const id of TEXTS) {
+          el(id).addEventListener("input", (event) => {
+            preset[id] = event.target.value;
+            rebuild();
+          });
+        }
+        for (const id of SELECTS) {
+          el(id).addEventListener("change", (event) => {
+            preset[id] = event.target.value;
+            lettering();
+            rebuild();
+          });
+        }
+        el("pattern").addEventListener("change", (event) => {
+          preset.pattern = event.target.value;
+          rebuild();
+        });
+        el("transform").addEventListener("change", (event) => {
+          preset.transform = event.target.value;
+          rebuild();
+        });
+
+        el("device").addEventListener("change", (event) => {
+          preset.deviceWidth = Number(event.target.value);
+          el("deviceWidth").value = preset.deviceWidth;
+          render();
+        });
+        el("deviceWidth").addEventListener("input", (event) => {
+          preset.deviceWidth = Number(event.target.value) || 1440;
+          render();
+        });
+        el("light").addEventListener("change", render);
+        el("fit").addEventListener("change", render);
+        window.addEventListener("resize", render);
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Typefaces                                                           */
+      /* ------------------------------------------------------------------ */
+
+      const SUGGESTED = [
+        "Inter", "Helvetica Neue", "Arial", "Archivo", "Archivo Black", "Anton", "Bebas Neue",
+        "Futura", "Avenir Next", "Poppins", "Montserrat", "Space Grotesk", "Syne", "Outfit",
+        "Georgia", "Times New Roman", "Playfair Display", "Instrument Serif", "Bodoni Moda",
+        "Menlo", "SF Mono", "JetBrains Mono", "IBM Plex Mono", "Courier New",
+      ];
+
+      function suggest(names) {
+        const list = el("families");
+        list.innerHTML = "";
+        for (const name of names) {
+          const option = document.createElement("option");
+          option.value = name;
+          list.appendChild(option);
+        }
+      }
+
+      async function pickLocal() {
+        if (!window.queryLocalFonts) {
+          warn("This browser has no Local Font Access. Load a font file, or fetch one from Google Fonts.");
+          return;
+        }
+        try {
+          const fonts = await window.queryLocalFonts();
+          const families = [...new Set(fonts.map((font) => font.family))].sort();
+          suggest(families);
+          warn(`${families.length} installed families are in the Typeface list.`);
+        } catch (error) {
+          warn(`Could not read installed fonts: ${error.message}`);
+        }
+      }
+
+      function pickFile(file) {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          try {
+            const name = file.name.replace(/\.[^.]+$/, "");
+            const face = new FontFace(name, reader.result);
+            await face.load();
+            document.fonts.add(face);
+            preset.family = name;
+            el("family").value = name;
+            suggest([name, ...SUGGESTED]);
+            warn(`Loaded ${name}.`);
+            rebuild();
+          } catch (error) {
+            warn(`That file would not load: ${error.message}`);
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      }
+
+      /* Google Fonts rejects an axis range the family does not have — asking a
+         static face for `wght@100..900` is a 400, and a variable one only
+         answers to its own range. There is no way to know that range without
+         asking, so ask in order and keep the first spec that comes back. */
+      const AXES = [
+        "ital,wght@0,100..900;1,100..900",
+        "wght@100..900",
+        "ital,wght@0,200..900;1,200..900",
+        "wght@200..900",
+        "ital,wght@0,300..900;1,300..900",
+        "wght@300..900",
+        "ital,wght@0,400..900;1,400..900",
+        "wght@400..900",
+        "ital,wght@0,300..700;1,300..700",
+        "wght@300..700",
+        "ital,wght@0,400;1,400",
+        "",
+      ];
+
+      /** How wide the word sets right now, used to prove a face actually took. */
+      function probeWidth(family) {
+        const probe = document.createElement("canvas").getContext("2d");
+        probe.font = `${preset.weight} 100px "${family}", monospace`;
+        return probe.measureText(preset.text || "dhruv2mars").width;
+      }
+
+      async function fetchGoogle(name) {
+        if (!name.trim()) return;
+        const family = name.trim();
+        const encoded = encodeURIComponent(family).replace(/%20/g, "+");
+        const before = probeWidth(family);
+        warn(`Fetching ${family}…`);
+
+        /* `fetch` is not available here — the studio runs off the filesystem and
+           a null origin cannot read a cross-origin response. A stylesheet link
+           is not held to that, and it reports a rejected spec by firing
+           `error`, which is the whole signal needed. */
+        let ok = false;
+        for (const axis of AXES) {
+          const href = `https://fonts.googleapis.com/css2?family=${encoded}${axis ? ":" + axis : ""}&display=swap`;
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = href;
+          ok = await new Promise((resolve) => {
+            link.addEventListener("load", () => resolve(true), { once: true });
+            link.addEventListener("error", () => resolve(false), { once: true });
+            document.head.appendChild(link);
+          });
+          if (ok) break;
+          link.remove();
+        }
+        if (!ok) {
+          warn(`Google Fonts has no family called ${family}.`);
+          return;
+        }
+
+        try {
+          await document.fonts.load(`${preset.weight} 100px "${family}"`);
+          await document.fonts.ready;
+        } catch (error) {
+          warn(`${family} arrived but would not load: ${error.message}`);
+          return;
+        }
+
+        /* A face that never arrived measures exactly like the fallback did, and
+           the dither would quietly be of some other typeface entirely. */
+        if (probeWidth(family) === before && !document.fonts.check(`${preset.weight} 100px "${family}"`)) {
+          warn(`${family} did not take — the page is still setting the fallback.`);
+          return;
+        }
+
+        preset.family = family;
+        el("family").value = family;
+        suggest([family, ...SUGGESTED]);
+        warn(`Loaded ${family}.`);
+        rebuild();
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Export                                                              */
+      /* ------------------------------------------------------------------ */
+
+      const result = () => ({ box, preset, dots, visible: Number(visible.toFixed(4)) });
+
+      function moduleText() {
+        return Dither.toModule(result());
+      }
+
+      function download() {
+        const blob = new Blob([moduleText()], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "wordmark-dots.ts";
+        link.click();
+        URL.revokeObjectURL(url);
+        toast("Downloaded. Move it to lib/wordmark-dots.ts.");
+      }
+
       async function copy(text, message) {
         try {
           await navigator.clipboard.writeText(text);
           toast(message);
         } catch {
-          window.prompt("Copy failed — take it from here:", text);
+          const area = document.createElement("textarea");
+          area.value = text;
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand("copy");
+          area.remove();
+          toast(message);
         }
       }
 
-      document.getElementById("copy-ts").addEventListener("click", () =>
-        copy(Dither.toModule(result), "lib/wordmark-dots.ts copied"),
-      );
-      document.getElementById("copy-json").addEventListener("click", () =>
-        copy(JSON.stringify(result.dots), "coordinates copied"),
-      );
-      document.getElementById("copy-preset").addEventListener("click", () =>
-        copy(JSON.stringify(result.preset, null, 2), "preset copied"),
-      );
-      document.getElementById("download").addEventListener("click", () => {
-        const blob = new Blob([JSON.stringify({ box: result.box, preset: result.preset, dots: result.dots })], {
-          type: "application/json",
-        });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "dots.json";
-        link.click();
-        URL.revokeObjectURL(link.href);
-      });
-      document.getElementById("reset").addEventListener("click", () => {
-        Object.assign(preset, Dither.DEFAULTS);
-        textInput.value = preset.text;
-        patternSelect.value = preset.pattern;
-        staggerBox.checked = preset.stagger;
-        for (const key of Object.keys(els)) {
-          els[key].input.value = preset[key];
-          els[key].value.textContent = preset[key];
+      /* Presets get pasted in from a file header, so they arrive unchecked.
+         A key whose type does not match the default it replaces is at best
+         ignored and at worst fatal — `spacing` at zero or below makes the
+         dither grid infinite and hangs the tab with no way back. Say which key
+         is wrong rather than dying on it. */
+      function wrong(next) {
+        if (!next || typeof next !== "object" || Array.isArray(next)) return "not an object";
+        for (const [key, value] of Object.entries(next)) {
+          const want = Dither.DEFAULTS[key];
+          if (want === undefined) continue;
+          if (typeof value !== typeof want) return `${key} should be a ${typeof want}`;
+          if (typeof want === "number" && !Number.isFinite(value)) return `${key} is not a number`;
         }
+        if (next.spacing !== undefined && next.spacing <= 0) return "spacing has to be above zero";
+        if (next.boxWidth !== undefined && next.boxWidth <= 0) return "boxWidth has to be above zero";
+        return "";
+      }
+
+      function applyPreset(raw) {
+        let next;
+        try {
+          next = JSON.parse(raw);
+        } catch (error) {
+          toast(`That is not a preset: ${error.message}`);
+          return;
+        }
+        const bad = wrong(next);
+        if (bad) {
+          toast(`That preset is not usable: ${bad}`);
+          return;
+        }
+        Object.assign(preset, next);
+        fill();
         rebuild();
-      });
-      document.getElementById("theme").addEventListener("click", () => {
-        const light = document.documentElement.dataset.theme === "light";
-        document.documentElement.dataset.theme = light ? "dark" : "light";
-        for (const stage of stages) stage.draw();
-      });
+        toast("Preset applied.");
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Boot                                                                */
+      /* ------------------------------------------------------------------ */
+
+      function boot() {
+        preset.deviceWidth = 1440;
+
+        for (const name of Dither.PATTERNS) {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          el("pattern").appendChild(option);
+        }
+        for (const name of Dither.TRANSFORMS) {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          el("transform").appendChild(option);
+        }
+        for (const [label, width] of DEVICES) {
+          const option = document.createElement("option");
+          option.value = String(width);
+          option.textContent = `${label} — ${width}`;
+          el("device").appendChild(option);
+        }
+        suggest(SUGGESTED);
+
+        fill();
+        wire();
+
+        el("pickLocal").addEventListener("click", pickLocal);
+        el("pickArt").addEventListener("click", () => el("artFile").click());
+        el("artFile").addEventListener("change", (event) => {
+          if (event.target.files[0]) pickArtwork(event.target.files[0]);
+        });
+        el("pickFile").addEventListener("click", () => el("fontFile").click());
+        el("fontFile").addEventListener("change", (event) => {
+          if (event.target.files[0]) pickFile(event.target.files[0]);
+        });
+        el("googleLoad").addEventListener("click", () => fetchGoogle(el("googleName").value));
+        el("googleName").addEventListener("keydown", (event) => {
+          if (event.key === "Enter") fetchGoogle(el("googleName").value);
+        });
+
+        el("download").addEventListener("click", download);
+        el("copy").addEventListener("click", () => copy(moduleText(), "The whole file is on the clipboard."));
+        el("copyPreset").addEventListener("click", () =>
+          copy(JSON.stringify(preset), "Preset copied."),
+        );
+        el("presetLoad").addEventListener("click", () => applyPreset(el("presetIn").value));
+        el("reset").addEventListener("click", () => {
+          Object.assign(preset, Dither.DEFAULTS, { deviceWidth: preset.deviceWidth });
+          fill();
+          rebuild();
+        });
+
+        document.fonts.ready.then(rebuild);
+        rebuild();
+      }
+
+      boot();
     </script>
   </body>
 </html>

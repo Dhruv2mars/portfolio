@@ -60,26 +60,51 @@ carries the filtered number rather than starting wrong and correcting itself.
 **Chrome is the same on every route.** A header that keeps the mark and, above `sm`, the nav and the
 palette trigger; below `sm` a floating dock that carries the nav and the trigger down to where a
 thumb already is, mounted after the content so it comes last in the tab order — a control painted at
-the bottom of the viewport should not sit two stops in. Under both, a fixed fade dissolves the sheet
-into the background at the bottom edge: six rems deep on a phone, four above `sm`, because the phone
-has a dock to float over and the desktop does not. The footer reserves exactly that depth, so the
-fade lands on its own spacer and never on the last thing a Visitor was reading.
+the bottom of the viewport should not sit two stops in. Nothing dissolves the bottom edge: the page
+ends on the signature, and a gradient over a mark that is already running off the page would read as
+a mistake. The dock and the way back up both ride `--signature-clear` above that edge instead —
+the mark spans the viewport, so its height is a fraction of the viewport width, and one number
+derived from that keeps every floating control off the name at every size.
 
 The footer is a signature: the year and the legal name, the three places the work lives plus the
 feed, and the mark beneath them in the site's own alphabet. The name and the mark differ on purpose —
 a copyright line names who holds it, and the signature under it is what that person is called.
 
-**The signature is dithered, and it is small.** The mark is a field of a few thousand square dots on
-a canvas, not a drawn stroke, and it is fitted to a box that stops growing at three and a half rems
-of height — a signature sits under the page, so it is the last thing that should be the largest. An
-invisible circle rides the cursor: a dot inside it is pushed straight out from the pointer by an
+**The signature is dithered, and it runs off the page.** The mark is a field of a few thousand
+square dots on a canvas, not a drawn stroke. It is the only thing on the site that leaves the column:
+the frame holds every other row to three-quarters of a column, and the signature spans the whole
+viewport, in a heavy geometric cut of the site's alphabet whose strokes are twice the weight of the
+lettering anywhere else. Mass is the point — a dither reads by how densely it packs, and a thin
+stroke breaks into loose grit where a thick one holds together as a slab. The canvas is sized by
+aspect ratio and shows the top eighty-five percent of that box, so the bottom of the lettering is
+below the last pixel of the page at every viewport rather than drifting with the height. A name cut
+by the edge of the sheet reads as a signature; a name sitting neatly above it reads as one more row.
+It is cut at the bottom only: the box carries a small bearing on each side, because letters held
+hard against the glass read as trimmed by accident rather than as running off on purpose. Every dot
+lands on a whole device pixel and takes back in opacity what rounding its side cost, so the grain
+stays sharp at any size — a fractional square is antialiased across two columns, and on a phone,
+where a dot is barely one pixel wide, that smear is the entire signature.
+An invisible circle rides the cursor: a dot inside it is pushed straight out from the pointer by an
 amount falling off as the cube of the distance, so the push is at full strength under the cursor and
 effectively nothing at the rim, and the field has no edge for the eye to catch. Under
-`prefers-reduced-motion` it renders once and listens to nothing. The dots are coordinates, checked in
-at `lib/wordmark-dots.ts`; the letterforms are tuned against the drawn original with sliders in
-`tools/wordmark-studio.html` and re-exported, never guessed at in code. `bun tools/gen-dots.mjs`
-reproduces the checked-in file from the same engine the sliders drive, so the art is derivable from
-the repository and not from a session that has since ended.
+`prefers-reduced-motion` it renders once and listens to nothing.
+
+**The art is baked, and the studio is the only way to change it.** The dots are a fixed run of
+coordinates checked in at `lib/wordmark-dots.ts`; nothing at runtime re-letters them, and nothing in
+the app knows what a letter is. They come from `tools/wordmark-studio.html`, which opens straight off
+the filesystem: it sets any text in any typeface — installed, uploaded as a file, or fetched from
+Google Fonts — rasterises it, reads the alpha channel, and dithers the coverage. The dither takes a
+coverage field rather than an alphabet, so the ink need not be type at all: load a drawing instead —
+SVG, PNG, JPEG, WebP — and it goes through the same pipeline, coverage read from the alpha channel
+when the file has one and from brightness when it does not. That is the route for lettering that was
+drawn rather than typed. Because the shape always comes from a rasteriser rather than from outlines
+written out by hand, no alphabet lives in code and any face, or none, is usable. The first preview is the footer's signature section drawn at true size for a
+chosen device — the same width, the same height, the same crop at the page edge — so the call on how
+big and how wide the mark should sit is made against the real rectangle rather than a proxy. The
+studio and the site share one painter, `tools/dither.js`, so the pixel snapping and the ink
+compensation are the same code in both and the preview cannot drift from what ships. Every export
+carries its own preset in the file header, which is what you paste back into the studio to pick the
+work up again.
 
 `rehype-sanitize` on all MDX and escaped JSON-LD embedding survive from the old build unchanged.
 Regressing either is a security bug, not a style change.
