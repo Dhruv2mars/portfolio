@@ -17,6 +17,18 @@
   else root.Dither = api;
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   /**
+   * How much of the baked weight each theme keeps.
+   *
+   * The same alpha does not weigh the same in both — lightness is steep near
+   * black and flat near white — so light is the reference and dark is dimmed
+   * until the ink over the strokes lifts off its page as far as light's presses
+   * into its own. The site reads these off `--wordmark-ink` in
+   * `app/globals.css`; they live here too so the studio's preview can apply the
+   * same factor, and `lib/wordmark-dots.test.ts` asserts the two agree.
+   */
+  const THEME_INK = { light: 1, dark: 0.444 };
+
+  /**
    * Everything the look is made of, and what the studio opens on.
    *
    * The box is always `boxWidth` units across, whatever the font, because the
@@ -225,5 +237,5 @@ ${lines.join("\n")}
 `;
   }
 
-  return { DEFAULTS, PATTERNS, TRANSFORMS, BAYER, hash, threshold, ditherField, paint, toModule };
+  return { DEFAULTS, THEME_INK, PATTERNS, TRANSFORMS, BAYER, hash, threshold, ditherField, paint, toModule };
 });

@@ -601,13 +601,17 @@
             ctx.fillStyle = p.background;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
           }
+          const theme = el("light").checked ? "light" : "dark";
           Dither.paint(ctx, current || dots, {
             scale: p.scale,
             offsetX: p.offsetX,
             offsetY: p.offsetY,
             dot: preset.dot,
-            ink: preset.ink,
-            color: INKC[el("light").checked ? "light" : "dark"],
+            /* The theme dims the baked weight on the way to the page, so a
+               preview that skipped the factor would show a dark mark far
+               heavier than the one that ships. */
+            ink: preset.ink * Dither.THEME_INK[theme],
+            color: INKC[theme],
           });
           if (p.edge != null) {
             ctx.strokeStyle = "#7cc4ff";
@@ -1020,12 +1024,35 @@
         }
       }
 
+      /* Presets get pasted in from a file header, so they arrive unchecked.
+         A key whose type does not match the default it replaces is at best
+         ignored and at worst fatal — `spacing` at zero or below makes the
+         dither grid infinite and hangs the tab with no way back. Say which key
+         is wrong rather than dying on it. */
+      function wrong(next) {
+        if (!next || typeof next !== "object" || Array.isArray(next)) return "not an object";
+        for (const [key, value] of Object.entries(next)) {
+          const want = Dither.DEFAULTS[key];
+          if (want === undefined) continue;
+          if (typeof value !== typeof want) return `${key} should be a ${typeof want}`;
+          if (typeof want === "number" && !Number.isFinite(value)) return `${key} is not a number`;
+        }
+        if (next.spacing !== undefined && next.spacing <= 0) return "spacing has to be above zero";
+        if (next.boxWidth !== undefined && next.boxWidth <= 0) return "boxWidth has to be above zero";
+        return "";
+      }
+
       function applyPreset(raw) {
         let next;
         try {
           next = JSON.parse(raw);
         } catch (error) {
           toast(`That is not a preset: ${error.message}`);
+          return;
+        }
+        const bad = wrong(next);
+        if (bad) {
+          toast(`That preset is not usable: ${bad}`);
           return;
         }
         Object.assign(preset, next);

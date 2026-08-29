@@ -73,12 +73,17 @@ export function SiteWordmark({ className }: { className?: string }) {
     };
 
     /* Colour and weight both come from the cascade, so the theme decides both
-       and reading one without the other would leave the mark half-swapped. */
+       and reading one without the other would leave the mark half-swapped.
+
+       `--wordmark-ink` is a multiplier on the weight the studio baked, not a
+       replacement for it: the preset stays the one place the mark's weight is
+       set, and the theme only says how much of it survives the page it lands
+       on. Light is 1 by definition. See the note in `app/globals.css`. */
     const weigh = () => {
       const style = getComputedStyle(canvas);
       ink = style.color;
-      const pressed = Number.parseFloat(style.getPropertyValue("--wordmark-ink"));
-      const press = Number.isFinite(pressed) ? pressed : WORDMARK.ink;
+      const themed = Number.parseFloat(style.getPropertyValue("--wordmark-ink"));
+      const press = WORDMARK.ink * (Number.isFinite(themed) ? themed : 1);
       alpha = (press * (want * want)) / (side * side);
     };
 

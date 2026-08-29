@@ -75,20 +75,18 @@
      at any viewport. `lib/wordmark-dots.ts` holds the numbers it derives from. */
   --signature-clear: calc(9vw + --spacing(4));
 
-  /* How hard the signature's dots press, per theme. The same dots at the same
-     alpha do not weigh the same in both: lightness is steep near black and
-     flat near white, so a sparse field lifting off a dark page shifts it
-     several times as far as the same field darkening a light one. Baking one
-     number would leave one of the two modes wrong, so the theme owns it and
-     `components/site-wordmark.tsx` reads it.
+  /* How much of the signature's baked weight survives this theme. The same
+     dots at the same alpha do not weigh the same in both: lightness is steep
+     near black and flat near white, so a sparse field lifting off a dark page
+     shifts it several times as far as the same field darkening a light one.
 
-     Light is the reference: it keeps the 0.45 the studio was tuned at, which
-     is the weight the mark is meant to have. Dark is the one that has to bend
-     — the same 0.45 on a dark page reads about three times heavier, so it is
-     dimmed until the ink over the strokes measures the same lift off the page
-     that light's does. Change light's number and dark's is stale; they are a
-     pair, not two settings. */
-  --wordmark-ink: 0.45;
+     It is a multiplier, not a weight — the weight itself stays in the preset
+     the studio baked, so retuning ink there still moves the real mark. Light
+     is the reference at 1. Dark carries the correction; `tools/dither.js`
+     holds the same factor so the studio's dark preview does not lie about
+     what ships, and a test in `lib/wordmark-dots.test.ts` keeps the two
+     honest. */
+  --wordmark-ink: 1;
 }
 
 .dark {
@@ -133,7 +131,7 @@
   --selection: oklch(0.985 0 0);
   --selection-foreground: oklch(0.141 0.005 285.823);
 
-  --wordmark-ink: 0.2;
+  --wordmark-ink: 0.444;
 }
 
 @theme inline {

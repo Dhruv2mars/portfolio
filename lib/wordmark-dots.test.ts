@@ -87,6 +87,23 @@ test("--signature-clear still clears the signature", () => {
   expect(Number(vw) / 100).toBeCloseTo(kept, 4);
 });
 
+test("the studio's dark preview is dimmed the same as the shipped one", () => {
+  // The theme dims the baked weight on the way to the page, and the studio has
+  // to apply the same factor or its dark preview shows a mark far heavier than
+  // the one that ships — which is the one thing the studio exists to prevent.
+  // Two files, one number, no import between them: assert they agree.
+  const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+  const dark = css.match(/\.dark\s*\{[\s\S]*?--wordmark-ink:\s*([\d.]+)/)?.[1];
+  const light = css.match(/:root\s*\{[\s\S]*?--wordmark-ink:\s*([\d.]+)/)?.[1];
+  expect(light).toBe("1");
+  expect(dark).toBeDefined();
+
+  const js = readFileSync(new URL("../tools/dither.js", import.meta.url), "utf8");
+  const studio = js.match(/THEME_INK\s*=\s*\{\s*light:\s*([\d.]+),\s*dark:\s*([\d.]+)/);
+  expect(studio?.[1]).toBe(light);
+  expect(studio?.[2]).toBe(dark);
+});
+
 test("the mark has side bearing, so it reads as running off rather than trimmed", () => {
   let left = Infinity;
   let right = -Infinity;
