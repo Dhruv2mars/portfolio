@@ -1,0 +1,15 @@
+https://www.dhruv2mars.com/blog/gpt-5-6-review
+
+see this page. compare it with 5 different blog from engg companies (vercel, openai, matt shumer, etc). see why does mine looks shit and theirs doesnt. why mine look like it is having spacing/layout issues?????
+
+---
+
+just to be clear and sure. there is no issue with my content, right? maybe i have mistakenly put 2 line spaces, or things like that. just check and confirm that.
+
+---
+
+lets do an experiment. lets work in a new branch. here, just take that blog content (pure english), and generate a html page which u think is the best format for a blog and how it should look and feel. take inspiration from different engineering/blogs in developer community and tech startups. design that page, so that i can take a look at it, and see if that makes sense and does that look perfect to my eyes. if that is the case, then i will be sure that its implementation error in our blog section on dhruv2mars.com
+
+---
+
+lets do an experiment. lets work in a new branch. here, just take that blog content (pure english), and generate a html page which u think is the best format for a blog and how it should look and feel. take inspiration from different engineering/blogs in developer community and tech startups. design that page, so that i can take a look at it, and see if that makes sense and does that look perfect to my eyes. if that is the case, then i will be sure that its implementation error in our blog section on dhruv2mars.com
