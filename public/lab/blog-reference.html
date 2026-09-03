@@ -43,8 +43,15 @@
   --step-small: 0.8125rem;  /* 13px */
   --step-micro: 0.75rem;    /* 12px */
 
-  --space-h2: 3rem;         /* 48px above a section heading */
-  --space-h3: 2rem;
+  /* vertical space is counted in BODY LINES, not px — so the sans (17/27.2)
+     and serif (18/29.16) modes keep an identical rhythm instead of drifting */
+  --h2-lines: 1.7647;
+  --h3-lines: 1.176;
+  --after-lines: 0.647;
+  --lh: calc(var(--body-size) * var(--body-lead));
+  --space-h2: calc(var(--lh) * var(--h2-lines));   /* sans 48px · serif 51.5px */
+  --space-h3: calc(var(--lh) * var(--h3-lines));   /* sans 32px */
+  --space-after-h: calc(var(--lh) * var(--after-lines)); /* sans 17.6px */
 
   --ease: cubic-bezier(.32, .72, 0, 1);
 }
@@ -141,6 +148,9 @@ header.site {
   transition: border-color .2s var(--ease);
 }
 header.site[data-stuck="true"] { border-bottom-color: var(--line); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  header.site { background: var(--bg); }
+}
 header.site .rail { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 
 /* the wordmark sits on the SAME left edge as the article text. no drift. */
@@ -179,11 +189,12 @@ header.site .rail { display: flex; align-items: center; justify-content: space-b
     overscroll-behavior: contain;
     z-index: 20;
     opacity: 0;
+    visibility: hidden;   /* opacity alone still leaves the links tabbable */
     transform: translateY(4px);
-    transition: opacity .3s var(--ease), transform .3s var(--ease);
+    transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s;
     pointer-events: none;
   }
-  .toc[data-visible="true"] { opacity: 1; transform: none; pointer-events: auto; }
+  .toc[data-visible="true"] { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
 }
 .toc h2 {
   font: 500 var(--step-micro)/1 var(--mono);
@@ -290,7 +301,7 @@ hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
   scroll-margin-top: calc(var(--header-h) + 28px);
 }
 /* proximity: a heading belongs to what FOLLOWS it, not what precedes it */
-.prose h2 + *, .prose h3 + * { margin-top: 1.1rem; }
+.prose h2 + *, .prose h3 + * { margin-top: var(--space-after-h); }
 .prose > :first-child { margin-top: 0; }
 
 .prose a {
@@ -338,21 +349,6 @@ code {
   transition: color .15s var(--ease);
 }
 .gloss:hover { color: var(--fg-strong); }
-
-/* pull quote — deliberately smaller than a section break */
-.pull {
-  font-family: var(--sans);
-  font-size: 1.375rem;
-  line-height: 1.36;
-  letter-spacing: -.015em;
-  font-weight: 500;
-  color: var(--fg-strong);
-  border-left: 2px solid var(--accent);
-  padding-left: 22px;
-  margin-block: 2.5rem !important;
-  text-wrap: balance;
-}
-html[data-face="serif"] .pull { font-family: var(--serif); letter-spacing: 0; }
 
 /* ── definitions ──────────────────────────────────────────── */
 .defs { padding-top: 48px; }
@@ -402,20 +398,19 @@ details#spec td:last-child { width: 100%; }
     --step-h1: 2.125rem;    /* 34px, still 2.0× body */
     --step-h2: 1.4375rem;   /* 23px */
     --step-lede: 1.1875rem;
-    --space-h2: 2.25rem;    /* 36px */
-    --space-h3: 1.5rem;
+    --h2-lines: 1.32;       /* 36px — tighter, a phone screen is shorter */
+    --h3-lines: 0.88;
   }
   .masthead { padding-top: 48px; }
   .byline { margin-top: 28px; padding-bottom: 28px; }
   .prose { padding-top: 36px; }
-  .pull { font-size: 1.1875rem; padding-left: 18px; }
   footer.site { padding-bottom: 64px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
-  .toc { opacity: 1 !important; transform: none !important; }
+  .toc[data-visible="true"] { opacity: 1 !important; transform: none !important; }
 }
 
 @media print {
@@ -427,7 +422,6 @@ details#spec td:last-child { width: 100%; }
   h1 { font-size: 24pt; }
   .prose h2 { font-size: 14pt; margin-top: 20pt; page-break-after: avoid; }
   .prose p, .prose li { orphans: 3; widows: 3; }
-  .pull { border-left-color: #999; }
   a { text-decoration: none; color: #000; }
 }
 </style>
@@ -520,8 +514,6 @@ details#spec td:last-child { width: 100%; }
 
     <p>behavior-wise, luna is also very different from sol. it doesn't like spawning subagents at all. it is great for browser-use, computer-use and scheduled automation tasks. but it is not great for long-horizon work. if you leave it running on something too open-ended for too long, it has a tendency to go off on a different tangent. that's why luna makes the most sense to me as a cheap, highly capable worker that is given a clearly scoped task.</p>
 
-    <p class="pull">selecting a higher reasoning level doesn't necessarily mean the model will always spend significantly more tokens. the important thing is that the reasoning ceiling is higher.</p>
-
     <h2 id="still-bad">what's still bad</h2>
 
     <p>as much as i like the 5.6 family, there are still some very obvious problems.</p>
@@ -574,6 +566,7 @@ details#spec td:last-child { width: 100%; }
         <tr><td>h2 space</td><td>48px above / 17.6px below → 1.76 body lines, ratio 2.7:1</td></tr>
         <tr><td>measure</td><td>~76 chars per line</td></tr>
         <tr><td>foreground</td><td>#e4e4e7 on #0a0a0b — not pure white, kills halation</td></tr>
+        <tr><td>rhythm</td><td>vertical space counted in body lines, not px — sans and serif match</td></tr>
         <tr><td>typefaces</td><td>Geist · Geist Mono · IBM Plex Serif — same as the live site</td></tr>
         <tr><td>left edge</td><td>wordmark and body text share one x &nbsp;·&nbsp; live site drifts 17px</td></tr>
       </table>
