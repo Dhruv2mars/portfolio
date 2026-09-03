@@ -10,6 +10,7 @@
    TYPE SPEC  (every number here is deliberate — see #spec)
    rail 660px · body 17/27.2 (1.60) · ¶gap 23.8 → advance 1.88×
    h1 46 (2.71× body) · h2 27 (1.59×) · h3 20 (1.18×)
+   h2 space 48 above / 17.6 below (2.7:1)
    ───────────────────────────────────────────────────────────── */
 :root {
   --rail: 660px;
@@ -195,7 +196,7 @@ hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
   letter-spacing: -.018em;
   font-weight: 620;
   color: var(--fg-strong);
-  margin-top: 4.5rem;      /* 72px ≈ 1.4× the ¶ advance × 2 — a real gear change */
+  margin-top: 3rem;        /* 48px = 1.76 body lines. median of the five refs is 1.71 */
   scroll-margin-top: 80px;
   text-wrap: balance;
 }
@@ -206,7 +207,7 @@ hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
   letter-spacing: -.012em;
   font-weight: 600;
   color: var(--fg-strong);
-  margin-top: 2.75rem;
+  margin-top: 2rem;        /* 32px, scaled from h2 */
   scroll-margin-top: 80px;
 }
 /* proximity: a heading belongs to what FOLLOWS it */
@@ -286,7 +287,7 @@ hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
   font-weight: 500;
   border-left: 2px solid var(--accent);
   padding-left: 22px;
-  margin-block: 3rem !important;
+  margin-block: 2.5rem !important;
   text-wrap: balance;
 }
 
@@ -327,7 +328,7 @@ details#spec td:first-child { color: var(--fg); white-space: nowrap; }
 @media (max-width: 640px) {
   :root { --gutter: 20px; --step-h1: 2.125rem; --step-h2: 1.5rem; --step-lede: 1.1875rem; }
   .masthead { padding-top: 48px; }
-  .prose h2 { margin-top: 3.25rem; }
+  .prose h2 { margin-top: 2.25rem; }
   .switches button { padding: 6px 9px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -464,7 +465,7 @@ details#spec td:first-child { color: var(--fg); white-space: nowrap; }
         <tr><td>¶ gap</td><td>23.8px → line-advance ratio 1.88 (vs 21.8px → 1.68)</td></tr>
         <tr><td>h1</td><td>46px / 1.06 → 2.71× body (vs 30px → 1.58×)</td></tr>
         <tr><td>h2</td><td>27px → 1.59× body (vs 24px → 1.26×)</td></tr>
-        <tr><td>h2 space above</td><td>72px, space below 17.6px — heading binds to what follows</td></tr>
+        <tr><td>h2 space</td><td>48px above / 17.6px below — 1.76 body lines, ratio 2.7:1</td></tr>
         <tr><td>measure</td><td>~72 chars/line (vs 76)</td></tr>
         <tr><td>fg on dark</td><td>#e4e4e7, not #fff — kills halation</td></tr>
         <tr><td>families</td><td>2 in the article (sans + mono), not 3</td></tr>
