@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-face="sans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>gpt-5.6 review: after burning 3.5b tokens</title>
+<meta name="description" content="gpt-5.6 is like a bull that keeps hitting the wall until the wall breaks. the surprising part is how efficient it is while doing that." />
+<style>
+/* ─────────────────────────────────────────────────────────────
+   TYPE SPEC  (every number here is deliberate — see #spec)
+   rail 660px · body 17/27.2 (1.60) · ¶gap 23.8 → advance 1.88×
+   h1 46 (2.71× body) · h2 27 (1.59×) · h3 20 (1.18×)
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --rail: 660px;
+  --gutter: 24px;
+
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", ui-serif, Georgia, serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --body-size: 1.0625rem;   /* 17px */
+  --body-lead: 1.6;         /* 27.2px */
+  --body-flow: 1.4em;       /* 23.8px → line advance ratio 1.88 */
+
+  --step-h1: 2.875rem;      /* 46px */
+  --step-h2: 1.6875rem;     /* 27px */
+  --step-h3: 1.25rem;       /* 20px */
+  --step-lede: 1.3125rem;   /* 21px */
+  --step-small: 0.8125rem;  /* 13px */
+}
+
+html[data-face="serif"] {
+  --body-size: 1.125rem;    /* serif runs optically smaller; +1px keeps x-height matched */
+  --body-lead: 1.62;
+}
+
+html[data-theme="dark"] {
+  --bg:        #0a0a0b;
+  --surface:   #121214;
+  --fg:        #e4e4e7;     /* not #fff — pure white haloes on near-black */
+  --fg-strong: #f4f4f5;
+  --muted:     #8f8f99;
+  --line:      rgba(255,255,255,.09);
+  --line-soft: rgba(255,255,255,.055);
+  --accent:    #7dd3fc;
+  --mark:      rgba(125,211,252,.14);
+}
+html[data-theme="light"] {
+  --bg:        #fcfcfb;
+  --surface:   #f4f4f2;
+  --fg:        #26262a;
+  --fg-strong: #0d0d0f;
+  --muted:     #71717a;
+  --line:      rgba(0,0,0,.11);
+  --line-soft: rgba(0,0,0,.065);
+  --accent:    #0369a1;
+  --mark:      rgba(3,105,161,.10);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: var(--body-size);
+  line-height: var(--body-lead);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis-weight: none;
+  transition: background-color .18s ease, color .18s ease;
+}
+html[data-face="serif"] body { font-family: var(--serif); }
+
+::selection { background: var(--mark); color: var(--fg-strong); }
+
+/* ── rail ─────────────────────────────────────────────────── */
+.rail {
+  width: 100%;
+  max-width: calc(var(--rail) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ── progress ─────────────────────────────────────────────── */
+#bar {
+  position: fixed; inset: 0 auto auto 0;
+  height: 2px; width: 0;
+  background: var(--fg-strong);
+  opacity: .5;
+  z-index: 60;
+}
+
+/* ── header ───────────────────────────────────────────────── */
+header.site {
+  position: sticky; top: 0; z-index: 50;
+  height: 56px;
+  display: flex; align-items: center;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(140%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .18s ease;
+}
+header.site[data-stuck="true"] { border-bottom-color: var(--line); }
+header.site .rail { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+
+/* wordmark sits on the SAME left edge as the article text. no 17px drift. */
+.wordmark {
+  font-family: var(--mono);
+  font-size: var(--step-small);
+  letter-spacing: -.01em;
+  color: var(--fg-strong);
+  text-decoration: none;
+  font-weight: 500;
+}
+.wordmark span { color: var(--muted); }
+
+.switches { display: flex; gap: 6px; }
+.switches button {
+  font: 500 12px/1 var(--mono);
+  letter-spacing: .02em;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 11px;
+  cursor: pointer;
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
+}
+.switches button:hover { color: var(--fg-strong); border-color: var(--muted); }
+
+/* ── masthead ─────────────────────────────────────────────── */
+.masthead { padding-top: 88px; padding-bottom: 0; }
+
+.eyebrow {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font: 500 var(--step-small)/1 var(--mono);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 22px;
+}
+.eyebrow .dot { width: 3px; height: 3px; border-radius: 50%; background: currentColor; opacity: .5; }
+
+h1 {
+  font-family: var(--sans);
+  font-size: var(--step-h1);
+  line-height: 1.06;
+  letter-spacing: -.028em;
+  font-weight: 640;
+  color: var(--fg-strong);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.lede {
+  font-size: var(--step-lede);
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 22px 0 0;
+  text-wrap: pretty;
+  max-width: 34em;
+}
+
+.byline {
+  display: flex; align-items: center; gap: 10px;
+  margin: 36px 0 0;
+  padding-bottom: 36px;
+  font-size: var(--step-small);
+  font-family: var(--mono);
+  color: var(--muted);
+}
+.avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: linear-gradient(140deg, var(--accent), var(--surface));
+  border: 1px solid var(--line);
+  flex: none;
+}
+.byline b { color: var(--fg); font-weight: 500; }
+
+hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+/* ── prose ────────────────────────────────────────────────── */
+.prose { padding-top: 48px; padding-bottom: 24px; }
+.prose > * { margin: 0; }
+.prose > * + * { margin-top: var(--body-flow); }
+.prose p { text-wrap: pretty; }
+
+.prose h2 {
+  font-family: var(--sans);
+  font-size: var(--step-h2);
+  line-height: 1.22;
+  letter-spacing: -.018em;
+  font-weight: 620;
+  color: var(--fg-strong);
+  margin-top: 4.5rem;      /* 72px ≈ 1.4× the ¶ advance × 2 — a real gear change */
+  scroll-margin-top: 80px;
+  text-wrap: balance;
+}
+.prose h3 {
+  font-family: var(--sans);
+  font-size: var(--step-h3);
+  line-height: 1.3;
+  letter-spacing: -.012em;
+  font-weight: 600;
+  color: var(--fg-strong);
+  margin-top: 2.75rem;
+  scroll-margin-top: 80px;
+}
+/* proximity: a heading belongs to what FOLLOWS it */
+.prose h2 + *, .prose h3 + * { margin-top: 1.1rem; }
+.prose > :first-child { margin-top: 0; }
+
+.prose a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--fg) 32%, transparent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color .15s ease;
+}
+.prose a:hover { text-decoration-color: var(--fg); }
+
+.prose strong { color: var(--fg-strong); font-weight: 620; }
+
+.prose code, dd code {
+  font-family: var(--mono);
+  font-size: .875em;
+  padding: .15em .4em;
+  border-radius: 5px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  color: var(--fg-strong);
+}
+
+.prose ul { padding-left: 0; list-style: none; }
+.prose li { position: relative; padding-left: 1.35em; }
+.prose li + li { margin-top: .55em; }
+.prose li::before {
+  content: ""; position: absolute;
+  left: .15em; top: calc(var(--body-lead) * .5em - 2.5px);
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--muted);
+}
+
+/* tl;dr callout — the one place the page changes texture early */
+.tldr {
+  position: relative;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.tldr .label {
+  font: 500 var(--step-small)/1 var(--mono);
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted);
+  display: block; margin-bottom: 12px;
+}
+.tldr p { margin: 0; color: var(--fg-strong); }
+.tldr p + p { margin-top: .9em; }
+
+/* inline glossary marker */
+.gloss {
+  display: inline-block;
+  font: 500 11px/1 var(--mono);
+  vertical-align: .32em;
+  margin-left: 1px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: var(--muted);
+  background: var(--mark);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+.gloss:hover { color: var(--fg-strong); }
+
+/* pull quote */
+.pull {
+  font-size: 1.375rem;
+  line-height: 1.35;
+  letter-spacing: -.015em;
+  color: var(--fg-strong);
+  font-weight: 500;
+  border-left: 2px solid var(--accent);
+  padding-left: 22px;
+  margin-block: 3rem !important;
+  text-wrap: balance;
+}
+
+/* ── definitions ──────────────────────────────────────────── */
+.defs { padding: 56px 0 0; }
+.defs h2 { margin-top: 0 !important; }
+dl { margin: 28px 0 0; }
+dt {
+  font-family: var(--sans);
+  font-size: var(--step-h3);
+  font-weight: 600;
+  letter-spacing: -.012em;
+  color: var(--fg-strong);
+  scroll-margin-top: 80px;
+}
+dd { margin: .6em 0 0; color: var(--muted); }
+dd + dt { margin-top: 2rem; }
+
+/* ── footer ───────────────────────────────────────────────── */
+footer.site {
+  margin-top: 80px;
+  border-top: 1px solid var(--line);
+  padding: 32px 0 96px;
+  font: 400 var(--step-small)/1.7 var(--mono);
+  color: var(--muted);
+}
+footer.site .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+footer.site a { color: var(--muted); }
+
+details#spec { margin-top: 28px; }
+details#spec summary { cursor: pointer; color: var(--muted); }
+details#spec summary:hover { color: var(--fg); }
+details#spec table { border-collapse: collapse; margin-top: 16px; font-size: 12px; width: 100%; }
+details#spec td { border-top: 1px solid var(--line-soft); padding: 6px 10px 6px 0; vertical-align: top; }
+details#spec td:first-child { color: var(--fg); white-space: nowrap; }
+
+/* ── responsive ───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  :root { --gutter: 20px; --step-h1: 2.125rem; --step-h2: 1.5rem; --step-lede: 1.1875rem; }
+  .masthead { padding-top: 48px; }
+  .prose h2 { margin-top: 3.25rem; }
+  .switches button { padding: 6px 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="bar"></div>
+
+<header class="site" id="hdr">
+  <div class="rail">
+    <a class="wordmark" href="#top">dhruv2mars<span>.com</span></a>
+    <div class="switches">
+      <button id="t-face" type="button" aria-label="Toggle typeface">serif</button>
+      <button id="t-theme" type="button" aria-label="Toggle theme">light</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="rail masthead">
+    <p class="eyebrow">
+      <span>19 aug 2026</span><i class="dot"></i>
+      <span>4 min read</span><i class="dot"></i>
+      <span>gpt-5.6 · codex · models</span>
+    </p>
+
+    <h1>gpt-5.6 review: after burning 3.5b tokens</h1>
+
+    <p class="lede">gpt-5.6 is like a bull that keeps hitting the wall until the wall breaks. the surprising part is how efficient it is while doing that.</p>
+
+    <div class="byline">
+      <span class="avatar" aria-hidden="true"></span>
+      <span><b>dhruv sharma</b></span>
+    </div>
+  </div>
+
+  <hr class="rule" />
+
+  <article class="rail prose">
+
+    <div class="tldr">
+      <span class="label">tl;dr</span>
+      <p>gpt-5.6 is like a bull that keeps hitting the wall until the wall breaks. the surprising part is how efficient it is while doing that.</p>
+    </div>
+
+    <p>i am very late to the party, but nevertheless, here are my thoughts on the gpt-5.6 family.</p>
+
+    <p>first of all, i would like to point out just how efficient these models are. i am on the $20 plan, and i still got so much usage out of it. credit goes to tibo for the multiple resets as well. imo, this is the best $20 plan out there.</p>
+
+    <p>now, let's talk about what actually changed.</p>
+
+    <h2 id="what-changed">what changed from gpt-5.5</h2>
+
+    <p>gpt-5.5 was really bad at long-horizon tasks, which has improved a ton here. compaction also got better, which means 5.6 can go for hours without human intervention. atp there is almost no use for <code>/goal</code> in codex. with 5.5, it felt useful because the model had the tendency to stop in the middle of a task. with 5.6, that happens far less often. frontend design has improved as well, but it is still way behind the competition.</p>
+
+    <p>and some things haven't changed at all: it still writes too much code, too many tests, and loves to overcomplicate everything.</p>
+
+    <p>with that out of the way, here is how i see all three models.</p>
+
+    <h2 id="sol">gpt-5.6 sol: the best overall</h2>
+
+    <p>gpt-5.6 sol is the best overall model in the family. it has that big-model energy<a class="gloss" href="#big-small-model-energy" aria-label="definition: big/small model energy">i</a> and the best figure-out ability<a class="gloss" href="#figure-out-ability" aria-label="definition: figure-out ability">i</a>. the biggest thing i noticed is how good it is for long-horizon work. it just doesn't stop until the goal is reached. it is also the model that loves to spawn subagents.</p>
+
+    <p>my most-used model was sol low. it is capable and fast, and for most of my work, it was enough. at times, when it missed something or i needed more reasoning, i would switch to medium reasoning. if you have no budget limitations, sol high is probably the best version of sol. xhigh and max just don't make much sense to me. the price-to-performance ratio gets bad very quickly.</p>
+
+    <h2 id="terra">gpt-5.6 terra: the awkward middle child</h2>
+
+    <p>gpt-5.6 terra is in a weird spot. it's like the awkward middle child of the family. it doesn't have the performance or figure-out ability of sol, and it isn't cheap like luna. at the start, i used terra high and terra medium a lot. but eventually switched almost completely to sol low.</p>
+
+    <p>terra also doesn't like to spawn subagents as frequently as sol does. it isn't great for long-horizon work either. it has more of that gpt-5.5 feel where it will work for some time and then stop, waiting for me to intervene. low and medium reasoning levels are just not smart enough. xhigh and max don't make sense from a price-to-performance perspective. terra high is somewhat comparable to sol low, but sol still has more figure-out ability and that big-model energy. and even after the updated pricing, terra got overshadowed by luna from the other side.</p>
+
+    <h2 id="luna">gpt-5.6 luna: the underdog</h2>
+
+    <p>gpt-5.6 luna is the most interesting model in the family. it is the underdog. the best part about luna is its price-to-performance ratio. it is so cheap, and that's its power. it is the smallest model, so naturally it has the most small-model energy and the least figure-out ability out of all three. but it is extremely capable when given a direct, scoped task. and that's exactly why i think it is the best model to use as a subagent.</p>
+
+    <p>luna low and medium are just not smart enough, but can be used for tasks like session naming, commit messages, etc. high, xhigh, and max are the real deal. surprisingly, luna max even scored higher than sol low on some benchmarks. and after the 80% price cut on luna, these higher reasoning levels became even more useful.</p>
+
+    <p>there is another thing here that i think is misunderstood about reasoning levels. from what i have seen with openai models, selecting a higher reasoning level doesn't necessarily mean the model will always spend significantly more tokens. if the task isn't that complex, the model doesn't automatically sit there thinking forever just because max reasoning is selected. the important thing is that the reasoning ceiling is higher. the model has permission to spend more reasoning tokens when the task actually requires it. it doesn't necessarily mean it will spend that entire budget every single time. that's why, even while using luna max, i still got way more usage than i expected.</p>
+
+    <p>behavior-wise, luna is also very different from sol. it doesn't like spawning subagents at all. it is great for browser-use, computer-use and scheduled automation tasks. but it is not great for long-horizon work. if you leave it running on something too open-ended for too long, it has a tendency to go off on a different tangent. that's why luna makes the most sense to me as a cheap, highly capable worker that is given a clearly scoped task.</p>
+
+    <p class="pull">selecting a higher reasoning level doesn't necessarily mean the model will always spend significantly more tokens. the important thing is that the reasoning ceiling is higher.</p>
+
+    <h2 id="still-bad">what's still bad</h2>
+
+    <p>as much as i like the 5.6 family, there are still some very obvious problems.</p>
+
+    <ul>
+      <li>it loves to overcomplicate things.</li>
+      <li>it writes too much code.</li>
+      <li>it writes too many tests.</li>
+      <li>frontend design is still not great.</li>
+      <li>the subagent implementation in codex is bad.</li>
+    </ul>
+
+    <h2 id="verdict">verdict</h2>
+
+    <p>the 5.6 family becomes significantly better when paired with another model that complements its quirks: something better at design, reviewing, and cleaning up the code after (fable/opus).</p>
+
+  </article>
+
+  <hr class="rule" />
+
+  <section class="rail defs">
+    <h2>definitions</h2>
+    <dl>
+      <dt id="figure-out-ability">figure-out ability</dt>
+      <dd>a model's ability to take ambiguous tasks and figure things out on its own. ex: fable and qwen27b on extreme ends of the spectrum.</dd>
+
+      <dt id="big-small-model-energy">big/small model energy</dt>
+      <dd>how much training data and knowledge the model has, where it already knows more. ex: fable and qwen27b on extreme ends of the spectrum.</dd>
+    </dl>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="rail">
+    <div class="row">
+      <span>dhruv sharma · 2026</span>
+      <a href="#top">back to top ↑</a>
+    </div>
+
+    <details id="spec">
+      <summary>type spec — every number in this page</summary>
+      <table>
+        <tr><td>text rail</td><td>660px (vs 734px live)</td></tr>
+        <tr><td>body</td><td>17px / 27.2px → leading 1.60 (vs 19px / 32.3px → 1.70)</td></tr>
+        <tr><td>¶ gap</td><td>23.8px → line-advance ratio 1.88 (vs 21.8px → 1.68)</td></tr>
+        <tr><td>h1</td><td>46px / 1.06 → 2.71× body (vs 30px → 1.58×)</td></tr>
+        <tr><td>h2</td><td>27px → 1.59× body (vs 24px → 1.26×)</td></tr>
+        <tr><td>h2 space above</td><td>72px, space below 17.6px — heading binds to what follows</td></tr>
+        <tr><td>measure</td><td>~72 chars/line (vs 76)</td></tr>
+        <tr><td>fg on dark</td><td>#e4e4e7, not #fff — kills halation</td></tr>
+        <tr><td>families</td><td>2 in the article (sans + mono), not 3</td></tr>
+        <tr><td>left edge</td><td>wordmark and body text share one x. no 17px drift</td></tr>
+      </table>
+    </details>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var html = document.documentElement;
+  var bar = document.getElementById('bar');
+  var hdr = document.getElementById('hdr');
+  var bTheme = document.getElementById('t-theme');
+  var bFace = document.getElementById('t-face');
+
+  function sync() {
+    bTheme.textContent = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    bFace.textContent = html.dataset.face === 'sans' ? 'serif' : 'sans';
+  }
+  bTheme.addEventListener('click', function () {
+    html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    sync();
+  });
+  bFace.addEventListener('click', function () {
+    html.dataset.face = html.dataset.face === 'sans' ? 'serif' : 'sans';
+    sync();
+  });
+  sync();
+
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      var y = window.scrollY;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+      hdr.dataset.stuck = y > 8 ? 'true' : 'false';
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+
+</body>
+</html>
