@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.10.3",
+  "checkpoint_id": "f581afa760b6",
+  "strategy": "manual-commit",
+  "branch": "experiment/blog-typography-reference",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "public/lab/blog-reference.html"
+  ],
+  "sessions": [
+    {
+      "metadata": "/f5/81afa760b6/0/metadata.json",
+      "transcript": "/f5/81afa760b6/0/full.jsonl",
+      "compact_transcript": "/f5/81afa760b6/0/transcript.jsonl",
+      "content_hash": "/f5/81afa760b6/0/content_hash.txt",
+      "prompt": "/f5/81afa760b6/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 38,
+    "cache_creation_tokens": 15053,
+    "cache_read_tokens": 1808880,
+    "output_tokens": 11317,
+    "api_call_count": 19
+  }
+}
