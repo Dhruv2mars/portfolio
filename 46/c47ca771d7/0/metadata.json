@@ -1,0 +1,118 @@
+{
+  "cli_version": "0.10.3",
+  "checkpoint_id": "46c47ca771d7",
+  "session_id": "ac0913b9-460e-4025-95b0-7912454d1c2a",
+  "strategy": "manual-commit",
+  "created_at": "2026-09-04T03:46:51.774652Z",
+  "branch": "fix/blog-typography",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "app/blog/[slug]/page.tsx",
+    "app/globals.css"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5",
+  "turn_id": "320593545633",
+  "checkpoint_transcript_start": 630,
+  "transcript_lines_at_start": 630,
+  "compact_transcript_start": 142,
+  "token_usage": {
+    "input_tokens": 78,
+    "cache_creation_tokens": 116959,
+    "cache_read_tokens": 3822955,
+    "output_tokens": 23837,
+    "api_call_count": 39
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01EvzzojPjE8JKUjjvXVqT21",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "loop"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "cd5479e16a31",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 423,
+        "end": 424,
+        "entry_ids": [
+          "b1470d08-596b-449a-959f-3ce5e36bad5b"
+        ],
+        "tool_use_id": "toolu_01EvzzojPjE8JKUjjvXVqT21"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01EvzzojPjE8JKUjjvXVqT21"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: loop",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-loop-2026-09-03T08:54:01.038462Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "loop"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "44a01b9bca35",
+      "timestamp": "2026-09-03T08:54:01.038462Z",
+      "native": {
+        "command": "/loop"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/loop",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 14
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-09-04T03:46:51.650546Z",
+    "agent_lines": 44,
+    "agent_removed": 9,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 44,
+    "total_lines_changed": 53,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 765,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/entire-search.md": 25,
+        ".claude/settings.json": 112,
+        ".codex/agents/entire-search.toml": 23,
+        ".codex/config.toml": 3,
+        ".codex/hooks.json": 55,
+        ".cursor/hooks.json": 40,
+        ".factory/settings.json": 122,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216
+      }
+    }
+  ]
+}
