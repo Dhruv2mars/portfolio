@@ -141,7 +141,19 @@ export default async function PostPage({ params }: PageProps) {
             it is the one that has to be given a band to sit in rather than
             being set flush against the rule above it. */}
         <PanelHeader>
-          <PanelTitle as="h1" className="py-6">
+          {/* A post title is the only h1 on the page and the thing the whole
+              frame is built around, so it is set well above the panel default.
+              At the shared `text-3xl` it was 1.58x the body text it sat over —
+              lower than any of the six posts this was measured against, whose
+              titles run 2.4-3.4x. Nothing on the page read as the top of it.
+              The ramp is written to finish where the body's does (~750px) and
+              not at 5.5vw, which left a trough around 640px where the body had
+              already reached 19px and the title was still pinned at its floor
+              — the one width on the site where the scale went flat again. */}
+          <PanelTitle
+            as="h1"
+            className="py-6 text-[clamp(2.25rem,1.55rem+2.9vw,2.875rem)] leading-[1.08]"
+          >
             {post.title}
           </PanelTitle>
           <PanelDescription className="py-5">

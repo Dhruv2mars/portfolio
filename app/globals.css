@@ -571,11 +571,35 @@
   /* Set to the frame rather than to a nominal step: the rail is 734px of text
      and the serif ran ~86 characters across it at 17px, well past the line a
      reader can return from without losing their place. 19px brings it back to
-     ~75, which is why the body of a post is the largest type on the site. */
-  --typeset-size: 1.1875rem;
+     ~75, which is why the body of a post is the largest type on the site.
+     That argument is about the 734px rail, so it stops holding once the rail
+     does: on a 375px phone the same 19px gave 32 characters a line, short
+     enough that the eye spends more time returning than reading. The ramp
+     finishes at ~628px, just under the width where the rail locks. */
+  --typeset-size: clamp(1.0625rem, 0.87rem + 0.8vw, 1.1875rem);
   --typeset-leading: 1.7;
-  --typeset-flow: 1.15em;
+  /* A paragraph break has to be worth more than a line break or the eye stops
+     seeing where one paragraph ends. At 1.15em the gap was 0.68 of a line and
+     the total advance between paragraphs only 1.68x a line — the tightest of
+     the six posts this was measured against, all of which sit at 1.81-2.03.
+     1.45em puts it at 1.85x. */
+  --typeset-flow: 1.45em;
+  /* One body line. Every vertical space below is a multiple of this rather
+     than an em of the heading it sits on, so changing a heading's size moves
+     the heading and not the rhythm around it. */
+  --prose-line: calc(var(--typeset-size) * var(--typeset-leading));
   font-family: var(--font-serif);
+  color: var(--foreground);
+}
+/* Body text steps back off pure white; headings keep it. On a near-black
+   background a 400-weight serif at full --foreground haloes, and the gap
+   between the two gives the page a second hierarchy channel besides size. */
+.dark .prose {
+  color: oklch(0.91 0.004 286.1);
+}
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose strong {
   color: var(--foreground);
 }
 .prose h2,
@@ -583,21 +607,41 @@
   font-family: var(--font-heading);
   font-weight: 500;
   letter-spacing: -0.01em;
+  /* `pretty` is inherited from .typeset and is the right call for a paragraph,
+     where it only protects the last line. A heading is all last line: on a
+     phone these run two and three lines and `balance` is what evens them. */
+  text-wrap: balance;
   scroll-margin-top: calc(var(--header-height) + 1rem);
 }
+/* The scale was flat — h2 was 1.26x the body, so nothing announced a section
+   and the post could not be skimmed. 1.58x is the median of the six reference
+   posts. The space above then comes down rather than up: a heading that is
+   visibly larger needs less room to separate itself, and space is only there
+   to assist. */
 .prose h2 {
-  font-size: 1.5rem;
-  line-height: 1.3;
-  margin-top: 2.5em;
+  /* A ratio rather than a step, for the same reason the spaces below are
+     multiples of a body line: the scale is a relationship to the body text,
+     so it has to survive the body text changing size. At 19px this is the
+     same 30px it was as a fixed 1.875rem. */
+  font-size: calc(var(--typeset-size) * 1.58);
+  line-height: 1.25;
+  margin-top: calc(var(--prose-line) * 1.76);
 }
 .prose h3 {
-  font-size: 1.25rem;
-  line-height: 1.35;
-  margin-top: 2em;
+  font-size: calc(var(--typeset-size) * 1.16);
+  line-height: 1.3;
+  margin-top: calc(var(--prose-line) * 1.17);
 }
-.prose h2 + *,
-.prose h3 + * {
-  margin-top: 0.75em;
+/* A heading belongs to what follows it, not to what it follows. 2.7:1 is the
+   split; below 2:1 the heading starts to look like it caps the section above.
+   The exclusions are the cases where what follows is itself a heading of the
+   same or higher level: that is not the section's first line, it is the next
+   section, and it needs the full space its own rule gives it. An h3 straight
+   after an h2 is not excluded — a subhead is the first thing its section
+   contains, so it should hug the head the same way a paragraph would. */
+.prose h2 + :not(h2),
+.prose h3 + :not(h2, h3) {
+  margin-top: calc(var(--prose-line) * 0.65);
 }
 .prose > :first-child {
   margin-top: 0;
@@ -630,7 +674,9 @@
   color: var(--muted-foreground);
 }
 .prose li + li {
-  margin-top: 0.5rem;
+  /* Items are closer than paragraphs but further apart than lines, and like
+     every other space here it is counted in body lines so it tracks the ramp. */
+  margin-top: calc(var(--prose-line) * 0.35);
 }
 .prose blockquote {
   padding-left: 1.125rem;
