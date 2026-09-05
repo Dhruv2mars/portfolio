@@ -633,9 +633,14 @@
   margin-top: calc(var(--prose-line) * 1.17);
 }
 /* A heading belongs to what follows it, not to what it follows. 2.7:1 is the
-   split; below 2:1 the heading starts to look like it caps the section above. */
-.prose h2 + *,
-.prose h3 + * {
+   split; below 2:1 the heading starts to look like it caps the section above.
+   The exclusions are the cases where what follows is itself a heading of the
+   same or higher level: that is not the section's first line, it is the next
+   section, and it needs the full space its own rule gives it. An h3 straight
+   after an h2 is not excluded — a subhead is the first thing its section
+   contains, so it should hug the head the same way a paragraph would. */
+.prose h2 + :not(h2),
+.prose h3 + :not(h2, h3) {
   margin-top: calc(var(--prose-line) * 0.65);
 }
 .prose > :first-child {
