@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.10.3",
+  "checkpoint_id": "cbfe4eb3d8db",
+  "strategy": "manual-commit",
+  "branch": "fix/blog-typography",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "app/blog/[slug]/page.tsx",
+    "app/globals.css"
+  ],
+  "sessions": [
+    {
+      "metadata": "/cb/fe4eb3d8db/0/metadata.json",
+      "transcript": "/cb/fe4eb3d8db/0/full.jsonl",
+      "compact_transcript": "/cb/fe4eb3d8db/0/transcript.jsonl",
+      "content_hash": "/cb/fe4eb3d8db/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 997,
+    "cache_read_tokens": 155107,
+    "output_tokens": 1039,
+    "api_call_count": 2
+  }
+}
