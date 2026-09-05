@@ -571,8 +571,12 @@
   /* Set to the frame rather than to a nominal step: the rail is 734px of text
      and the serif ran ~86 characters across it at 17px, well past the line a
      reader can return from without losing their place. 19px brings it back to
-     ~75, which is why the body of a post is the largest type on the site. */
-  --typeset-size: 1.1875rem;
+     ~75, which is why the body of a post is the largest type on the site.
+     That argument is about the 734px rail, so it stops holding once the rail
+     does: on a 375px phone the same 19px gave 32 characters a line, short
+     enough that the eye spends more time returning than reading. The ramp
+     finishes at ~628px, just under the width where the rail locks. */
+  --typeset-size: clamp(1.0625rem, 0.87rem + 0.8vw, 1.1875rem);
   --typeset-leading: 1.7;
   /* A paragraph break has to be worth more than a line break or the eye stops
      seeing where one paragraph ends. At 1.15em the gap was 0.68 of a line and
@@ -603,6 +607,10 @@
   font-family: var(--font-heading);
   font-weight: 500;
   letter-spacing: -0.01em;
+  /* `pretty` is inherited from .typeset and is the right call for a paragraph,
+     where it only protects the last line. A heading is all last line: on a
+     phone these run two and three lines and `balance` is what evens them. */
+  text-wrap: balance;
   scroll-margin-top: calc(var(--header-height) + 1rem);
 }
 /* The scale was flat — h2 was 1.26x the body, so nothing announced a section
@@ -611,12 +619,16 @@
    visibly larger needs less room to separate itself, and space is only there
    to assist. */
 .prose h2 {
-  font-size: 1.875rem;
+  /* A ratio rather than a step, for the same reason the spaces below are
+     multiples of a body line: the scale is a relationship to the body text,
+     so it has to survive the body text changing size. At 19px this is the
+     same 30px it was as a fixed 1.875rem. */
+  font-size: calc(var(--typeset-size) * 1.58);
   line-height: 1.25;
   margin-top: calc(var(--prose-line) * 1.76);
 }
 .prose h3 {
-  font-size: 1.375rem;
+  font-size: calc(var(--typeset-size) * 1.16);
   line-height: 1.3;
   margin-top: calc(var(--prose-line) * 1.17);
 }
@@ -657,7 +669,9 @@
   color: var(--muted-foreground);
 }
 .prose li + li {
-  margin-top: 0.5rem;
+  /* Items are closer than paragraphs but further apart than lines, and like
+     every other space here it is counted in body lines so it tracks the ramp. */
+  margin-top: calc(var(--prose-line) * 0.35);
 }
 .prose blockquote {
   padding-left: 1.125rem;
